@@ -1,0 +1,17 @@
+{
+  "namespace": "org.jhk.gdh.serialization.avro",
+  "type": "record",
+  "name": "User",
+  "fields": [
+  	{"name": "avatar", "type": "bytes"},
+  	{"name": "achievements", "type": {"type": "array", "items": "string"}},
+  	{"name": "address", "type": "Address"},
+  	{"name": "email", "type": "string"},
+  	{"name": "foundationId", "type": "long"},
+  	{"name": "id", "type": "long"},
+  	{"name": "level", "type": "int"},
+  	{"name": "name", "type": "string"},
+  	{"name": "password", "type": "string"},
+  	{"name": "title", "type": "string"}
+  ]
+}

@@ -1,0 +1,10 @@
+{
+  "namespace": "org.jhk.gdh.serialization.avro",
+  "type": "record",
+  "name": "Address",
+  "fields": [
+    {"name": "address", "type": "string"},
+  	{"name": "coordinates", "type": {"type": "array", "items": "double"}},
+  	{"name": "description", "type": "string"}
+  ]
+}

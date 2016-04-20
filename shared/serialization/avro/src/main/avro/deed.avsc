@@ -1,0 +1,14 @@
+{
+  "namespace": "org.jhk.gdh.serialization.avro",
+  "type": "record",
+  "name": "Deed",
+  "fields": [
+  	{"name": "deedTime", "type": "long"},
+  	{"name": "description", "type": "string"},
+  	{"name": "id", "type": "long"},
+  	{"name": "pluses", "type": "int"},
+  	{"name": "deederId", "type": "long"},
+  	{"name": "title", "type": "string"},
+  	{"name": "validated", "type": "boolean"}
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "namespace": "org.jhk.gdh.serialization.avro",
+  "type": "record",
+  "name": "Foundation",
+  "fields": [
+  	{"name": "avatar", "type": "bytes"},
+  	{"name": "awards", "type": {"type": "array", "items": "string"}},
+  	{"name": "creationTime", "type": "long"},
+  	{"name": "description", "type": "string"},
+  	{"name": "id", "type": "long"},
+  	{"name": "masterId", "type": "long"},
+  	{"name": "name", "type": "string"},
+  	{"name": "praises", "type": "int"},
+  	{"name": "titles", "type": {"type": "array", "items": "string"}}
+  ]
+}

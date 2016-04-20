@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.jhk.good-deed-hunt</groupId>
+    <artifactId>good-deed-hunt-project</artifactId>
+    <version>${good.deed.hunt.version}</version>
+  </parent>
+  
+  <groupId>org.jhk.good-deed-hunt.storm</groupId>
+  <artifactId>storm</artifactId>
+  <version>${good.deed.hunt.version}</version>
+  <name>storm</name>
+  <url>https://github.com/JHKTruth/good-deed-hunt/storm</url>
+  
+  <dependencies>
+    
+    <dependency>
+      <groupId>org.jhk.good-deed-hunt.shared.core</groupId>
+      <artifactId>core</artifactId>
+    </dependency>
+    
+    <dependency>
+	  <groupId>org.apache.storm</groupId>
+      <artifactId>storm-core</artifactId>
+    </dependency>
+    
+    <dependency>
+	  <groupId>org.apache.storm</groupId>
+      <artifactId>storm-kafka</artifactId>
+    </dependency>
+    
+    <dependency>
+	  <groupId>org.apache.storm</groupId>
+      <artifactId>storm-starter</artifactId>
+    </dependency>
+    
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
+    
+  </dependencies>
+  
+</project>

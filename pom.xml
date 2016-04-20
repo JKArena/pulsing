@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.jhk.good-deed-hunt</groupId>
+  <artifactId>good-deed-hunt-project</artifactId>
+  <packaging>pom</packaging>
+  <version>${good.deed.hunt.version}</version>
+  <name>good-deed-hunt-project</name>
+  <url>https://github.com/JHKTruth/good-deed-hunt</url>
+  <description>Good Deed Hunt Build Project</description>
+  
+  <dependencyManagement>
+    <dependencies>
+      
+      <dependency>
+	      <groupId>org.jhk.good-deed-hunt.shared.core</groupId>
+        <artifactId>core</artifactId>
+        <version>${good.deed.hunt.version}</version>
+      </dependency>
+      
+      <dependency>
+	      <groupId>org.jhk.good-deed-hunt.shared.serialization.avro</groupId>
+        <artifactId>avro</artifactId>
+        <version>${good.deed.hunt.version}</version>
+      </dependency>
+      
+      <dependency>
+	      <groupId>org.jhk.good-deed-hunt.shared.serialization.thrift</groupId>
+        <artifactId>thrift</artifactId>
+        <version>${good.deed.hunt.version}</version>
+      </dependency>
+      
+      <dependency>
+	      <groupId>org.apache.storm</groupId>
+        <artifactId>storm-core</artifactId>
+        <version>${org.apache.storm.core}</version>
+      </dependency>
+      
+      <dependency>
+	      <groupId>org.apache.storm</groupId>
+        <artifactId>storm-kafka</artifactId>
+        <version>${org.apache.storm.kafka}</version>
+      </dependency>
+      
+      <dependency>
+	      <groupId>org.apache.storm</groupId>
+        <artifactId>storm-starter</artifactId>
+        <version>${org.apache.storm.starter}</version>
+      </dependency>
+      
+      <dependency>
+	      <groupId>org.apache.thrift</groupId>
+        <artifactId>libthrift</artifactId>
+        <version>${org.apache.thrift}</version>
+      </dependency>
+      
+      <dependency>
+	      <groupId>org.apache.avro</groupId>
+        <artifactId>avro</artifactId>
+        <version>${org.apache.avro}</version>
+      </dependency>
+      
+      <dependency>
+        <groupId>junit</groupId>
+        <artifactId>junit</artifactId>
+        <version>${junit}</version>
+      </dependency>
+      
+    </dependencies>
+  </dependencyManagement>
+  
+  <properties>
+    <good.deed.hunt.version>0.1-SNAPSHOT</good.deed.hunt.version>
+    <org.apache.storm.core>1.0.0</org.apache.storm.core>
+    <org.apache.storm.kafka>1.0.0</org.apache.storm.kafka>
+    <org.apache.storm.starter>1.0.0</org.apache.storm.starter>
+    <org.apache.thrift>0.9.3</org.apache.thrift>
+    <org.apache.avro>1.8.0</org.apache.avro>
+    <junit>3.8.1</junit>
+  </properties>
+  
+  <modules>
+    <module>shared</module>
+    <module>storm</module>
+  </modules>
+  
+</project>
