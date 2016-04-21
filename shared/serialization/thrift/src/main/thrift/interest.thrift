@@ -16,17 +16,20 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
+ 
 namespace java org.jhk.interested.serialization.thrift
 
-include "address.thrift"
+enum ACTION {
+  CREATE = 1,
+  SUBSCRIBE = 2,
+  UNSUBSCRIBE = 3,
+  DELETE = 4
+}
 
-struct User {
-  1: binary picture,
-  2: address.Address address,
-  3: string email,
-  4: i64 id,
-  5: string name,
-  6: string password,
-  7: list<string> interests
+struct Interest {
+  1: i64 id,
+  2: i64 userId,
+  3: i64 timeStamp,
+  4: string value,
+  5: ACTION action
 }

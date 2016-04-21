@@ -16,17 +16,33 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.jhk.interested.serialization;
 
-namespace java org.jhk.interested.serialization.thrift
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 
-include "address.thrift"
+/**
+ * @author Ji Kim
+ */
+public final class PojoProxy<T> implements InvocationHandler {
+    
+    private T _obj;
+    
+    public PojoProxy(T obj) {
+        super();
+        
+        _obj = obj;
+    }
 
-struct User {
-  1: binary picture,
-  2: address.Address address,
-  3: string email,
-  4: i64 id,
-  5: string name,
-  6: string password,
-  7: list<string> interests
+    @Override
+    public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+        return method.invoke(_obj, args);
+    }
+    
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    public static <T> T getInstance(Class<T> clazz, Object object) {
+        return (T) Proxy.newProxyInstance(clazz.getClassLoader(), new Class[]{clazz}, new PojoProxy(object));
+    }
+    
 }

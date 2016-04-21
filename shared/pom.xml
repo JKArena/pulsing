@@ -2,17 +2,17 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.jhk.good-deed-hunt</groupId>
-    <artifactId>good-deed-hunt-project</artifactId>
-    <version>${good.deed.hunt.version}</version>
+    <groupId>org.jhk.interested</groupId>
+    <artifactId>interested-project</artifactId>
+    <version>${interested.version}</version>
   </parent>
   
-  <groupId>org.jhk.good-deed-hunt.shared</groupId>
+  <groupId>org.jhk.interested.shared</groupId>
   <artifactId>shared</artifactId>
   <packaging>pom</packaging>
-  <version>${good.deed.hunt.version}</version>
+  <version>${interested.version}</version>
   <name>shared</name>
-  <url>https://github.com/JHKTruth/good-deed-hunt/shared</url>
+  <url>https://github.com/JHKTruth/interested/shared</url>
   
   <modules>
     <module>core</module>
