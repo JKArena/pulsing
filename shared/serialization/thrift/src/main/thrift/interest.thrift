@@ -26,7 +26,7 @@ enum ACTION {
   DELETE = 4
 }
 
-struct Interest {
+union Interest {
   1: i64 id,
   2: i64 userId,
   3: i64 timeStamp,

@@ -30,7 +30,7 @@ import org.apache.storm.trident.TridentTopology;
 /**
  * @author Ji Kim
  */
-public final class PostUserTopologyBuilder {
+public final class UserTopologyBuilder {
     
     public StormTopology build() {
         TridentTopology topology = new TridentTopology();

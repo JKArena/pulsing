@@ -19,7 +19,7 @@
 
 namespace java org.jhk.interested.serialization.thrift
 
-struct Address {
+union Address {
   1: string address,
   2: list<double> coordinates,
   3: string description
