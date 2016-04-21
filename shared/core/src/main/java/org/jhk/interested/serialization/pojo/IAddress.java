@@ -16,17 +16,21 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.jhk.interested.serialization.pojo;
 
-namespace java org.jhk.interested.serialization.thrift
+import java.util.List;
 
-include "address.thrift"
-
-struct User {
-  1: binary picture,
-  2: address.Address address,
-  3: string email,
-  4: i64 id,
-  5: string name,
-  6: string password,
-  7: list<string> interests
+/**
+ * @author Ji Kim
+ */
+public interface IAddress {
+    
+    CharSequence getAddress();
+    
+    List<Float> getCoordinates();
+    
+    CharSequence getDescription();
+    
+    long getId();
+        
 }

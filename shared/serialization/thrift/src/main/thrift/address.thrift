@@ -17,7 +17,7 @@
  * under the License.
  */
 
-namespace java org.jhk.gdh.serialization.thrift
+namespace java org.jhk.interested.serialization.thrift
 
 struct Address {
   1: string address,

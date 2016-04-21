@@ -17,16 +17,16 @@
  * under the License.
  */
 
-namespace java org.jhk.interested.serialization.thrift
-
-include "address.thrift"
-
-struct User {
-  1: binary picture,
-  2: address.Address address,
-  3: string email,
-  4: i64 id,
-  5: string name,
-  6: string password,
-  7: list<string> interests
+{
+  "namespace": "org.jhk.interested.serialization.avro",
+  "type": "record",
+  "name": "Interest",
+  "fields": [
+    {"name": "id", "type": "long"},
+    {"name": "userId", "type": "long"},
+    {"name": "timeStamp", "type": "long"},
+    {"name": "value", "type": "string"},
+    {"name": "Action", "type": {"type": "enum", "name": "ACTION",
+        "symbols": ["CREATE", "SUBSCRIBE", "UNSUBSCRIBE", "DELETE"] }}
+  ]
 }

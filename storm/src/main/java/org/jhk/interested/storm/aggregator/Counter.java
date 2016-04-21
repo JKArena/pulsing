@@ -16,17 +16,31 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.jhk.interested.storm.aggregator;
 
-namespace java org.jhk.interested.serialization.thrift
+import org.apache.storm.trident.operation.CombinerAggregator;
+import org.apache.storm.trident.tuple.TridentTuple;
 
-include "address.thrift"
+/**
+ * @author Ji Kim
+ */
+public final class Counter implements CombinerAggregator<Long> {
 
-struct User {
-  1: binary picture,
-  2: address.Address address,
-  3: string email,
-  4: i64 id,
-  5: string name,
-  6: string password,
-  7: list<string> interests
+    private static final long serialVersionUID = -7930085122578857788L;
+
+    @Override
+    public Long combine(Long first, Long second) {
+        return (first.longValue() + second.longValue());
+    }
+
+    @Override
+    public Long init(TridentTuple tuple) {
+        return 1L;
+    }
+
+    @Override
+    public Long zero() {
+        return 0L;
+    }
+    
 }
