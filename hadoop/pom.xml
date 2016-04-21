@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.jhk.interested</groupId>
+    <artifactId>interested-project</artifactId>
+    <version>${interested.version}</version>
+  </parent>
+  
+  <groupId>org.jhk.interested.hadoop</groupId>
+  <artifactId>hadoop</artifactId>
+  <version>${interested.version}</version>
+  <name>hadoop</name>
+  <url>https://github.com/JHKTruth/interested/hadoop</url>
+  
+  <dependencies>
+    
+    <dependency>
+      <groupId>org.jhk.interested.shared.serialization.thrift</groupId>
+      <artifactId>thrift</artifactId>
+    </dependency>
+    
+    <dependency>
+	    <groupId>com.backtype</groupId>
+	    <artifactId>dfs-datastores</artifactId>
+	  </dependency>
+    
+    <dependency>
+      <groupId>cascalog</groupId>
+      <artifactId>cascalog</artifactId>
+    </dependency>
+    
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
+    
+  </dependencies>
+  
+  <repositories>
+    <repository>
+      <id>clojars.org</id>
+      <url>http://clojars.org/repo</url>
+    </repository>
+  </repositories>
+  
+</project>

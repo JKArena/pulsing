@@ -21,7 +21,7 @@ namespace java org.jhk.interested.serialization.thrift
 
 include "address.thrift"
 
-struct User {
+union User {
   1: binary picture,
   2: address.Address address,
   3: string email,
