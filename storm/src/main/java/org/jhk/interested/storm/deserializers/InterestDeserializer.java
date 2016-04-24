@@ -26,7 +26,7 @@ import org.apache.storm.trident.tuple.TridentTuple;
 import org.apache.storm.tuple.Fields;
 import org.apache.storm.tuple.Values;
 import org.jhk.interested.serialization.SerializationFactory;
-import org.jhk.interested.serialization.pojo.IInterest;
+import org.jhk.interested.serialization.avro.Interest;
 
 /**
  * @author Ji Kim
@@ -44,7 +44,7 @@ public class InterestDeserializer extends BaseFunction {
         
         try {
             
-            IInterest interest = SerializationFactory.decodeFromJSONStringToType(IInterest.class, interestString);
+            Interest interest = SerializationFactory.decodeFromJSONStringToAvro(Interest.class, Interest.getClassSchema(), interestString);
             collector.emit(getInterestValues(interest));
             
         } catch (IOException decodeException) {
@@ -53,7 +53,7 @@ public class InterestDeserializer extends BaseFunction {
         
     }
     
-    private Values getInterestValues(IInterest interest) {
+    private Values getInterestValues(Interest interest) {
         return new Values(interest.getAction().toString(), interest.getId(), interest.getUserId(), 
                 interest.getTimeStamp(), interest.getValue());
     }

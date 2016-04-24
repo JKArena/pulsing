@@ -31,51 +31,26 @@ import org.apache.avro.io.JsonDecoder;
 import org.apache.avro.specific.SpecificDatumReader;
 import org.apache.avro.specific.SpecificDatumWriter;
 import org.apache.avro.specific.SpecificRecord;
-import org.jhk.interested.serialization.pojo.IAddress;
-import org.jhk.interested.serialization.pojo.IUser;
 
 /**
  * @author Ji Kim
  */
 public final class SerializationFactory {
     
-    private static final Map<Class<?>, Schema> AVRO_MAPPER = new HashMap<>();
-    private static final Map<Class<?>, Class<?>> THRIFT_MAPPER = new HashMap<>();
-    
-    static {
-        AVRO_MAPPER.put(IAddress.class, org.jhk.interested.serialization.avro.Address.getClassSchema());
-        AVRO_MAPPER.put(IUser.class, org.jhk.interested.serialization.avro.User.getClassSchema());
-        
-        THRIFT_MAPPER.put(IAddress.class, org.jhk.interested.serialization.thrift.Address.class);
-        THRIFT_MAPPER.put(IUser.class, org.jhk.interested.serialization.thrift.User.class);
-    }
-    
     private SerializationFactory() {
         super();
     }
     
-    public static <T> T decodeFromJSONStringToType(Class<T> clazz, String jsonString) throws IOException {
-        return decodeFromJSONStringToAvro(clazz, jsonString);
-    }
-    
-    @SuppressWarnings({"rawtypes", "unchecked"})
-    private static <T> T decodeFromJSONStringToAvro(Class<T> clazz, String jsonString) throws IOException {
+    public static <T extends SpecificRecord> T decodeFromJSONStringToAvro(Class<T> clazz, Schema schema, String jsonString) throws IOException {
         
-        Schema schema = AVRO_MAPPER.get(clazz);
         JsonDecoder decoder = DecoderFactory.get().jsonDecoder(schema, jsonString);
 
-        SpecificDatumReader reader = new SpecificDatumReader(schema);
-        Object decoded = reader.read(null, decoder);
+        SpecificDatumReader<T> reader = new SpecificDatumReader<T>(schema);
         
-        return PojoProxy.getInstance(clazz, decoded);
+        return reader.read(null, decoder);
     }
     
-    public static String encodeTypeToJSONString(Object obj) throws IOException {
-        return encodeAvroTypeToJSONString(obj);
-    }
-    
-    @SuppressWarnings({"rawtypes", "unchecked"})
-    private static String encodeAvroTypeToJSONString(Object obj) throws IOException {
+    public static <T> String encodeAvroTypeToJSONString(T obj) throws IOException {
         if(obj == null || !(obj instanceof SpecificRecord)) {
             return null;
         }
@@ -84,7 +59,8 @@ public final class SerializationFactory {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         Encoder encoder = EncoderFactory.get().jsonEncoder(schema, out);
         
-        SpecificDatumWriter writer = new SpecificDatumWriter(obj.getClass());
+        @SuppressWarnings("unchecked")
+        SpecificDatumWriter<T> writer = new SpecificDatumWriter<T>((Class<T>) obj.getClass());
         writer.write(obj, encoder);
         encoder.flush();
         

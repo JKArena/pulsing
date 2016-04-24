@@ -26,7 +26,7 @@ import org.apache.storm.trident.tuple.TridentTuple;
 import org.apache.storm.tuple.Fields;
 import org.apache.storm.tuple.Values;
 import org.jhk.interested.serialization.SerializationFactory;
-import org.jhk.interested.serialization.pojo.IUser;
+import org.jhk.interested.serialization.avro.User;
 
 /**
  * @author Ji Kim
@@ -44,7 +44,7 @@ public final class UserDeserializer extends BaseFunction {
         
         try {
             
-            IUser user = SerializationFactory.decodeFromJSONStringToType(IUser.class, userString);
+            User user = SerializationFactory.decodeFromJSONStringToAvro(User.class, User.getClassSchema(), userString);
             collector.emit(getUserValues(user));
             
         } catch (IOException decodeException) {
@@ -53,7 +53,7 @@ public final class UserDeserializer extends BaseFunction {
         
     }
     
-    private Values getUserValues(IUser user) {
+    private Values getUserValues(User user) {
         return new Values(user.getPicture(), user.getId(), user.getAddress(), 
                 user.getEmail(), user.getName(), user.getPassword());
     }
