@@ -17,10 +17,20 @@
  * under the License.
  */
 
-namespace java org.jhk.interested.serialization.thrift
+namespace java org.jhk.interested.serialization.thrift.property
 
-union Address {
-  1: string address,
-  2: list<double> coordinates,
-  3: string description
+include "../id/InterestId.thrift"
+
+/**
+ * Interest property
+ *
+ * @author Ji Kim
+ */
+struct InterestProperty {
+  1: InterestId.InterestId id;
+  2: InterestPropertyValue property;
+}
+
+union InterestPropertyValue {
+  1: string value;
 }

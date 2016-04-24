@@ -17,8 +17,8 @@
   <dependencies>
     
     <dependency>
-      <groupId>org.jhk.interested.shared.core</groupId>
-      <artifactId>core</artifactId>
+      <groupId>org.jhk.interested.shared.serialization.avro</groupId>
+      <artifactId>avro</artifactId>
     </dependency>
     
     <dependency>

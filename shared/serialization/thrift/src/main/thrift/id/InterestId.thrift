@@ -17,16 +17,13 @@
  * under the License.
  */
 
-namespace java org.jhk.interested.serialization.thrift
+namespace java org.jhk.interested.serialization.thrift.id
 
-include "address.thrift"
-
-union User {
-  1: binary picture,
-  2: address.Address address,
-  3: string email,
-  4: i64 id,
-  5: string name,
-  6: string password,
-  7: list<string> interests
+/**
+ * Interest id node
+ *
+ * @author Ji Kim
+ */
+union InterestId {
+  1: i64 id;
 }
