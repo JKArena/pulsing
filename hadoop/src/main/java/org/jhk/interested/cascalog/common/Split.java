@@ -16,34 +16,36 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.jhk.interested.cascalog.common;
 
-namespace java org.jhk.interested.serialization.thrift.data
-
-include "../property/InterestProperty.thrift"
-include "../property/UserProperty.thrift"
-
-include "../edges/EquivEdge.thrift"
-include "../edges/FriendEdge.thrift"
-include "../edges/InterestEdge.thrift"
+import cascading.flow.FlowProcess;
+import cascading.operation.FunctionCall;
+import cascading.tuple.Tuple;
+import cascalog.CascalogFunction;
 
 /**
- * Data content
- *
  * @author Ji Kim
  */
-struct Data {
-  1: required DataUnit dataunit;
-  2: required Pedigree pedigree;
-}
+public final class Split extends CascalogFunction {
 
-struct Pedigree {
-  1: required i32 true_as_of_secs;
-}
+    private static final long serialVersionUID = 1710613680664690784L;
+    
+    private String _delim;
+    
+    public Split(String delim) {
+        super();
+        
+        _delim = delim;
+    }
 
-union DataUnit {
-  1: UserProperty.UserProperty user_property;
-  2: InterestProperty.InterestProperty interest_property;
-  3: EquivEdge.EquivEdge equiv;
-  4: FriendEdge.FriendEdge friends;
-  5: InterestEdge.InterestEdge interest;
+    @Override
+    public void operate(FlowProcess process, FunctionCall call) {
+        
+        String sentence = call.getArguments().getString(0);
+        for(String word : sentence.split(_delim)) {
+            call.getOutputCollector().add(new Tuple(word));
+        }
+        
+    }
+
 }
