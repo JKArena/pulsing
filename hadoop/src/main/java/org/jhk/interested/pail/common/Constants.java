@@ -16,34 +16,20 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-
-namespace java org.jhk.interested.serialization.thrift.data
-
-include "../property/InterestProperty.thrift"
-include "../property/UserProperty.thrift"
-
-include "../edges/EquivEdge.thrift"
-include "../edges/FriendEdge.thrift"
-include "../edges/InterestEdge.thrift"
+package org.jhk.interested.pail.common;
 
 /**
- * Data content
- *
  * @author Ji Kim
  */
-struct Data {
-  1: required DataUnit dataunit;
-  2: required Pedigree pedigree;
-}
-
-struct Pedigree {
-  1: required i32 true_as_of_secs;
-}
-
-union DataUnit {
-  1: UserProperty.UserProperty user_property;
-  2: InterestProperty.InterestProperty interest_property;
-  3: EquivEdge.EquivEdge equiv;
-  4: FriendEdge.FriendEdge friends;
-  5: InterestEdge.InterestEdge interest;
+public final class Constants {
+    
+    public static final String PAIL_TEMP_WORKSPACE = "/data/hadoop/temp"; //push to config later
+    public static final String PAIL_TEMP_NEW_DATA_SNAPSHOT = "/data/hadoop/temp/newDataSnapshot";
+    public static final String PAIL_TEMP_SNAPSHOT = "/data/hadoop/temp/snapshot";
+    public static final String PAIL_TEMP_SHREDDED = "/data/hadoop/temp/shredded";
+    
+    private Constants() {
+        super();
+    }
+    
 }

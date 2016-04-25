@@ -29,4 +29,11 @@ include "../id/UserId.thrift"
 union FriendEdge {
   1: required UserId.UserId firstId;
   2: required UserId.UserId secondId;
+  3: i64 timeStamp;
+  4: ACTION action;
+}
+
+enum ACTION {
+  FRIENDED = 1;
+  UNFRIENDED = 2;
 }
