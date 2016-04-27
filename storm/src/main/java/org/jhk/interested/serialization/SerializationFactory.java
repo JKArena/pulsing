@@ -20,8 +20,6 @@ package org.jhk.interested.serialization;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.apache.avro.Schema;
 import org.apache.avro.io.DecoderFactory;

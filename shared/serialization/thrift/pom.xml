@@ -4,14 +4,14 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.jhk.interested.shared.serialization</groupId>
-    <artifactId>serialization</artifactId>
+    <artifactId>interested-serialization</artifactId>
     <version>${interested.version}</version>
   </parent>
   
   <groupId>org.jhk.interested.shared.serialization.thrift</groupId>
-  <artifactId>thrift</artifactId>
+  <artifactId>interested-thrift</artifactId>
   <version>${interested.version}</version>
-  <name>thrift</name>
+  <name>interested-thrift</name>
   <url>https://github.com/JHKTruth/interested/shared/serialization/thrift</url>
   
   <dependencies>

@@ -8,10 +8,10 @@
   </parent>
   
   <groupId>org.jhk.interested.shared</groupId>
-  <artifactId>shared</artifactId>
+  <artifactId>interested-shared</artifactId>
   <packaging>pom</packaging>
   <version>${interested.version}</version>
-  <name>shared</name>
+  <name>interested-shared</name>
   <url>https://github.com/JHKTruth/interested/shared</url>
   
   <modules>

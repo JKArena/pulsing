@@ -3,28 +3,18 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.jhk.interested.shared</groupId>
-    <artifactId>interested-shared</artifactId>
+    <groupId>org.jhk.interested</groupId>
+    <artifactId>interested-project</artifactId>
     <version>${interested.version}</version>
   </parent>
   
-  <groupId>org.jhk.interested.shared.core</groupId>
-  <artifactId>interested-core</artifactId>
+  <groupId>org.jhk.interested.flume</groupId>
+  <artifactId>interested-flume</artifactId>
   <version>${interested.version}</version>
-  <name>interested-core</name>
-  <url>https://github.com/JHKTruth/interested/shared/core</url>
+  <name>interested-flume</name>
+  <url>https://github.com/JHKTruth/interested/storm</url>
   
   <dependencies>
-    
-    <dependency>
-      <groupId>org.apache.avro</groupId>
-      <artifactId>avro</artifactId>
-    </dependency>
-    
-    <dependency>
-      <groupId>org.apache.thrift</groupId>
-      <artifactId>libthrift</artifactId>
-    </dependency>
     
     <dependency>
       <groupId>junit</groupId>

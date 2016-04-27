@@ -4,14 +4,14 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.jhk.interested.shared.serialization</groupId>
-    <artifactId>serialization</artifactId>
+    <artifactId>interested-serialization</artifactId>
     <version>${interested.version}</version>
   </parent>
   
   <groupId>org.jhk.interested.shared.serialization.avro</groupId>
-  <artifactId>avro</artifactId>
+  <artifactId>interested-avro</artifactId>
   <version>${interested.version}</version>
-  <name>avro</name>
+  <name>interested-avro</name>
   <url>https://github.com/JHKTruth/interested/shared/serialization/avro</url>
   
   <dependencies>

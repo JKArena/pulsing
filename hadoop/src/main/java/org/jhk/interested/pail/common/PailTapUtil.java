@@ -22,6 +22,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.jhk.interested.hadoop.common.Constants;
+import static org.jhk.interested.hadoop.common.Constants.DIRECTORIES.*;
 import org.jhk.interested.pail.common.PailTap.PailTapOptions;
 import org.jhk.interested.pail.thrift.SplitDataPailstructure;
 import org.jhk.interested.serialization.thrift.data.DataUnit;
@@ -67,8 +69,8 @@ public final class PailTapUtil {
     }
     
     public static Pail shred() throws IOException {
-        PailTap source = new PailTap(Constants.PAIL_TEMP_SNAPSHOT);
-        PailTap sink = splitDataTap(Constants.PAIL_TEMP_SHREDDED);
+        PailTap source = new PailTap(Constants.getTempWorkingDirectory(TEMP_SNAPSHOT));
+        PailTap sink = splitDataTap(Constants.getTempWorkingDirectory(TEMP_SHREDDED));
         
         Subquery reduced = new Subquery("?rand", "?data")
                 .predicate(source, "_", "?data-in")
@@ -79,14 +81,14 @@ public final class PailTapUtil {
         
         Api.execute(sink,  new Subquery("?data").predicate(reduced, "_", "?data"));
         
-        Pail shreddedPail = new Pail(Constants.PAIL_TEMP_SHREDDED);
+        Pail shreddedPail = new Pail(Constants.getTempWorkingDirectory(TEMP_SHREDDED));
         shreddedPail.consolidate();
         
         return shreddedPail;
     }
     
     /**
-     * when sinking data from queries to bran new pails, need to declare the type of records writing to PailTap
+     * when sinking data from queries to brand new pails, need to declare the type of records writing to PailTap
      * 
      * @param path
      * @return

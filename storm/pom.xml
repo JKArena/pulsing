@@ -9,16 +9,21 @@
   </parent>
   
   <groupId>org.jhk.interested.storm</groupId>
-  <artifactId>storm</artifactId>
+  <artifactId>interested-storm</artifactId>
   <version>${interested.version}</version>
-  <name>storm</name>
+  <name>interested-storm</name>
   <url>https://github.com/JHKTruth/interested/storm</url>
   
   <dependencies>
     
     <dependency>
       <groupId>org.jhk.interested.shared.serialization.avro</groupId>
-      <artifactId>avro</artifactId>
+      <artifactId>interested-avro</artifactId>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.jhk.interested.shared.serialization.thrift</groupId>
+      <artifactId>interested-thrift</artifactId>
     </dependency>
     
     <dependency>
