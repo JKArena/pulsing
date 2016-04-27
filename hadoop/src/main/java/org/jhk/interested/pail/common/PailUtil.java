@@ -25,6 +25,8 @@ import java.util.List;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
+import org.jhk.interested.hadoop.common.Constants;
+import static org.jhk.interested.hadoop.common.Constants.DIRECTORIES.*;
 
 import com.backtype.hadoop.pail.Pail;
 import com.backtype.hadoop.pail.Pail.TypedRecordOutputStream;
@@ -38,29 +40,27 @@ public final class PailUtil {
         super();
     }
     
+    /**
+     * When moving new data to the master data
+     * 
+     * @param masterPail
+     * @param newDataPail
+     * @throws IOException
+     */
     public static void ingest(Pail masterPail, Pail newDataPail) throws IOException {
         FileSystem fSystem = FileSystem.get(new Configuration());
         
-        fSystem.delete(new Path(Constants.PAIL_TEMP_WORKSPACE), true);
-        fSystem.mkdirs(new Path(Constants.PAIL_TEMP_WORKSPACE));
+        fSystem.delete(new Path(Constants.getTempWorkingDirectory(null)), true);
+        fSystem.mkdirs(new Path(Constants.getTempWorkingDirectory(null)));
         
-        Pail snapShotPail = newDataPail.snapshot(Constants.PAIL_TEMP_NEW_DATA_SNAPSHOT);
+        Pail snapShotPail = newDataPail.snapshot(Constants.getTempWorkingDirectory(TEMP_NEW_DATA_SNAPSHOT));
         appendNewData(masterPail, snapShotPail);
         newDataPail.deleteSnapshot(snapShotPail);
     }
     
-    public static void appendNewData(Pail masterPail, Pail snapshotPail) throws IOException {
+    private static void appendNewData(Pail masterPail, Pail snapshotPail) throws IOException {
         Pail shreddedPail = PailTapUtil.shred();
         masterPail.absorb(shreddedPail);
-    }
-    
-    
-    public static void mergeData(String masterDirectory, String updateDirectory) throws IOException {
-        Pail target = new Pail(masterDirectory);
-        Pail source = new Pail(updateDirectory);
-        
-        target.absorb(source);
-        target.consolidate();
     }
     
     public static <T extends Comparable<T>> void writePailStructures(String path, ThriftPailStructure<T> tpStructure,

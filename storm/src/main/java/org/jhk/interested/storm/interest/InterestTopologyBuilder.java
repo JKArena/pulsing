@@ -30,13 +30,12 @@ import org.apache.storm.trident.TridentState;
 import org.apache.storm.trident.TridentTopology;
 import org.apache.storm.trident.operation.BaseFilter;
 import org.apache.storm.trident.operation.builtin.MapGet;
-import org.apache.storm.trident.operation.builtin.TupleCollectionGet;
 import org.apache.storm.trident.testing.MemoryMapState;
 import org.apache.storm.trident.tuple.TridentTuple;
 import org.apache.storm.tuple.Fields;
 import org.jhk.interested.storm.aggregator.Counter;
 import org.jhk.interested.storm.common.functions.SplitByDelimiter;
-import org.jhk.interested.storm.deserializers.InterestDeserializer;
+import org.jhk.interested.storm.deserializers.avro.InterestDeserializer;
 
 /**
  * @author Ji Kim

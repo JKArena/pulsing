@@ -3,15 +3,15 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>org.jhk.interested.shared</groupId>
-    <artifactId>shared</artifactId>
+    <artifactId>interested-shared</artifactId>
     <version>${interested.version}</version>
   </parent>
   
   <groupId>org.jhk.interested.shared.serialization</groupId>
-  <artifactId>serialization</artifactId>
+  <artifactId>interested-serialization</artifactId>
   <packaging>pom</packaging>
   <version>${interested.version}</version>
-  <name>serialization</name>
+  <name>interested-serialization</name>
   <url>https://github.com/JHKTruth/interested/shared/serialization</url>
   
   <modules>

@@ -9,7 +9,7 @@
   </parent>
   
   <groupId>org.jhk.interested.hadoop</groupId>
-  <artifactId>hadoop</artifactId>
+  <artifactId>interested-hadoop</artifactId>
   <version>${interested.version}</version>
   <name>hadoop</name>
   <url>https://github.com/JHKTruth/interested/hadoop</url>
@@ -18,7 +18,7 @@
     
     <dependency>
       <groupId>org.jhk.interested.shared.serialization.thrift</groupId>
-      <artifactId>thrift</artifactId>
+      <artifactId>interested-thrift</artifactId>
     </dependency>
     
     <dependency>

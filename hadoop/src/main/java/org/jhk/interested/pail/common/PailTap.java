@@ -41,6 +41,9 @@ import cascading.tuple.hadoop.TupleSerialization;
 public class PailTap extends Hfs {
     
     private static Logger LOG = Logger.getLogger(PailTap.class);
+    
+    private String _pailRoot;
+    private PailTapOptions _options;
 
     public static PailSpec makeSpec(PailSpec given, PailStructure structure) {
         return (given == null)
@@ -49,6 +52,7 @@ public class PailTap extends Hfs {
     }
 
     public static class PailTapOptions implements Serializable {
+        
         public PailSpec spec = null;
         public String fieldName = "bytes";
         public List<String>[] attrs = null;
@@ -65,10 +69,15 @@ public class PailTap extends Hfs {
             this.attrs = attrs;
             this.lister = lister;
         }
+        
     }
 
-    public class PailScheme extends
-            Scheme<JobConf, RecordReader, OutputCollector, Object[], Object[]> {
+    public class PailScheme extends Scheme<JobConf, RecordReader, OutputCollector, Object[], Object[]> {
+        
+        private transient BytesWritable bw;
+        private transient Text keyW;
+        private transient PailStructure _structure;
+        
         private PailTapOptions _options;
 
         public PailScheme(PailTapOptions options) {
@@ -79,9 +88,6 @@ public class PailTap extends Hfs {
         public PailSpec getSpec() {
             return _options.spec;
         }
-
-        private transient BytesWritable bw;
-        private transient Text keyW;
 
         protected Object deserialize(BytesWritable record) {
             PailStructure structure = getStructure();
@@ -100,8 +106,6 @@ public class PailTap extends Hfs {
                 ret.set(b, 0, b.length);
             }
         }
-
-        private transient PailStructure _structure;
 
         public PailStructure getStructure() {
             if (_structure == null) {
@@ -192,9 +196,6 @@ public class PailTap extends Hfs {
         }
 
     }
-
-    private String _pailRoot;
-    private PailTapOptions _options;
 
     protected String getCategory(Object obj) {
         return "";
@@ -337,4 +338,5 @@ public class PailTap extends Hfs {
     private Path getQualifiedPath(JobConf conf) throws IOException {
         return getPath().makeQualified(getFileSystem(conf));
     }
+    
 }

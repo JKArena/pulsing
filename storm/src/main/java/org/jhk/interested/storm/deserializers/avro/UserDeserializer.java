@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.interested.storm.deserializers;
+package org.jhk.interested.storm.deserializers.avro;
 
 import java.io.IOException;
 

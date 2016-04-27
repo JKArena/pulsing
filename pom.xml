@@ -14,19 +14,19 @@
       
       <dependency>
 	      <groupId>org.jhk.interested.shared.core</groupId>
-        <artifactId>core</artifactId>
+        <artifactId>interested-core</artifactId>
         <version>${interested.version}</version>
       </dependency>
       
       <dependency>
 	      <groupId>org.jhk.interested.shared.serialization.avro</groupId>
-        <artifactId>avro</artifactId>
+        <artifactId>interested-avro</artifactId>
         <version>${interested.version}</version>
       </dependency>
       
       <dependency>
 	      <groupId>org.jhk.interested.shared.serialization.thrift</groupId>
-        <artifactId>thrift</artifactId>
+        <artifactId>interested-thrift</artifactId>
         <version>${interested.version}</version>
       </dependency>
       
@@ -115,6 +115,7 @@
   </properties>
   
   <modules>
+    <module>flume</module>
     <module>hadoop</module>
     <module>shared</module>
     <module>storm</module>
