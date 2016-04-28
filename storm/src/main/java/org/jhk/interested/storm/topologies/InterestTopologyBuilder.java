@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.interested.storm.interest;
+package org.jhk.interested.storm.topologies;
 
 import org.apache.storm.generated.StormTopology;
 import org.apache.storm.kafka.BrokerHosts;
@@ -42,7 +42,7 @@ import org.jhk.interested.storm.deserializers.avro.InterestDeserializer;
  */
 public final class InterestTopologyBuilder {
     
-    private class InterestSubscribeFilter extends BaseFilter {
+    private static class InterestSubscribeFilter extends BaseFilter {
 
         private static final long serialVersionUID = -5563080957922894127L;
 
@@ -53,7 +53,7 @@ public final class InterestTopologyBuilder {
         
     }
     
-    public StormTopology build() {
+    public static StormTopology build() {
         TridentTopology topology = new TridentTopology();
         
         Stream interestStream = topology.newStream("interest-action-spout", buildSpout()).each(
@@ -81,7 +81,7 @@ public final class InterestTopologyBuilder {
         return topology.build();
     }
     
-    private TransactionalTridentKafkaSpout buildSpout() {
+    private static TransactionalTridentKafkaSpout buildSpout() {
         BrokerHosts host = new ZkHosts("localhost");
         TridentKafkaConfig spoutConfig = new TridentKafkaConfig(host, "interest-action");
         spoutConfig.scheme = new SchemeAsMultiScheme(new StringScheme());

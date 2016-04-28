@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.interested.storm.users;
+package org.jhk.interested.storm.topologies;
 
 import org.apache.storm.generated.StormTopology;
 import org.apache.storm.kafka.BrokerHosts;
@@ -32,13 +32,13 @@ import org.apache.storm.trident.TridentTopology;
  */
 public final class UserTopologyBuilder {
     
-    public StormTopology build() {
+    public static StormTopology build() {
         TridentTopology topology = new TridentTopology();
         topology.newStream("user-submission-spout", buildSpout());
         return topology.build();
     }
     
-    private TransactionalTridentKafkaSpout buildSpout() {
+    private static TransactionalTridentKafkaSpout buildSpout() {
         BrokerHosts host = new ZkHosts("localhost");
         TridentKafkaConfig spoutConfig = new TridentKafkaConfig(host, "user-submission");
         spoutConfig.scheme = new SchemeAsMultiScheme(new StringScheme());
