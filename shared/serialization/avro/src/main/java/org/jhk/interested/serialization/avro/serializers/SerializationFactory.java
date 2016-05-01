@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.interested.serialization;
+package org.jhk.interested.serialization.avro.serializers;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -39,7 +39,7 @@ public final class SerializationFactory {
         super();
     }
     
-    public static <T extends SpecificRecord> T decodeFromJSONStringToAvro(Class<T> clazz, Schema schema, String jsonString) throws IOException {
+    public static <T extends SpecificRecord> T deserializeFromJSONStringToAvro(Class<T> clazz, Schema schema, String jsonString) throws IOException {
         
         JsonDecoder decoder = DecoderFactory.get().jsonDecoder(schema, jsonString);
 
@@ -48,7 +48,7 @@ public final class SerializationFactory {
         return reader.read(null, decoder);
     }
     
-    public static <T> String encodeAvroTypeToJSONString(T obj) throws IOException {
+    public static <T extends SpecificRecord> String serializeAvroTypeToJSONString(T obj) throws IOException {
         if(obj == null || !(obj instanceof SpecificRecord)) {
             return null;
         }

@@ -27,7 +27,6 @@
   	{"name": "email", "type": "string"},
   	{"name": "id", "type": "long"},
   	{"name": "name", "type": "string"},
-  	{"name": "password", "type": "string"},
-  	{"name": "interests", "type": {"type": "array", "items": "string"}}
+  	{"name": "password", "type": "string"}
   ]
 }

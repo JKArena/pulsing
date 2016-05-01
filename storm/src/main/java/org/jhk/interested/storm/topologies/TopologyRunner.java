@@ -23,7 +23,6 @@ import org.apache.storm.StormSubmitter;
 import org.apache.storm.generated.AlreadyAliveException;
 import org.apache.storm.generated.AuthorizationException;
 import org.apache.storm.generated.InvalidTopologyException;
-import org.apache.storm.generated.StormTopology;
 
 /**
  * @author Ji Kim
@@ -32,13 +31,12 @@ public final class TopologyRunner {
     
     public static void main(String[] args) throws AlreadyAliveException, InvalidTopologyException, AuthorizationException {
         
-        StormTopology topology = UserTopologyBuilder.build();
-        
         Config config = new Config();
         config.setNumWorkers(2);
         config.setMessageTimeoutSecs(60);
         
-        StormSubmitter.submitTopology("user-topology", config, topology);
+        StormSubmitter.submitTopology("user-topology", config, UserTopologyBuilder.build());
+        //StormSubmitter.submitTopology("interest-topology", config, InterestTopologyBuilder.build());
         
     }
     
