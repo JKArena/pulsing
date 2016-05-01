@@ -16,28 +16,42 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.interested.serialization.pojo;
+package org.jhk.interested.serialization.avro.serializers;
 
-import java.nio.ByteBuffer;
-import java.util.List;
+import java.io.IOException;
+import java.util.Map;
+
+import org.apache.avro.specific.SpecificRecord;
+import org.apache.kafka.common.serialization.Serializer;
+
 
 /**
  * @author Ji Kim
  */
-public interface IUser {
+public final class KafkaAvroJSONSerializer implements Serializer<SpecificRecord> {
     
-    ByteBuffer getPicture();
-    
-    IAddress getAddress();
-    
-    CharSequence getEmail();
-    
-    long getId();
-    
-    CharSequence getName();
-    
-    CharSequence getPassword();
-    
-    List<String> getInterests();
+    @Override
+    public void close() {
+        
+    }
+
+    @Override
+    public void configure(Map<String, ?> configs, boolean isKey) {
+        
+    }
+
+    @Override
+    public byte[] serialize(String topic, SpecificRecord data) {
+        
+        String result = "";
+        
+        try {
+            result = SerializationFactory.serializeAvroTypeToJSONString(data);
+        } catch (IOException ioExcept) {
+            ioExcept.printStackTrace();
+        }
+        
+        return result.getBytes();
+    }
     
 }

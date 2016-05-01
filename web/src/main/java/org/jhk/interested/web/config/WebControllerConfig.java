@@ -16,21 +16,21 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.interested.serialization.pojo;
+package org.jhk.interested.web.config;
+
+import org.jhk.interested.web.controller.InterestController;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
 /**
  * @author Ji Kim
  */
-public interface IInterest {
+@Configuration
+public class WebControllerConfig {
     
-    long getId();
-    
-    long getUserId();
-    
-    long getTimeStamp();
-    
-    CharSequence getValue();
-    
-    Object getAction();
+    @Bean(name="interestController")
+    public InterestController getInterestController() {
+        return new InterestController();
+    }
     
 }

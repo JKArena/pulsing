@@ -7,8 +7,8 @@ package org.jhk.interested.serialization.avro;
 @SuppressWarnings("all")
 @org.apache.avro.specific.AvroGenerated
 public class User extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
-  private static final long serialVersionUID = -140249436267901296L;
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"User\",\"namespace\":\"org.jhk.interested.serialization.avro\",\"fields\":[{\"name\":\"picture\",\"type\":\"bytes\"},{\"name\":\"address\",\"type\":{\"type\":\"record\",\"name\":\"Address\",\"fields\":[{\"name\":\"address\",\"type\":\"string\"},{\"name\":\"coordinates\",\"type\":{\"type\":\"array\",\"items\":\"double\"}},{\"name\":\"description\",\"type\":\"string\"}]}},{\"name\":\"email\",\"type\":\"string\"},{\"name\":\"id\",\"type\":\"long\"},{\"name\":\"name\",\"type\":\"string\"},{\"name\":\"password\",\"type\":\"string\"},{\"name\":\"interests\",\"type\":{\"type\":\"array\",\"items\":\"string\"}}]}");
+  private static final long serialVersionUID = -8327263443366850633L;
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"User\",\"namespace\":\"org.jhk.interested.serialization.avro\",\"fields\":[{\"name\":\"picture\",\"type\":\"bytes\"},{\"name\":\"address\",\"type\":{\"type\":\"record\",\"name\":\"Address\",\"fields\":[{\"name\":\"address\",\"type\":\"string\"},{\"name\":\"coordinates\",\"type\":{\"type\":\"array\",\"items\":\"double\"}},{\"name\":\"description\",\"type\":\"string\"}]}},{\"name\":\"email\",\"type\":\"string\"},{\"name\":\"id\",\"type\":\"long\"},{\"name\":\"name\",\"type\":\"string\"},{\"name\":\"password\",\"type\":\"string\"}]}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
   @Deprecated public java.nio.ByteBuffer picture;
   @Deprecated public org.jhk.interested.serialization.avro.Address address;
@@ -16,7 +16,6 @@ public class User extends org.apache.avro.specific.SpecificRecordBase implements
   @Deprecated public long id;
   @Deprecated public java.lang.CharSequence name;
   @Deprecated public java.lang.CharSequence password;
-  @Deprecated public java.util.List<java.lang.CharSequence> interests;
 
   /**
    * Default constructor.  Note that this does not initialize fields
@@ -28,14 +27,13 @@ public class User extends org.apache.avro.specific.SpecificRecordBase implements
   /**
    * All-args constructor.
    */
-  public User(java.nio.ByteBuffer picture, org.jhk.interested.serialization.avro.Address address, java.lang.CharSequence email, java.lang.Long id, java.lang.CharSequence name, java.lang.CharSequence password, java.util.List<java.lang.CharSequence> interests) {
+  public User(java.nio.ByteBuffer picture, org.jhk.interested.serialization.avro.Address address, java.lang.CharSequence email, java.lang.Long id, java.lang.CharSequence name, java.lang.CharSequence password) {
     this.picture = picture;
     this.address = address;
     this.email = email;
     this.id = id;
     this.name = name;
     this.password = password;
-    this.interests = interests;
   }
 
   public org.apache.avro.Schema getSchema() { return SCHEMA$; }
@@ -48,7 +46,6 @@ public class User extends org.apache.avro.specific.SpecificRecordBase implements
     case 3: return id;
     case 4: return name;
     case 5: return password;
-    case 6: return interests;
     default: throw new org.apache.avro.AvroRuntimeException("Bad index");
     }
   }
@@ -62,7 +59,6 @@ public class User extends org.apache.avro.specific.SpecificRecordBase implements
     case 3: id = (java.lang.Long)value$; break;
     case 4: name = (java.lang.CharSequence)value$; break;
     case 5: password = (java.lang.CharSequence)value$; break;
-    case 6: interests = (java.util.List<java.lang.CharSequence>)value$; break;
     default: throw new org.apache.avro.AvroRuntimeException("Bad index");
     }
   }
@@ -158,21 +154,6 @@ public class User extends org.apache.avro.specific.SpecificRecordBase implements
   }
 
   /**
-   * Gets the value of the 'interests' field.
-   */
-  public java.util.List<java.lang.CharSequence> getInterests() {
-    return interests;
-  }
-
-  /**
-   * Sets the value of the 'interests' field.
-   * @param value the value to set.
-   */
-  public void setInterests(java.util.List<java.lang.CharSequence> value) {
-    this.interests = value;
-  }
-
-  /**
    * Creates a new User RecordBuilder.
    * @return A new User RecordBuilder
    */
@@ -211,7 +192,6 @@ public class User extends org.apache.avro.specific.SpecificRecordBase implements
     private long id;
     private java.lang.CharSequence name;
     private java.lang.CharSequence password;
-    private java.util.List<java.lang.CharSequence> interests;
 
     /** Creates a new Builder */
     private Builder() {
@@ -251,10 +231,6 @@ public class User extends org.apache.avro.specific.SpecificRecordBase implements
         this.password = data().deepCopy(fields()[5].schema(), other.password);
         fieldSetFlags()[5] = true;
       }
-      if (isValidValue(fields()[6], other.interests)) {
-        this.interests = data().deepCopy(fields()[6].schema(), other.interests);
-        fieldSetFlags()[6] = true;
-      }
     }
     
     /**
@@ -287,10 +263,6 @@ public class User extends org.apache.avro.specific.SpecificRecordBase implements
       if (isValidValue(fields()[5], other.password)) {
         this.password = data().deepCopy(fields()[5].schema(), other.password);
         fieldSetFlags()[5] = true;
-      }
-      if (isValidValue(fields()[6], other.interests)) {
-        this.interests = data().deepCopy(fields()[6].schema(), other.interests);
-        fieldSetFlags()[6] = true;
       }
     }
 
@@ -561,45 +533,6 @@ public class User extends org.apache.avro.specific.SpecificRecordBase implements
       return this;
     }
 
-    /**
-      * Gets the value of the 'interests' field.
-      * @return The value.
-      */
-    public java.util.List<java.lang.CharSequence> getInterests() {
-      return interests;
-    }
-
-    /**
-      * Sets the value of the 'interests' field.
-      * @param value The value of 'interests'.
-      * @return This builder.
-      */
-    public org.jhk.interested.serialization.avro.User.Builder setInterests(java.util.List<java.lang.CharSequence> value) {
-      validate(fields()[6], value);
-      this.interests = value;
-      fieldSetFlags()[6] = true;
-      return this; 
-    }
-
-    /**
-      * Checks whether the 'interests' field has been set.
-      * @return True if the 'interests' field has been set, false otherwise.
-      */
-    public boolean hasInterests() {
-      return fieldSetFlags()[6];
-    }
-
-
-    /**
-      * Clears the value of the 'interests' field.
-      * @return This builder.
-      */
-    public org.jhk.interested.serialization.avro.User.Builder clearInterests() {
-      interests = null;
-      fieldSetFlags()[6] = false;
-      return this;
-    }
-
     @Override
     public User build() {
       try {
@@ -614,7 +547,6 @@ public class User extends org.apache.avro.specific.SpecificRecordBase implements
         record.id = fieldSetFlags()[3] ? this.id : (java.lang.Long) defaultValue(fields()[3]);
         record.name = fieldSetFlags()[4] ? this.name : (java.lang.CharSequence) defaultValue(fields()[4]);
         record.password = fieldSetFlags()[5] ? this.password : (java.lang.CharSequence) defaultValue(fields()[5]);
-        record.interests = fieldSetFlags()[6] ? this.interests : (java.util.List<java.lang.CharSequence>) defaultValue(fields()[6]);
         return record;
       } catch (Exception e) {
         throw new org.apache.avro.AvroRuntimeException(e);

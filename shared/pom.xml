@@ -15,7 +15,6 @@
   <url>https://github.com/JHKTruth/interested/shared</url>
   
   <modules>
-    <module>core</module>
     <module>serialization</module>
   </modules>
   
