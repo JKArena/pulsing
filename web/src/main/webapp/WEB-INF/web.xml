@@ -24,9 +24,10 @@
   <display-name>Interested Web Application</display-name>
   
   <servlet>
-    <servlet-name>springMVC</servlet-name>
+    <servlet-name>spring</servlet-name>
     <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>        
     
+    <!-- 
     <init-param>
       <param-name>contextClass</param-name>
       <param-value>
@@ -37,12 +38,17 @@
       <param-name>contextConfigLocation</param-name>
       <param-value>org.jhk.interested.web.config.WebControllerConfig</param-value>
     </init-param> 
+     -->
+    <init-param>
+      <param-name>contextConfigLocation</param-name>
+      <param-value>/WEB-INF/spring-servlet.xml</param-value>
+    </init-param>
     <load-on-startup>1</load-on-startup>
     <multipart-config/>
   </servlet>
   
   <servlet-mapping>
-    <servlet-name>springMVC</servlet-name>
+    <servlet-name>spring</servlet-name>
     <url-pattern>/controller/*</url-pattern>
   </servlet-mapping>
   

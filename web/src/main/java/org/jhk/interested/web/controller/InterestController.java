@@ -18,10 +18,10 @@
  */
 package org.jhk.interested.web.controller;
 
+import org.jhk.interested.serialization.avro.Interest;
 import org.jhk.interested.web.common.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,10 +37,8 @@ public final class InterestController {
     
     private static final Logger _LOGGER = LoggerFactory.getLogger(InterestController.class);
     
-    @RequestMapping(value="/createInterest", method=RequestMethod.POST, consumes=MediaType.APPLICATION_JSON_VALUE, produces=MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public Result subscribeInterest(@RequestBody Interest interest) {
-        _LOGGER.info("In subscribeInterest");
+    @RequestMapping(value="/createInterest", method=RequestMethod.POST)
+    public @ResponseBody Result subscribeInterest(@RequestBody Interest interest) {
         
         return new Result(Result.CODE.SUCCESS);
     }
