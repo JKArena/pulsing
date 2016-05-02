@@ -93,25 +93,19 @@
       <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-core</artifactId>
-        <version>${spring.core}</version>
+        <version>${spring}</version>
       </dependency>
       
       <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-context</artifactId>
-        <version>${spring.context}</version>
-      </dependency>
-      
-      <dependency>
-        <groupId>org.springframework</groupId>
-        <artifactId>spring-web</artifactId>
-        <version>${spring.web}</version>
+        <version>${spring}</version>
       </dependency>
       
       <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-webmvc</artifactId>
-        <version>${spring.web.mvc}</version>
+        <version>${spring}</version>
       </dependency>
       
       <dependency>
@@ -123,7 +117,31 @@
       <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-beans</artifactId>
-        <version>${spring.beans}</version>
+        <version>${spring}</version>
+      </dependency>
+      
+      <dependency>
+	      <groupId>com.fasterxml.jackson.core</groupId>
+	      <artifactId>jackson-core</artifactId>
+	      <version>${jackson}</version>
+      </dependency>
+
+      <dependency>
+	      <groupId>com.fasterxml.jackson.core</groupId>
+	      <artifactId>jackson-databind</artifactId>
+	      <version>${jackson}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-annotations</artifactId>
+        <version>${jackson}</version>
+      </dependency>
+      
+      <dependency>
+        <groupId>org.mortbay.jetty</groupId>
+        <artifactId>maven-jetty-plugin</artifactId>
+        <version>${jetty}</version>
       </dependency>
       
       <dependency>
@@ -147,13 +165,11 @@
     <org.apache.hadoop.hdfs>2.7.2</org.apache.hadoop.hdfs>
     <dfs-datastores>1.3.6</dfs-datastores>
     <cascalog>2.1.1</cascalog>
-    <spring.core>4.2.5.RELEASE</spring.core>
-    <spring.context>4.2.5.RELEASE</spring.context>
-    <spring.web>4.2.5.RELEASE</spring.web>
-    <spring.web.mvc>4.2.5.RELEASE</spring.web.mvc>
-    <spring.beans>4.2.5.RELEASE</spring.beans>
-    <kafka.clients>0.9.0.1</kafka.clients>
+    <spring>4.2.5.RELEASE</spring>
     <spring.integration.kafka>1.3.0.RELEASE</spring.integration.kafka>
+    <jackson>2.7.4</jackson>
+    <jetty>6.1.10</jetty>
+    <kafka.clients>0.9.0.1</kafka.clients>
     <junit>3.8.1</junit>
   </properties>
   
