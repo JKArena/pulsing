@@ -2,4 +2,5 @@
 .project
 
 .settings
+src/main/java/org/jhk/interested/serialization/avro/records/
 target

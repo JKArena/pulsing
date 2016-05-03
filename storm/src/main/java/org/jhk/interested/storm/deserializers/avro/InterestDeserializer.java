@@ -25,7 +25,7 @@ import org.apache.storm.trident.operation.TridentCollector;
 import org.apache.storm.trident.tuple.TridentTuple;
 import org.apache.storm.tuple.Fields;
 import org.apache.storm.tuple.Values;
-import org.jhk.interested.serialization.avro.Interest;
+import org.jhk.interested.serialization.avro.records.Interest;
 import org.jhk.interested.serialization.avro.serializers.SerializationFactory;
 
 /**

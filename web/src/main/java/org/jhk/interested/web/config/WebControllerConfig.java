@@ -20,7 +20,7 @@ package org.jhk.interested.web.config;
 
 import java.util.List;
 
-import org.jhk.interested.serialization.avro.Interest;
+import org.jhk.interested.serialization.avro.records.Interest;
 import org.jhk.interested.web.controller.InterestController;
 import org.jhk.interested.web.serialization.AvroJsonSerializer;
 import org.jhk.interested.web.serialization.JsonAvroDeserializer;
