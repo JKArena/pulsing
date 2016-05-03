@@ -16,17 +16,16 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.jhk.interested.web.config;
 
-{
-  "namespace": "org.jhk.interested.serialization.avro",
-  "type": "record",
-  "name": "Interest",
-  "fields": [
-    {"name": "id", "type": "InterestId"},
-    {"name": "userId", "type": "UserId"},
-    {"name": "timeStamp", "type": ["null", "long"], "default": null}, //optional as populate on the server side
-    {"name": "value", "type": "string"},
-    {"name": "Action", "type": ["null", {"type": "enum", "name": "ACTION",
-        "symbols": ["CREATE", "SUBSCRIBE", "UNSUBSCRIBE", "DELETE"] }], "default": null}
-  ]
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
+
+/**
+ * @author Ji Kim
+ */
+@Import(WebControllerConfig.class)
+@Configuration
+public class Config {
+    
 }

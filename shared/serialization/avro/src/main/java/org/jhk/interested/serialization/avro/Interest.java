@@ -7,12 +7,12 @@ package org.jhk.interested.serialization.avro;
 @SuppressWarnings("all")
 @org.apache.avro.specific.AvroGenerated
 public class Interest extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
-  private static final long serialVersionUID = -7858149350796499175L;
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"Interest\",\"namespace\":\"org.jhk.interested.serialization.avro\",\"fields\":[{\"name\":\"id\",\"type\":\"long\"},{\"name\":\"userId\",\"type\":\"long\"},{\"name\":\"timeStamp\",\"type\":\"long\"},{\"name\":\"value\",\"type\":\"string\"},{\"name\":\"Action\",\"type\":{\"type\":\"enum\",\"name\":\"ACTION\",\"symbols\":[\"CREATE\",\"SUBSCRIBE\",\"UNSUBSCRIBE\",\"DELETE\"]}}]}");
+  private static final long serialVersionUID = -8287698815051913730L;
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"Interest\",\"namespace\":\"org.jhk.interested.serialization.avro\",\"fields\":[{\"name\":\"id\",\"type\":{\"type\":\"record\",\"name\":\"InterestId\",\"fields\":[{\"name\":\"id\",\"type\":\"long\"}]}},{\"name\":\"userId\",\"type\":{\"type\":\"record\",\"name\":\"UserId\",\"fields\":[{\"name\":\"id\",\"type\":[\"null\",\"long\"],\"default\":null},{\"name\":\"cookie\",\"type\":[\"null\",\"string\"],\"default\":null}]}},{\"name\":\"timeStamp\",\"type\":[\"null\",\"long\"],\"default\":null},{\"name\":\"value\",\"type\":\"string\"},{\"name\":\"Action\",\"type\":[\"null\",{\"type\":\"enum\",\"name\":\"ACTION\",\"symbols\":[\"CREATE\",\"SUBSCRIBE\",\"UNSUBSCRIBE\",\"DELETE\"]}],\"default\":null}]}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
-  @Deprecated public long id;
-  @Deprecated public long userId;
-  @Deprecated public long timeStamp;
+  @Deprecated public org.jhk.interested.serialization.avro.InterestId id;
+  @Deprecated public org.jhk.interested.serialization.avro.UserId userId;
+  @Deprecated public java.lang.Long timeStamp;
   @Deprecated public java.lang.CharSequence value;
   @Deprecated public org.jhk.interested.serialization.avro.ACTION Action;
 
@@ -26,7 +26,7 @@ public class Interest extends org.apache.avro.specific.SpecificRecordBase implem
   /**
    * All-args constructor.
    */
-  public Interest(java.lang.Long id, java.lang.Long userId, java.lang.Long timeStamp, java.lang.CharSequence value, org.jhk.interested.serialization.avro.ACTION Action) {
+  public Interest(org.jhk.interested.serialization.avro.InterestId id, org.jhk.interested.serialization.avro.UserId userId, java.lang.Long timeStamp, java.lang.CharSequence value, org.jhk.interested.serialization.avro.ACTION Action) {
     this.id = id;
     this.userId = userId;
     this.timeStamp = timeStamp;
@@ -50,8 +50,8 @@ public class Interest extends org.apache.avro.specific.SpecificRecordBase implem
   @SuppressWarnings(value="unchecked")
   public void put(int field$, java.lang.Object value$) {
     switch (field$) {
-    case 0: id = (java.lang.Long)value$; break;
-    case 1: userId = (java.lang.Long)value$; break;
+    case 0: id = (org.jhk.interested.serialization.avro.InterestId)value$; break;
+    case 1: userId = (org.jhk.interested.serialization.avro.UserId)value$; break;
     case 2: timeStamp = (java.lang.Long)value$; break;
     case 3: value = (java.lang.CharSequence)value$; break;
     case 4: Action = (org.jhk.interested.serialization.avro.ACTION)value$; break;
@@ -62,7 +62,7 @@ public class Interest extends org.apache.avro.specific.SpecificRecordBase implem
   /**
    * Gets the value of the 'id' field.
    */
-  public java.lang.Long getId() {
+  public org.jhk.interested.serialization.avro.InterestId getId() {
     return id;
   }
 
@@ -70,14 +70,14 @@ public class Interest extends org.apache.avro.specific.SpecificRecordBase implem
    * Sets the value of the 'id' field.
    * @param value the value to set.
    */
-  public void setId(java.lang.Long value) {
+  public void setId(org.jhk.interested.serialization.avro.InterestId value) {
     this.id = value;
   }
 
   /**
    * Gets the value of the 'userId' field.
    */
-  public java.lang.Long getUserId() {
+  public org.jhk.interested.serialization.avro.UserId getUserId() {
     return userId;
   }
 
@@ -85,7 +85,7 @@ public class Interest extends org.apache.avro.specific.SpecificRecordBase implem
    * Sets the value of the 'userId' field.
    * @param value the value to set.
    */
-  public void setUserId(java.lang.Long value) {
+  public void setUserId(org.jhk.interested.serialization.avro.UserId value) {
     this.userId = value;
   }
 
@@ -166,9 +166,11 @@ public class Interest extends org.apache.avro.specific.SpecificRecordBase implem
   public static class Builder extends org.apache.avro.specific.SpecificRecordBuilderBase<Interest>
     implements org.apache.avro.data.RecordBuilder<Interest> {
 
-    private long id;
-    private long userId;
-    private long timeStamp;
+    private org.jhk.interested.serialization.avro.InterestId id;
+    private org.jhk.interested.serialization.avro.InterestId.Builder idBuilder;
+    private org.jhk.interested.serialization.avro.UserId userId;
+    private org.jhk.interested.serialization.avro.UserId.Builder userIdBuilder;
+    private java.lang.Long timeStamp;
     private java.lang.CharSequence value;
     private org.jhk.interested.serialization.avro.ACTION Action;
 
@@ -187,9 +189,15 @@ public class Interest extends org.apache.avro.specific.SpecificRecordBase implem
         this.id = data().deepCopy(fields()[0].schema(), other.id);
         fieldSetFlags()[0] = true;
       }
+      if (other.hasIdBuilder()) {
+        this.idBuilder = org.jhk.interested.serialization.avro.InterestId.newBuilder(other.getIdBuilder());
+      }
       if (isValidValue(fields()[1], other.userId)) {
         this.userId = data().deepCopy(fields()[1].schema(), other.userId);
         fieldSetFlags()[1] = true;
+      }
+      if (other.hasUserIdBuilder()) {
+        this.userIdBuilder = org.jhk.interested.serialization.avro.UserId.newBuilder(other.getUserIdBuilder());
       }
       if (isValidValue(fields()[2], other.timeStamp)) {
         this.timeStamp = data().deepCopy(fields()[2].schema(), other.timeStamp);
@@ -215,10 +223,12 @@ public class Interest extends org.apache.avro.specific.SpecificRecordBase implem
         this.id = data().deepCopy(fields()[0].schema(), other.id);
         fieldSetFlags()[0] = true;
       }
+      this.idBuilder = null;
       if (isValidValue(fields()[1], other.userId)) {
         this.userId = data().deepCopy(fields()[1].schema(), other.userId);
         fieldSetFlags()[1] = true;
       }
+      this.userIdBuilder = null;
       if (isValidValue(fields()[2], other.timeStamp)) {
         this.timeStamp = data().deepCopy(fields()[2].schema(), other.timeStamp);
         fieldSetFlags()[2] = true;
@@ -237,7 +247,7 @@ public class Interest extends org.apache.avro.specific.SpecificRecordBase implem
       * Gets the value of the 'id' field.
       * @return The value.
       */
-    public java.lang.Long getId() {
+    public org.jhk.interested.serialization.avro.InterestId getId() {
       return id;
     }
 
@@ -246,8 +256,9 @@ public class Interest extends org.apache.avro.specific.SpecificRecordBase implem
       * @param value The value of 'id'.
       * @return This builder.
       */
-    public org.jhk.interested.serialization.avro.Interest.Builder setId(long value) {
+    public org.jhk.interested.serialization.avro.Interest.Builder setId(org.jhk.interested.serialization.avro.InterestId value) {
       validate(fields()[0], value);
+      this.idBuilder = null;
       this.id = value;
       fieldSetFlags()[0] = true;
       return this; 
@@ -261,12 +272,46 @@ public class Interest extends org.apache.avro.specific.SpecificRecordBase implem
       return fieldSetFlags()[0];
     }
 
+    /**
+     * Gets the Builder instance for the 'id' field and creates one if it doesn't exist yet.
+     * @return This builder.
+     */
+    public org.jhk.interested.serialization.avro.InterestId.Builder getIdBuilder() {
+      if (idBuilder == null) {
+        if (hasId()) {
+          setIdBuilder(org.jhk.interested.serialization.avro.InterestId.newBuilder(id));
+        } else {
+          setIdBuilder(org.jhk.interested.serialization.avro.InterestId.newBuilder());
+        }
+      }
+      return idBuilder;
+    }
+
+    /**
+     * Sets the Builder instance for the 'id' field
+     * @return This builder.
+     */
+    public org.jhk.interested.serialization.avro.Interest.Builder setIdBuilder(org.jhk.interested.serialization.avro.InterestId.Builder value) {
+      clearId();
+      idBuilder = value;
+      return this;
+    }
+
+    /**
+     * Checks whether the 'id' field has an active Builder instance
+     * @return True if the 'id' field has an active Builder instance
+     */
+    public boolean hasIdBuilder() {
+      return idBuilder != null;
+    }
 
     /**
       * Clears the value of the 'id' field.
       * @return This builder.
       */
     public org.jhk.interested.serialization.avro.Interest.Builder clearId() {
+      id = null;
+      idBuilder = null;
       fieldSetFlags()[0] = false;
       return this;
     }
@@ -275,7 +320,7 @@ public class Interest extends org.apache.avro.specific.SpecificRecordBase implem
       * Gets the value of the 'userId' field.
       * @return The value.
       */
-    public java.lang.Long getUserId() {
+    public org.jhk.interested.serialization.avro.UserId getUserId() {
       return userId;
     }
 
@@ -284,8 +329,9 @@ public class Interest extends org.apache.avro.specific.SpecificRecordBase implem
       * @param value The value of 'userId'.
       * @return This builder.
       */
-    public org.jhk.interested.serialization.avro.Interest.Builder setUserId(long value) {
+    public org.jhk.interested.serialization.avro.Interest.Builder setUserId(org.jhk.interested.serialization.avro.UserId value) {
       validate(fields()[1], value);
+      this.userIdBuilder = null;
       this.userId = value;
       fieldSetFlags()[1] = true;
       return this; 
@@ -299,12 +345,46 @@ public class Interest extends org.apache.avro.specific.SpecificRecordBase implem
       return fieldSetFlags()[1];
     }
 
+    /**
+     * Gets the Builder instance for the 'userId' field and creates one if it doesn't exist yet.
+     * @return This builder.
+     */
+    public org.jhk.interested.serialization.avro.UserId.Builder getUserIdBuilder() {
+      if (userIdBuilder == null) {
+        if (hasUserId()) {
+          setUserIdBuilder(org.jhk.interested.serialization.avro.UserId.newBuilder(userId));
+        } else {
+          setUserIdBuilder(org.jhk.interested.serialization.avro.UserId.newBuilder());
+        }
+      }
+      return userIdBuilder;
+    }
+
+    /**
+     * Sets the Builder instance for the 'userId' field
+     * @return This builder.
+     */
+    public org.jhk.interested.serialization.avro.Interest.Builder setUserIdBuilder(org.jhk.interested.serialization.avro.UserId.Builder value) {
+      clearUserId();
+      userIdBuilder = value;
+      return this;
+    }
+
+    /**
+     * Checks whether the 'userId' field has an active Builder instance
+     * @return True if the 'userId' field has an active Builder instance
+     */
+    public boolean hasUserIdBuilder() {
+      return userIdBuilder != null;
+    }
 
     /**
       * Clears the value of the 'userId' field.
       * @return This builder.
       */
     public org.jhk.interested.serialization.avro.Interest.Builder clearUserId() {
+      userId = null;
+      userIdBuilder = null;
       fieldSetFlags()[1] = false;
       return this;
     }
@@ -322,7 +402,7 @@ public class Interest extends org.apache.avro.specific.SpecificRecordBase implem
       * @param value The value of 'timeStamp'.
       * @return This builder.
       */
-    public org.jhk.interested.serialization.avro.Interest.Builder setTimeStamp(long value) {
+    public org.jhk.interested.serialization.avro.Interest.Builder setTimeStamp(java.lang.Long value) {
       validate(fields()[2], value);
       this.timeStamp = value;
       fieldSetFlags()[2] = true;
@@ -343,6 +423,7 @@ public class Interest extends org.apache.avro.specific.SpecificRecordBase implem
       * @return This builder.
       */
     public org.jhk.interested.serialization.avro.Interest.Builder clearTimeStamp() {
+      timeStamp = null;
       fieldSetFlags()[2] = false;
       return this;
     }
@@ -429,8 +510,16 @@ public class Interest extends org.apache.avro.specific.SpecificRecordBase implem
     public Interest build() {
       try {
         Interest record = new Interest();
-        record.id = fieldSetFlags()[0] ? this.id : (java.lang.Long) defaultValue(fields()[0]);
-        record.userId = fieldSetFlags()[1] ? this.userId : (java.lang.Long) defaultValue(fields()[1]);
+        if (idBuilder != null) {
+          record.id = this.idBuilder.build();
+        } else {
+          record.id = fieldSetFlags()[0] ? this.id : (org.jhk.interested.serialization.avro.InterestId) defaultValue(fields()[0]);
+        }
+        if (userIdBuilder != null) {
+          record.userId = this.userIdBuilder.build();
+        } else {
+          record.userId = fieldSetFlags()[1] ? this.userId : (org.jhk.interested.serialization.avro.UserId) defaultValue(fields()[1]);
+        }
         record.timeStamp = fieldSetFlags()[2] ? this.timeStamp : (java.lang.Long) defaultValue(fields()[2]);
         record.value = fieldSetFlags()[3] ? this.value : (java.lang.CharSequence) defaultValue(fields()[3]);
         record.Action = fieldSetFlags()[4] ? this.Action : (org.jhk.interested.serialization.avro.ACTION) defaultValue(fields()[4]);

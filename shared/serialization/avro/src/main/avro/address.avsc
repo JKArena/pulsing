@@ -23,7 +23,7 @@
   "name": "Address",
   "fields": [
     {"name": "address", "type": "string"},
-  	{"name": "coordinates", "type": {"type": "array", "items": "double"}},
+  	{"name": "coordinates", "type": ["null", {"type": "array", "items": "double"}], "default": null},
   	{"name": "description", "type": "string"}
   ]
 }

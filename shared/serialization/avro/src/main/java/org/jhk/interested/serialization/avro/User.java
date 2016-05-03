@@ -7,13 +7,13 @@ package org.jhk.interested.serialization.avro;
 @SuppressWarnings("all")
 @org.apache.avro.specific.AvroGenerated
 public class User extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
-  private static final long serialVersionUID = -8327263443366850633L;
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"User\",\"namespace\":\"org.jhk.interested.serialization.avro\",\"fields\":[{\"name\":\"picture\",\"type\":\"bytes\"},{\"name\":\"address\",\"type\":{\"type\":\"record\",\"name\":\"Address\",\"fields\":[{\"name\":\"address\",\"type\":\"string\"},{\"name\":\"coordinates\",\"type\":{\"type\":\"array\",\"items\":\"double\"}},{\"name\":\"description\",\"type\":\"string\"}]}},{\"name\":\"email\",\"type\":\"string\"},{\"name\":\"id\",\"type\":\"long\"},{\"name\":\"name\",\"type\":\"string\"},{\"name\":\"password\",\"type\":\"string\"}]}");
+  private static final long serialVersionUID = -7950020721857565098L;
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"User\",\"namespace\":\"org.jhk.interested.serialization.avro\",\"fields\":[{\"name\":\"picture\",\"type\":[\"null\",\"bytes\"],\"default\":null},{\"name\":\"address\",\"type\":{\"type\":\"record\",\"name\":\"Address\",\"fields\":[{\"name\":\"address\",\"type\":\"string\"},{\"name\":\"coordinates\",\"type\":[\"null\",{\"type\":\"array\",\"items\":\"double\"}],\"default\":null},{\"name\":\"description\",\"type\":\"string\"}]}},{\"name\":\"email\",\"type\":\"string\"},{\"name\":\"id\",\"type\":{\"type\":\"record\",\"name\":\"UserId\",\"fields\":[{\"name\":\"id\",\"type\":[\"null\",\"long\"],\"default\":null},{\"name\":\"cookie\",\"type\":[\"null\",\"string\"],\"default\":null}]}},{\"name\":\"name\",\"type\":\"string\"},{\"name\":\"password\",\"type\":\"string\"}]}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
   @Deprecated public java.nio.ByteBuffer picture;
   @Deprecated public org.jhk.interested.serialization.avro.Address address;
   @Deprecated public java.lang.CharSequence email;
-  @Deprecated public long id;
+  @Deprecated public org.jhk.interested.serialization.avro.UserId id;
   @Deprecated public java.lang.CharSequence name;
   @Deprecated public java.lang.CharSequence password;
 
@@ -27,7 +27,7 @@ public class User extends org.apache.avro.specific.SpecificRecordBase implements
   /**
    * All-args constructor.
    */
-  public User(java.nio.ByteBuffer picture, org.jhk.interested.serialization.avro.Address address, java.lang.CharSequence email, java.lang.Long id, java.lang.CharSequence name, java.lang.CharSequence password) {
+  public User(java.nio.ByteBuffer picture, org.jhk.interested.serialization.avro.Address address, java.lang.CharSequence email, org.jhk.interested.serialization.avro.UserId id, java.lang.CharSequence name, java.lang.CharSequence password) {
     this.picture = picture;
     this.address = address;
     this.email = email;
@@ -56,7 +56,7 @@ public class User extends org.apache.avro.specific.SpecificRecordBase implements
     case 0: picture = (java.nio.ByteBuffer)value$; break;
     case 1: address = (org.jhk.interested.serialization.avro.Address)value$; break;
     case 2: email = (java.lang.CharSequence)value$; break;
-    case 3: id = (java.lang.Long)value$; break;
+    case 3: id = (org.jhk.interested.serialization.avro.UserId)value$; break;
     case 4: name = (java.lang.CharSequence)value$; break;
     case 5: password = (java.lang.CharSequence)value$; break;
     default: throw new org.apache.avro.AvroRuntimeException("Bad index");
@@ -111,7 +111,7 @@ public class User extends org.apache.avro.specific.SpecificRecordBase implements
   /**
    * Gets the value of the 'id' field.
    */
-  public java.lang.Long getId() {
+  public org.jhk.interested.serialization.avro.UserId getId() {
     return id;
   }
 
@@ -119,7 +119,7 @@ public class User extends org.apache.avro.specific.SpecificRecordBase implements
    * Sets the value of the 'id' field.
    * @param value the value to set.
    */
-  public void setId(java.lang.Long value) {
+  public void setId(org.jhk.interested.serialization.avro.UserId value) {
     this.id = value;
   }
 
@@ -189,7 +189,8 @@ public class User extends org.apache.avro.specific.SpecificRecordBase implements
     private org.jhk.interested.serialization.avro.Address address;
     private org.jhk.interested.serialization.avro.Address.Builder addressBuilder;
     private java.lang.CharSequence email;
-    private long id;
+    private org.jhk.interested.serialization.avro.UserId id;
+    private org.jhk.interested.serialization.avro.UserId.Builder idBuilder;
     private java.lang.CharSequence name;
     private java.lang.CharSequence password;
 
@@ -222,6 +223,9 @@ public class User extends org.apache.avro.specific.SpecificRecordBase implements
       if (isValidValue(fields()[3], other.id)) {
         this.id = data().deepCopy(fields()[3].schema(), other.id);
         fieldSetFlags()[3] = true;
+      }
+      if (other.hasIdBuilder()) {
+        this.idBuilder = org.jhk.interested.serialization.avro.UserId.newBuilder(other.getIdBuilder());
       }
       if (isValidValue(fields()[4], other.name)) {
         this.name = data().deepCopy(fields()[4].schema(), other.name);
@@ -256,6 +260,7 @@ public class User extends org.apache.avro.specific.SpecificRecordBase implements
         this.id = data().deepCopy(fields()[3].schema(), other.id);
         fieldSetFlags()[3] = true;
       }
+      this.idBuilder = null;
       if (isValidValue(fields()[4], other.name)) {
         this.name = data().deepCopy(fields()[4].schema(), other.name);
         fieldSetFlags()[4] = true;
@@ -421,7 +426,7 @@ public class User extends org.apache.avro.specific.SpecificRecordBase implements
       * Gets the value of the 'id' field.
       * @return The value.
       */
-    public java.lang.Long getId() {
+    public org.jhk.interested.serialization.avro.UserId getId() {
       return id;
     }
 
@@ -430,8 +435,9 @@ public class User extends org.apache.avro.specific.SpecificRecordBase implements
       * @param value The value of 'id'.
       * @return This builder.
       */
-    public org.jhk.interested.serialization.avro.User.Builder setId(long value) {
+    public org.jhk.interested.serialization.avro.User.Builder setId(org.jhk.interested.serialization.avro.UserId value) {
       validate(fields()[3], value);
+      this.idBuilder = null;
       this.id = value;
       fieldSetFlags()[3] = true;
       return this; 
@@ -445,12 +451,46 @@ public class User extends org.apache.avro.specific.SpecificRecordBase implements
       return fieldSetFlags()[3];
     }
 
+    /**
+     * Gets the Builder instance for the 'id' field and creates one if it doesn't exist yet.
+     * @return This builder.
+     */
+    public org.jhk.interested.serialization.avro.UserId.Builder getIdBuilder() {
+      if (idBuilder == null) {
+        if (hasId()) {
+          setIdBuilder(org.jhk.interested.serialization.avro.UserId.newBuilder(id));
+        } else {
+          setIdBuilder(org.jhk.interested.serialization.avro.UserId.newBuilder());
+        }
+      }
+      return idBuilder;
+    }
+
+    /**
+     * Sets the Builder instance for the 'id' field
+     * @return This builder.
+     */
+    public org.jhk.interested.serialization.avro.User.Builder setIdBuilder(org.jhk.interested.serialization.avro.UserId.Builder value) {
+      clearId();
+      idBuilder = value;
+      return this;
+    }
+
+    /**
+     * Checks whether the 'id' field has an active Builder instance
+     * @return True if the 'id' field has an active Builder instance
+     */
+    public boolean hasIdBuilder() {
+      return idBuilder != null;
+    }
 
     /**
       * Clears the value of the 'id' field.
       * @return This builder.
       */
     public org.jhk.interested.serialization.avro.User.Builder clearId() {
+      id = null;
+      idBuilder = null;
       fieldSetFlags()[3] = false;
       return this;
     }
@@ -544,7 +584,11 @@ public class User extends org.apache.avro.specific.SpecificRecordBase implements
           record.address = fieldSetFlags()[1] ? this.address : (org.jhk.interested.serialization.avro.Address) defaultValue(fields()[1]);
         }
         record.email = fieldSetFlags()[2] ? this.email : (java.lang.CharSequence) defaultValue(fields()[2]);
-        record.id = fieldSetFlags()[3] ? this.id : (java.lang.Long) defaultValue(fields()[3]);
+        if (idBuilder != null) {
+          record.id = this.idBuilder.build();
+        } else {
+          record.id = fieldSetFlags()[3] ? this.id : (org.jhk.interested.serialization.avro.UserId) defaultValue(fields()[3]);
+        }
         record.name = fieldSetFlags()[4] ? this.name : (java.lang.CharSequence) defaultValue(fields()[4]);
         record.password = fieldSetFlags()[5] ? this.password : (java.lang.CharSequence) defaultValue(fields()[5]);
         return record;

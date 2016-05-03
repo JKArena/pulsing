@@ -7,8 +7,8 @@ package org.jhk.interested.serialization.avro;
 @SuppressWarnings("all")
 @org.apache.avro.specific.AvroGenerated
 public class Address extends org.apache.avro.specific.SpecificRecordBase implements org.apache.avro.specific.SpecificRecord {
-  private static final long serialVersionUID = 273453767153077860L;
-  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"Address\",\"namespace\":\"org.jhk.interested.serialization.avro\",\"fields\":[{\"name\":\"address\",\"type\":\"string\"},{\"name\":\"coordinates\",\"type\":{\"type\":\"array\",\"items\":\"double\"}},{\"name\":\"description\",\"type\":\"string\"}]}");
+  private static final long serialVersionUID = 5832943155336325424L;
+  public static final org.apache.avro.Schema SCHEMA$ = new org.apache.avro.Schema.Parser().parse("{\"type\":\"record\",\"name\":\"Address\",\"namespace\":\"org.jhk.interested.serialization.avro\",\"fields\":[{\"name\":\"address\",\"type\":\"string\"},{\"name\":\"coordinates\",\"type\":[\"null\",{\"type\":\"array\",\"items\":\"double\"}],\"default\":null},{\"name\":\"description\",\"type\":\"string\"}]}");
   public static org.apache.avro.Schema getClassSchema() { return SCHEMA$; }
   @Deprecated public java.lang.CharSequence address;
   @Deprecated public java.util.List<java.lang.Double> coordinates;
@@ -296,7 +296,9 @@ public class Address extends org.apache.avro.specific.SpecificRecordBase impleme
 
     @Override
     public Address build() {
+        
       try {
+          
         Address record = new Address();
         record.address = fieldSetFlags()[0] ? this.address : (java.lang.CharSequence) defaultValue(fields()[0]);
         record.coordinates = fieldSetFlags()[1] ? this.coordinates : (java.util.List<java.lang.Double>) defaultValue(fields()[1]);

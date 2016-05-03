@@ -18,19 +18,38 @@
  */
 package org.jhk.interested.web.config;
 
+import java.util.List;
+
+import org.jhk.interested.serialization.avro.Interest;
 import org.jhk.interested.web.controller.InterestController;
+import org.jhk.interested.web.serialization.AvroJsonSerializer;
+import org.jhk.interested.web.serialization.JsonAvroDeserializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 /**
  * @author Ji Kim
  */
 @Configuration
-public class WebControllerConfig {
+@EnableWebMvc
+public class WebControllerConfig extends WebMvcConfigurerAdapter {
     
     @Bean(name="interestController")
     public InterestController getInterestController() {
         return new InterestController();
+    }
+    
+    @Override
+    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+        Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder();
+        builder.deserializerByType(Interest.class, new JsonAvroDeserializer<>(Interest.class, Interest.getClassSchema()));
+        builder.serializerByType(Interest.class, new AvroJsonSerializer<Interest>(Interest.class));
+        converters.add(new MappingJackson2HttpMessageConverter(builder.build()));
     }
     
 }
