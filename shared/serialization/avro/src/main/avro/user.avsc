@@ -22,10 +22,10 @@
   "type": "record",
   "name": "User",
   "fields": [
-  	{"name": "picture", "type": "bytes"},
+  	{"name": "picture", "type": ["null", "bytes"], "default": null},
   	{"name": "address", "type": "Address"},
   	{"name": "email", "type": "string"},
-  	{"name": "id", "type": "long"},
+  	{"name": "id", "type": "UserId"},
   	{"name": "name", "type": "string"},
   	{"name": "password", "type": "string"}
   ]

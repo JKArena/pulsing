@@ -42,8 +42,17 @@ public final class SerializationFactory {
     public static <T extends SpecificRecord> T deserializeFromJSONStringToAvro(Class<T> clazz, Schema schema, String jsonString) throws IOException {
         
         JsonDecoder decoder = DecoderFactory.get().jsonDecoder(schema, jsonString);
-
+        
         SpecificDatumReader<T> reader = new SpecificDatumReader<T>(schema);
+        
+        return reader.read(null, decoder);
+    }
+    
+    public static <T extends SpecificRecord> T deserializeFromJSONStringToAvro(Class<T> clazz, Schema wSchema, Schema rSchema, String jsonString) throws IOException {
+        
+        JsonDecoder decoder = DecoderFactory.get().jsonDecoder(rSchema, jsonString);
+        
+        SpecificDatumReader<T> reader = new SpecificDatumReader<T>(wSchema, rSchema);
         
         return reader.read(null, decoder);
     }

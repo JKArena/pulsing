@@ -53,6 +53,8 @@
               <outputDirectory>${project.basedir}/src/main/java/</outputDirectory>
               <imports>
               	<import>${project.basedir}/src/main/avro/address.avsc</import>
+                <import>${project.basedir}/src/main/avro/interestId.avsc</import>
+                <import>${project.basedir}/src/main/avro/userId.avsc</import>
               </imports>
             </configuration>
           </execution>
