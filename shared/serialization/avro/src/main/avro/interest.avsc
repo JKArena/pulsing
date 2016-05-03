@@ -18,7 +18,7 @@
  */
 
 {
-  "namespace": "org.jhk.interested.serialization.avro",
+  "namespace": "org.jhk.interested.serialization.avro.records",
   "type": "record",
   "name": "Interest",
   "fields": [

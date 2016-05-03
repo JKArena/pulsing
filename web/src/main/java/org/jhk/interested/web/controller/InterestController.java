@@ -18,7 +18,7 @@
  */
 package org.jhk.interested.web.controller;
 
-import org.jhk.interested.serialization.avro.Interest;
+import org.jhk.interested.serialization.avro.records.Interest;
 import org.jhk.interested.web.common.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
