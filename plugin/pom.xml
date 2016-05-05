@@ -7,15 +7,15 @@
     <version>${interested.version}</version>
   </parent>
   
-  <groupId>org.jhk.interested.shared</groupId>
-  <artifactId>interested-shared</artifactId>
+  <groupId>org.jhk.interested.plugin</groupId>
+  <artifactId>interested-plugin</artifactId>
   <packaging>pom</packaging>
   <version>${interested.version}</version>
-  <name>interested-shared</name>
-  <url>https://github.com/JHKTruth/interested/shared</url>
+  <name>interested-plugin</name>
+  <url>https://github.com/JHKTruth/interested/plugin</url>
   
   <modules>
-    <module>serialization</module>
+    <module>maven</module>
   </modules>
   
 </project>

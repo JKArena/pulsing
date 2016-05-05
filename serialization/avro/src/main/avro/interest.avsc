@@ -20,13 +20,13 @@
 {
   "namespace": "org.jhk.interested.serialization.avro.records",
   "type": "record",
-  "name": "User",
+  "name": "Interest",
   "fields": [
-  	{"name": "picture", "type": ["null", "bytes"], "default": null},
-  	{"name": "address", "type": "Address"},
-  	{"name": "email", "type": "string"},
-  	{"name": "id", "type": "UserId"},
-  	{"name": "name", "type": "string"},
-  	{"name": "password", "type": "string"}
+    {"name": "id", "type": ["null", "InterestId"], "default": "null"},
+    {"name": "userId", "type": ["null", "UserId"], "default": "null"},
+    {"name": "timeStamp", "type": ["null", "long"], "default": "null"}, //optional as populate on the server side
+    {"name": "value", "type": ["null", "string"], "default": "null"},
+    {"name": "action", "type": ["null", {"type": "enum", "name": "ACTION",
+        "symbols": ["CREATE", "SUBSCRIBE", "UNSUBSCRIBE", "DELETE"] }], "default": "null"}
   ]
 }

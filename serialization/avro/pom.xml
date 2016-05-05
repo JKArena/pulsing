@@ -3,16 +3,16 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.jhk.interested.shared.serialization</groupId>
+    <groupId>org.jhk.interested.serialization</groupId>
     <artifactId>interested-serialization</artifactId>
     <version>${interested.version}</version>
   </parent>
   
-  <groupId>org.jhk.interested.shared.serialization.avro</groupId>
+  <groupId>org.jhk.interested.serialization.avro</groupId>
   <artifactId>interested-avro</artifactId>
   <version>${interested.version}</version>
   <name>interested-avro</name>
-  <url>https://github.com/JHKTruth/interested/shared/serialization/avro</url>
+  <url>https://github.com/JHKTruth/interested/serialization/avro</url>
   
   <dependencies>
     
