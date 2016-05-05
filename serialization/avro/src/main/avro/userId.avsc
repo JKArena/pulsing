@@ -22,7 +22,7 @@
   "type": "record",
   "name": "UserId",
   "fields": [
-    {"name": "id", "type": ["null", "long"], "default": "null"},
-    {"name": "cookie", "type": ["null", "string"], "default": "null"}
+    {"name": "id", "type": ["null", "long"], "default": null},
+    {"name": "cookie", "type": ["null", "string"], "default": null}
   ]
 }
