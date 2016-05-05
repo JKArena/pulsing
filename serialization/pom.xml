@@ -2,17 +2,17 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.jhk.interested.shared</groupId>
-    <artifactId>interested-shared</artifactId>
+    <groupId>org.jhk.interested</groupId>
+    <artifactId>interested-project</artifactId>
     <version>${interested.version}</version>
   </parent>
   
-  <groupId>org.jhk.interested.shared.serialization</groupId>
+  <groupId>org.jhk.interested.serialization</groupId>
   <artifactId>interested-serialization</artifactId>
   <packaging>pom</packaging>
   <version>${interested.version}</version>
   <name>interested-serialization</name>
-  <url>https://github.com/JHKTruth/interested/shared/serialization</url>
+  <url>https://github.com/JHKTruth/interested/serialization</url>
   
   <modules>
     <module>avro</module>

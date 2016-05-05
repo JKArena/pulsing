@@ -17,7 +17,7 @@
   <dependencies>
     
     <dependency>
-      <groupId>org.jhk.interested.shared.serialization.thrift</groupId>
+      <groupId>org.jhk.interested.serialization.thrift</groupId>
       <artifactId>interested-thrift</artifactId>
     </dependency>
     

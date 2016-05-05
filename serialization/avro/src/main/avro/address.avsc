@@ -22,8 +22,8 @@
   "type": "record",
   "name": "Address",
   "fields": [
-    {"name": "address", "type": "string"},
-  	{"name": "coordinates", "type": ["null", {"type": "array", "items": "double"}], "default": null},
-  	{"name": "description", "type": "string"}
+    {"name": "address", "type": ["null", "string"], "default": "null"},
+  	{"name": "coordinates", "type": ["null", {"type": "array", "items": "double"}], "default": "null"},
+  	{"name": "description", "type": ["null", "string"], "default": "null"}
   ]
 }

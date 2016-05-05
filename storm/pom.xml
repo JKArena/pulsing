@@ -17,22 +17,22 @@
   <dependencies>
     
     <dependency>
-      <groupId>org.jhk.interested.shared.serialization.avro</groupId>
+      <groupId>org.jhk.interested.serialization.avro</groupId>
       <artifactId>interested-avro</artifactId>
     </dependency>
     
     <dependency>
-      <groupId>org.jhk.interested.shared.serialization.thrift</groupId>
+      <groupId>org.jhk.interested.serialization.thrift</groupId>
       <artifactId>interested-thrift</artifactId>
     </dependency>
     
     <dependency>
-	  <groupId>org.apache.storm</groupId>
+	    <groupId>org.apache.storm</groupId>
       <artifactId>storm-core</artifactId>
     </dependency>
     
     <dependency>
-	  <groupId>org.apache.storm</groupId>
+	    <groupId>org.apache.storm</groupId>
       <artifactId>storm-kafka</artifactId>
     </dependency>
     
