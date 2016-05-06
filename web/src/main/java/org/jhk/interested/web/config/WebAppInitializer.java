@@ -18,14 +18,26 @@
  */
 package org.jhk.interested.web.config;
 
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 /**
  * @author Ji Kim
  */
-@Configuration
-@ComponentScan({"org.jhk.interested.web.publisher"})
-public class Config {
+public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer  {
+    
+    @Override
+    protected Class<?>[] getRootConfigClasses() {
+        return new Class<?>[]{ Config.class };
+    }
+
+    @Override
+    protected Class<?>[] getServletConfigClasses() {
+        return new Class<?>[]{ WebControllerConfig.class };
+    }
+
+    @Override
+    protected String[] getServletMappings() {
+        return new String[]{"/controller/*"};
+    }
     
 }
