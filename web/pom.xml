@@ -97,7 +97,7 @@
             <param>org.jhk.interested.serialization.avro.records.User</param>
             <param>org.jhk.interested.serialization.avro.records.UserId</param>
           </avroclasses>
-          <destination>${project.build.sourceDirectory}/main/webapp/jsapp/avro/</destination>
+          <destination>${project.build.sourceDirectory}/../webapp/jsapp/avro/avrojson.js</destination>
         </configuration>
         <executions>
           <execution>

@@ -156,6 +156,12 @@
         <version>${junit}</version>
       </dependency>
       
+      <dependency>
+        <groupId>org.freemarker</groupId>
+        <artifactId>freemarker</artifactId>
+	      <version>${freemarker}</version>
+      </dependency>
+      
     </dependencies>
   </dependencyManagement>
   
@@ -177,6 +183,7 @@
     <jetty>6.1.10</jetty>
     <kafka.clients>0.9.0.1</kafka.clients>
     <junit>3.8.1</junit>
+    <freemarker>2.3.23</freemarker>
   </properties>
   
   <modules>

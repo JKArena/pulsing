@@ -19,11 +19,11 @@
 package org.jhk.interested.plugin.maven;
 
 import java.io.File;
-import java.lang.invoke.MethodHandle;
-import java.lang.invoke.MethodHandles;
-import java.lang.invoke.MethodType;
 import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.avro.data.RecordBuilder;
 import org.apache.avro.specific.SpecificRecord;
@@ -33,13 +33,23 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
+import org.jhk.interested.plugin.freemarker.AvroJsonProcessor;
 import org.jhk.interested.serialization.avro.serializers.SerializationFactory;
+
 
 /**
  * @author Ji Kim
  */
 @Mojo(name="avrojson", defaultPhase=LifecyclePhase.COMPILE)
 public final class AvroJsonMojo extends AbstractMojo {
+    
+    private static final String DEFAULT_AVROJS_FREEMARKER_TEMPLATE = "META-INF/avrojs-template.ftl";
+    
+    /**
+     * directory that contains freemarker template
+     */
+    @Parameter
+    private File freemarkerDirectory;
     
     /**
      * avro classes
@@ -57,17 +67,23 @@ public final class AvroJsonMojo extends AbstractMojo {
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         
+        AvroJsonProcessor processor = AvroJsonProcessor.getInstance(freemarkerDirectory, getClass().getClassLoader(), destination);
+        
+        Map<String, Object> data = new HashMap<>();
+        List<ClassInfo> classinfos = new LinkedList<>();
+        
         for(String entry : avroclasses) {
             
             try {
                 
                 Class<? extends SpecificRecord> clazz = (Class<? extends SpecificRecord>) Class.forName(entry);
                 Method method = clazz.getDeclaredMethod("newBuilder");
-                RecordBuilder builder = (RecordBuilder) method.invoke(null);
                 
+                RecordBuilder builder = (RecordBuilder) method.invoke(null);
                 SpecificRecord record = (SpecificRecord) builder.build();
                 String result = SerializationFactory.serializeAvroTypeToJSONString(record);
-                System.out.println("GOT " + result);
+                
+                classinfos.add(new ClassInfo(clazz.getSimpleName(), result));
                 
             } catch (Throwable throwMe) {
                 throwMe.printStackTrace();
@@ -75,6 +91,43 @@ public final class AvroJsonMojo extends AbstractMojo {
             }
             
         }
+        
+        data.put("classinfos", classinfos);
+        
+        try {
+            processor.processTemplate(data, DEFAULT_AVROJS_FREEMARKER_TEMPLATE);
+        } catch (Exception pException) {
+            pException.printStackTrace();
+            throw new MojoExecutionException(pException.getMessage());
+        }
+    }
+    
+    public static class ClassInfo {
+        
+        private String _clazz;
+        private String _skeleton;
+        
+        private ClassInfo(String clazz, String skeleton) {
+            super();
+            
+            _clazz = clazz;
+            _skeleton = skeleton;
+        }
+        
+        public String getClazz() {
+            return _clazz;
+        }
+        public void setClazz(String clazz) {
+            _clazz = clazz;
+        }
+        
+        public String getSkeleton() {
+            return _skeleton;
+        }
+        public void setSkeleton(String skeleton) {
+            _skeleton = skeleton;
+        }
+        
     }
     
 }
