@@ -22,8 +22,8 @@
   "type": "record",
   "name": "Interest",
   "fields": [
-    {"name": "id", "type": ["null", "InterestId"], "default": null},
-    {"name": "userId", "type": ["null", "UserId"], "default": null},
+    {"name": "id", "type": "InterestId", "default": null},
+    {"name": "userId", "type": "UserId", "default": null},
     {"name": "timeStamp", "type": ["null", "long"], "default": null}, //optional as populate on the server side
     {"name": "value", "type": ["null", "string"], "default": null},
     {"name": "action", "type": ["null", {"type": "enum", "name": "ACTION",

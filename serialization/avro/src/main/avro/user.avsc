@@ -23,9 +23,9 @@
   "name": "User",
   "fields": [
   	{"name": "picture", "type": ["null", "bytes"], "default": null},
-  	{"name": "address", "type": ["null", "Address"], "default": null},
+  	{"name": "address", "type": "Address", "default": null},
   	{"name": "email", "type": ["null", "string"], "default": null},
-  	{"name": "id", "type": ["null", "UserId"], "default": null},
+  	{"name": "id", "type": "UserId", "default": null},
   	{"name": "name", "type": ["null", "string"], "default": null},
   	{"name": "password", "type": ["null", "string"], "default": null}
   ]
