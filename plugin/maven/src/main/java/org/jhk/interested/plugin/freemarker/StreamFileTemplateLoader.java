@@ -59,7 +59,7 @@ public final class StreamFileTemplateLoader implements TemplateLoader {
     @Override
     public void closeTemplateSource(Object templateSource) throws IOException {
         
-        Reader reader = _mapper.get(templateSource);
+        Reader reader = _mapper.remove(templateSource);
         if(reader != null) {
             reader.close();
         }

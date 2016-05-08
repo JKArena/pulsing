@@ -105,10 +105,10 @@
             <param>org.jhk.interested.serialization.avro.records.UserId</param>
           </avroclasses>
           <destination>${project.build.sourceDirectory}/../webapp/jsapp/avro/avrojson.js</destination>
+          <testdestination>${basedir}/src/test/resources/org/jhk/interested/serialization/avro/serializers.js</testdestination>
         </configuration>
         <executions>
           <execution>
-            <phase>compile</phase>
             <goals>
               <goal>avrojson</goal>
             </goals>

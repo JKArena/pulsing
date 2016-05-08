@@ -5,4 +5,5 @@
 
 src/main/webapp/test.jsp
 src/main/webapp/jsapp/avro/avrojson.js
+src/test/resources/org/jhk/interested/serialization/avro/serializers.js
 target
