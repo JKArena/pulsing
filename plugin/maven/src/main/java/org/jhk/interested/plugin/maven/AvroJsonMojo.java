@@ -33,17 +33,30 @@ import org.apache.maven.plugin.MojoFailureException;
 import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
-import org.jhk.interested.plugin.freemarker.AvroJsonProcessor;
+import org.jhk.interested.plugin.freemarker.FreemarkerProcessor;
 import org.jhk.interested.serialization.avro.serializers.SerializationFactory;
 
 
 /**
  * @author Ji Kim
  */
-@Mojo(name="avrojson", defaultPhase=LifecyclePhase.COMPILE)
+@Mojo(name="avrojson", defaultPhase=LifecyclePhase.GENERATE_RESOURCES)
 public final class AvroJsonMojo extends AbstractMojo {
     
     private static final String DEFAULT_AVROJS_FREEMARKER_TEMPLATE = "META-INF/avrojs-template.ftl";
+    private static final String DEFAULT_AVROJS_FREEMARKER_TEST_TEMPLATE = "META-INF/avrojs-template-test.ftl"; 
+    
+    /**
+     * avro classes
+     */
+    @Parameter(required=true)
+    private List<String> avroclasses;
+    
+    /**
+     * Destination of where Javascript files will be dumped to
+     */
+    @Parameter(required=true)
+    private File destination;
     
     /**
      * directory that contains freemarker template
@@ -52,22 +65,16 @@ public final class AvroJsonMojo extends AbstractMojo {
     private File freemarkerDirectory;
     
     /**
-     * avro classes
+     * File to be used for tests
      */
     @Parameter
-    private List<String> avroclasses;
-    
-    /**
-     * Destination of where Javascript files will be dumped to
-     */
-    @Parameter
-    private File destination;
+    private File testdestination;
     
     @SuppressWarnings({"unchecked", "rawtypes"})
     @Override
     public void execute() throws MojoExecutionException, MojoFailureException {
         
-        AvroJsonProcessor processor = AvroJsonProcessor.getInstance(freemarkerDirectory, getClass().getClassLoader(), destination);
+        FreemarkerProcessor processor = FreemarkerProcessor.getInstance(freemarkerDirectory, getClass().getClassLoader());
         
         Map<String, Object> data = new HashMap<>();
         List<ClassInfo> classinfos = new LinkedList<>();
@@ -95,7 +102,11 @@ public final class AvroJsonMojo extends AbstractMojo {
         data.put("classinfos", classinfos);
         
         try {
-            processor.processTemplate(data, DEFAULT_AVROJS_FREEMARKER_TEMPLATE);
+            processor.processTemplate(data, DEFAULT_AVROJS_FREEMARKER_TEMPLATE, destination);
+            
+            if(testdestination != null) {
+                processor.processTemplate(data, DEFAULT_AVROJS_FREEMARKER_TEST_TEMPLATE, testdestination);
+            }
         } catch (Exception pException) {
             pException.printStackTrace();
             throw new MojoExecutionException(pException.getMessage());

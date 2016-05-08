@@ -31,25 +31,23 @@ import freemarker.template.TemplateException;
 /**
  * @author Ji Kim
  */
-public final class AvroJsonProcessor {
+public final class FreemarkerProcessor {
     
     private Configuration _config;
-    private File _destination;
     
-    private AvroJsonProcessor(File sDirectory, ClassLoader cLoader, File destination) {
+    private FreemarkerProcessor(File sDirectory, ClassLoader cLoader) {
         super();
         
         _config = new Configuration(Configuration.VERSION_2_3_23);
         _config.setTemplateLoader(new StreamFileTemplateLoader(sDirectory, cLoader));
-        _destination = destination;
     }
     
-    public static synchronized AvroJsonProcessor getInstance(File sDirectory, ClassLoader cLoader, File destination) {
-        return new AvroJsonProcessor(sDirectory, cLoader, destination);
+    public static synchronized FreemarkerProcessor getInstance(File sDirectory, ClassLoader cLoader) {
+        return new FreemarkerProcessor(sDirectory, cLoader);
     }
     
-    public void processTemplate(Map<String, Object> data, String readFileName) throws IOException, TemplateException {
-        BufferedWriter bWriter = Files.newBufferedWriter(_destination.toPath(), Charset.forName("UTF-8"));
+    public void processTemplate(Map<String, Object> data, String readFileName, File destination) throws IOException, TemplateException {
+        BufferedWriter bWriter = Files.newBufferedWriter(destination.toPath(), Charset.forName("UTF-8"));
         _config.getTemplate(readFileName).process(data, bWriter);
         bWriter.flush();
     }

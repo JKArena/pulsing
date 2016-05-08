@@ -38,8 +38,10 @@ import cascading.tuple.Tuple;
 import cascading.tuple.TupleEntry;
 import cascading.tuple.hadoop.TupleSerialization;
 
-public class PailTap extends Hfs {
+public final class PailTap extends Hfs {
     
+    private static final long serialVersionUID = 8703299458671063700L;
+
     private static Logger LOG = Logger.getLogger(PailTap.class);
     
     private String _pailRoot;
