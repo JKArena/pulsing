@@ -58,8 +58,6 @@ public class AvroJsonSerializationTest {
         try {
             engine.eval(reader);
             _invoker = (Invocable) engine;
-            //System.out.println("GOT " + inv.invokeFunction("getter", "Address" ));
-            
         } catch (Exception setupException) {
             throw new RuntimeException(setupException);
         }
