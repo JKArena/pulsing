@@ -16,28 +16,17 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.interested.storm.topologies;
-
-import org.apache.storm.Config;
-import org.apache.storm.StormSubmitter;
-import org.apache.storm.generated.AlreadyAliveException;
-import org.apache.storm.generated.AuthorizationException;
-import org.apache.storm.generated.InvalidTopologyException;
+package org.jhk.interested.storm.util;
 
 /**
  * @author Ji Kim
  */
-public final class TopologyRunner {
+public final class InterestedConstants {
     
-    public static void main(String[] args) throws AlreadyAliveException, InvalidTopologyException, AuthorizationException {
-        
-        Config config = new Config();
-        config.setNumWorkers(2);
-        config.setMessageTimeoutSecs(60);
-        
-        StormSubmitter.submitTopology("user-topology", config, UserTopologyBuilder.build());
-        StormSubmitter.submitTopology("interest-subscribe-topology", config, InterestSubscribeTopologyBuilder.build());
-        
+    public static final int DEFAULT_INTERVAL_SECONDS = 15;
+    
+    private InterestedConstants() {
+        super();
     }
     
 }

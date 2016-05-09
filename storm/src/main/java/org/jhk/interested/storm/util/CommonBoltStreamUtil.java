@@ -16,28 +16,22 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.interested.storm.topologies;
+package org.jhk.interested.storm.util;
 
-import org.apache.storm.Config;
-import org.apache.storm.StormSubmitter;
-import org.apache.storm.generated.AlreadyAliveException;
-import org.apache.storm.generated.AuthorizationException;
-import org.apache.storm.generated.InvalidTopologyException;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Ji Kim
  */
-public final class TopologyRunner {
+public final class CommonBoltStreamUtil {
     
-    public static void main(String[] args) throws AlreadyAliveException, InvalidTopologyException, AuthorizationException {
-        
-        Config config = new Config();
-        config.setNumWorkers(2);
-        config.setMessageTimeoutSecs(60);
-        
-        StormSubmitter.submitTopology("user-topology", config, UserTopologyBuilder.build());
-        StormSubmitter.submitTopology("interest-subscribe-topology", config, InterestSubscribeTopologyBuilder.build());
-        
+    private CommonBoltStreamUtil() {
+        super();
+    }
+    
+    public static Long getTimeInterval(Long timeStampNano, int timeInterval) {
+        Long timeStampSeconds = TimeUnit.SECONDS.convert(timeStampNano, TimeUnit.NANOSECONDS);
+        return timeStampSeconds / timeInterval;
     }
     
 }

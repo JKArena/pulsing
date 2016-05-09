@@ -16,28 +16,21 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.interested.storm.topologies;
+package org.jhk.interested.storm.filter;
 
-import org.apache.storm.Config;
-import org.apache.storm.StormSubmitter;
-import org.apache.storm.generated.AlreadyAliveException;
-import org.apache.storm.generated.AuthorizationException;
-import org.apache.storm.generated.InvalidTopologyException;
+import org.apache.storm.trident.operation.BaseFilter;
+import org.apache.storm.trident.tuple.TridentTuple;
 
 /**
  * @author Ji Kim
  */
-public final class TopologyRunner {
+public final class InterestSubscribeFilter extends BaseFilter {
     
-    public static void main(String[] args) throws AlreadyAliveException, InvalidTopologyException, AuthorizationException {
-        
-        Config config = new Config();
-        config.setNumWorkers(2);
-        config.setMessageTimeoutSecs(60);
-        
-        StormSubmitter.submitTopology("user-topology", config, UserTopologyBuilder.build());
-        StormSubmitter.submitTopology("interest-subscribe-topology", config, InterestSubscribeTopologyBuilder.build());
-        
+    private static final long serialVersionUID = -5563080957922894127L;
+
+    @Override
+    public boolean isKeep(TridentTuple tuple) {
+        return tuple.getStringByField("action").equals("SUBSCRIBE");
     }
     
 }

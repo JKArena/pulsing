@@ -16,14 +16,15 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.interested.storm.deserializers.avro;
+package org.jhk.interested.storm.bolts.interest;
 
 import java.io.IOException;
 
-import org.apache.storm.trident.operation.BaseFunction;
-import org.apache.storm.trident.operation.TridentCollector;
-import org.apache.storm.trident.tuple.TridentTuple;
+import org.apache.storm.topology.BasicOutputCollector;
+import org.apache.storm.topology.OutputFieldsDeclarer;
+import org.apache.storm.topology.base.BaseBasicBolt;
 import org.apache.storm.tuple.Fields;
+import org.apache.storm.tuple.Tuple;
 import org.apache.storm.tuple.Values;
 import org.jhk.interested.serialization.avro.records.Interest;
 import org.jhk.interested.serialization.avro.serializers.SerializationFactory;
@@ -31,24 +32,23 @@ import org.jhk.interested.serialization.avro.serializers.SerializationFactory;
 /**
  * @author Ji Kim
  */
-public class InterestDeserializer extends BaseFunction {
-
-    private static final long serialVersionUID = 4863013986214675297L;
+public final class InterestDeserializerBolt extends BaseBasicBolt {
+    
+    private static final long serialVersionUID = 9003236874311323612L;
     
     public static Fields FIELDS = new Fields("action", "id", "userId", "timeStamp", "value");
     
     @Override
-    public void execute(TridentTuple tuple, TridentCollector collector) {
-        
+    public void execute(Tuple tuple, BasicOutputCollector outputCollector) {
         String interestString = tuple.getString(0);
         
         try {
             
             Interest interest = SerializationFactory.deserializeFromJSONStringToAvro(Interest.class, Interest.getClassSchema(), interestString);
-            collector.emit(getInterestValues(interest));
+            outputCollector.emit(getInterestValues(interest));
             
         } catch (IOException decodeException) {
-            collector.reportError(decodeException);
+            outputCollector.reportError(decodeException);
         }
         
     }
@@ -56,6 +56,11 @@ public class InterestDeserializer extends BaseFunction {
     private Values getInterestValues(Interest interest) {
         return new Values(interest.getAction().toString(), interest.getId().getId(), interest.getUserId().getId(), 
                 interest.getTimeStamp(), interest.getValue());
+    }
+
+    @Override
+    public void declareOutputFields(OutputFieldsDeclarer fieldsDeclarer) {
+        fieldsDeclarer.declare(FIELDS);
     }
 
 }
