@@ -145,6 +145,12 @@
       </dependency>
       
       <dependency>
+	      <groupId>redis.clients</groupId>
+	      <artifactId>jedis</artifactId>
+	      <version>${jedis}</version>
+      </dependency>
+      
+      <dependency>
         <groupId>org.mortbay.jetty</groupId>
         <artifactId>maven-jetty-plugin</artifactId>
         <version>${jetty}</version>
@@ -184,6 +190,7 @@
     <kafka.clients>0.9.0.1</kafka.clients>
     <junit>4.12</junit>
     <freemarker>2.3.23</freemarker>
+    <jedis>2.8.1</jedis>
   </properties>
   
   <modules>

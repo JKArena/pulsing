@@ -27,13 +27,18 @@
     </dependency>
     
     <dependency>
-	    <groupId>org.apache.storm</groupId>
+	  <groupId>org.apache.storm</groupId>
       <artifactId>storm-core</artifactId>
     </dependency>
     
     <dependency>
-	    <groupId>org.apache.storm</groupId>
+	  <groupId>org.apache.storm</groupId>
       <artifactId>storm-kafka</artifactId>
+    </dependency>
+    
+    <dependency>
+      <groupId>redis.clients</groupId>
+      <artifactId>jedis</artifactId>
     </dependency>
     
     <dependency>
