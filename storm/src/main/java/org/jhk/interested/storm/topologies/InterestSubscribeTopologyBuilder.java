@@ -42,14 +42,16 @@ public final class InterestSubscribeTopologyBuilder {
         TopologyBuilder builder = new TopologyBuilder();
         builder.setSpout("interest-subscribe-spout", buildSpout());
         
-        builder.setBolt("interest-deserializer", new InterestDeserializerBolt(), 8) //sets executors, namely threads
-                .setNumTasks(8) //num tasks is number of instances of this bolt
+        builder.setBolt("interest-deserializer", new InterestDeserializerBolt(), 4) //sets executors, namely threads
+                .setNumTasks(4) //num tasks is number of instances of this bolt
                 .shuffleGrouping("interest-subscribe-spout");
         
-        builder.setBolt("interest-subscribe-interval-extractor", new TimeIntervalBolt())
+        builder.setBolt("interest-subscribe-interval-extractor", new TimeIntervalBolt(), 2)
+                .setNumTasks(2)
                 .shuffleGrouping("interest-deserialized");
         
-        builder.setBolt("interest-subscribe-interval-builder", new TimeIntervalBuilderBolt())
+        builder.setBolt("interest-subscribe-interval-builder", new TimeIntervalBuilderBolt(), 4)
+                .setNumTasks(4)
                 .fieldsGrouping("interest-subscribe-interval-extractor", 
                                 new Fields("timeInterval"));
         
@@ -64,6 +66,7 @@ public final class InterestSubscribeTopologyBuilder {
         
         SpoutConfig spoutConfig = new SpoutConfig(host, "interest-subscribe", 
                                                     "/kafkastorm", "trending-interest-subscribe");
+        
         spoutConfig.scheme = new SchemeAsMultiScheme(new StringScheme());
         return new KafkaSpout(spoutConfig);
     }

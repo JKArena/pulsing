@@ -35,7 +35,7 @@ public final class TopologyRunner {
         config.setNumWorkers(2);
         config.setMessageTimeoutSecs(60);
         
-        StormSubmitter.submitTopology("user-topology", config, UserTopologyBuilder.build());
+        //StormSubmitter.submitTopology("user-topology", config, UserTopologyBuilder.build());
         StormSubmitter.submitTopology("interest-subscribe-topology", config, InterestSubscribeTopologyBuilder.build());
         
     }

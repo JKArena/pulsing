@@ -22,7 +22,7 @@ import java.io.IOException;
 
 import org.apache.avro.Schema;
 import org.apache.avro.specific.SpecificRecord;
-import org.jhk.interested.serialization.avro.serializers.SerializationFactory;
+import org.jhk.interested.serialization.avro.serializers.SerializationHelper;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -56,7 +56,7 @@ public class JsonAvroDeserializer<T extends SpecificRecord> extends JsonDeserial
     public T deserialize(JsonParser parser, DeserializationContext context) throws IOException, JsonProcessingException {
         
         JsonNode node = _mapper.readTree(parser);
-        return SerializationFactory.deserializeFromJSONStringToAvro(_type, _schema, node.toString());
+        return SerializationHelper.deserializeFromJSONStringToAvro(_type, _schema, node.toString());
     }
     
 }

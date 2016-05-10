@@ -34,7 +34,7 @@ import org.apache.maven.plugins.annotations.LifecyclePhase;
 import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.jhk.interested.plugin.freemarker.FreemarkerProcessor;
-import org.jhk.interested.serialization.avro.serializers.SerializationFactory;
+import org.jhk.interested.serialization.avro.serializers.SerializationHelper;
 
 
 /**
@@ -88,7 +88,7 @@ public final class AvroJsonMojo extends AbstractMojo {
                 
                 RecordBuilder builder = (RecordBuilder) method.invoke(null);
                 SpecificRecord record = (SpecificRecord) builder.build();
-                String result = SerializationFactory.serializeAvroTypeToJSONString(record);
+                String result = SerializationHelper.serializeAvroTypeToJSONString(record);
                 
                 classinfos.add(new ClassInfo(clazz.getSimpleName(), result));
                 

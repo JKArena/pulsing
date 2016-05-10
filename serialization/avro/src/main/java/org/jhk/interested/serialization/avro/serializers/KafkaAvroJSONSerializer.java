@@ -46,7 +46,7 @@ public final class KafkaAvroJSONSerializer implements Serializer<SpecificRecord>
         String result = "";
         
         try {
-            result = SerializationFactory.serializeAvroTypeToJSONString(data);
+            result = SerializationHelper.serializeAvroTypeToJSONString(data);
         } catch (IOException ioExcept) {
             ioExcept.printStackTrace();
         }

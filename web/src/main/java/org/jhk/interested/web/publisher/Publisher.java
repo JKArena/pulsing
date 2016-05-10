@@ -32,7 +32,7 @@ public final class Publisher {
     
     private static final String DEFAULT_ZOOKEEPER_ADDRESS = "127.0.0.1:2181";
     
-    private WeakReference<KafkaProducer<String, SpecificRecord>> _producerRef;
+    private KafkaProducer<String, SpecificRecord> _producer;
     private String _zooKeeperAddress;
     
     public Publisher() {
@@ -50,13 +50,12 @@ public final class Publisher {
     public void produce(String topic, SpecificRecord message) {
         
         ProducerRecord<String, SpecificRecord> data = new ProducerRecord<>(topic, message);
-        KafkaProducer<String, SpecificRecord> producer = _producerRef.get();
         
-        if(producer == null) {
-            _producerRef = new WeakReference<>(createProducer());
+        if(_producer == null) {
+            _producer = createProducer();
         }
         
-        producer.send(data);;
+        _producer.send(data);;
     }
     
     private KafkaProducer<String, SpecificRecord> createProducer() {
