@@ -34,7 +34,7 @@ import org.jhk.interested.serialization.avro.records.Interest;
 import org.jhk.interested.serialization.avro.records.InterestId;
 import org.jhk.interested.serialization.avro.records.User;
 import org.jhk.interested.serialization.avro.records.UserId;
-import org.jhk.interested.serialization.avro.serializers.SerializationFactory;
+import org.jhk.interested.serialization.avro.serializers.SerializationHelper;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -82,7 +82,7 @@ public class AvroJsonSerializationTest {
             
             try {
                 String serialized = _invoker.invokeFunction("getAvroClassSkeleton", recordInfo._clazz.getSimpleName()).toString();
-                SerializationFactory.deserializeFromJSONStringToAvro(recordInfo._clazz, recordInfo._schema, serialized);
+                SerializationHelper.deserializeFromJSONStringToAvro(recordInfo._clazz, recordInfo._schema, serialized);
                 assertTrue("Successfully ran " + recordInfo._clazz.getSimpleName(), true);
             }catch (Exception e) {
                 assertTrue("Error while running " + recordInfo._clazz.getSimpleName(), false);

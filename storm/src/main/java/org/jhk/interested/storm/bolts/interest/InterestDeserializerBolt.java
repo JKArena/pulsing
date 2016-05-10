@@ -27,7 +27,7 @@ import org.apache.storm.tuple.Fields;
 import org.apache.storm.tuple.Tuple;
 import org.apache.storm.tuple.Values;
 import org.jhk.interested.serialization.avro.records.Interest;
-import org.jhk.interested.serialization.avro.serializers.SerializationFactory;
+import org.jhk.interested.serialization.avro.serializers.SerializationHelper;
 
 /**
  * @author Ji Kim
@@ -44,7 +44,7 @@ public final class InterestDeserializerBolt extends BaseBasicBolt {
         
         try {
             
-            Interest interest = SerializationFactory.deserializeFromJSONStringToAvro(Interest.class, Interest.getClassSchema(), interestString);
+            Interest interest = SerializationHelper.deserializeFromJSONStringToAvro(Interest.class, Interest.getClassSchema(), interestString);
             outputCollector.emit(getInterestValues(interest));
             
         } catch (IOException decodeException) {

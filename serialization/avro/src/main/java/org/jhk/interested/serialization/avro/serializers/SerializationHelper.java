@@ -33,9 +33,9 @@ import org.apache.avro.specific.SpecificRecord;
 /**
  * @author Ji Kim
  */
-public final class SerializationFactory {
+public final class SerializationHelper {
     
-    private SerializationFactory() {
+    private SerializationHelper() {
         super();
     }
     

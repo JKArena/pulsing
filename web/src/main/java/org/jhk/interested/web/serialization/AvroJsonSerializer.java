@@ -21,7 +21,7 @@ package org.jhk.interested.web.serialization;
 import java.io.IOException;
 
 import org.apache.avro.specific.SpecificRecord;
-import org.jhk.interested.serialization.avro.serializers.SerializationFactory;
+import org.jhk.interested.serialization.avro.serializers.SerializationHelper;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
@@ -41,7 +41,7 @@ public class AvroJsonSerializer<T extends SpecificRecord> extends StdSerializer<
     @Override
     public void serialize(T value, JsonGenerator jgen, SerializerProvider provider)throws IOException {
         
-        jgen.writeString(SerializationFactory.serializeAvroTypeToJSONString(value));
+        jgen.writeString(SerializationHelper.serializeAvroTypeToJSONString(value));
         
     }
 
