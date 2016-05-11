@@ -18,7 +18,6 @@
  */
 package org.jhk.interested.web.publisher;
 
-import java.lang.ref.WeakReference;
 import java.util.Properties;
 
 import org.apache.avro.specific.SpecificRecord;
@@ -36,24 +35,23 @@ public final class Publisher {
     private String _zooKeeperAddress;
     
     public Publisher() {
-        super();
-        
-        _zooKeeperAddress = DEFAULT_ZOOKEEPER_ADDRESS;
+        this(DEFAULT_ZOOKEEPER_ADDRESS);
     }
     
     public Publisher(String zkHost, int zkPort) {
+        this(zkHost + ":" + zkPort);
+    }
+    
+    public Publisher(String zooKeeperAddress) {
         super();
         
-        _zooKeeperAddress = zkHost + ":" + zkPort;
+        _zooKeeperAddress = zooKeeperAddress;
+        _producer = createProducer();
     }
     
     public void produce(String topic, SpecificRecord message) {
         
         ProducerRecord<String, SpecificRecord> data = new ProducerRecord<>(topic, message);
-        
-        if(_producer == null) {
-            _producer = createProducer();
-        }
         
         _producer.send(data);;
     }
