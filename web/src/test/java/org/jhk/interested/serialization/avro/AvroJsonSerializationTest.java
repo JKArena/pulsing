@@ -20,20 +20,12 @@ package org.jhk.interested.serialization.avro;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.util.LinkedList;
-import java.util.List;
 
 import javax.script.Invocable;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 
-import org.apache.avro.Schema;
 import org.apache.avro.specific.SpecificRecord;
-import org.jhk.interested.serialization.avro.records.Address;
-import org.jhk.interested.serialization.avro.records.Interest;
-import org.jhk.interested.serialization.avro.records.InterestId;
-import org.jhk.interested.serialization.avro.records.User;
-import org.jhk.interested.serialization.avro.records.UserId;
 import org.jhk.interested.serialization.avro.serializers.SerializationHelper;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -46,7 +38,6 @@ import static org.junit.Assert.*;
 public class AvroJsonSerializationTest {
     
     private static Invocable _invoker;
-    private static List<RecordInfo> _testClasses;
     
     @BeforeClass
     public static void setup() {
@@ -62,12 +53,6 @@ public class AvroJsonSerializationTest {
             throw new RuntimeException(setupException);
         }
         
-        _testClasses = new LinkedList<>();
-        _testClasses.add(new RecordInfo(Address.class, Address.getClassSchema()));
-        _testClasses.add(new RecordInfo(Interest.class, Interest.getClassSchema()));
-        _testClasses.add(new RecordInfo(InterestId.class, InterestId.getClassSchema()));
-        _testClasses.add(new RecordInfo(User.class, User.getClassSchema()));
-        _testClasses.add(new RecordInfo(UserId.class, UserId.getClassSchema()));
     }
     
     @Test
@@ -78,32 +63,20 @@ public class AvroJsonSerializationTest {
     @Test
     public void testDeserialization() {
         
-        for(RecordInfo recordInfo : _testClasses) {
-            
-            try {
-                String serialized = _invoker.invokeFunction("getAvroClassSkeleton", recordInfo._clazz.getSimpleName()).toString();
-                SerializationHelper.deserializeFromJSONStringToAvro(recordInfo._clazz, recordInfo._schema, serialized);
-                assertTrue("Successfully ran " + recordInfo._clazz.getSimpleName(), true);
-            }catch (Exception e) {
-                assertTrue("Error while running " + recordInfo._clazz.getSimpleName(), false);
-            }
-            
-        }
-        
+        SerializationHelper.getAvroRecordStream()
+            .forEach(avroRecord -> {
+                
+                Class<? extends SpecificRecord> clazz = avroRecord.getClazz();
+                
+                try {
+                    String serialized = _invoker.invokeFunction("getAvroClassSkeleton", clazz.getSimpleName()).toString();
+                    SerializationHelper.deserializeFromJSONStringToAvro(clazz, avroRecord.getSchema(), serialized);
+                    assertTrue("Successfully ran " + clazz.getSimpleName(), true);
+                }catch (Exception e) {
+                    assertTrue("Error while running " + clazz.getSimpleName(), false);
+                }
+            });
+                
     }
-    
-    private static class RecordInfo {
         
-        private Class<? extends SpecificRecord> _clazz;
-        private Schema _schema;
-        
-        private RecordInfo(Class<? extends SpecificRecord> clazz, Schema schema) {
-            super();
-            
-            _clazz = clazz;
-            _schema = schema;
-        }
-        
-    }
-    
 }
