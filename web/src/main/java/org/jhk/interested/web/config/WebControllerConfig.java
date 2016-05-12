@@ -20,7 +20,8 @@ package org.jhk.interested.web.config;
 
 import java.util.List;
 
-import org.jhk.interested.serialization.avro.records.Interest;
+import org.apache.avro.specific.SpecificRecord;
+import org.jhk.interested.serialization.avro.serializers.SerializationHelper;
 import org.jhk.interested.web.controller.InterestController;
 import org.jhk.interested.web.serialization.AvroJsonSerializer;
 import org.jhk.interested.web.serialization.JsonAvroDeserializer;
@@ -58,9 +59,15 @@ public class WebControllerConfig extends WebMvcConfigurerAdapter {
     
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-        Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder();
-        builder.deserializerByType(Interest.class, new JsonAvroDeserializer<>(Interest.class, Interest.getClassSchema()));
-        builder.serializerByType(Interest.class, new AvroJsonSerializer<Interest>(Interest.class));
+        final Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder();
+        
+        SerializationHelper.getAvroRecordStream()
+            .forEach(avroRecord -> {
+                Class<? extends SpecificRecord> clazz = avroRecord.getClazz();
+                builder.deserializerByType(clazz, new JsonAvroDeserializer<>(clazz, avroRecord.getSchema()));
+                builder.serializerByType(clazz, new AvroJsonSerializer(clazz));
+            });
+        
         converters.add(new MappingJackson2HttpMessageConverter(builder.build()));
     }
     

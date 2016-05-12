@@ -38,6 +38,32 @@
  * 
  * ________________________________________________________________________________________________________________
  * 
+ * Predicate interface defines an abstract method named test that accepts an object of generic type T and return a boolean
+ * 
+ * public interface Predicate<T> {
+ *      boolean test(T t);
+ * }
+ * 
+ * Consumer interface defines an abstract method named accept that takes an object of generic type T and returns no result (void).
+ * 
+ * public interface Consumer<T> {
+ *      void accept(T t);
+ * }
+ * 
+ * Function interface defines an abstract method named apply that takes an object of generic type T as input and returns an object of 
+ * generic type R.
+ * 
+ * public interface Function<T, R> {
+ *      R apply(T t);
+ * }
+ * 
+ * Supplier
+ * 
+ * public interface Supplier<T> {
+ *      T get()
+ * }
+ * ________________________________________________________________________________________________________________
+ * 
  * An interface can now contain method signatures for which an implementing class doesn't provide an implementation.
  * Also it can contain static methods.
  * 
@@ -137,6 +163,54 @@
  * 
  * Optional doesn't implement Serializable.
  * 
+ * ________________________________________________________________________________________________________________
+ * 
+ * CompletableFuture extends Future.
+ * 
+ * CompletableFuture.supplyAsync(() -> doSomething(stuff));
+ * 
+ * The supplyAsync method accepts a Supplier as argument and returns a CompletableFuture that will be asynchronously 
+ * completed with the value obtained by invoking that Supplier. This Suppier will be run by one of the Executors in 
+ * the ForkJoinPool, but you can specify a different Executor by passing it as a second argument to the overloaded 
+ * version of this method.
+ * 
+ * return List<String>
+ * List<CompletableFuture<Stirng>> stuffs = content.stream()
+ *                                          .map(stuff -> CompletableFuture.supplyAsync( () -> stuff.getName()))
+ *                                          .collect(Collectors.toList());
+ * return stuffs.stream().map(CompletableFuture::join).collect(toList());
+ * 
+ * CompletableFutures have an advantage over parallel streams api b/c they allow you to specify a different 
+ * Executor to submit the task (whereas parallel share the same ones).
+ * 
+ * CompletableFutures API provides thenCompose method allowing you to pipeline two asynchronous operations (like promise) 
+ * passing the result of the first operation to the second operation when it becomes available. Can compose two 
+ * CompletableFutures by invoking the thenCompose method on the first CompletableFuture and passing to it a Function.
+ * 
+ * The thenCompose method has a variant with an Async suffix. In general a method without the Async suffix in its name 
+ * executes its task in the same thread as the previous task, whereas a method terminating with Async always submits the 
+ * succeeding task to the thread pool, so each of the tasks can be handled by a different thread.
+ * 
+ * When you need to combine the results of the operations performed by two completely independent CompletableFutures and you 
+ * don't want to wait for the first to complete before starting on the second use the thenCombine method which takes a 
+ * second argument a BiFunction defining how the results of the two CompletableFutures are to be combined when they both become 
+ * available.
+ * 
+ * CompletableFuture.allOf factory method takes as input an array of CompletableFutures and returns a CompletableFuture<Void> that's 
+ * completed only when all the CompletableFutures passed have completed (Promise.all).
+ * 
+ * ________________________________________________________________________________________________________________
+ * 
+ * LocalDateTime and etc are of user whereas java.time.Instant is intended for use only by a machine.
+ * int day = Instant.now().get(ChronoField.DAY_OF_MONTH); will just thrown an exception.
+ * 
+ * LocalDate date = LocalDate.of(2014, 3, 18);
+ * Duration duration = Duration.between(time1, time2);
+ * 
+ * Period tenDays = Period.between(LocalDate.of(2014, 3, 8), LocalDate.of(2014, 3, 18));
+ * 
+ * java.time.temporal.TemporalAdjusters.* provide things such as 
+ * LocalDate date = date.with(lastyDayOfMonth());
  * ________________________________________________________________________________________________________________
  * 
  * @author Ji Kim
