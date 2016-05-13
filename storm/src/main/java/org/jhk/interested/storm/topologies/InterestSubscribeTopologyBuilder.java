@@ -31,6 +31,7 @@ import org.jhk.interested.storm.bolts.interest.InterestDeserializerBolt;
 import org.jhk.interested.storm.bolts.interest.TimeIntervalBolt;
 import org.jhk.interested.storm.bolts.interest.TimeIntervalBuilderBolt;
 import org.jhk.interested.storm.bolts.interest.TimeIntervalPersistorBolt;
+import org.jhk.interested.storm.util.InterestedConstants;
 
 /**
  * @author Ji Kim
@@ -64,7 +65,7 @@ public final class InterestSubscribeTopologyBuilder {
     private static KafkaSpout buildSpout() {
         BrokerHosts host = new ZkHosts("localhost");
         
-        SpoutConfig spoutConfig = new SpoutConfig(host, "interest-subscribe", 
+        SpoutConfig spoutConfig = new SpoutConfig(host, InterestedConstants.TOPICS.INTEREST_SUBSCRIBE.toString(), 
                                                     "/kafkastorm", "trending-interest-subscribe");
         
         spoutConfig.scheme = new SchemeAsMultiScheme(new StringScheme());

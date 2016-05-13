@@ -23,6 +23,11 @@
     </dependency>
     
     <dependency>
+      <groupId>org.jhk.interested.storm</groupId>
+      <artifactId>interested-storm</artifactId>
+    </dependency>
+    
+    <dependency>
       <groupId>org.jhk.interested.plugin.maven</groupId>
       <artifactId>interested-plugin-maven</artifactId>
     </dependency>
@@ -51,6 +56,11 @@
     <dependency>
       <groupId>org.springframework.integration</groupId>
       <artifactId>spring-integration-java-dsl</artifactId>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.springframework.integration</groupId>
+      <artifactId>spring-integration-kafka</artifactId>
     </dependency>
     
     <dependency>
