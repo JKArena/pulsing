@@ -24,6 +24,12 @@ package org.jhk.interested.storm.util;
 public final class InterestedConstants {
     
     public static final int DEFAULT_INTERVAL_SECONDS = 15;
+    public static final String DEFAULT_ZOOKEEPER_HOST = "127.0.0.1";
+    public static final int DEFAULT_ZOOKEEPER_PORT = 2181;
+    
+    public enum TOPICS {
+		INTEREST_SUBSCRIBE;
+	};
     
     private InterestedConstants() {
         super();

@@ -23,19 +23,18 @@ import java.util.Properties;
 import org.apache.avro.specific.SpecificRecord;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
+import org.jhk.interested.storm.util.InterestedConstants;
 
 /**
  * @author Ji Kim
  */
 public final class Publisher {
     
-    private static final String DEFAULT_ZOOKEEPER_ADDRESS = "127.0.0.1:2181";
-    
     private KafkaProducer<String, SpecificRecord> _producer;
     private String _zooKeeperAddress;
     
     public Publisher() {
-        this(DEFAULT_ZOOKEEPER_ADDRESS);
+        this(InterestedConstants.DEFAULT_ZOOKEEPER_HOST, InterestedConstants.DEFAULT_ZOOKEEPER_PORT);
     }
     
     public Publisher(String zkHost, int zkPort) {
@@ -62,7 +61,7 @@ public final class Publisher {
         
         props.put("zk.connect", _zooKeeperAddress);
         props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
-        props.put("value.serializer", "org.jhk.interested.serialization.avro.serializers.KafkaAvroJSONEncoder");
+        props.put("value.serializer", "org.jhk.interested.serialization.avro.serializers.KafkaAvroJSONSerializer");
         
         return new KafkaProducer<>(props);
     }

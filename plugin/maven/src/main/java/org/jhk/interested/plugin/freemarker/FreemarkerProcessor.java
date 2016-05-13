@@ -47,6 +47,11 @@ public final class FreemarkerProcessor {
     }
     
     public void processTemplate(Map<String, Object> data, String readFileName, File destination) throws IOException, TemplateException {
+    	File parentFile = destination.getParentFile();
+    	if(!parentFile.exists()) {
+    		parentFile.mkdirs();
+    	}
+    	
         BufferedWriter bWriter = Files.newBufferedWriter(destination.toPath(), Charset.forName("UTF-8"));
         _config.getTemplate(readFileName).process(data, bWriter);
         bWriter.flush();
