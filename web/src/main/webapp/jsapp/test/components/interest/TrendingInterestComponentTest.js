@@ -7,7 +7,7 @@
 // import TestUtils from 'react-addons-test-utils';
 import createComponent from 'helpers/shallowRenderHelper';
 
-import TrendingInterestComponent from 'components/org/jhk/interested/interest/TrendingInterestComponent.js';
+import TrendingInterestComponent from 'components/interest/TrendingInterestComponent.js';
 
 describe('TrendingInterestComponent', () => {
   let component;
