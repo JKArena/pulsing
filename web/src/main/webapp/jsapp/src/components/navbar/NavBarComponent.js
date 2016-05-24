@@ -3,7 +3,7 @@
 import React, {Component, PropTypes} from 'react';
 import {Navbar, Nav, NavItem} from 'react-bootstrap';
 
-require('styles/navbar/NavBar.scss');
+require('./NavBar.scss');
 
 class NavBarComponent extends Component {
   

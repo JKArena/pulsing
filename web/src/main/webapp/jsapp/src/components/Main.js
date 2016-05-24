@@ -1,6 +1,6 @@
 require('normalize.css/normalize.css');
 require('bootstrap/dist/css/bootstrap.css');
-require('styles/App.css');
+require('./App.css');
 
 import React from 'react';
 import NavBarComponent from './navbar/NavBarComponent';

@@ -25,7 +25,7 @@
 
 import React, {Component, PropTypes} from 'react';
 
-require('styles/interest/TrendingInterest.scss');
+require('./TrendingInterest.scss');
 
 class TrendingInterestComponent extends Component {
   
