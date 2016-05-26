@@ -25,8 +25,13 @@
 
 var EventEmitter = require('events').EventEmitter;
 var CHANGE_EVENT = 'change';
+var _trending = [];
 
 class TrendingInterestStore = extends EventEmitter {
+  
+  getAllTrending() {
+    return {trending: _trending};
+  },
   
   emitChange() {
     this.emit(CHANGE_EVENT);
