@@ -8,16 +8,16 @@
 // const TestUtils = React.addons.TestUtils;
 import createComponent from 'helpers/shallowRenderHelper';
 
-import Main from 'components/Main';
+import App from 'components/App';
 
 describe('MainComponent', () => {
-  let MainComponent;
+  let AppComponent;
 
   beforeEach(() => {
-    MainComponent = createComponent(Main);
+    AppComponent = createComponent(App);
   });
 
   it('should have its component name as default className', () => {
-    expect(MainComponent.props.className).to.equal('index');
+    expect(AppComponent.props.className).to.equal('index');
   });
 });
