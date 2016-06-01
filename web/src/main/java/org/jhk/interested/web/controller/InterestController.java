@@ -19,9 +19,12 @@
 package org.jhk.interested.web.controller;
 
 import org.jhk.interested.serialization.avro.records.Interest;
+import org.jhk.interested.serialization.avro.records.UserId;
 import org.jhk.interested.web.common.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -38,9 +41,17 @@ public final class InterestController {
     private static final Logger _LOGGER = LoggerFactory.getLogger(InterestController.class);
     
     @RequestMapping(value="/createInterest", method=RequestMethod.POST)
-    public @ResponseBody Result subscribeInterest(@RequestBody Interest interest) {
+    public @ResponseBody Result createInterest(@RequestBody Interest interest) {
         
         return new Result(Result.CODE.SUCCESS);
+    }
+    
+    @MessageMapping("/interestedSocketJS")
+    @SendTo("/interestedTopic/subscribeInterest")
+    public UserId subscribeInterest(Interest interest) {
+        //notify new user subscribed to the interest
+        //should have the subscription time out (as a config?)
+        return interest.getUserId();
     }
     
 }
