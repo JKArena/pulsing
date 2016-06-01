@@ -23,35 +23,37 @@
 
 'use strict';
 
-import React, {Component, PropTypes} from 'react';
+require('./TrendingInterest.scss');
+
+import React, {Component} from 'react';
 import TrendingInterestStore from './TrendingInterestStore';
 
-require('./TrendingInterest.scss');
+let _store = new TrendingInterestStore();
 
 class TrendingInterestComponent extends Component {
   
   constructor(props) {
     super(props);
     
-    this.state = TrendingInterestStore.getAllTrending();
-  },
+    this.state = _store.getAllTrending();
+  }
   
   componentDidMount() {
-    TrendingInterestStore.addChangeListener(this._onChange);
-  },
+    _store.addChangeListener(this._onChange);
+  }
   
   componentWillUnmount() {
-    TrendingInterestStore.removeChangeListener(this._onChange);
-  },
+    _store.removeChangeListener(this._onChange);
+  }
   
   _onChange() {
-    this.setState(TrendingInterestStore.getAllTrending());
-  },
+    this.setState(_store.getAllTrending());
+  }
   
   render() {
     return (
       <div>
-        <div></div>
+        <div>Trending</div>
       </div>
     );
   }

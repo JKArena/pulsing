@@ -27,24 +27,24 @@ var EventEmitter = require('events').EventEmitter;
 var CHANGE_EVENT = 'change';
 var _trending = [];
 
-class TrendingInterestStore = extends EventEmitter {
-  
-  getAllTrending() {
-    return {trending: _trending};
-  },
+class TrendingInterestStore extends EventEmitter {
   
   emitChange() {
     this.emit(CHANGE_EVENT);
-  },
+  }
   
   addChangeListener(callback) {
     this.on(CHANGE_EVENT, callback);
-  },
+  }
   
   removeChangeListener(callback) {
     this.removeListener(CHANGE_EVENT, callback);
   }
   
-});
+  getAllTrending() {
+    return {trending: _trending};
+  }
+  
+}
 
-module.exports = TrendingInterestStore;
+export default TrendingInterestStore;
