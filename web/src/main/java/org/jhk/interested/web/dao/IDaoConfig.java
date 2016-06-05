@@ -16,16 +16,15 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.interested.web.config;
-
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
+package org.jhk.interested.web.dao;
 
 /**
  * @author Ji Kim
  */
-@Configuration
-@ComponentScan({"org.jhk.interested.web.publisher", "org.jhk.interested.web.dao"})
-public class Config {
+public interface IDaoConfig {
+    
+    public IUserDao getUserDao();
+    
+    public IInterestDao getInterestDao();
     
 }

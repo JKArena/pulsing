@@ -16,37 +16,40 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.interested.web.config;
+package org.jhk.interested.web.dao.dev;
 
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-
-import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
+import org.jhk.interested.serialization.avro.records.Interest;
+import org.jhk.interested.serialization.avro.records.InterestId;
+import org.jhk.interested.web.dao.IInterestDao;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 /**
  * @author Ji Kim
  */
-public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer  {
+@Component
+public class InterestDao implements IInterestDao {
     
+    private static final Logger _LOGGER = LoggerFactory.getLogger(InterestDao.class);
+
     @Override
-    public void onStartup(ServletContext servletContext) throws ServletException {
-        super.onStartup(servletContext);
-        servletContext.setInitParameter("spring.profiles.active", "dev");
-    }
-    
-    @Override
-    protected Class<?>[] getRootConfigClasses() {
-        return new Class<?>[]{ Config.class };
+    public Interest getInterest(InterestId interestId) {
+        _LOGGER.info("getInterest", interestId);
+        
+        return null;
     }
 
     @Override
-    protected Class<?>[] getServletConfigClasses() {
-        return new Class<?>[]{ WebControllerConfig.class };
+    public void createInterest(Interest interest) {
+        _LOGGER.info("createInterest", interest);
+        
     }
 
     @Override
-    protected String[] getServletMappings() {
-        return new String[]{"/controller/*"};
+    public void subscribeInterest(Interest interest) {
+        _LOGGER.info("subscribeInterest", interest);
+        
     }
     
 }
