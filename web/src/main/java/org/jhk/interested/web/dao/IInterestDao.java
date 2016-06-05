@@ -16,16 +16,20 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.interested.web.config;
+package org.jhk.interested.web.dao;
 
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
+import org.jhk.interested.serialization.avro.records.Interest;
+import org.jhk.interested.serialization.avro.records.InterestId;
 
 /**
  * @author Ji Kim
  */
-@Configuration
-@ComponentScan({"org.jhk.interested.web.publisher", "org.jhk.interested.web.dao"})
-public class Config {
+public interface IInterestDao {
+    
+    public Interest getInterest(InterestId interestId);
+    
+    public void createInterest(Interest interest);
+    
+    public void subscribeInterest(Interest interest);
     
 }

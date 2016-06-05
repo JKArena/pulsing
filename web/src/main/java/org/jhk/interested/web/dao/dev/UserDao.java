@@ -16,16 +16,34 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.interested.web.config;
+package org.jhk.interested.web.dao.dev;
 
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
+import org.jhk.interested.serialization.avro.records.User;
+import org.jhk.interested.serialization.avro.records.UserId;
+import org.jhk.interested.web.dao.IUserDao;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 /**
  * @author Ji Kim
  */
-@Configuration
-@ComponentScan({"org.jhk.interested.web.publisher", "org.jhk.interested.web.dao"})
-public class Config {
+@Component
+public class UserDao implements IUserDao {
+    
+    private static final Logger _LOGGER = LoggerFactory.getLogger(UserDao.class);
+
+    @Override
+    public User getUser(UserId userId) {
+        _LOGGER.info("getUser", userId);
+        
+        return null;
+    }
+
+    @Override
+    public void createUser(User user) {
+        _LOGGER.info("createUser", user);
+        
+    }
     
 }
