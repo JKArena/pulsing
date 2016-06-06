@@ -28,14 +28,21 @@ require('./TrendingInterest.scss');
 import React, {Component} from 'react';
 import TrendingInterestStore from './TrendingInterestStore';
 
-let _store = new TrendingInterestStore();
+const _store = new TrendingInterestStore();
 
 class TrendingInterestComponent extends Component {
   
   constructor(props) {
     super(props);
     
-    this.state = _store.getAllTrending();
+    TrendingInterestStore.trending
+      .then(function(result) {
+        
+        this.state = result;
+      }, function(err) {
+        
+        console.error(err);
+      }).bind(this);
   }
   
   componentDidMount() {
@@ -47,7 +54,7 @@ class TrendingInterestComponent extends Component {
   }
   
   _onChange() {
-    this.setState(_store.getAllTrending());
+    this.setState(TrendingInterestStore.trending);
   }
   
   render() {

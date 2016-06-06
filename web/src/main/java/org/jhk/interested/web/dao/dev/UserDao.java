@@ -18,6 +18,9 @@
  */
 package org.jhk.interested.web.dao.dev;
 
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
+
 import org.jhk.interested.serialization.avro.records.User;
 import org.jhk.interested.serialization.avro.records.UserId;
 import org.jhk.interested.web.dao.IUserDao;
@@ -32,6 +35,12 @@ import org.springframework.stereotype.Component;
 public class UserDao implements IUserDao {
     
     private static final Logger _LOGGER = LoggerFactory.getLogger(UserDao.class);
+    
+    private static final ConcurrentMap<UserId, User> _MOCKED_USERS = new ConcurrentHashMap<>();
+    
+    static {
+        
+    }
 
     @Override
     public User getUser(UserId userId) {

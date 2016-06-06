@@ -26,8 +26,8 @@ import org.jhk.interested.serialization.avro.records.UserId;
  */
 public interface IUserDao {
     
-    public User getUser(UserId userId);
+    User getUser(UserId userId);
     
-    public void createUser(User user);
+    void createUser(User user);
     
 }
