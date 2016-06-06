@@ -25,7 +25,7 @@
 
 var EventEmitter = require('events').EventEmitter;
 var CHANGE_EVENT = 'change';
-var _trending = [];
+var _trending;
 
 class TrendingInterestStore extends EventEmitter {
   
@@ -41,8 +41,28 @@ class TrendingInterestStore extends EventEmitter {
     this.removeListener(CHANGE_EVENT, callback);
   }
   
-  getAllTrending() {
-    return {trending: _trending};
+  static get trending() {
+    return _trending ? Promise.resolve(_trending) : new Promise(function(resolve, reject) {
+      let request = new Request("/controller/getTrendingInterest");
+      
+      fetch(request, {
+        method: 'GET',
+        mode: 'same-origin'
+      })
+      .then(function(response) {
+        _trending = new Map();
+        
+        response.forEach(interest => {
+          _trending.set(interest.id, interest);
+        });
+        
+        resolve(_trending);
+      })
+      .catch(function(err) {
+        console.error("Failure in getting trending ", err);
+      });
+      
+    });
   }
   
 }

@@ -18,11 +18,17 @@
  */
 package org.jhk.interested.web.controller;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import org.jhk.interested.serialization.avro.records.Interest;
 import org.jhk.interested.serialization.avro.records.UserId;
 import org.jhk.interested.web.common.Result;
+import org.jhk.interested.web.dao.IInterestDao;
+import org.jhk.interested.web.dao.IUserDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
@@ -40,11 +46,27 @@ public final class InterestController {
     
     private static final Logger _LOGGER = LoggerFactory.getLogger(InterestController.class);
     
+    @Autowired
+    private IUserDao userDao;
+    
+    @Autowired
+    private IInterestDao interestDao;
+    
     @RequestMapping(value="/createInterest", method=RequestMethod.POST)
     public @ResponseBody Result createInterest(@RequestBody Interest interest) {
         
         return new Result(Result.CODE.SUCCESS);
     }
+    
+    @RequestMapping(value="/getTrendingInterest", method=RequestMethod.GET)
+    public @ResponseBody List<Interest> getTrendingInterest() {
+        
+        List<Interest> trending = new LinkedList<>();
+        
+        
+        return trending;
+    }
+    
     
     @MessageMapping("/interestedSocketJS")
     @SendTo("/interestedTopic/subscribeInterest")

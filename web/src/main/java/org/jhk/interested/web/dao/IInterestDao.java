@@ -18,6 +18,8 @@
  */
 package org.jhk.interested.web.dao;
 
+import java.util.List;
+
 import org.jhk.interested.serialization.avro.records.Interest;
 import org.jhk.interested.serialization.avro.records.InterestId;
 
@@ -26,10 +28,12 @@ import org.jhk.interested.serialization.avro.records.InterestId;
  */
 public interface IInterestDao {
     
-    public Interest getInterest(InterestId interestId);
+    Interest getInterest(InterestId interestId);
     
-    public void createInterest(Interest interest);
+    void createInterest(Interest interest);
     
-    public void subscribeInterest(Interest interest);
+    void subscribeInterest(Interest interest);
+    
+    List<Interest> getTrendingInterests();
     
 }

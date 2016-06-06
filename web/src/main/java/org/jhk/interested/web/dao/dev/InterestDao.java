@@ -18,6 +18,8 @@
  */
 package org.jhk.interested.web.dao.dev;
 
+import java.util.List;
+
 import org.jhk.interested.serialization.avro.records.Interest;
 import org.jhk.interested.serialization.avro.records.InterestId;
 import org.jhk.interested.web.dao.IInterestDao;
@@ -50,6 +52,11 @@ public class InterestDao implements IInterestDao {
     public void subscribeInterest(Interest interest) {
         _LOGGER.info("subscribeInterest", interest);
         
+    }
+
+    @Override
+    public List<Interest> getTrendingInterests() {
+        return null;
     }
     
 }

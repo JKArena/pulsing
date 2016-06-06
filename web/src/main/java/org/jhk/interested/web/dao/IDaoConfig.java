@@ -23,8 +23,8 @@ package org.jhk.interested.web.dao;
  */
 public interface IDaoConfig {
     
-    public IUserDao getUserDao();
+    IUserDao getUserDao();
     
-    public IInterestDao getInterestDao();
+    IInterestDao getInterestDao();
     
 }
