@@ -17,7 +17,7 @@
  * under the License.
  */
 
-namespace java org.jhk.interested.serialization.thrift.property
+namespace java org.jhk.pulsing.serialization.thrift.property
 
 include "../common/Address.thrift"
 include "../id/UserId.thrift"

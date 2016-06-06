@@ -3,16 +3,16 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.jhk.interested.serialization</groupId>
-    <artifactId>interested-serialization</artifactId>
-    <version>${interested.version}</version>
+    <groupId>org.jhk.pulsing.serialization</groupId>
+    <artifactId>pulsing-serialization</artifactId>
+    <version>${pulsing.version}</version>
   </parent>
   
-  <groupId>org.jhk.interested.serialization.avro</groupId>
-  <artifactId>interested-avro</artifactId>
-  <version>${interested.version}</version>
-  <name>interested-avro</name>
-  <url>https://github.com/JHKTruth/interested/serialization/avro</url>
+  <groupId>org.jhk.pulsing.serialization.avro</groupId>
+  <artifactId>pulsing-avro</artifactId>
+  <version>${pulsing.version}</version>
+  <name>pulsing-avro</name>
+  <url>https://github.com/JHKTruth/pulsing/serialization/avro</url>
   
   <dependencies>
     
@@ -53,7 +53,7 @@
               <outputDirectory>${project.basedir}/src/main/java/</outputDirectory>
               <imports>
               	<import>${project.basedir}/src/main/avro/address.avsc</import>
-                <import>${project.basedir}/src/main/avro/interestId.avsc</import>
+                <import>${project.basedir}/src/main/avro/pulseId.avsc</import>
                 <import>${project.basedir}/src/main/avro/userId.avsc</import>
               </imports>
             </configuration>

@@ -1,6 +1,6 @@
 {
   "generator-react-webpack": {
-    "appName": "interested",
+    "appName": "pulsing",
     "style": "scss",
     "postcss": true,
     "generatedWithVersion": 3

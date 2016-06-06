@@ -17,7 +17,7 @@
  * under the License.
  */
 
-namespace java org.jhk.interested.serialization.thrift.id
+namespace java org.jhk.pulsing.serialization.thrift.id
 
 /**
  * User id node

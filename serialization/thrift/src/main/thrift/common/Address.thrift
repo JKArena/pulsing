@@ -17,7 +17,7 @@
  * under the License.
  */
 
-namespace java org.jhk.interested.serialization.thrift.common
+namespace java org.jhk.pulsing.serialization.thrift.common
 
 /**
  * Common struct Address, since can be used in multiple properties

@@ -1,39 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.jhk.interested</groupId>
-  <artifactId>interested-project</artifactId>
+  <groupId>org.jhk.pulsing</groupId>
+  <artifactId>pulsing-project</artifactId>
   <packaging>pom</packaging>
-  <version>${interested.version}</version>
-  <name>interested-project</name>
-  <url>https://github.com/JHKTruth/interested</url>
-  <description>Interested Build Project</description>
+  <version>${pulsing.version}</version>
+  <name>pulsing-project</name>
+  <url>https://github.com/JHKTruth/pulsing</url>
+  <description>Pulsing Build Project</description>
   
   <dependencyManagement>
     <dependencies>
       
       <dependency>
-	    <groupId>org.jhk.interested.serialization.avro</groupId>
-        <artifactId>interested-avro</artifactId>
-        <version>${interested.version}</version>
+	    <groupId>org.jhk.pulsing.serialization.avro</groupId>
+        <artifactId>pulsing-avro</artifactId>
+        <version>${pulsing.version}</version>
       </dependency>
       
       <dependency>
-	    <groupId>org.jhk.interested.serialization.thrift</groupId>
-        <artifactId>interested-thrift</artifactId>
-        <version>${interested.version}</version>
+	    <groupId>org.jhk.pulsing.serialization.thrift</groupId>
+        <artifactId>pulsing-thrift</artifactId>
+        <version>${pulsing.version}</version>
       </dependency>
 	  
 	  <dependency>
-	    <groupId>org.jhk.interested.storm</groupId>
-        <artifactId>interested-storm</artifactId>
-        <version>${interested.version}</version>
+	    <groupId>org.jhk.pulsing.storm</groupId>
+        <artifactId>pulsing-storm</artifactId>
+        <version>${pulsing.version}</version>
       </dependency>
       
       <dependency>
-        <groupId>org.jhk.interested.plugin.maven</groupId>
-        <artifactId>interested-plugin-maven</artifactId>
-        <version>${interested.version}</version>
+        <groupId>org.jhk.pulsing.plugin.maven</groupId>
+        <artifactId>pulsing-plugin-maven</artifactId>
+        <version>${pulsing.version}</version>
       </dependency>
       
       <dependency>
@@ -190,7 +190,7 @@
   </dependencyManagement>
   
   <properties>
-    <interested.version>0.1-SNAPSHOT</interested.version>
+    <pulsing.version>0.1-SNAPSHOT</pulsing.version>
     <org.apache.storm.core>1.0.0</org.apache.storm.core>
     <org.apache.storm.kafka>1.0.0</org.apache.storm.kafka>
     <org.apache.storm.starter>1.0.0</org.apache.storm.starter>
@@ -250,8 +250,8 @@
           </connectors>
           <contextHandlers>
             <contextHandler implementation="org.eclipse.jetty.maven.plugin.JettyWebAppContext">
-              <war>${project.basedir}/../web/target/interested-web.war</war>
-              <contextPath>/interested-web</contextPath>
+              <war>${project.basedir}/../web/target/pulsing-web.war</war>
+              <contextPath>/pulsing-web</contextPath>
             </contextHandler>
           </contextHandlers>
         </configuration>

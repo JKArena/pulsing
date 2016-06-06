@@ -1,8 +1,8 @@
 {
-  "name": "interested",
+  "name": "pulsing",
   "private": true,
   "version": "0.0.1",
-  "description": "interested",
+  "description": "pulsing",
   "main": "",
   "scripts": {
     "start": "node server.js --env=dev",
