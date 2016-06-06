@@ -25,7 +25,7 @@ import org.springframework.context.annotation.Configuration;
  * @author Ji Kim
  */
 @Configuration
-@ComponentScan({"org.jhk.interested.web.publisher", "org.jhk.interested.web.dao"})
+@ComponentScan({"org.jhk.interested.web.dao"})
 public class Config {
     
 }
