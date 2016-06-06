@@ -1,7 +1,3 @@
-# scout
-
-=================
-
 Project for playing around with :
 
 1. Lamba architecture
