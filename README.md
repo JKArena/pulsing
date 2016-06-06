@@ -5,6 +5,6 @@ Project for playing around with :
    * Hadoop
    * Redis+Cassandra
    * Avro + Thrift for serializations
-2. Bootstrap+ReactJS
+2. Bootstrap+ReactJS+NodeJS
 3. Spring
-4. etc
+4. Java8+Ecmascript6 and etc
