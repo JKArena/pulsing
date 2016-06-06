@@ -3,33 +3,33 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.jhk.interested</groupId>
-    <artifactId>interested-project</artifactId>
-    <version>${interested.version}</version>
+    <groupId>org.jhk.pulsing</groupId>
+    <artifactId>pulsing-project</artifactId>
+    <version>${pulsing.version}</version>
   </parent>
   
-  <groupId>org.jhk.interested.web</groupId>
-  <artifactId>interested-web</artifactId>
-  <version>${interested.version}</version>
+  <groupId>org.jhk.pulsing.web</groupId>
+  <artifactId>pulsing-web</artifactId>
+  <version>${pulsing.version}</version>
   <packaging>war</packaging>
-  <name>interested-web</name>
+  <name>pulsing-web</name>
   <url>http://maven.apache.org</url>
   
   <dependencies>
     
     <dependency>
-      <groupId>org.jhk.interested.serialization.avro</groupId>
-      <artifactId>interested-avro</artifactId>
+      <groupId>org.jhk.pulsing.serialization.avro</groupId>
+      <artifactId>pulsing-avro</artifactId>
     </dependency>
     
     <dependency>
-      <groupId>org.jhk.interested.storm</groupId>
-      <artifactId>interested-storm</artifactId>
+      <groupId>org.jhk.pulsing.storm</groupId>
+      <artifactId>pulsing-storm</artifactId>
     </dependency>
     
     <dependency>
-      <groupId>org.jhk.interested.plugin.maven</groupId>
-      <artifactId>interested-plugin-maven</artifactId>
+      <groupId>org.jhk.pulsing.plugin.maven</groupId>
+      <artifactId>pulsing-plugin-maven</artifactId>
     </dependency>
     
     <dependency>
@@ -109,23 +109,23 @@
   </dependencies>
   
   <build>
-    <finalName>interested-web</finalName>
+    <finalName>pulsing-web</finalName>
     
     <plugins>
       <plugin>
-        <groupId>org.jhk.interested.plugin.maven</groupId>
-        <artifactId>interested-plugin-maven</artifactId>
-        <version>${interested.version}</version>
+        <groupId>org.jhk.pulsing.plugin.maven</groupId>
+        <artifactId>pulsing-plugin-maven</artifactId>
+        <version>${pulsing.version}</version>
         <configuration>
           <avroclasses>
-            <param>org.jhk.interested.serialization.avro.records.Address</param>
-            <param>org.jhk.interested.serialization.avro.records.Interest</param>
-            <param>org.jhk.interested.serialization.avro.records.InterestId</param>
-            <param>org.jhk.interested.serialization.avro.records.User</param>
-            <param>org.jhk.interested.serialization.avro.records.UserId</param>
+            <param>org.jhk.pulsing.serialization.avro.records.Address</param>
+            <param>org.jhk.pulsing.serialization.avro.records.Pulse</param>
+            <param>org.jhk.pulsing.serialization.avro.records.PulseId</param>
+            <param>org.jhk.pulsing.serialization.avro.records.User</param>
+            <param>org.jhk.pulsing.serialization.avro.records.UserId</param>
           </avroclasses>
           <destination>${project.build.sourceDirectory}/../webapp/jsapp/avro/avrojson.js</destination>
-          <testdestination>${basedir}/src/test/resources/org/jhk/interested/serialization/avro/serializers.js</testdestination>
+          <testdestination>${basedir}/src/test/resources/org/jhk/pulsing/serialization/avro/serializers.js</testdestination>
         </configuration>
         <executions>
           <execution>

@@ -7,7 +7,7 @@ import {Navbar, Nav, NavItem} from 'react-bootstrap';
 import {Router, Route, Link, IndexRoute, browserHistory} from 'react-router';
 import {LinkContainer, IndexLinkContainer} from 'react-router-bootstrap';
 
-import TrendingInterestComponent from "../interest/trending/TrendingInterestComponent";
+import TrendingPulseComponent from "../pulsing/trending/TrendingPulseComponent";
 
 class NavBarComponent extends Component {
   

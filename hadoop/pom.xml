@@ -3,22 +3,22 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.jhk.interested</groupId>
-    <artifactId>interested-project</artifactId>
-    <version>${interested.version}</version>
+    <groupId>org.jhk.pulsing</groupId>
+    <artifactId>pulsing-project</artifactId>
+    <version>${pulsing.version}</version>
   </parent>
   
-  <groupId>org.jhk.interested.hadoop</groupId>
-  <artifactId>interested-hadoop</artifactId>
-  <version>${interested.version}</version>
-  <name>interested-hadoop</name>
-  <url>https://github.com/JHKTruth/interested/hadoop</url>
+  <groupId>org.jhk.pulsing.hadoop</groupId>
+  <artifactId>pulsing-hadoop</artifactId>
+  <version>${pulsing.version}</version>
+  <name>pulsing-hadoop</name>
+  <url>https://github.com/JHKTruth/pulsing/hadoop</url>
   
   <dependencies>
     
     <dependency>
-      <groupId>org.jhk.interested.serialization.thrift</groupId>
-      <artifactId>interested-thrift</artifactId>
+      <groupId>org.jhk.pulsing.serialization.thrift</groupId>
+      <artifactId>pulsing-thrift</artifactId>
     </dependency>
     
     <dependency>

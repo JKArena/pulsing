@@ -2,17 +2,17 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.jhk.interested</groupId>
-    <artifactId>interested-project</artifactId>
-    <version>${interested.version}</version>
+    <groupId>org.jhk.pulsing</groupId>
+    <artifactId>pulsing-project</artifactId>
+    <version>${pulsing.version}</version>
   </parent>
   
-  <groupId>org.jhk.interested.plugin</groupId>
-  <artifactId>interested-plugin</artifactId>
+  <groupId>org.jhk.pulsing.plugin</groupId>
+  <artifactId>pulsing-plugin</artifactId>
   <packaging>pom</packaging>
-  <version>${interested.version}</version>
-  <name>interested-plugin</name>
-  <url>https://github.com/JHKTruth/interested/plugin</url>
+  <version>${pulsing.version}</version>
+  <name>pulsing-plugin</name>
+  <url>https://github.com/JHKTruth/pulsing/plugin</url>
   
   <modules>
     <module>maven</module>

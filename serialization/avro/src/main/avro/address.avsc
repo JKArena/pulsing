@@ -18,7 +18,7 @@
  */
 
 {
-  "namespace": "org.jhk.interested.serialization.avro.records",
+  "namespace": "org.jhk.pulsing.serialization.avro.records",
   "type": "record",
   "name": "Address",
   "fields": [

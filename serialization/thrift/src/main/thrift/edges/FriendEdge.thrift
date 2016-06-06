@@ -17,7 +17,7 @@
  * under the License.
  */
 
-namespace java org.jhk.interested.serialization.thrift.edges
+namespace java org.jhk.pulsing.serialization.thrift.edges
 
 include "../id/UserId.thrift"
 

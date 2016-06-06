@@ -17,14 +17,14 @@
  * under the License.
  */
 
-namespace java org.jhk.interested.serialization.thrift.data
+namespace java org.jhk.pulsing.serialization.thrift.data
 
-include "../property/InterestProperty.thrift"
+include "../property/PulseProperty.thrift"
 include "../property/UserProperty.thrift"
 
 include "../edges/EquivEdge.thrift"
 include "../edges/FriendEdge.thrift"
-include "../edges/InterestEdge.thrift"
+include "../edges/PulseEdge.thrift"
 
 /**
  * Data content
@@ -42,8 +42,8 @@ struct Pedigree {
 
 union DataUnit {
   1: UserProperty.UserProperty user_property;
-  2: InterestProperty.InterestProperty interest_property;
+  2: PulseProperty.PulseProperty pulse_property;
   3: EquivEdge.EquivEdge equiv;
   4: FriendEdge.FriendEdge friends;
-  5: InterestEdge.InterestEdge interest;
+  5: PulseEdge.PulseEdge pulse;
 }

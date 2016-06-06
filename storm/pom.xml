@@ -3,27 +3,27 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.jhk.interested</groupId>
-    <artifactId>interested-project</artifactId>
-    <version>${interested.version}</version>
+    <groupId>org.jhk.pulsing</groupId>
+    <artifactId>pulsing-project</artifactId>
+    <version>${pulsing.version}</version>
   </parent>
   
-  <groupId>org.jhk.interested.storm</groupId>
-  <artifactId>interested-storm</artifactId>
-  <version>${interested.version}</version>
-  <name>interested-storm</name>
-  <url>https://github.com/JHKTruth/interested/storm</url>
+  <groupId>org.jhk.pulsing.storm</groupId>
+  <artifactId>pulsing-storm</artifactId>
+  <version>${pulsing.version}</version>
+  <name>pulsing-storm</name>
+  <url>https://github.com/JHKTruth/pulsing/storm</url>
   
   <dependencies>
     
     <dependency>
-      <groupId>org.jhk.interested.serialization.avro</groupId>
-      <artifactId>interested-avro</artifactId>
+      <groupId>org.jhk.pulsing.serialization.avro</groupId>
+      <artifactId>pulsing-avro</artifactId>
     </dependency>
     
     <dependency>
-      <groupId>org.jhk.interested.serialization.thrift</groupId>
-      <artifactId>interested-thrift</artifactId>
+      <groupId>org.jhk.pulsing.serialization.thrift</groupId>
+      <artifactId>pulsing-thrift</artifactId>
     </dependency>
     
     <dependency>
