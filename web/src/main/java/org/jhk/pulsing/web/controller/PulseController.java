@@ -42,7 +42,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @Controller
 @RequestMapping("/pulse")
-public final class PulseController {
+public final class PulseController extends AbstractController {
     
     private static final Logger _LOGGER = LoggerFactory.getLogger(PulseController.class);
     
@@ -66,7 +66,6 @@ public final class PulseController {
         
         return trending;
     }
-    
     
     @MessageMapping("/pulsingSocketJS")
     @SendTo("/pulsingTopic/subscribePulse")

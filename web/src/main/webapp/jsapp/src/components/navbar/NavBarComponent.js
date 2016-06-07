@@ -7,7 +7,7 @@ import {Navbar, Nav, NavItem} from 'react-bootstrap';
 import {Router, Route, Link, IndexRoute, browserHistory} from 'react-router';
 import {LinkContainer, IndexLinkContainer} from 'react-router-bootstrap';
 
-import TrendingPulseComponent from "../pulsing/trending/TrendingPulseComponent";
+import TrendingPulseComponent from '../pulsing/trending/TrendingPulseComponent';
 
 class NavBarComponent extends Component {
   
@@ -30,7 +30,7 @@ class NavBarComponent extends Component {
           
           <Navbar.Collapse>
             <Nav>
-              <NavItem href='/'>Trending</NavItem>
+              <NavItem href='/'><TrendingPulseComponent></TrendingPulseComponent></NavItem>
             </Nav>
             
             <Nav pullRight>

@@ -39,10 +39,10 @@ class TrendingPulseComponent extends Component {
       .then(function(result) {
         
         this.state = result;
-      }, function(err) {
-        
-        console.error(err);
-      }).bind(this);
+      }.bind(this))
+      .catch(function(err) {
+        console.error('Error getting trending ', err);
+      });
   }
   
   componentDidMount() {

@@ -23,9 +23,11 @@
 
 'use strict';
 
-var EventEmitter = require('events').EventEmitter;
-var CHANGE_EVENT = 'change';
-var _trending;
+import Fetch from '../../../common/Fetch';
+import {EventEmitter} from 'events';
+
+let CHANGE_EVENT = 'change';
+let _trending;
 
 class TrendingPulseStore extends EventEmitter {
   
@@ -43,25 +45,24 @@ class TrendingPulseStore extends EventEmitter {
   
   static get trending() {
     return _trending ? Promise.resolve(_trending) : new Promise(function(resolve, reject) {
-      let request = new Request("/controller/getTrendingPulse");
-      
-      fetch(request, {
-        method: 'GET',
-        mode: 'same-origin'
-      })
-      .then(function(response) {
-        _trending = new Map();
-        
-        response.forEach(pulse => {
-          _trending.set(pulse.id, pulse);
+
+      Fetch.GET('pulse/getTrendingPulse')
+        .then(function(json) {
+          console.info('gotTrendingPulse', json);
+          _trending = new Map();
+          
+          json.forEach(pulse => {
+            _trending.set(pulse.id, pulse);
+          });
+          
+          resolve(_trending);
+        })
+        .catch(function(err) {
+          console.error(err);
+          
+          reject(err);
         });
-        
-        resolve(_trending);
-      })
-      .catch(function(err) {
-        console.error("Failure in getting trending ", err);
-      });
-      
+
     });
   }
   
