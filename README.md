@@ -2,7 +2,7 @@ Project for playing around with :
 
 1. Lamba architecture
    * Storm+Trident+Kafka
-   * Hadoop
+   * Hadoop+JCascade+Pail+Flume
    * Redis+Cassandra
    * Avro + Thrift for serializations
 2. Bootstrap+ReactJS+NodeJS
