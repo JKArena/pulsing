@@ -104,6 +104,25 @@ export default Object.freeze(
 
           set: function() {},
           enumerable: true
+        },
+        
+        'POST_JSON' : {
+          get: function() {
+
+            return (pPath, options=Object.create(null)) => {
+              
+              const DEFAULT_HEADERS = new Headers({'Accept': 'application/json'});
+              const DEFAULT_OPTIONS = {method: 'POST',  mode: 'cors', headers: DEFAULT_HEADERS};
+
+              let request = new Request(controllerUrl() + pPath);
+              let pOptions = Object.assign(DEFAULT_OPTIONS, options);
+
+              return fetchContent(request, pOptions, 'json');
+            }
+          },
+
+          set: function() {},
+          enumerable: true
         }
       })
 );
