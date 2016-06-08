@@ -43,7 +43,7 @@ const FETCH_RESPONSE_HANDLER = Object.freeze(Object.create(null, {
   
   'raw': {
     get: function() {
-      return (response, resolve, reject) => {
+      return (response, resolve) => {
         resolve(response);
       };
     },
