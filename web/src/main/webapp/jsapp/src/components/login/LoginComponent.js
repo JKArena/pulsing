@@ -17,7 +17,7 @@ class LoginComponent extends Component {
           value: ''
         },
         password: {
-          state: 0, //-1 invalid, 0 initial, 1 valid
+          state: 0,
           value: ''
         }
     };
@@ -52,7 +52,7 @@ class LoginComponent extends Component {
           <Grid>
             <Row>
               <Col sm={12}>
-                <h1>Login</h1>
+                <h1>Login | Register</h1>
               </Col>
               <Col sm={12}>
                 <form class='form' name='loginform'>
@@ -66,7 +66,7 @@ class LoginComponent extends Component {
                   <FormGroup controlId='password' validationState={this.getValidState('password')}>
                     <ControlLabel>Password</ControlLabel>
                     <FormControl type='password' onChange={this.handleChange}
-                      value={this.state.password.value} placeholder='wsad best' />
+                      value={this.state.password.value} placeholder='wsad' />
                     <FormControl.Feedback />
                     <HelpBlock>wsad best password</HelpBlock>
                   </FormGroup>
@@ -83,13 +83,13 @@ class LoginComponent extends Component {
                   
                   <div>
                     <Button bsSize='large' block type='submit' onClick={this.handleSubmit}>| Login</Button>
-                    <LinkContainer to='/signup'><Button bsSize='large' block>| Register</Button></LinkContainer>
+                    <LinkContainer to='/signup'><Button bsSize='large' block>| Signup</Button></LinkContainer>
                   </div>
                   
                   <hr />
                   
                   <div>
-                    <Button bsSize='large' block onClick={this.loginOauth('facebook')}>| Connect with Facebook</Button>
+                    <Button bsSize='large' block onClick={this.loginOauth('facebook')}>| Login with Facebook</Button>
                   </div>
                 </form>
               </Col>

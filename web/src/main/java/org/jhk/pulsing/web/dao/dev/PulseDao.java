@@ -18,7 +18,10 @@
  */
 package org.jhk.pulsing.web.dao.dev;
 
+import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import org.jhk.pulsing.serialization.avro.records.Pulse;
 import org.jhk.pulsing.serialization.avro.records.PulseId;
@@ -34,18 +37,45 @@ import org.springframework.stereotype.Component;
 public class PulseDao implements IPulseDao {
     
     private static final Logger _LOGGER = LoggerFactory.getLogger(PulseDao.class);
+    
+    private static final List<Pulse> MOCK_TRENDING_PULSES = new LinkedList<>();
+    private static final ConcurrentMap<PulseId, Pulse> MOCK_PULSE_MAPPER = new ConcurrentHashMap<>();
+    
+    static {
+        
+        PulseId pulseId = PulseId.newBuilder().build();
+        pulseId.setId(1234L);
+        
+        Pulse pulse = Pulse.newBuilder().build();
+        pulse.setValue("Test 1");
+        pulse.setId(pulseId);
+        
+        MOCK_PULSE_MAPPER.put(pulseId, pulse);
+        MOCK_TRENDING_PULSES.add(pulse);
+        
+        pulseId = PulseId.newBuilder().build();
+        pulseId.setId(5678L);
+        
+        pulse = Pulse.newBuilder().build();
+        pulse.setValue("Test 2");
+        pulse.setId(pulseId);
+        
+        MOCK_PULSE_MAPPER.put(pulseId, pulse);
+        MOCK_TRENDING_PULSES.add(pulse);
+    }
 
     @Override
     public Pulse getPulse(PulseId pulseId) {
         _LOGGER.info("getPulse", pulseId);
         
-        return null;
+        return MOCK_PULSE_MAPPER.get(pulseId);
     }
 
     @Override
     public void createPulse(Pulse pulse) {
         _LOGGER.info("createPulse", pulse);
         
+        MOCK_PULSE_MAPPER.put(pulse.getId(), pulse);
     }
 
     @Override
@@ -56,7 +86,7 @@ public class PulseDao implements IPulseDao {
 
     @Override
     public List<Pulse> getTrendingPulse() {
-        return null;
+        return MOCK_TRENDING_PULSES;
     }
     
 }
