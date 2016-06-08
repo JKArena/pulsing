@@ -3,11 +3,9 @@
 require('./NavBar.scss');
 
 import React, {Component, PropTypes} from 'react';
+import {IndexLink} from 'react-router';
 import {Navbar, Nav, NavItem} from 'react-bootstrap';
-import {Router, Route, Link, IndexRoute, browserHistory} from 'react-router';
-import {LinkContainer, IndexLinkContainer} from 'react-router-bootstrap';
-
-import TrendingPulseComponent from '../pulsing/trending/TrendingPulseComponent';
+import {LinkContainer} from 'react-router-bootstrap';
 
 class NavBarComponent extends Component {
   
@@ -23,14 +21,14 @@ class NavBarComponent extends Component {
         <Navbar inverse>
           <Navbar.Header>
             <Navbar.Brand>
-              <a href='/'>Interested</a>
+              <IndexLink to='/'>Pulsing</IndexLink>
             </Navbar.Brand>
             <Navbar.Toggle/>
           </Navbar.Header>
           
           <Navbar.Collapse>
             <Nav>
-              <NavItem href='/'><TrendingPulseComponent></TrendingPulseComponent></NavItem>
+              <LinkContainer to='/'><NavItem>Trending</NavItem></LinkContainer>
             </Nav>
             
             <Nav pullRight>
@@ -46,7 +44,7 @@ class NavBarComponent extends Component {
 NavBarComponent.displayName = 'NavBarComponent';
 
 NavBarComponent.propTypes = {
-  user: React.PropTypes.object
+  user: PropTypes.object
 };
 NavBarComponent.defaultProps = {
   user: null

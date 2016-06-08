@@ -10,6 +10,8 @@ class AppComponent extends React.Component {
     return (
       <div>
         <NavBarComponent></NavBarComponent>
+        
+        {this.props.children}
       </div>
     );
   }
