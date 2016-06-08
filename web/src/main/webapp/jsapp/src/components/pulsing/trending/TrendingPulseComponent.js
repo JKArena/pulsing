@@ -59,7 +59,7 @@ class TrendingPulseComponent extends Component {
   
   render() {
     return (
-      <div>
+      <div class='trendingpulse-component'>
         <div>Trending</div>
       </div>
     );

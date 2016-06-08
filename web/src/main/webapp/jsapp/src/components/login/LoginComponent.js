@@ -5,7 +5,7 @@ require('./Login.scss');
 import React from 'react';
 
 let LoginComponent = (props) => (
-  <div>
+  <div class='login-component'>
     LoginComponent
   </div>
 );

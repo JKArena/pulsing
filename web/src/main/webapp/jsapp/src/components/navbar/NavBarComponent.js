@@ -18,32 +18,34 @@ class NavBarComponent extends Component {
   render() {
     
     return (
-        <Navbar inverse>
-          <Navbar.Header>
-            <Navbar.Brand>
-              <IndexLink to='/'>Pulsing</IndexLink>
-            </Navbar.Brand>
-            <Navbar.Toggle/>
-          </Navbar.Header>
-          
-          <Navbar.Collapse>
-            <Nav>
-              <LinkContainer to='/'><NavItem>Trending</NavItem></LinkContainer>
-            </Nav>
+        <div class='navbar-component'>
+          <Navbar inverse>
+            <Navbar.Header>
+              <Navbar.Brand>
+                <IndexLink to='/'>Pulsing</IndexLink>
+              </Navbar.Brand>
+              <Navbar.Toggle/>
+            </Navbar.Header>
             
-            {(() => {
-              if(this.state.loggedIn) {
-                return <Nav pullRight><LinkContainer to='/logout'><NavItem>Logout</NavItem></LinkContainer></Nav>
-              } else {
-                return <Nav pullRight>
-                  <LinkContainer to='/signup'><NavItem>Signup</NavItem></LinkContainer>
-                  <LinkContainer to='/login'><NavItem>Login</NavItem></LinkContainer>
-                </Nav>;
-              }
-            })()}
-            
-          </Navbar.Collapse>
-        </Navbar>
+            <Navbar.Collapse>
+              <Nav>
+                <LinkContainer to='/'><NavItem>Trending</NavItem></LinkContainer>
+              </Nav>
+              
+              {(() => {
+                if(this.state.loggedIn) {
+                  return <Nav pullRight><LinkContainer to='/logout'><NavItem>Logout</NavItem></LinkContainer></Nav>
+                } else {
+                  return <Nav pullRight>
+                    <LinkContainer to='/signup'><NavItem>Signup</NavItem></LinkContainer>
+                    <LinkContainer to='/login'><NavItem>Login</NavItem></LinkContainer>
+                  </Nav>;
+                }
+              })()}
+              
+            </Navbar.Collapse>
+          </Navbar>
+        </div>
         );
   }
   

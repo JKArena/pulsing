@@ -5,7 +5,7 @@ require('./Logout.scss');
 import React from 'react';
 
 let LogoutComponent = (props) => (
-  <div>
+  <div class='logout-component'>
     Logout
   </div>
 );
