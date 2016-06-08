@@ -36,11 +36,10 @@ class TrendingPulseComponent extends Component {
   constructor(props) {
     super(props);
     
+    this.state = {trending: new Map()};
     TrendingPulseStore.trending
       .then(function(result) {
-        console.info('pulsestore result ', result);
-        
-        this.setState(result);
+        this.setState({trending: result});
       }.bind(this))
       .catch(function(err) {
         console.error('Error getting trending ', err);
@@ -66,23 +65,33 @@ class TrendingPulseComponent extends Component {
   }
   
   render() {
+    let trending = this.state.trending;
+    
     return (
       <div class='trendingpulse-component'>
 
         {(() => {
+          
           return <Grid>
             <Row>
-
-              <Col xs={12} sm={6} md={4} lg={3}>
-                <Thumbnail alt='242x200'>
-                  <h3>Pulse value</h3>
-                  <p>Description</p>
-                  <p>
-                    <Button bsStyle="primary" id='pulseId' onClick={this.handleSubscribe}>Subscribe</Button>
-                  </p>
-                </Thumbnail>
-              </Col>
-
+              {(() => {
+              let cols = []; 
+              
+              trending.forEach((value, key) => {
+                
+                cols.push(<Col xs={12} sm={6} md={4} lg={3} key={key}>
+                  <Thumbnail alt='242x200'>
+                    <h3>{value}</h3>
+                    <p>Description</p>
+                    <p>
+                      <Button bsStyle="primary" id={key} onClick={this.handleSubscribe}>Subscribe</Button>
+                    </p>
+                  </Thumbnail>
+                </Col>);
+              });
+              
+              return cols;
+              })()}
             </Row>
           </Grid>
         })()}

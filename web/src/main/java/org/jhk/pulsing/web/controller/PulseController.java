@@ -61,10 +61,7 @@ public final class PulseController extends AbstractController {
     @RequestMapping(value="/getTrendingPulse", method=RequestMethod.GET)
     public @ResponseBody List<Pulse> getTrendingPulse() {
         
-        List<Pulse> trending = new LinkedList<>();
-        
-        
-        return trending;
+        return pulseDao.getTrendingPulse();
     }
     
     @MessageMapping("/pulsingSocketJS")

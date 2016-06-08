@@ -49,10 +49,13 @@ class TrendingPulseStore extends EventEmitter {
       Fetch.GET_JSON('pulse/getTrendingPulse')
         .then(function(json) {
           console.info('gotTrendingPulse', json);
+          //when making subsequent rest calls for Pulse, create PulseId from the long values
           _trending = new Map();
           
-          json.forEach(pulse => {
-            _trending.set(pulse.id, pulse);
+          json.forEach(pulseStr => {
+            let pulse = JSON.parse(pulseStr);
+            
+            _trending.set(pulse.id.id.long, pulse.value.string);
           });
           
           resolve(_trending);
