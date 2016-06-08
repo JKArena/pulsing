@@ -46,7 +46,7 @@ class TrendingPulseStore extends EventEmitter {
   static get trending() {
     return _trending ? Promise.resolve(_trending) : new Promise(function(resolve, reject) {
 
-      Fetch.GET('pulse/getTrendingPulse')
+      Fetch.GET_JSON('pulse/getTrendingPulse')
         .then(function(json) {
           console.info('gotTrendingPulse', json);
           _trending = new Map();
