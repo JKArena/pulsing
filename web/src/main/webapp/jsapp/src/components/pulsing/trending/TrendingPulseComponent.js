@@ -25,6 +25,7 @@
 
 require('./TrendingPulse.scss');
 
+import {Grid, Row, Col, Thumbnail, Button} from 'react-bootstrap';
 import React, {Component} from 'react';
 import TrendingPulseStore from './TrendingPulseStore';
 
@@ -37,8 +38,9 @@ class TrendingPulseComponent extends Component {
     
     TrendingPulseStore.trending
       .then(function(result) {
+        console.info('pulsestore result ', result);
         
-        this.state = result;
+        this.setState(result);
       }.bind(this))
       .catch(function(err) {
         console.error('Error getting trending ', err);
@@ -53,14 +55,38 @@ class TrendingPulseComponent extends Component {
     _store.removeChangeListener(this._onChange);
   }
   
+  handleSubscribe(evt) {
+    console.info('handleSubscribe', evt);
+    
+  }
+  
   _onChange() {
-    this.setState(TrendingPulseStore.trending);
+    console.info('_onChange');
+    
   }
   
   render() {
     return (
       <div class='trendingpulse-component'>
-        <div>Trending</div>
+
+        {(() => {
+          return <Grid>
+            <Row>
+
+              <Col xs={12} sm={6} md={4} lg={3}>
+                <Thumbnail alt='242x200'>
+                  <h3>Pulse value</h3>
+                  <p>Description</p>
+                  <p>
+                    <Button bsStyle="primary" id='pulseId' onClick={this.handleSubscribe}>Subscribe</Button>
+                  </p>
+                </Thumbnail>
+              </Col>
+
+            </Row>
+          </Grid>
+        })()}
+
       </div>
     );
   }

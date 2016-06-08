@@ -29,7 +29,6 @@ class NavBarComponent extends Component {
             
             <Navbar.Collapse>
               <Nav>
-                <LinkContainer to='/'><NavItem>Trending</NavItem></LinkContainer>
               </Nav>
               
               {(() => {
