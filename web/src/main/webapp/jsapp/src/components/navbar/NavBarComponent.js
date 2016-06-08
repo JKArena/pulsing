@@ -31,9 +31,17 @@ class NavBarComponent extends Component {
               <LinkContainer to='/'><NavItem>Trending</NavItem></LinkContainer>
             </Nav>
             
-            <Nav pullRight>
-              {this.state.loggedIn ? <NavItem href='/logout'>Logout</NavItem> : <NavItem href='/login'>Login</NavItem>}
-            </Nav>
+            {(() => {
+              if(this.state.loggedIn) {
+                return <Nav pullRight><LinkContainer to='/logout'><NavItem>Logout</NavItem></LinkContainer></Nav>
+              } else {
+                return <Nav pullRight>
+                  <LinkContainer to='/signup'><NavItem>Signup</NavItem></LinkContainer>
+                  <LinkContainer to='/login'><NavItem>Login</NavItem></LinkContainer>
+                </Nav>;
+              }
+            })()}
+            
           </Navbar.Collapse>
         </Navbar>
         );
