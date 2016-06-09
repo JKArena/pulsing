@@ -28,12 +28,10 @@ import org.jhk.pulsing.serialization.avro.records.PulseId;
 import org.jhk.pulsing.web.dao.IPulseDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 
 /**
  * @author Ji Kim
  */
-@Component
 public class PulseDao implements IPulseDao {
     
     private static final Logger _LOGGER = LoggerFactory.getLogger(PulseDao.class);
@@ -47,7 +45,7 @@ public class PulseDao implements IPulseDao {
         pulseId.setId(1234L);
         
         Pulse pulse = Pulse.newBuilder().build();
-        pulse.setValue("Test 1");
+        pulse.setValue("Mocked 1");
         pulse.setId(pulseId);
         
         MOCK_PULSE_MAPPER.put(pulseId, pulse);
@@ -57,7 +55,7 @@ public class PulseDao implements IPulseDao {
         pulseId.setId(5678L);
         
         pulse = Pulse.newBuilder().build();
-        pulse.setValue("Test 2");
+        pulse.setValue("Mocked 2");
         pulse.setId(pulseId);
         
         MOCK_PULSE_MAPPER.put(pulseId, pulse);

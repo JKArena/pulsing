@@ -18,20 +18,22 @@
  */
 package org.jhk.pulsing.web.dao.dev;
 
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import org.jhk.pulsing.serialization.avro.records.Address;
 import org.jhk.pulsing.serialization.avro.records.User;
 import org.jhk.pulsing.serialization.avro.records.UserId;
 import org.jhk.pulsing.web.dao.IUserDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 
 /**
  * @author Ji Kim
  */
-@Component
 public class UserDao implements IUserDao {
     
     private static final Logger _LOGGER = LoggerFactory.getLogger(UserDao.class);
@@ -39,20 +41,63 @@ public class UserDao implements IUserDao {
     private static final ConcurrentMap<UserId, User> _MOCKED_USERS = new ConcurrentHashMap<>();
     
     static {
+        UserId userId = UserId.newBuilder().build();
+        userId.setId(1111L);
         
+        User user = User.newBuilder().build();
+        user.setId(userId);
+        user.setEmail("mathXphysics@truth.com");
+        user.setName("Isaac Newton");
+        user.setPassword("genius");
+        
+        Address address = Address.newBuilder().build();
+        address.setAddress("Woolsthorpe-by-Colsterworth, United Kingdom");
+        address.setCoordinates(Stream.of(52.809863D, -0.62877D).collect(Collectors.toList()));
+        
+        user.setAddress(address);
+        
+        _MOCKED_USERS.put(userId, user);
+        
+        userId = UserId.newBuilder().build();
+        userId.setId(9999L);
+        
+        user = User.newBuilder().build();
+        user.setId(userId);
+        user.setEmail("philosophy@truth.com");
+        user.setName("Socrates");
+        user.setPassword("genius");
+        
+        address = Address.newBuilder().build();
+        address.setAddress("Athens Greece");
+        address.setCoordinates(Stream.of(37.9667D, 23.7167D).collect(Collectors.toList()));
+        
+        user.setAddress(address);
+        
+        _MOCKED_USERS.put(userId, user);
     }
 
     @Override
     public User getUser(UserId userId) {
         _LOGGER.info("getUser", userId);
         
-        return null;
+        return _MOCKED_USERS.get(userId);
     }
 
     @Override
     public void createUser(User user) {
         _LOGGER.info("createUser", user);
         
+        _MOCKED_USERS.put(user.getId(), user);
+    }
+
+    @Override
+    public User validateUser(String email, String password) {
+        
+        Optional<User> filteredUser = _MOCKED_USERS.values().stream()
+            .filter(user -> user.getEmail().equals(email) && user.getPassword().equals(password))
+            .findAny();
+        
+        return filteredUser.isPresent() ? filteredUser.get() : null;
     }
     
 }

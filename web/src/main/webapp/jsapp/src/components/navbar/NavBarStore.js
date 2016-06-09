@@ -16,20 +16,32 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.web.dao;
-
-import org.jhk.pulsing.serialization.avro.records.User;
-import org.jhk.pulsing.serialization.avro.records.UserId;
 
 /**
  * @author Ji Kim
  */
-public interface IUserDao {
-    
-    User getUser(UserId userId);
-    
-    void createUser(User user);
-    
-    User validateUser(String email, String password);
-    
+
+'use strict';
+
+import Fetch from '../../common/Fetch';
+import {EventEmitter} from 'events';
+
+const CHANGE_EVENT = 'change';
+
+class NavBarStore extends EventEmitter {
+  
+  emitChange() {
+    this.emit(CHANGE_EVENT);
+  }
+  
+  addChangeListener(callback) {
+    this.on(CHANGE_EVENT, callback);
+  }
+  
+  removeChangeListener(callback) {
+    this.removeListener(CHANGE_EVENT, callback);
+  }
+  
 }
+
+export default NavBarStore;

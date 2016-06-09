@@ -18,17 +18,13 @@
  */
 package org.jhk.pulsing.web.controller;
 
-import java.util.List;
-
-import org.jhk.pulsing.serialization.avro.records.Pulse;
+import org.jhk.pulsing.serialization.avro.records.User;
 import org.jhk.pulsing.serialization.avro.records.UserId;
 import org.jhk.pulsing.web.common.Result;
-import org.jhk.pulsing.web.dao.IPulseDao;
+import org.jhk.pulsing.web.dao.IDaoConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,35 +36,32 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @Controller
 @RequestMapping("/pulse")
-public final class PulseController extends AbstractController {
+public final class UserController extends AbstractController {
     
-    private static final Logger _LOGGER = LoggerFactory.getLogger(PulseController.class);
+    private static final Logger _LOGGER = LoggerFactory.getLogger(UserController.class);
     
     @Autowired
-    private IPulseDao pulseDao;
+    private IDaoConfig daoConfig;
     
-    @RequestMapping(value="/createPulse", method=RequestMethod.POST)
-    public @ResponseBody Result createPulse(@RequestBody Pulse pulse) {
-        _LOGGER.info("createPulse", pulse);
+    @RequestMapping(value="/createUser", method=RequestMethod.POST)
+    public @ResponseBody Result createUser(@RequestBody User user) {
+        _LOGGER.info("createUser", user);
         
         return new Result(Result.CODE.SUCCESS);
     }
     
-    @RequestMapping(value="/getTrendingPulse", method=RequestMethod.GET)
-    public @ResponseBody List<Pulse> getTrendingPulse() {
-        _LOGGER.info("getTrendingPulse");
+    @RequestMapping(value="/getUser", method=RequestMethod.GET)
+    public @ResponseBody User getUser(UserId userId) {
+        _LOGGER.info("getUser", userId);
         
-        return pulseDao.getTrendingPulse();
+        return daoConfig.getUserDao().getUser(userId);
     }
     
-    @MessageMapping("/pulsingSocketJS")
-    @SendTo("/pulsingTopic/subscribePulse")
-    public UserId subscribePulse(Pulse pulse) {
-        _LOGGER.info("subscribePulse", pulse);
+    @RequestMapping(value="/validateUser", method=RequestMethod.GET)
+    public @ResponseBody User validateUser(String email, String password) {
+        _LOGGER.info("validateUser", email, password);
         
-        //notify new user subscribed to the pulse
-        //should have the subscription time out (as a config?)
-        return pulse.getUserId();
+        return daoConfig.getUserDao().validateUser(email, password);
     }
     
 }
