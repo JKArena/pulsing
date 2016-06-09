@@ -16,20 +16,41 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.web.dao;
+package org.jhk.pulsing.web.dao.prod;
 
-import org.jhk.pulsing.serialization.avro.records.User;
-import org.jhk.pulsing.serialization.avro.records.UserId;
+import java.util.List;
+
+import org.jhk.pulsing.serialization.avro.records.Pulse;
+import org.jhk.pulsing.serialization.avro.records.PulseId;
+import org.jhk.pulsing.web.dao.IPulseDao;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Ji Kim
  */
-public interface IUserDao {
+public class PulseDao implements IPulseDao {
     
-    User getUser(UserId userId);
+    private static final Logger _LOGGER = LoggerFactory.getLogger(PulseDao.class);
     
-    void createUser(User user);
-    
-    User validateUser(String email, String password);
-    
+    @Override
+    public Pulse getPulse(PulseId pulseId) {
+        return null;
+    }
+
+    @Override
+    public void createPulse(Pulse pulse) {
+        
+    }
+
+    @Override
+    public void subscribePulse(Pulse pulse) {
+        
+    }
+
+    @Override
+    public List<Pulse> getTrendingPulse() {
+        return null;
+    }
+
 }
