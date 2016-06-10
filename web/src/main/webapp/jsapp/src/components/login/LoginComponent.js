@@ -24,7 +24,7 @@
 
 require('./Login.scss');
 
-import {Grid, Row, Col, FormGroup, ControlLabel, FormControl, HelpBlock, Button} from 'react-bootstrap';
+import {Grid, Row, Col, FormGroup, ControlLabel, FormControl, HelpBlock, Button, Panel} from 'react-bootstrap';
 import {LinkContainer} from 'react-router-bootstrap';
 import {browserHistory} from 'react-router';
 import React from 'react';
@@ -38,14 +38,11 @@ class LoginComponent extends AbstractComponent {
     super(props);
     
     this.state = {
-        email: {
-          state: 0, //-1 invalid, 0 initial, 1 valid
-          value: ''
+        validity: {
+          email: 0, //-1 invalid, 0 initial, 1 valid
+          password: 0
         },
-        password: {
-          state: 0,
-          value: ''
-        }
+        loginErrorMsg: ''
     };
   }
   
@@ -61,6 +58,8 @@ class LoginComponent extends AbstractComponent {
       .catch(function(message) {
         console.error(message);
         //display message
+        this.state.logInErrorMsg = message;
+        this.setState(this.state);
       })
   }
   
@@ -98,6 +97,18 @@ class LoginComponent extends AbstractComponent {
                     <Button id='loginBtn' bsSize='large' bsStyle='primary' block onClick={this.handleSubmit.bind(this)}>| Login</Button>
                     <LinkContainer to='/signup'><Button bsSize='large' block>| Signup</Button></LinkContainer>
                   </div>
+                  
+                  {(() => {
+                    
+                    if(this.state.loginErrorMsg) {
+                      return <div>
+                        <Panel header='Login Error' bsStyle='danger'>
+                          {this.state.loginErrorMsg}
+                        </Panel>
+                      </div>;
+                    }
+                    
+                  })()}
                   
                   <hr />
                   

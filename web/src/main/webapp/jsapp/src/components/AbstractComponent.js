@@ -35,10 +35,10 @@ class AbstractComponent extends Component {
     
     let target = evt.target;
     let eleId = target.id;
-    let oldState = this.state[eleId].state;
+    let oldState = this.state.validity[eleId];
     
-    this.state[eleId].state = target.value.trim().length > 0 ? 1 : -1;
-    if(oldState !== this.state[eleId].state) {
+    this.state.validity[eleId] = target.value.trim().length > 0 ? 1 : -1;
+    if(oldState !== this.state.validity[eleId]) {
       this.setState(this.state);
     }
   }
