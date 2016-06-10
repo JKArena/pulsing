@@ -31,6 +31,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
@@ -51,6 +52,13 @@ public class WebControllerConfig extends WebMvcConfigurerAdapter {
     @Bean(name="userController")
     public UserController getUserController() {
         return new UserController();
+    }
+    
+    @Bean
+    public CommonsMultipartResolver multipartResolver() {
+        CommonsMultipartResolver resolver=new CommonsMultipartResolver();
+        resolver.setDefaultEncoding("utf-8");
+        return resolver;
     }
     
     @Override

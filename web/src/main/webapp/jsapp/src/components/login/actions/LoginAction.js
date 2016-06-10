@@ -45,7 +45,7 @@ const LoginAction = Object.freeze(Object.create(null, {
               console.info('loginUser', result);
               
               if(result.code === 'SUCCESS') {
-                resolve(result);
+                resolve(JSON.parse(result.data));
               }else {
                 reject(result.message);
               }
