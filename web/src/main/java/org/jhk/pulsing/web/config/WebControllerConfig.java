@@ -23,6 +23,7 @@ import java.util.List;
 import org.apache.avro.specific.SpecificRecord;
 import org.jhk.pulsing.serialization.avro.serializers.SerializationHelper;
 import org.jhk.pulsing.web.controller.PulseController;
+import org.jhk.pulsing.web.controller.UserController;
 import org.jhk.pulsing.web.serialization.AvroJsonSerializer;
 import org.jhk.pulsing.web.serialization.JsonAvroDeserializer;
 import org.springframework.context.annotation.Bean;
@@ -45,6 +46,11 @@ public class WebControllerConfig extends WebMvcConfigurerAdapter {
     @Bean(name="pulseController")
     public PulseController getPulseController() {
         return new PulseController();
+    }
+    
+    @Bean(name="userController")
+    public UserController getUserController() {
+        return new UserController();
     }
     
     @Override

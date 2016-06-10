@@ -22,6 +22,7 @@ import java.util.List;
 
 import org.jhk.pulsing.serialization.avro.records.Pulse;
 import org.jhk.pulsing.serialization.avro.records.PulseId;
+import org.jhk.pulsing.web.common.Result;
 import org.jhk.pulsing.web.dao.IPulseDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,18 +35,18 @@ public class PulseDao implements IPulseDao {
     private static final Logger _LOGGER = LoggerFactory.getLogger(PulseDao.class);
     
     @Override
-    public Pulse getPulse(PulseId pulseId) {
+    public Result<Pulse> getPulse(PulseId pulseId) {
         return null;
     }
 
     @Override
-    public void createPulse(Pulse pulse) {
-        
+    public Result<PulseId> createPulse(Pulse pulse) {
+        return null;
     }
 
     @Override
-    public void subscribePulse(Pulse pulse) {
-        
+    public Result<PulseId> subscribePulse(Pulse pulse) {
+        return null;
     }
 
     @Override

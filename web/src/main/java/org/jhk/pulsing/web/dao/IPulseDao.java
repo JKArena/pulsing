@@ -22,17 +22,18 @@ import java.util.List;
 
 import org.jhk.pulsing.serialization.avro.records.Pulse;
 import org.jhk.pulsing.serialization.avro.records.PulseId;
+import org.jhk.pulsing.web.common.Result;
 
 /**
  * @author Ji Kim
  */
 public interface IPulseDao {
     
-    Pulse getPulse(PulseId pulseId);
+    Result<Pulse> getPulse(PulseId pulseId);
     
-    void createPulse(Pulse pulse);
+    Result<PulseId> createPulse(Pulse pulse);
     
-    void subscribePulse(Pulse pulse);
+    Result<PulseId> subscribePulse(Pulse pulse);
     
     List<Pulse> getTrendingPulse();
     

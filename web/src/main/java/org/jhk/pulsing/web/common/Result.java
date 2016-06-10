@@ -21,7 +21,7 @@ package org.jhk.pulsing.web.common;
 /**
  * @author Ji Kim
  */
-public final class Result {
+public final class Result<T> {
     
     public enum CODE { 
         SUCCESS, FAILURE;
@@ -29,15 +29,23 @@ public final class Result {
     
     private CODE _code;
     private String _message;
+    private T _data;
     
-    public Result(CODE code) { 
+    public Result(CODE code, String message) {
         super();
         
         _code = code;
+        _message = message;
     }
     
-    public Result(CODE code, String message) { 
-        this(code);
+    public Result(CODE code, T data) { 
+        this(code, "");
+        
+        _data = data;
+    }
+    
+    public Result(CODE code, T data, String message) { 
+        this(code, data);
         
         _message = message;
     }
@@ -56,11 +64,20 @@ public final class Result {
         _message = message;
     }
     
+    public T getData() {
+        return _data;
+    }
+    public void setData(T data) {
+        _data = data;
+    }
+    
     @Override
     public String toString() {
         StringBuilder content = new StringBuilder();
         
-        content.append("code [ ");
+        content.append("data [ ");
+        content.append(_data);
+        content.append("] code [ ");
         content.append(_code);
         content.append(" ] message [ ");
         content.append(_message);

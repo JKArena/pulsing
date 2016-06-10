@@ -21,7 +21,7 @@ package org.jhk.pulsing.web.controller;
 import org.jhk.pulsing.serialization.avro.records.User;
 import org.jhk.pulsing.serialization.avro.records.UserId;
 import org.jhk.pulsing.web.common.Result;
-import org.jhk.pulsing.web.dao.IDaoConfig;
+import org.jhk.pulsing.web.dao.IUserDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,39 +29,40 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * @author Ji Kim
  */
 @Controller
-@RequestMapping("/pulse")
+@RequestMapping("/user")
 public final class UserController extends AbstractController {
     
     private static final Logger _LOGGER = LoggerFactory.getLogger(UserController.class);
     
     @Autowired
-    private IDaoConfig daoConfig;
+    private IUserDao userDao;
     
     @RequestMapping(value="/createUser", method=RequestMethod.POST)
-    public @ResponseBody Result createUser(@RequestBody User user) {
+    public @ResponseBody Result<UserId> createUser(@RequestBody User user) {
         _LOGGER.info("createUser", user);
         
-        return new Result(Result.CODE.SUCCESS);
+        return null;
     }
     
     @RequestMapping(value="/getUser", method=RequestMethod.GET)
-    public @ResponseBody User getUser(UserId userId) {
+    public @ResponseBody Result<User> getUser(UserId userId) {
         _LOGGER.info("getUser", userId);
         
-        return daoConfig.getUserDao().getUser(userId);
+        return userDao.getUser(userId);
     }
     
-    @RequestMapping(value="/validateUser", method=RequestMethod.GET)
-    public @ResponseBody User validateUser(String email, String password) {
+    @RequestMapping(value="/validateUser", method=RequestMethod.POST)
+    public @ResponseBody Result<User> validateUser(@RequestParam String email, @RequestParam String password) {
         _LOGGER.info("validateUser", email, password);
         
-        return daoConfig.getUserDao().validateUser(email, password);
+        return userDao.validateUser(email, password);
     }
     
 }

@@ -24,7 +24,7 @@
 
 require('./NavBar.scss');
 
-import React, {Component, PropTypes} from 'react';
+import React, {Component} from 'react';
 import {IndexLink} from 'react-router';
 import {Navbar, Nav, NavItem} from 'react-bootstrap';
 import {LinkContainer} from 'react-router-bootstrap';
@@ -56,7 +56,8 @@ class NavBarComponent extends Component {
   
   logOut() {
     this.state.loggedIn = false;
-    this.props.user = null;
+    
+    _store.user = null;
     
     this.setState(this.state);
   }
@@ -97,12 +98,5 @@ class NavBarComponent extends Component {
 }
 
 NavBarComponent.displayName = 'NavBarComponent';
-
-NavBarComponent.propTypes = {
-  user: PropTypes.object
-};
-NavBarComponent.defaultProps = {
-  user: null
-};
 
 export default NavBarComponent;

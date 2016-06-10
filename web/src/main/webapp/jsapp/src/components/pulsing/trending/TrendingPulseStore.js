@@ -53,7 +53,7 @@ class TrendingPulseStore extends EventEmitter {
           
           resolve(_trending);
         })
-        .catch(function(err) {
+        .catch(function() {
           resolve([]);
         });
       

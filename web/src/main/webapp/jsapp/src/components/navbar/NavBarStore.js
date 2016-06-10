@@ -23,15 +23,28 @@
 
 'use strict';
 
-import Fetch from '../../common/Fetch';
 import {EventEmitter} from 'events';
 
 const CHANGE_EVENT = 'change';
 
 class NavBarStore extends EventEmitter {
   
+  constructor(...args) {
+    super(...args)
+    
+    this.user = null;
+  }
+  
   emitChange() {
     this.emit(CHANGE_EVENT);
+  }
+  
+  set user(user) {
+    this._user = user;
+  }
+  
+  get user() {
+    return this._user;
   }
   
   addChangeListener(callback) {
