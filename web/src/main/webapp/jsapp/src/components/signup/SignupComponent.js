@@ -36,21 +36,14 @@ class SignupComponent extends AbstractComponent {
     super(props);
     
     this.state = {
-        email: {
-          state: 0 //-1 invalid, 0 initial, 1 valid
+        validity: {
+          email: 0, //-1 invalid, 0 initial, 1 valid
+          password: 0,
+          name: 0,
+          address: 0,
+          picture: 0
         },
-        password: {
-          state: 0
-        },
-        name: {
-          state: 0
-        },
-        address: {
-          state: 0
-        },
-        picture: {
-          state: 0
-        }
+        signupErrorMsg: ''
     };
   }
   
@@ -138,6 +131,18 @@ class SignupComponent extends AbstractComponent {
                       <FormControl.Feedback />
                     </div>
                   </FormGroup>
+                  
+                  {(() => {
+                    
+                    if(this.state.signupErrorMsg) {
+                      return <div>
+                        <Panel header='Signup Error' bsStyle='danger'>
+                          {this.state.signupErrorMsg}
+                        </Panel>
+                      </div>;
+                    }
+                    
+                  })()}
                   
                   <hr />
                   
