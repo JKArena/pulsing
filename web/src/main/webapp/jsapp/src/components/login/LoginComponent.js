@@ -81,14 +81,14 @@ class LoginComponent extends AbstractComponent {
                 <form class='form' id='loginform' action=''>
                   <FormGroup controlId='email' validationState={this.getValidState('email')}>
                     <ControlLabel>Email</ControlLabel>
-                    <FormControl type='email' onBlur={this.handleChange.bind(this)}
+                    <FormControl type='email' name='email' onBlur={this.handleChange.bind(this)}
                       placeholder='foobar@email.com' />
                     <FormControl.Feedback />
                   </FormGroup>
                   
                   <FormGroup controlId='password' validationState={this.getValidState('password')}>
                     <ControlLabel>Password</ControlLabel>
-                    <FormControl type='password' onBlur={this.handleChange.bind(this)}
+                    <FormControl type='password' name='password' onBlur={this.handleChange.bind(this)}
                       placeholder='wsad' />
                     <FormControl.Feedback />
                     <HelpBlock>wsad best password</HelpBlock>
