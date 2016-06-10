@@ -25,6 +25,8 @@ import java.util.concurrent.ConcurrentMap;
 
 import org.jhk.pulsing.serialization.avro.records.Pulse;
 import org.jhk.pulsing.serialization.avro.records.PulseId;
+import org.jhk.pulsing.web.common.Result;
+import static org.jhk.pulsing.web.common.Result.CODE.*;
 import org.jhk.pulsing.web.dao.IPulseDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,23 +65,32 @@ public class PulseDao implements IPulseDao {
     }
 
     @Override
-    public Pulse getPulse(PulseId pulseId) {
+    public Result<Pulse> getPulse(PulseId pulseId) {
         _LOGGER.info("getPulse", pulseId);
         
-        return MOCK_PULSE_MAPPER.get(pulseId);
+        Pulse pulse = MOCK_PULSE_MAPPER.get(pulseId);
+        Result<Pulse> gResult = pulse == null ? new Result<>(FAILURE, "Failed to get pulse " + pulseId) 
+                : new Result<Pulse>(SUCCESS, pulse);
+        
+        return gResult;
     }
 
     @Override
-    public void createPulse(Pulse pulse) {
+    public Result<PulseId> createPulse(Pulse pulse) {
         _LOGGER.info("createPulse", pulse);
         
         MOCK_PULSE_MAPPER.put(pulse.getId(), pulse);
+        
+        Result<PulseId> cResult = new Result<>(SUCCESS, pulse.getId());
+        return cResult;
     }
 
     @Override
-    public void subscribePulse(Pulse pulse) {
+    public Result<PulseId> subscribePulse(Pulse pulse) {
         _LOGGER.info("subscribePulse", pulse);
         
+        Result<PulseId> sResult = new Result<>(SUCCESS, pulse.getId());
+        return sResult;
     }
 
     @Override

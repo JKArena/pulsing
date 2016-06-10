@@ -1,14 +1,39 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ */
+
+/**
+ * @author Ji Kim
+ */
 'use strict';
 
 const SPRING_CONTROLLER_SUFFIX = ':8083/pulsing-web/controller/';
+const BASIC = Symbol('basic');
 
 const FETCH_RESPONSE_HANDLER = Object.freeze(Object.create(null, {
   
   'json': {
     get: function() {
+      
       return (response, resolve, reject) => {
-        this['basic'](response, resolve, reject, 'json');
+        this[BASIC](response, resolve, reject, 'json');
       };
+      
     },
     set: function() {},
     enumerable: true
@@ -16,26 +41,32 @@ const FETCH_RESPONSE_HANDLER = Object.freeze(Object.create(null, {
   
   'blob': {
     get: function() {
+      
       return (response, resolve, reject) => {
-        this['basic'](response, resolve, reject, 'blob');
+        this[BASIC](response, resolve, reject, 'blob');
       };
+      
     },
     set: function() {},
     enumerable: true
   },
   
-  'basic': {
+  [BASIC]: {
     get: function() {
+      
       return (response, resolve, reject, basic_type) => {
+        
         response[basic_type]()
-        .then(function(result) {
-          resolve(result);
-        })
-        .catch(function(err) {
-          console.error(`Failure in ${basic_type} `, err);
-          reject(err);
-        });
+          .then(function(result) {
+            resolve(result);
+          })
+          .catch(function(err) {
+            console.error(`Failure in ${basic_type} `, err);
+            reject(err);
+          });
+        
       };
+      
     },
     set: function() {},
     enumerable: true
@@ -43,15 +74,17 @@ const FETCH_RESPONSE_HANDLER = Object.freeze(Object.create(null, {
   
   'raw': {
     get: function() {
+      
       return (response, resolve) => {
         resolve(response);
       };
+      
     },
     set: function() {},
     enumerable: true
   }
-  
-}));
+ })
+);
 
 function controllerUrl() {
   let location = global.location;
@@ -124,5 +157,6 @@ export default Object.freeze(
           set: function() {},
           enumerable: true
         }
-      })
+      }
+    )
 );

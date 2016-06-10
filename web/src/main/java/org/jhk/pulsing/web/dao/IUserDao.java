@@ -20,16 +20,17 @@ package org.jhk.pulsing.web.dao;
 
 import org.jhk.pulsing.serialization.avro.records.User;
 import org.jhk.pulsing.serialization.avro.records.UserId;
+import org.jhk.pulsing.web.common.Result;
 
 /**
  * @author Ji Kim
  */
 public interface IUserDao {
     
-    User getUser(UserId userId);
+    Result<User> getUser(UserId userId);
     
-    void createUser(User user);
+    Result<UserId> createUser(User user);
     
-    User validateUser(String email, String password);
+    Result<User> validateUser(String email, String password);
     
 }

@@ -66,7 +66,7 @@ class TrendingPulseComponent extends Component {
   
   render() {
     let trending = this.state.trending;
-    let cols = []; 
+    let cols = [];
     
     trending.forEach((value, key) => {
       

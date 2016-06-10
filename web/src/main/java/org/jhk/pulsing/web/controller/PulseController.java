@@ -21,6 +21,7 @@ package org.jhk.pulsing.web.controller;
 import java.util.List;
 
 import org.jhk.pulsing.serialization.avro.records.Pulse;
+import org.jhk.pulsing.serialization.avro.records.PulseId;
 import org.jhk.pulsing.serialization.avro.records.UserId;
 import org.jhk.pulsing.web.common.Result;
 import org.jhk.pulsing.web.dao.IPulseDao;
@@ -48,10 +49,10 @@ public final class PulseController extends AbstractController {
     private IPulseDao pulseDao;
     
     @RequestMapping(value="/createPulse", method=RequestMethod.POST)
-    public @ResponseBody Result createPulse(@RequestBody Pulse pulse) {
+    public @ResponseBody Result<PulseId> createPulse(@RequestBody Pulse pulse) {
         _LOGGER.info("createPulse", pulse);
         
-        return new Result(Result.CODE.SUCCESS);
+        return null;
     }
     
     @RequestMapping(value="/getTrendingPulse", method=RequestMethod.GET)

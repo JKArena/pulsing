@@ -26,9 +26,13 @@ require('./Login.scss');
 
 import {Grid, Row, Col, FormGroup, ControlLabel, FormControl, HelpBlock, Button} from 'react-bootstrap';
 import {LinkContainer} from 'react-router-bootstrap';
-import React, {Component} from 'react';
+import {browserHistory} from 'react-router';
+import React from 'react';
 
-class LoginComponent extends Component {
+import AbstractComponent from '../AbstractComponent';
+import LoginAction from './actions/LoginAction';
+
+class LoginComponent extends AbstractComponent {
   
   constructor(props) {
     super(props);
@@ -47,24 +51,21 @@ class LoginComponent extends Component {
   
   handleSubmit() {
     console.info('logging in');
-  }
-  
-  handleChange(evt) {
-    console.info('handleChange ', evt);
-  }
-  
-  getValidState(elementId) {
-    console.info('elementId', elementId);
+    const path = '/';
     
-    switch(this.state[elementId].state) {
-    case 0: return '';
-    case 1: return 'success';
-    case -1: return 'error';
-    }
+    LoginAction.loginUser('loginBtn', 'loginform')
+      .then(function(user) {
+        //save the user and update the store
+        browserHistory.push(path);
+      })
+      .catch(function(message) {
+        console.error(message);
+        //display message
+      })
   }
   
-  loginOauth(oauthType) {
-    console.info('oauthType ', oauthType);
+  loginOauth(evt) {
+    console.info('oauthType ', evt.target.id);
   }
   
   render() {
@@ -77,47 +78,35 @@ class LoginComponent extends Component {
                 <h1>Login | Register</h1>
               </Col>
               <Col sm={12}>
-                <form class='form' name='loginform'>
+                <form class='form' id='loginform' action=''>
                   <FormGroup controlId='email' validationState={this.getValidState('email')}>
                     <ControlLabel>Email</ControlLabel>
-                    <FormControl type='email' pattern='[^ @]*@[^ @]' onChange={this.handleChange}
-                      value={this.state.email.value} placeholder='foobar@email.com' />
+                    <FormControl type='email' onBlur={this.handleChange.bind(this)}
+                      placeholder='foobar@email.com' />
                     <FormControl.Feedback />
                   </FormGroup>
                   
                   <FormGroup controlId='password' validationState={this.getValidState('password')}>
                     <ControlLabel>Password</ControlLabel>
-                    <FormControl type='password' onChange={this.handleChange}
-                      value={this.state.password.value} placeholder='wsad' />
+                    <FormControl type='password' onBlur={this.handleChange.bind(this)}
+                      placeholder='wsad' />
                     <FormControl.Feedback />
                     <HelpBlock>wsad best password</HelpBlock>
                   </FormGroup>
                   
-                  {(() => {
-                    if(this.state === -1) {
-                      <FormGroup>
-                        <p class='help-block'>
-                          | Please enter your email and password.
-                        </p>
-                      </FormGroup>
-                    }
-                  })()}
-                  
                   <div>
-                    <Button bsSize='large' block type='submit' onClick={this.handleSubmit}>| Login</Button>
+                    <Button id='loginBtn' bsSize='large' bsStyle='primary' block onClick={this.handleSubmit.bind(this)}>| Login</Button>
                     <LinkContainer to='/signup'><Button bsSize='large' block>| Signup</Button></LinkContainer>
                   </div>
                   
                   <hr />
                   
                   <div>
-                    <Button bsSize='large' block onClick={this.loginOauth('facebook')}>| Login with Facebook</Button>
+                    <Button id='oauthFacebook' bsSize='large' block onClick={this.loginOauth.bind(this)}>| Login with Facebook</Button>
                   </div>
                 </form>
               </Col>
             </Row>
-            
-            <hr />
           </Grid>
         </div>
     );

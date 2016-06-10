@@ -16,35 +16,27 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.web.dao.prod;
-
-import org.jhk.pulsing.serialization.avro.records.User;
-import org.jhk.pulsing.serialization.avro.records.UserId;
-import org.jhk.pulsing.web.common.Result;
-import org.jhk.pulsing.web.dao.IUserDao;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * @author Ji Kim
  */
-public class UserDao implements IUserDao {
-    
-    private static final Logger _LOGGER = LoggerFactory.getLogger(UserDao.class);
+'use strict';
 
-    @Override
-    public Result<User> getUser(UserId userId) {
-        return null;
-    }
+export default Object.freeze(
+    Object.create(null,
+      {
+        'eventCanceller' : {
+          get: function() {
 
-    @Override
-    public Result<UserId> createUser(User user) {
-        return null;
-    }
+            return (evt) => {
+              evt.stopPropagation();
+              evt.preventDefault();
+            }
+          },
 
-    @Override
-    public Result<User> validateUser(String email, String password) {
-        return null;
-    }
-
-}
+          set: function() {},
+          enumerable: true
+        }
+      }
+    )
+);

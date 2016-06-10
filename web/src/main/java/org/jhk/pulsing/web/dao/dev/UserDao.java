@@ -27,6 +27,8 @@ import java.util.stream.Stream;
 import org.jhk.pulsing.serialization.avro.records.Address;
 import org.jhk.pulsing.serialization.avro.records.User;
 import org.jhk.pulsing.serialization.avro.records.UserId;
+import org.jhk.pulsing.web.common.Result;
+import static org.jhk.pulsing.web.common.Result.CODE.*;
 import org.jhk.pulsing.web.dao.IUserDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,27 +79,34 @@ public class UserDao implements IUserDao {
     }
 
     @Override
-    public User getUser(UserId userId) {
+    public Result<User> getUser(UserId userId) {
         _LOGGER.info("getUser", userId);
         
-        return _MOCKED_USERS.get(userId);
+        User user = _MOCKED_USERS.get(userId);
+        Result<User> gResult = user == null ? new Result<User>(FAILURE, "Failed to get user " + userId) :
+            new Result<User>(SUCCESS, user);
+        
+        return gResult;
     }
 
     @Override
-    public void createUser(User user) {
+    public Result<UserId> createUser(User user) {
         _LOGGER.info("createUser", user);
         
         _MOCKED_USERS.put(user.getId(), user);
+        
+        return new Result<UserId>(SUCCESS, user.getId());
     }
-
+    
     @Override
-    public User validateUser(String email, String password) {
+    public Result<User> validateUser(String email, String password) {
         
         Optional<User> filteredUser = _MOCKED_USERS.values().stream()
             .filter(user -> user.getEmail().equals(email) && user.getPassword().equals(password))
             .findAny();
         
-        return filteredUser.isPresent() ? filteredUser.get() : null;
+        return filteredUser.isPresent() ? new Result<User>(SUCCESS, filteredUser.get()) : 
+                new Result<User>(FAILURE, "Failed to validate with " + email + ":" + password);
     }
     
 }
