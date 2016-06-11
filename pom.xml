@@ -173,6 +173,12 @@
 	    <artifactId>jedis</artifactId>
 	    <version>${jedis}</version>
       </dependency>
+	  
+	  <dependency>
+        <groupId>org.apache.cassandra</groupId>
+        <artifactId>cassandra-clientutil</artifactId>
+        <version>3.5</version>
+      </dependency>
       
       <dependency>
         <groupId>org.mortbay.jetty</groupId>
