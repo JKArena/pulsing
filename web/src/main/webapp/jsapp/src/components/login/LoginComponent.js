@@ -29,6 +29,7 @@ import {LinkContainer} from 'react-router-bootstrap';
 import React from 'react';
 
 import Storage from '../../common/Storage';
+import {TOPICS, API} from '../../common/PubSub';
 
 import AbstractComponent from '../AbstractComponent';
 import LoginAction from './actions/LoginAction';
@@ -49,15 +50,14 @@ class LoginComponent extends AbstractComponent {
   
   handleSubmit() {
     console.info('logging in');
-    const path = '/';
     
     LoginAction.loginUser('loginBtn', 'loginform')
       .then(user => {
         //save the user and update the store
         this.state.loginErrorMsg = '';
-        
         Storage.user = user;
-        this.props.history.replace(path);
+        
+        API.publish(TOPICS.AUTH, {loggedIn: true});
       })
       .catch(message => {
         this.state.loginErrorMsg = message;
@@ -67,6 +67,7 @@ class LoginComponent extends AbstractComponent {
   
   loginOauth(evt) {
     console.info('oauthType ', evt.target.id);
+    
   }
   
   render() {
