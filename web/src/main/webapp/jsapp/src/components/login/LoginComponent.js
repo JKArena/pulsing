@@ -26,8 +26,9 @@ require('./Login.scss');
 
 import {Grid, Row, Col, FormGroup, ControlLabel, FormControl, HelpBlock, Button, Panel} from 'react-bootstrap';
 import {LinkContainer} from 'react-router-bootstrap';
-import {browserHistory} from 'react-router';
 import React from 'react';
+
+import Storage from '../../common/Storage';
 
 import AbstractComponent from '../AbstractComponent';
 import LoginAction from './actions/LoginAction';
@@ -51,14 +52,15 @@ class LoginComponent extends AbstractComponent {
     const path = '/';
     
     LoginAction.loginUser('loginBtn', 'loginform')
-      .then(function(user) {
+      .then(user => {
         //save the user and update the store
-        browserHistory.push(path);
+        this.state.loginErrorMsg = '';
+        
+        Storage.user = user;
+        this.props.history.replace(path);
       })
-      .catch(function(message) {
-        console.error(message);
-        //display message
-        this.state.logInErrorMsg = message;
+      .catch(message => {
+        this.state.loginErrorMsg = message;
         this.setState(this.state);
       })
   }
@@ -93,11 +95,6 @@ class LoginComponent extends AbstractComponent {
                     <HelpBlock>wsad best password</HelpBlock>
                   </FormGroup>
                   
-                  <div>
-                    <Button id='loginBtn' bsSize='large' bsStyle='primary' block onClick={this.handleSubmit.bind(this)}>| Login</Button>
-                    <LinkContainer to='/signup'><Button bsSize='large' block>| Signup</Button></LinkContainer>
-                  </div>
-                  
                   {(() => {
                     
                     if(this.state.loginErrorMsg) {
@@ -110,6 +107,11 @@ class LoginComponent extends AbstractComponent {
                     
                   })()}
                   
+                  <div>
+                    <Button id='loginBtn' bsSize='large' bsStyle='primary' block onClick={this.handleSubmit.bind(this)}>| Login</Button>
+                    <LinkContainer to='/signup'><Button bsSize='large' block>| Signup</Button></LinkContainer>
+                  </div>
+                   
                   <hr />
                   
                   <div>

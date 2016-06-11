@@ -29,35 +29,19 @@ import {IndexLink} from 'react-router';
 import {Navbar, Nav, NavItem} from 'react-bootstrap';
 import {LinkContainer} from 'react-router-bootstrap';
 
-import NavBarStore from './NavBarStore';
-
-const _store = new NavBarStore();
+import Storage from '../../common/Storage';
 
 class NavBarComponent extends Component {
   
   constructor(props) {
     super(props);
     
-    this.state = {loggedIn: false};
-  }
-  
-  componentDidMount() {
-    _store.addChangeListener(this._onChange);
-  }
-  
-  componentWillUnmount() {
-    _store.removeChangeListener(this._onChange);
-  }
-  
-  _onChange() {
-    console.info('_onChange');
-    
+    this.state = {loggedIn: !!Storage.user};
   }
   
   logOut() {
     this.state.loggedIn = false;
-    
-    _store.user = null;
+    Storage.user = null;
     
     this.setState(this.state);
   }

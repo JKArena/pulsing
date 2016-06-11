@@ -20,41 +20,22 @@
 /**
  * @author Ji Kim
  */
-
 'use strict';
 
-import {EventEmitter} from 'events';
+const PULSING_USER_KEY = 'pulsingUser';
 
-const CHANGE_EVENT = 'change';
-
-class NavBarStore extends EventEmitter {
-  
-  constructor(...args) {
-    super(...args)
-    
-    this.user = null;
-  }
-  
-  emitChange() {
-    this.emit(CHANGE_EVENT);
-  }
-  
-  set user(user) {
-    this._user = user;
-  }
-  
-  get user() {
-    return this._user;
-  }
-  
-  addChangeListener(callback) {
-    this.on(CHANGE_EVENT, callback);
-  }
-  
-  removeChangeListener(callback) {
-    this.removeListener(CHANGE_EVENT, callback);
-  }
-  
-}
-
-export default NavBarStore;
+export default Object.freeze(
+    Object.create(null,
+      {
+        'user' : {
+          get: function() {
+            return sessionStorage.getItem(PULSING_USER_KEY);
+          },
+          set: function(user) {
+            sessionStorage.setItem(PULSING_USER_KEY, user);
+          },
+          enumerable: true
+        }
+      }
+    )
+);
