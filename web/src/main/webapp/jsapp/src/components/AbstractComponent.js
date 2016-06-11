@@ -31,7 +31,7 @@ class AbstractComponent extends Component {
   }
   
   handleChange(evt) {
-    console.info('handleChange ', evt);
+    console.debug('handleChange ', evt);
     
     let target = evt.target;
     let eleId = target.id;
@@ -53,7 +53,7 @@ class AbstractComponent extends Component {
     default: state = 'WRONG HERE!!!!!!!'; break;
     }
     
-    console.info('elementId', elementId, state, this.state);
+    console.debug('elementId', elementId, state, this.state);
     return state;
   }
   

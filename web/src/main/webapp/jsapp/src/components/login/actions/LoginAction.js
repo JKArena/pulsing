@@ -42,7 +42,7 @@ const LoginAction = Object.freeze(Object.create(null, {
 
           Fetch.POST_JSON(LOGIN_PATH, {body: fData})
             .then(function(result) {
-              console.info('loginUser', result);
+              console.debug('loginUser', result);
               
               if(result.code === 'SUCCESS') {
                 resolve(JSON.parse(result.data));

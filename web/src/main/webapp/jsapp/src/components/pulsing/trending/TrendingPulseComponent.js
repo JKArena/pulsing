@@ -55,12 +55,12 @@ class TrendingPulseComponent extends Component {
   }
   
   handleSubscribe(evt) {
-    console.info('handleSubscribe', evt.target.id);
+    console.debug('handleSubscribe', evt.target.id);
     
   }
   
   _onChange() {
-    console.info('_onChange');
+    console.debug('_onChange');
     
   }
   

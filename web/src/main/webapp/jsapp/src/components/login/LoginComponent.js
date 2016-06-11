@@ -49,7 +49,7 @@ class LoginComponent extends AbstractComponent {
   }
   
   handleSubmit() {
-    console.info('logging in');
+    console.debug('logging in');
     
     LoginAction.loginUser('loginBtn', 'loginform')
       .then(user => {
@@ -66,7 +66,7 @@ class LoginComponent extends AbstractComponent {
   }
   
   loginOauth(evt) {
-    console.info('oauthType ', evt.target.id);
+    console.debug('oauthType ', evt.target.id);
     
   }
   
