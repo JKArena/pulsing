@@ -25,10 +25,11 @@
 require('./NavBar.scss');
 
 import React, {Component} from 'react';
-import {IndexLink} from 'react-router';
+import {IndexLink, browserHistory} from 'react-router';
 import {Navbar, Nav, NavItem} from 'react-bootstrap';
 import {LinkContainer} from 'react-router-bootstrap';
 
+import {TOPICS, API} from '../../common/PubSub';
 import Storage from '../../common/Storage';
 
 class NavBarComponent extends Component {
@@ -39,15 +40,31 @@ class NavBarComponent extends Component {
     this.state = {loggedIn: !!Storage.user};
   }
   
-  logOut() {
+  loggedOut() {
     this.state.loggedIn = false;
     Storage.user = null;
     
     this.setState(this.state);
   }
   
-  render() {
+  loggedIn() {
+    const MAIN = '/';
     
+    this.state.loggedIn = true;
+    this.setState(this.state);
+    
+    browserHistory.push(MAIN);
+  }
+  
+  componentDidMount() {
+    API.subscribe(TOPICS.AUTH, this.loggedIn.bind(this));
+  }
+  
+  componentWillUnmount() {
+    API.unsubscribe(TOPICS.AUTH, this.loggedIn.bind(this));
+  }
+  
+  render() {
     return (
         <div class='navbar-component'>
           <Navbar inverse>
@@ -64,7 +81,7 @@ class NavBarComponent extends Component {
               
               {(() => {
                 if(this.state.loggedIn) {
-                  return <Nav pullRight onSelect={this.logOut}><LinkContainer to='/'><NavItem>Logout</NavItem></LinkContainer></Nav>
+                  return <Nav pullRight onSelect={this.loggedOut}><LinkContainer to='/'><NavItem>Logout</NavItem></LinkContainer></Nav>
                 } else {
                   return <Nav pullRight>
                     <LinkContainer to='/signup'><NavItem>Signup</NavItem></LinkContainer>
