@@ -39,7 +39,7 @@ render((
     <Route path='/' component={App}>
       <IndexRoute component={TrendingPulseComponent} />
       <Route path='signup' component={SignupComponent} />
-      <Route path="login" component={LoginComponent} />
+      <Route path='login' component={LoginComponent} />
     </Route>
   </Router>
 ), document.getElementById('app'));

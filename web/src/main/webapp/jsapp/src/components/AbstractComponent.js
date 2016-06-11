@@ -46,14 +46,14 @@ class AbstractComponent extends Component {
   getValidState(elementId) {
     let state;
     
-    switch(this.state[elementId].state) {
+    switch(this.state.validity[elementId]) {
     case 0: break;
     case 1: state = 'success'; break;
     case -1: state = 'error'; break;
     default: state = 'WRONG HERE!!!!!!!'; break;
     }
     
-    console.info('elementId', elementId, state);
+    console.info('elementId', elementId, state, this.state);
     return state;
   }
   
