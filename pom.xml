@@ -177,7 +177,7 @@
 	  <dependency>
         <groupId>org.apache.cassandra</groupId>
         <artifactId>cassandra-clientutil</artifactId>
-        <version>3.5</version>
+        <version>${cassandra.client}</version>
       </dependency>
       
       <dependency>
@@ -222,6 +222,7 @@
     <jackson>2.7.4</jackson>
     <jetty>9.3.8.v20160314</jetty>
     <kafka.clients>0.9.0.1</kafka.clients>
+	<cassandra.client>3.5</cassandra.client>
     <junit>4.12</junit>
     <freemarker>2.3.23</freemarker>
     <jedis>2.8.1</jedis>
