@@ -83,7 +83,7 @@ class SignupComponent extends AbstractComponent {
   }
   
   handleSubmit() {
-    console.info('signing up');
+    console.debug('signing up');
     
   }
   

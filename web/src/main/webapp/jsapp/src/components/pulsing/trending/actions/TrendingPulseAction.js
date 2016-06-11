@@ -35,7 +35,7 @@ const TrendingPulseAction = Object.freeze(Object.create(null, {
 
         Fetch.GET_JSON(GET_TRENDING_PULSE_PATH)
           .then(function(json) {
-            console.info('gotTrendingPulse', json);
+            console.debug('gotTrendingPulse', json);
             //when making subsequent rest calls for Pulse, create PulseId from the long values
             let trending = new Map();
 
