@@ -53,7 +53,6 @@ class AbstractComponent extends Component {
     default: state = 'WRONG HERE!!!!!!!'; break;
     }
     
-    console.debug('elementId', elementId, state, this.state);
     return state;
   }
   

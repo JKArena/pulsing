@@ -38,7 +38,7 @@ public class UserDao implements IUserDao {
     }
 
     @Override
-    public Result<UserId> createUser(User user) {
+    public Result<User> createUser(User user) {
         return null;
     }
 

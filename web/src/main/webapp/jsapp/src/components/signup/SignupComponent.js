@@ -28,6 +28,9 @@ import {Grid, Row, Col, FormGroup, ControlLabel, FormControl, HelpBlock, Button,
 import React from 'react';
 
 import AbstractComponent from '../AbstractComponent';
+import SignupAction from './actions/SignupAction';
+
+import {TOPICS, API} from '../../common/PubSub';
 import Common from '../../common/Common';
 
 class SignupComponent extends AbstractComponent {
@@ -41,14 +44,14 @@ class SignupComponent extends AbstractComponent {
           password: 0,
           name: 0,
           address: 0,
-          picture: 0
+          avatar: 0
         },
         signupErrorMsg: ''
     };
   }
   
   componentDidMount() {
-    let dropcontainer = document.getElementById('picture');
+    let dropcontainer = document.getElementById('avatar');
     
     dropcontainer.addEventListener('dragenter', Common.eventCanceller, false);
     dropcontainer.addEventListener('dragover', Common.eventCanceller, false);
@@ -56,7 +59,7 @@ class SignupComponent extends AbstractComponent {
   }
   
   componentWillUnmount() {
-    let dropcontainer = document.getElementById('picture');
+    let dropcontainer = document.getElementById('avatar');
     
     dropcontainer.removeEventListener('dragenter', Common.eventCanceller);
     dropcontainer.removeEventListener('dragover', Common.eventCanceller);
@@ -70,11 +73,11 @@ class SignupComponent extends AbstractComponent {
     let file = dt.files[0];
 
     if(!/^image\//.test(file.type)) {
-      this.state.picture.state = -1;
+      this.state.avatar.state = -1;
       return;
     }
     
-    let preview = document.getElementById('picture');
+    let preview = document.getElementById('avatar');
     preview.file = file;
     
     let reader = new FileReader();
@@ -85,6 +88,18 @@ class SignupComponent extends AbstractComponent {
   handleSubmit() {
     console.debug('signing up');
     
+    SignupAction.signup('signupBtn', 'signupform', 'avatar')
+      .then(user => {
+        //save the user and update the store
+        this.state.loginErrorMsg = '';
+        Storage.user = user;
+        
+        API.publish(TOPICS.AUTH, {loggedIn: true});
+      })
+      .catch(message => {
+        this.state.loginErrorMsg = message;
+        this.setState(this.state);
+      });
   }
   
   render() {
@@ -119,15 +134,15 @@ class SignupComponent extends AbstractComponent {
                   </FormGroup>
                   
                   <FormGroup controlId='address' validationState={this.getValidState('address')}>
-                    <ControlLabel>Name</ControlLabel>
+                    <ControlLabel>Address</ControlLabel>
                     <FormControl type='text' name='address' onBlur={this.handleChange.bind(this)} />
                     <FormControl.Feedback />
                   </FormGroup>
                   
-                  <FormGroup controlId='picture' validationState={this.getValidState('picture')}>
+                  <FormGroup controlId='avatar' validationState={this.getValidState('avatar')}>
                     <ControlLabel>Picture</ControlLabel>
                     <div>
-                      <Image id='picture' rounded src='/images/dropzone.png' style={{'maxHeight': '300px'}} />
+                      <Image id='avatar' rounded src='/images/dropzone.png' style={{'maxHeight': '300px'}} />
                       <FormControl.Feedback />
                     </div>
                   </FormGroup>
@@ -147,7 +162,7 @@ class SignupComponent extends AbstractComponent {
                   <hr />
                   
                   <div>
-                    <Button id='signupBtn' bsSize='large' bsStyle='primary' block type='submit'
+                    <Button id='signupBtn' bsSize='large' bsStyle='primary' block
                       onClick={this.handleSubmit.bind(this)}>| Signup</Button>
                   </div>
                   
