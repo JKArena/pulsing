@@ -27,6 +27,7 @@ import org.apache.storm.topology.OutputFieldsDeclarer;
 import org.apache.storm.topology.base.BaseBasicBolt;
 import org.apache.storm.tuple.Tuple;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.jhk.pulsing.storm.util.PulsingConstants;
 
 import redis.clients.jedis.Jedis;
 
@@ -43,7 +44,7 @@ public final class TimeIntervalPersistorBolt extends BaseBasicBolt {
     
     @Override
     public void prepare(Map stormConf, TopologyContext context) {
-        _jedis = new Jedis("localhost");
+        _jedis = new Jedis(PulsingConstants.REDIS_HOST, PulsingConstants.REDIS_PORT);
         _objectMapper = new ObjectMapper();
     }
     

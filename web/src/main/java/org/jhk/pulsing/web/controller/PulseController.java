@@ -50,7 +50,7 @@ public final class PulseController extends AbstractController {
     
     @RequestMapping(value="/createPulse", method=RequestMethod.POST)
     public @ResponseBody Result<PulseId> createPulse(@RequestBody Pulse pulse) {
-        _LOGGER.info("createPulse", pulse);
+        _LOGGER.info("createPulse: " + pulse);
         
         return null;
     }
@@ -65,7 +65,7 @@ public final class PulseController extends AbstractController {
     @MessageMapping("/pulsingSocketJS")
     @SendTo("/pulsingTopic/subscribePulse")
     public UserId subscribePulse(Pulse pulse) {
-        _LOGGER.info("subscribePulse", pulse);
+        _LOGGER.info("subscribePulse: " + pulse);
         
         //notify new user subscribed to the pulse
         //should have the subscription time out (as a config?)

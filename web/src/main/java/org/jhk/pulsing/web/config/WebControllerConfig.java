@@ -56,14 +56,9 @@ public class WebControllerConfig extends WebMvcConfigurerAdapter {
     
     @Bean
     public CommonsMultipartResolver multipartResolver() {
-        CommonsMultipartResolver resolver=new CommonsMultipartResolver();
-        resolver.setDefaultEncoding("utf-8");
+        CommonsMultipartResolver resolver= new CommonsMultipartResolver();
+        resolver.setDefaultEncoding("UTF-8");
         return resolver;
-    }
-    
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/jsapp/**").addResourceLocations("/jsapp/");
     }
     
     @Override

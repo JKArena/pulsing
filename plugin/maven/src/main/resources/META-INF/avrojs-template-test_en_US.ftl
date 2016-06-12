@@ -6,8 +6,8 @@ function getAvroClassSkeleton(avroclass) {
   
   switch(avroclass) {
   <#list classinfos as cInfo>
-    case "${cInfo.clazz}": return JSON.stringify(${cInfo.skeleton}); break;
+  case '${cInfo.clazz}': return JSON.stringify(${cInfo.skeleton}); break;
   </#list>
-    default: return null;
+  default: return null;
   }
 };

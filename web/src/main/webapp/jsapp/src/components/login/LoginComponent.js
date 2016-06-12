@@ -62,7 +62,7 @@ class LoginComponent extends AbstractComponent {
       .catch(message => {
         this.state.loginErrorMsg = message;
         this.setState(this.state);
-      })
+      });
   }
   
   loginOauth(evt) {
