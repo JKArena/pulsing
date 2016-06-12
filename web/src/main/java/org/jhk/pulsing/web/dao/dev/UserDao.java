@@ -42,9 +42,12 @@ public class UserDao implements IUserDao {
     
     private static final ConcurrentMap<UserId, User> _MOCKED_USERS = new ConcurrentHashMap<>();
     
+    //simply use counter since in real db will use AUTO_INCREMENT with different range for partitions
+    private static long USERID = 1000L;
+    
     static {
         UserId userId = UserId.newBuilder().build();
-        userId.setId(1111L);
+        userId.setId(USERID++);
         
         User user = User.newBuilder().build();
         user.setId(userId);
@@ -61,7 +64,7 @@ public class UserDao implements IUserDao {
         _MOCKED_USERS.put(userId, user);
         
         userId = UserId.newBuilder().build();
-        userId.setId(9999L);
+        userId.setId(USERID++);
         
         user = User.newBuilder().build();
         user.setId(userId);
@@ -90,12 +93,24 @@ public class UserDao implements IUserDao {
     }
 
     @Override
-    public Result<UserId> createUser(User user) {
-        _LOGGER.info("createUser", user);
+    public Result<User> createUser(User userSubmitted) {
+        _LOGGER.info("createUser", userSubmitted);
         
-        _MOCKED_USERS.put(user.getId(), user);
+        Optional<User> findUser = _MOCKED_USERS.values().stream()
+                .filter(user -> user.getEmail().equals(userSubmitted.getEmail()))
+                .findAny();
         
-        return new Result<UserId>(SUCCESS, user.getId());
+        if(findUser.isPresent()) {
+            return new Result<User>(FAILURE, "User with the email already exists " + userSubmitted.getName());
+        }
+        
+        UserId userId = UserId.newBuilder().build();
+        userId.setId(USERID++);
+        
+        userSubmitted.setId(userId);
+        _MOCKED_USERS.put(userId, userSubmitted);
+        
+        return new Result<User>(SUCCESS, userSubmitted);
     }
     
     @Override

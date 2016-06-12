@@ -29,7 +29,7 @@ public interface IUserDao {
     
     Result<User> getUser(UserId userId);
     
-    Result<UserId> createUser(User user);
+    Result<User> createUser(User user);
     
     Result<User> validateUser(String email, String password);
     
