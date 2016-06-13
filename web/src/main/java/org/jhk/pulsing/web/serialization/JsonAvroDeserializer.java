@@ -23,6 +23,8 @@ import java.io.IOException;
 import org.apache.avro.Schema;
 import org.apache.avro.specific.SpecificRecord;
 import org.jhk.pulsing.serialization.avro.serializers.SerializationHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -35,6 +37,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * @author Ji Kim
  */
 public class JsonAvroDeserializer<T extends SpecificRecord> extends JsonDeserializer<T> {
+    
+    private static final Logger _LOGGER = LoggerFactory.getLogger(JsonAvroDeserializer.class);
     
     private Class<T> _type;
     private Schema _schema;
@@ -56,6 +60,8 @@ public class JsonAvroDeserializer<T extends SpecificRecord> extends JsonDeserial
     public T deserialize(JsonParser parser, DeserializationContext context) throws IOException, JsonProcessingException {
         
         JsonNode node = _mapper.readTree(parser);
+        
+        _LOGGER.info("JsonAvroDeserializer.deserialize: " + (node != null ? node.toString() : ""));
         return SerializationHelper.deserializeFromJSONStringToAvro(_type, _schema, node.toString());
     }
     

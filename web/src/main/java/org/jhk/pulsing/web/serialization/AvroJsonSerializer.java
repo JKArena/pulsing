@@ -22,6 +22,8 @@ import java.io.IOException;
 
 import org.apache.avro.specific.SpecificRecord;
 import org.jhk.pulsing.serialization.avro.serializers.SerializationHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
@@ -31,6 +33,8 @@ import com.fasterxml.jackson.databind.ser.std.StdSerializer;
  * @author Ji Kim
  */
 public class AvroJsonSerializer<T extends SpecificRecord> extends StdSerializer<T> {
+    
+    private static final Logger _LOGGER = LoggerFactory.getLogger(AvroJsonSerializer.class);
 
     private static final long serialVersionUID = 1754524804919512789L;
 
@@ -40,6 +44,8 @@ public class AvroJsonSerializer<T extends SpecificRecord> extends StdSerializer<
 
     @Override
     public void serialize(T value, JsonGenerator jgen, SerializerProvider provider)throws IOException {
+        
+        _LOGGER.info("AvroJsonSerializer.serialize: " + value.getClass().getName() + " -> " + value);
         
         jgen.writeString(SerializationHelper.serializeAvroTypeToJSONString(value));
         

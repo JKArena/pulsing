@@ -26,15 +26,16 @@ import org.jhk.pulsing.web.controller.PulseController;
 import org.jhk.pulsing.web.controller.UserController;
 import org.jhk.pulsing.web.serialization.AvroJsonSerializer;
 import org.jhk.pulsing.web.serialization.JsonAvroDeserializer;
+import org.jhk.pulsing.web.serialization.StringToAvroRecordFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.format.FormatterRegistry;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 /**
@@ -59,6 +60,13 @@ public class WebControllerConfig extends WebMvcConfigurerAdapter {
         CommonsMultipartResolver resolver= new CommonsMultipartResolver();
         resolver.setDefaultEncoding("UTF-8");
         return resolver;
+    }
+    
+    @Override
+    public void addFormatters(FormatterRegistry registry) {
+        super.addFormatters(registry);
+        
+        registry.addConverterFactory(new StringToAvroRecordFactory());
     }
     
     @Override

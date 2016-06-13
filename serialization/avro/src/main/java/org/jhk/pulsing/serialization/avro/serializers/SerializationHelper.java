@@ -37,11 +37,15 @@ import org.jhk.pulsing.serialization.avro.records.Pulse;
 import org.jhk.pulsing.serialization.avro.records.PulseId;
 import org.jhk.pulsing.serialization.avro.records.User;
 import org.jhk.pulsing.serialization.avro.records.UserId;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Ji Kim
  */
 public final class SerializationHelper {
+    
+    private static final Logger _LOGGER = LoggerFactory.getLogger(SerializationHelper.class);
     
     private static final List<AvroRecords<? extends SpecificRecord>> _AVRO_RECORDS = new LinkedList<>();
     
@@ -82,20 +86,38 @@ public final class SerializationHelper {
     
     public static <T extends SpecificRecord> T deserializeFromJSONStringToAvro(Class<T> clazz, Schema schema, String jsonString) throws IOException {
         
-        JsonDecoder decoder = DecoderFactory.get().jsonDecoder(schema, jsonString);
+        T deserialized = null;
         
-        SpecificDatumReader<T> reader = new SpecificDatumReader<T>(schema);
+        try {
+            
+            JsonDecoder decoder = DecoderFactory.get().jsonDecoder(schema, jsonString);
+            SpecificDatumReader<T> reader = new SpecificDatumReader<T>(schema);
+            deserialized = reader.read(null, decoder);
+            
+        } catch(IOException deserializeException) {
+            _LOGGER.error("Error while deserializing: " + jsonString, deserializeException);
+            throw deserializeException;
+        }
         
-        return reader.read(null, decoder);
+        return deserialized;
     }
     
     public static <T extends SpecificRecord> T deserializeFromJSONStringToAvro(Class<T> clazz, Schema wSchema, Schema rSchema, String jsonString) throws IOException {
         
-        JsonDecoder decoder = DecoderFactory.get().jsonDecoder(rSchema, jsonString);
+        T deserialized = null;
         
-        SpecificDatumReader<T> reader = new SpecificDatumReader<T>(wSchema, rSchema);
+        try {
         
-        return reader.read(null, decoder);
+            JsonDecoder decoder = DecoderFactory.get().jsonDecoder(rSchema, jsonString);
+            SpecificDatumReader<T> reader = new SpecificDatumReader<T>(wSchema, rSchema);
+            deserialized = reader.read(null, decoder);
+            
+        } catch(IOException deserializeException) {
+            _LOGGER.error("Error while deserializing: " + jsonString, deserializeException);
+            throw deserializeException;
+        }
+        
+        return deserialized;
     }
     
     public static <T extends SpecificRecord> String serializeAvroTypeToJSONString(T obj) throws IOException {
@@ -103,16 +125,27 @@ public final class SerializationHelper {
             return null;
         }
         
-        Schema schema = ((SpecificRecord) obj).getSchema();
-        ByteArrayOutputStream out = new ByteArrayOutputStream();
-        Encoder encoder = EncoderFactory.get().jsonEncoder(schema, out);
+        String serialized = null;
         
-        @SuppressWarnings("unchecked")
-        SpecificDatumWriter<T> writer = new SpecificDatumWriter<T>((Class<T>) obj.getClass());
-        writer.write(obj, encoder);
-        encoder.flush();
+        try {
+            
+            Schema schema = ((SpecificRecord) obj).getSchema();
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            Encoder encoder = EncoderFactory.get().jsonEncoder(schema, out);
+            
+            @SuppressWarnings("unchecked")
+            SpecificDatumWriter<T> writer = new SpecificDatumWriter<T>((Class<T>) obj.getClass());
+            writer.write(obj, encoder);
+            encoder.flush();
+            
+            serialized = new String(out.toByteArray());
+            
+        } catch(IOException serializeException) {
+            _LOGGER.error("Error while serializing: " + obj, serializeException);
+            throw serializeException;
+        }
         
-        return new String(out.toByteArray());
+        return serialized;
     }
     
 }
