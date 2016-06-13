@@ -24,6 +24,7 @@
 
 import User from '../../../avro/User';
 import Fetch from '../../../common/Fetch';
+import Storage from '../../../common/Storage';
 
 const LOGIN_PATH = 'user/createUser';
 
@@ -56,7 +57,9 @@ const SignupAction = Object.freeze(Object.create(null, {
               console.debug('signup', result);
               
               if(result.code === 'SUCCESS') {
-                resolve(JSON.parse(result.data));
+                
+                Storage.user = JSON.parse(result.data);
+                resolve(Storage.user);
               }else {
                 reject(result.message);
               }

@@ -30,16 +30,20 @@ import TrendingPulseStore from './TrendingPulseStore';
 
 const _store = new TrendingPulseStore();
 
+let _trending = new Map();
+
 class TrendingPulseComponent extends Component {
   
   constructor(props) {
     super(props);
     
-    this.state = {trending: new Map()};
+    this.state = {};
     
     TrendingPulseStore.trending
       .then(function(result) {
-        this.setState({trending: result});
+        
+        _trending = result;
+        this.setState({});
       }.bind(this))
       .catch(function(err) {
         console.error('Error getting trending ', err);
@@ -47,11 +51,11 @@ class TrendingPulseComponent extends Component {
   }
   
   componentDidMount() {
-    _store.addChangeListener(this._onChange);
+    _store.addChangeListener(this._onChange.bind(this));
   }
   
   componentWillUnmount() {
-    _store.removeChangeListener(this._onChange);
+    _store.removeChangeListener(this._onChange.bind(this));
   }
   
   handleSubscribe(evt) {
@@ -65,7 +69,7 @@ class TrendingPulseComponent extends Component {
   }
   
   render() {
-    let trending = this.state.trending;
+    let trending = _trending;
     let cols = [];
     
     trending.forEach((value, key) => {
@@ -75,7 +79,7 @@ class TrendingPulseComponent extends Component {
           <h3>{value}</h3>
           <p>Description</p>
           <p>
-            <Button bsStyle="primary" id={key} onClick={this.handleSubscribe}>Subscribe</Button>
+            <Button bsStyle="primary" id={key} onClick={this.handleSubscribe.bind(this)}>Subscribe</Button>
           </p>
         </Thumbnail>
       </Col>);

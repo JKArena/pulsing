@@ -23,6 +23,7 @@
 'use strict';
 
 import Fetch from '../../../common/Fetch';
+import Storage from '../../../common/Storage';
 
 const LOGIN_PATH = 'user/validateUser';
 
@@ -45,7 +46,8 @@ const LoginAction = Object.freeze(Object.create(null, {
               console.debug('loginUser', result);
               
               if(result.code === 'SUCCESS') {
-                resolve(JSON.parse(result.data));
+                Storage.user = JSON.parse(result.data); //store as json, but get as Avros (and store in Map as Avros)
+                resolve(Storage.user);
               }else {
                 reject(result.message);
               }

@@ -28,8 +28,6 @@ import TrendingPulseAction from './actions/TrendingPulseAction';
 
 const CHANGE_EVENT = 'change';
 
-let _trending;
-
 class TrendingPulseStore extends EventEmitter {
   
   emitChange() {
@@ -45,13 +43,12 @@ class TrendingPulseStore extends EventEmitter {
   }
   
   static get trending() {
-    return _trending ? Promise.resolve(_trending) : new Promise(function(resolve) {
+    return new Promise(function(resolve) {
       
       TrendingPulseAction.getTrendingPulse
         .then(function(trending) {
-          _trending = trending;
           
-          resolve(_trending);
+          resolve(trending);
         })
         .catch(function() {
           resolve([]);
