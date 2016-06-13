@@ -81,7 +81,7 @@ class NavBarComponent extends Component {
               
               {(() => {
                 if(this.state.loggedIn) {
-                  return <Nav pullRight onSelect={this.loggedOut}><LinkContainer to='/'><NavItem>Logout</NavItem></LinkContainer></Nav>
+                  return <Nav pullRight onSelect={this.loggedOut.bind(this)}><LinkContainer to='/'><NavItem>Logout</NavItem></LinkContainer></Nav>
                 } else {
                   return <Nav pullRight>
                     <LinkContainer to='/signup'><NavItem>Signup</NavItem></LinkContainer>
