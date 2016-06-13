@@ -89,10 +89,9 @@ class SignupComponent extends AbstractComponent {
     console.debug('signing up');
     
     SignupAction.signup('signupBtn', 'signupform', 'avatar')
-      .then(user => {
+      .then(() => {
         //save the user and update the store
         this.state.loginErrorMsg = '';
-        Storage.user = user;
         
         API.publish(TOPICS.AUTH, {loggedIn: true});
       })

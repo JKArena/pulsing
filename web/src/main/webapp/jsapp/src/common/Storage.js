@@ -22,18 +22,39 @@
  */
 'use strict';
 
-const PULSING_USER_KEY = 'pulsingUser';
+import User from '../avro/User';
+
+const _PULSING_USER_KEY = 'pulsingUser';
+const _MAPPER = new Map();
 
 export default Object.freeze(
     Object.create(null,
       {
         'user' : {
           get: function() {
-            //better to hold it in a different manner or memoize
-            return JSON.parse(sessionStorage.getItem(PULSING_USER_KEY));
+            if(_MAPPER.has(_PULSING_USER_KEY)) {
+              return _MAPPER.get(_PULSING_USER_KEY);
+            }
+            
+            let userStr = sessionStorage.getItem(_PULSING_USER_KEY);
+            let user = null;
+            
+            if(userStr !== null) {
+              user = JSON.parse(sessionStorage.getItem(_PULSING_USER_KEY));
+              _MAPPER.set(_PULSING_USER_KEY, User.deserialize(user));
+            }
+            
+            return user;
           },
           set: function(user) {
-            sessionStorage.setItem(PULSING_USER_KEY, JSON.stringify(user));
+            if(!user) {
+              sessionStorage.removeItem(_PULSING_USER_KEY);
+              _MAPPER.delete(_PULSING_USER_KEY);
+              return;
+            }
+            
+            _MAPPER.set(_PULSING_USER_KEY, User.deserialize(user));
+            sessionStorage.setItem(_PULSING_USER_KEY, JSON.stringify(user));
           },
           enumerable: true
         }

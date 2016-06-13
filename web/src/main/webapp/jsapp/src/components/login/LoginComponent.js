@@ -28,7 +28,6 @@ import {Grid, Row, Col, FormGroup, ControlLabel, FormControl, HelpBlock, Button,
 import {LinkContainer} from 'react-router-bootstrap';
 import React from 'react';
 
-import Storage from '../../common/Storage';
 import {TOPICS, API} from '../../common/PubSub';
 
 import AbstractComponent from '../AbstractComponent';
@@ -52,10 +51,9 @@ class LoginComponent extends AbstractComponent {
     console.debug('logging in');
     
     LoginAction.loginUser('loginBtn', 'loginform')
-      .then(user => {
+      .then(() => {
         //save the user and update the store
         this.state.loginErrorMsg = '';
-        Storage.user = user;
         
         API.publish(TOPICS.AUTH, {loggedIn: true});
       })

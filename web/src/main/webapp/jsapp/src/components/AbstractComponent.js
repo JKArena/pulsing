@@ -50,7 +50,7 @@ class AbstractComponent extends Component {
     case 0: break;
     case 1: state = 'success'; break;
     case -1: state = 'error'; break;
-    default: state = 'WRONG HERE!!!!!!!'; break;
+    default: state = 'identity crisis...'; break;
     }
     
     return state;

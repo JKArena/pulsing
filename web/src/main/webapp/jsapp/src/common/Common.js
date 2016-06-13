@@ -23,20 +23,12 @@
 'use strict';
 
 export default Object.freeze(
-    Object.create(null,
-      {
-        'eventCanceller' : {
-          get: function() {
-
-            return (evt) => {
-              evt.stopPropagation();
-              evt.preventDefault();
-            }
-          },
-
-          set: function() {},
-          enumerable: true
-        }
+    {
+      __proto__: null,
+      
+      eventCanceller(evt) {
+        evt.stopPropagation();
+        evt.preventDefault();
       }
-    )
+    }
 );
