@@ -52,7 +52,7 @@ public final class PulseController extends AbstractController {
     public @ResponseBody Result<PulseId> createPulse(@RequestBody Pulse pulse) {
         _LOGGER.info("createPulse: " + pulse);
         
-        return null;
+        return pulseDao.createPulse(pulse);
     }
     
     @RequestMapping(value="/getTrendingPulse", method=RequestMethod.GET)

@@ -29,10 +29,11 @@ export default Object.freeze(
       {
         'user' : {
           get: function() {
-            return sessionStorage.getItem(PULSING_USER_KEY);
+            //better to hold it in a different manner or memoize
+            return JSON.parse(sessionStorage.getItem(PULSING_USER_KEY));
           },
           set: function(user) {
-            sessionStorage.setItem(PULSING_USER_KEY, user);
+            sessionStorage.setItem(PULSING_USER_KEY, JSON.stringify(user));
           },
           enumerable: true
         }
