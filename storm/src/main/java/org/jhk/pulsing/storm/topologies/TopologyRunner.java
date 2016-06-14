@@ -19,23 +19,52 @@
 package org.jhk.pulsing.storm.topologies;
 
 import org.apache.storm.Config;
+import org.apache.storm.LocalCluster;
 import org.apache.storm.StormSubmitter;
 import org.apache.storm.generated.AlreadyAliveException;
 import org.apache.storm.generated.AuthorizationException;
 import org.apache.storm.generated.InvalidTopologyException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Ji Kim
  */
 public final class TopologyRunner {
     
+    private static final Logger _LOG = LoggerFactory.getLogger(TopologyRunner.class);
+    
     public static void main(String[] args) throws AlreadyAliveException, InvalidTopologyException, AuthorizationException {
+        
+        if(args == null || args.length == 0) {
+            _LOG.debug("TopologyRunner: running local");
+            runLocalCluster();
+        }else {
+            _LOG.debug("TopologyRunner: running remote");
+            runRemoteCluster();
+        }
+        
+    }
+    
+    private static void runLocalCluster() {
+        
+        Config config = new Config();
+        config.setDebug(true);
+        
+        LocalCluster cluster = new LocalCluster();
+        
+        //cluster.submitTopology("user-topology", config, UserTopologyBuilder.build());
+        cluster.submitTopology("pulse-subscribe-topology", config, PulseSubscribeTopologyBuilder.build());
+        
+    }
+    
+    private static void runRemoteCluster() throws AlreadyAliveException, InvalidTopologyException, AuthorizationException {
         
         Config config = new Config();
         config.setNumWorkers(2);
         config.setMessageTimeoutSecs(60);
         
-        //StormSubmitter.submitTopology("user-topology", config, UserTopologyBuilder.build());
+        StormSubmitter.submitTopology("user-topology", config, UserTopologyBuilder.build());
         StormSubmitter.submitTopology("pulse-subscribe-topology", config, PulseSubscribeTopologyBuilder.build());
         
     }

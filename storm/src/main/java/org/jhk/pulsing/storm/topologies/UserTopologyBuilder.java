@@ -26,13 +26,19 @@ import org.apache.storm.kafka.trident.TransactionalTridentKafkaSpout;
 import org.apache.storm.kafka.trident.TridentKafkaConfig;
 import org.apache.storm.spout.SchemeAsMultiScheme;
 import org.apache.storm.trident.TridentTopology;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Ji Kim
  */
 public final class UserTopologyBuilder {
     
+    private static final Logger _LOG = LoggerFactory.getLogger(UserTopologyBuilder.class);
+    
     public static StormTopology build() {
+        _LOG.debug("UserTopologyBuilder.build");
+        
         TridentTopology topology = new TridentTopology();
         topology.newStream("user-submission-spout", buildSpout());
         return topology.build();

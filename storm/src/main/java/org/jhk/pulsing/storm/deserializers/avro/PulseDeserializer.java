@@ -32,10 +32,10 @@ import org.jhk.pulsing.serialization.avro.serializers.SerializationHelper;
  * @author Ji Kim
  */
 public class PulseDeserializer extends BaseFunction {
-
-    private static final long serialVersionUID = 4863013986214675297L;
     
-    public static Fields FIELDS = new Fields("action", "id", "userId", "timeStamp", "value");
+    public static final Fields FIELDS = new Fields("action", "id", "userId", "timeStamp", "value");
+    
+    private static final long serialVersionUID = 4863013986214675297L;
     
     @Override
     public void execute(TridentTuple tuple, TridentCollector collector) {
