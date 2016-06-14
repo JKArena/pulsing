@@ -32,13 +32,18 @@ import org.jhk.pulsing.storm.bolts.pulse.TimeIntervalBolt;
 import org.jhk.pulsing.storm.bolts.pulse.TimeIntervalBuilderBolt;
 import org.jhk.pulsing.storm.bolts.pulse.TimeIntervalPersistorBolt;
 import org.jhk.pulsing.storm.util.PulsingConstants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Ji Kim
  */
 public final class PulseSubscribeTopologyBuilder {
     
+    private static final Logger _LOG = LoggerFactory.getLogger(PulseSubscribeTopologyBuilder.class);
+    
     public static StormTopology build() {
+        _LOG.debug("PulseSubscribeTopologyBuilder.build");
         
         TopologyBuilder builder = new TopologyBuilder();
         builder.setSpout("pulse-subscribe-spout", buildSpout());

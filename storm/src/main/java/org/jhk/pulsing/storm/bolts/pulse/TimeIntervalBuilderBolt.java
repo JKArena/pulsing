@@ -32,12 +32,15 @@ import org.apache.storm.tuple.Tuple;
 import org.apache.storm.tuple.Values;
 import org.jhk.pulsing.storm.util.CommonBoltStreamUtil;
 import org.jhk.pulsing.storm.util.PulsingConstants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Ji Kim
  */
 public final class TimeIntervalBuilderBolt extends BaseBasicBolt {
-
+    
+    private static final Logger _LOG = LoggerFactory.getLogger(TimeIntervalBuilderBolt.class);
     private static final long serialVersionUID = -94783556828622026L;
     
     private static final int DEFAULT_TICK_TUPLE_FREQ_SECONDS = 60;
@@ -69,6 +72,7 @@ public final class TimeIntervalBuilderBolt extends BaseBasicBolt {
 
     @Override
     public void execute(Tuple tuple, BasicOutputCollector outputCollector) {
+        _LOG.debug("TimeIntervalBuilderBolt.execute: " + tuple);
         
         if(isTickTuple(tuple)) {
             processTickTuple(outputCollector);
@@ -88,18 +92,18 @@ public final class TimeIntervalBuilderBolt extends BaseBasicBolt {
         
         Long currTimeInterval = CommonBoltStreamUtil.getTimeInterval(System.nanoTime(), _secondsInterval);
         
-        for(Long entryTI : _timeInterval.keySet()) {
-            if(entryTI <= currTimeInterval) {
-                Map<Long, Integer> idValueCounter = _timeInterval.remove(entryTI);
-                outputCollector.emit(new Values(entryTI, idValueCounter));
-            }
-        }
+        _timeInterval.keySet().stream()
+            .filter(entryTI -> (entryTI <= currTimeInterval))
+            .forEach(filteredTI -> {
+                Map<Long, Integer> idValueCounter = _timeInterval.remove(filteredTI);
+                outputCollector.emit(new Values(filteredTI, idValueCounter));
+            });
+        
     }
     
     private void processTimeIntervalValue(Tuple tuple, Long timeInterval) {
         Long id = tuple.getLongByField("id");
         
-        //convert below to java 8 also
         Map<Long, Integer> count = _timeInterval.get(timeInterval);
         if(count == null) {
             count = new HashMap<>();

@@ -90,6 +90,7 @@ public final class AvroJsonMojo extends AbstractMojo {
                 SpecificRecord record = (SpecificRecord) builder.build();
                 String result = SerializationHelper.serializeAvroTypeToJSONString(record);
                 
+                result = result.replace('"', '\''); //so to comply for lint
                 classinfos.add(new ClassInfo(clazz.getSimpleName(), result));
                 
             } catch (Throwable throwMe) {

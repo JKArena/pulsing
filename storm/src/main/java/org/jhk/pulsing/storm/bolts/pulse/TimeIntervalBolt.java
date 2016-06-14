@@ -26,12 +26,15 @@ import org.apache.storm.tuple.Tuple;
 import org.apache.storm.tuple.Values;
 import org.jhk.pulsing.storm.util.CommonBoltStreamUtil;
 import org.jhk.pulsing.storm.util.PulsingConstants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Ji Kim
  */
 public final class TimeIntervalBolt extends BaseBasicBolt {
     
+    private static final Logger _LOG = LoggerFactory.getLogger(TimeIntervalBolt.class);
     private static final long serialVersionUID = 3963343874691297355L;
     
     private int _secondsInterval;
@@ -48,6 +51,8 @@ public final class TimeIntervalBolt extends BaseBasicBolt {
 
     @Override
     public void execute(Tuple tuple, BasicOutputCollector outputCollector) {
+        _LOG.debug("TimeIntervalBolt.execute: " + tuple);
+        
         Long timeStamp = tuple.getLongByField("timeStamp");
         Long id = tuple.getLongByField("id");
         

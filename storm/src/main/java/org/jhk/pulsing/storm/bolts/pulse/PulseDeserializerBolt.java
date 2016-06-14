@@ -28,18 +28,23 @@ import org.apache.storm.tuple.Tuple;
 import org.apache.storm.tuple.Values;
 import org.jhk.pulsing.serialization.avro.records.Pulse;
 import org.jhk.pulsing.serialization.avro.serializers.SerializationHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Ji Kim
  */
 public final class PulseDeserializerBolt extends BaseBasicBolt {
     
-    private static final long serialVersionUID = 9003236874311323612L;
+    public static final Fields FIELDS = new Fields("action", "id", "userId", "timeStamp", "value");
     
-    public static Fields FIELDS = new Fields("action", "id", "userId", "timeStamp", "value");
+    private static final Logger _LOG = LoggerFactory.getLogger(PulseDeserializerBolt.class);
+    private static final long serialVersionUID = 9003236874311323612L;
     
     @Override
     public void execute(Tuple tuple, BasicOutputCollector outputCollector) {
+        _LOG.debug("PulseDeserializerBolt.execute: " + tuple);
+        
         String pulseString = tuple.getString(0);
         
         try {

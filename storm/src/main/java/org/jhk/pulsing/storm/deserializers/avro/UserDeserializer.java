@@ -27,18 +27,22 @@ import org.apache.storm.tuple.Fields;
 import org.apache.storm.tuple.Values;
 import org.jhk.pulsing.serialization.avro.records.User;
 import org.jhk.pulsing.serialization.avro.serializers.SerializationHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Ji Kim
  */
 public final class UserDeserializer extends BaseFunction {
     
-    private static final long serialVersionUID = -5222249102945206582L;
+    public static final Fields FIELDS = new Fields("picture", "id", "address", "email", "name", "password");
     
-    public static Fields FIELDS = new Fields("picture", "id", "address", "email", "name", "password");
+    private static final Logger _LOG = LoggerFactory.getLogger(UserDeserializer.class);
+    private static final long serialVersionUID = -5222249102945206582L;
     
     @Override
     public void execute(TridentTuple tuple, TridentCollector collector) {
+        _LOG.debug("UserDeserializer.execute: " + tuple);
         
         String userString = tuple.getString(0);
         

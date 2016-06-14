@@ -161,7 +161,7 @@
         <artifactId>maven-war-plugin</artifactId>
         <version>2.6</version>
         <configuration>
-          <warSourceExcludes>jsapp/node_modules/,jsapp/test/,jsapp/cfg/</warSourceExcludes>
+          <warSourceExcludes>jsapp/</warSourceExcludes>
         </configuration>
       </plugin>
     </plugins>

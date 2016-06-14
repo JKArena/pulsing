@@ -28,14 +28,19 @@ import org.apache.storm.topology.base.BaseBasicBolt;
 import org.apache.storm.tuple.Tuple;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.jhk.pulsing.storm.util.PulsingConstants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import redis.clients.jedis.Jedis;
 
 /**
+ * Use DRPC instead w/ memory; otherwise need to clear up redis entries
+ * 
  * @author Ji Kim
  */
 public final class TimeIntervalPersistorBolt extends BaseBasicBolt {
-
+    
+    private static final Logger _LOG = LoggerFactory.getLogger(TimeIntervalPersistorBolt.class);
     private static final long serialVersionUID = -884268616402022174L;
     private static final int HEAP_MAX_SIZE = 20;
     
@@ -50,6 +55,8 @@ public final class TimeIntervalPersistorBolt extends BaseBasicBolt {
     
     @Override
     public void execute(Tuple tuple, BasicOutputCollector outputCollector) {
+        _LOG.debug("TimeIntervalPersistorBolt.execute: " + tuple);
+        
         Long timeInterval = tuple.getLongByField("timeInterval");
         Map<Long, Integer> counter = (Map<Long, Integer>) tuple.getValueByField("idCounterMap");
         
