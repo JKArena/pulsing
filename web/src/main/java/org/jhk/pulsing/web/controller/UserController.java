@@ -47,7 +47,7 @@ public final class UserController extends AbstractController {
     
     @RequestMapping(value="/createUser", method=RequestMethod.POST, consumes={MediaType.MULTIPART_FORM_DATA_VALUE})
     public @ResponseBody Result<User> createUser(@RequestParam User user, @RequestParam(name="picture", required=false) MultipartFile picture) {
-        _LOGGER.info("createUser: " + user + "; " + (picture != null ? picture.getSize() : "picture not submitted"));
+        _LOGGER.info("createUser: " + user + "; " + (picture != null ? ("picture size is: " + picture.getSize()) : "picture not submitted"));
         
         return userDao.createUser(user);
     }

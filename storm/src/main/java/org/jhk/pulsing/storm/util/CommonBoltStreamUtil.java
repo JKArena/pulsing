@@ -29,9 +29,9 @@ public final class CommonBoltStreamUtil {
         super();
     }
     
-    public static Long getTimeInterval(Long timeStampNano, int timeInterval) {
-        Long timeStampSeconds = TimeUnit.SECONDS.convert(timeStampNano, TimeUnit.NANOSECONDS);
-        return timeStampSeconds / timeInterval;
+    public static Long getTimeInterval(Long timestampNano, int timeInterval) {
+        Long timestampSeconds = TimeUnit.SECONDS.convert(timestampNano, TimeUnit.NANOSECONDS);
+        return timestampSeconds / timeInterval;
     }
     
 }

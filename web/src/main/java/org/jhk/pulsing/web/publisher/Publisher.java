@@ -31,20 +31,20 @@ import org.jhk.pulsing.storm.util.PulsingConstants;
 public final class Publisher {
     
     private KafkaProducer<String, SpecificRecord> _producer;
-    private String _zooKeeperAddress;
+    private String _bootstrapAddress;
     
     public Publisher() {
-        this(PulsingConstants.DEFAULT_ZOOKEEPER_HOST, PulsingConstants.DEFAULT_ZOOKEEPER_PORT);
+        this(PulsingConstants.DEFAULT_BOOTSTRAP_HOST, PulsingConstants.DEFAULT_BOOTSTRAP_PORT);
     }
     
-    public Publisher(String zkHost, int zkPort) {
-        this(zkHost + ":" + zkPort);
+    public Publisher(String bHost, int bPort) {
+        this(bHost + ":" + bPort);
     }
     
-    public Publisher(String zooKeeperAddress) {
+    public Publisher(String bootstrapAddress) {
         super();
         
-        _zooKeeperAddress = zooKeeperAddress;
+        _bootstrapAddress = bootstrapAddress;
         _producer = createProducer();
     }
     
@@ -52,14 +52,14 @@ public final class Publisher {
         
         ProducerRecord<String, SpecificRecord> data = new ProducerRecord<>(topic, message);
         
-        _producer.send(data);;
+        _producer.send(data);
     }
     
     private KafkaProducer<String, SpecificRecord> createProducer() {
         
         Properties props = new Properties();
         
-        props.put("zk.connect", _zooKeeperAddress);
+        props.put("bootstrap.servers", _bootstrapAddress);
         props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
         props.put("value.serializer", "org.jhk.pulsing.serialization.avro.serializers.KafkaAvroJSONSerializer");
         

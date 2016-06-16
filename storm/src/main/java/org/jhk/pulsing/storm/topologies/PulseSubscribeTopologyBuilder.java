@@ -54,7 +54,7 @@ public final class PulseSubscribeTopologyBuilder {
         
         builder.setBolt("pulse-subscribe-interval-extractor", new TimeIntervalBolt(), 2)
                 .setNumTasks(2)
-                .shuffleGrouping("pulse-deserialized");
+                .shuffleGrouping("pulse-deserializer");
         
         builder.setBolt("pulse-subscribe-interval-builder", new TimeIntervalBuilderBolt(), 4)
                 .setNumTasks(4)

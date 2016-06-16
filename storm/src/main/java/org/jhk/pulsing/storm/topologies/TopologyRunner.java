@@ -53,8 +53,8 @@ public final class TopologyRunner {
         
         LocalCluster cluster = new LocalCluster();
         
-        //cluster.submitTopology("user-topology", config, UserTopologyBuilder.build());
         cluster.submitTopology("pulse-subscribe-topology", config, PulseSubscribeTopologyBuilder.build());
+        cluster.submitTopology("user-topology", config, UserTopologyBuilder.build());
         
     }
     
@@ -64,8 +64,8 @@ public final class TopologyRunner {
         config.setNumWorkers(2);
         config.setMessageTimeoutSecs(60);
         
-        StormSubmitter.submitTopology("user-topology", config, UserTopologyBuilder.build());
         StormSubmitter.submitTopology("pulse-subscribe-topology", config, PulseSubscribeTopologyBuilder.build());
+        StormSubmitter.submitTopology("user-topology", config, UserTopologyBuilder.build());
         
     }
     
