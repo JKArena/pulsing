@@ -26,6 +26,8 @@ import org.apache.storm.kafka.trident.TransactionalTridentKafkaSpout;
 import org.apache.storm.kafka.trident.TridentKafkaConfig;
 import org.apache.storm.spout.SchemeAsMultiScheme;
 import org.apache.storm.trident.TridentTopology;
+import org.apache.storm.tuple.Fields;
+import org.jhk.pulsing.storm.deserializers.avro.UserDeserializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,7 +42,13 @@ public final class UserTopologyBuilder {
         _LOG.debug("UserTopologyBuilder.build");
         
         TridentTopology topology = new TridentTopology();
-        topology.newStream("user-submission-spout", buildSpout());
+        topology.newStream("user-submission-spout", buildSpout())
+            .each(
+                    new Fields("str"), 
+                    new UserDeserializer(), 
+                    UserDeserializer.FIELDS
+                    );
+        
         return topology.build();
     }
     

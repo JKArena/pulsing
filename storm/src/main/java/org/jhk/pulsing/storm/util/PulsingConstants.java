@@ -24,8 +24,9 @@ package org.jhk.pulsing.storm.util;
 public final class PulsingConstants {
     
     public static final int DEFAULT_INTERVAL_SECONDS = 15;
-    public static final String DEFAULT_ZOOKEEPER_HOST = "127.0.0.1";
-    public static final int DEFAULT_ZOOKEEPER_PORT = 2181;
+    
+    public static final String DEFAULT_BOOTSTRAP_HOST = "0.0.0.0";
+    public static final int DEFAULT_BOOTSTRAP_PORT = 9092;
     
     public static final String REDIS_HOST = "localhost";
     public static final int REDIS_PORT = 6379;

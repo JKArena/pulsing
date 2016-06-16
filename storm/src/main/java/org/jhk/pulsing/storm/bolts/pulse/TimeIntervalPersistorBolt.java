@@ -34,7 +34,7 @@ import org.slf4j.LoggerFactory;
 import redis.clients.jedis.Jedis;
 
 /**
- * Use DRPC instead w/ memory; otherwise need to clear up redis entries
+ * Use DRPC instead w/ memory?
  * 
  * @author Ji Kim
  */
@@ -46,6 +46,19 @@ public final class TimeIntervalPersistorBolt extends BaseBasicBolt {
     
     private Jedis _jedis;
     private ObjectMapper _objectMapper;
+    private int _secondsInterval;
+    
+    public TimeIntervalPersistorBolt() {
+        super();
+
+        _secondsInterval = PulsingConstants.DEFAULT_INTERVAL_SECONDS;
+    }
+    
+    public TimeIntervalPersistorBolt(int secondsInterval) {
+        super();
+        
+        _secondsInterval = secondsInterval;
+    }
     
     @Override
     public void prepare(Map stormConf, TopologyContext context) {
@@ -76,7 +89,7 @@ public final class TimeIntervalPersistorBolt extends BaseBasicBolt {
         
         try {
             String timeIntervalSubscription = _objectMapper.writeValueAsString(queue);
-            _jedis.set("trend-pulse-" + timeInterval, timeIntervalSubscription);
+            _jedis.setex("trend-pulse-" + timeInterval, _secondsInterval, timeIntervalSubscription);
         } catch (Exception writeException) {
             writeException.printStackTrace();
         }

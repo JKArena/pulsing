@@ -83,7 +83,7 @@ public class UserDao implements IUserDao {
 
     @Override
     public Result<User> getUser(UserId userId) {
-        _LOGGER.info("getUser", userId);
+        _LOGGER.info("getUser: " + userId);
         
         User user = _MOCKED_USERS.get(userId);
         Result<User> gResult = user == null ? new Result<User>(FAILURE, "Failed to get user " + userId) :
@@ -94,7 +94,7 @@ public class UserDao implements IUserDao {
 
     @Override
     public Result<User> createUser(User userSubmitted) {
-        _LOGGER.info("createUser", userSubmitted);
+        _LOGGER.info("createUser: " + userSubmitted);
         
         Optional<User> findUser = _MOCKED_USERS.values().stream()
                 .filter(user -> user.getEmail().equals(userSubmitted.getEmail()))
@@ -115,6 +115,7 @@ public class UserDao implements IUserDao {
     
     @Override
     public Result<User> validateUser(String email, String password) {
+        _LOGGER.info("validateUser: " + email + ", " + password);
         
         Optional<User> filteredUser = _MOCKED_USERS.values().stream()
             .filter(user -> user.getEmail().equals(email) && user.getPassword().equals(password))
