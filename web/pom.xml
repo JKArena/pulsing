@@ -138,7 +138,6 @@
         <version>${pulsing.version}</version>
         <configuration>
           <avroclasses>
-            <param>org.jhk.pulsing.serialization.avro.records.Address</param>
             <param>org.jhk.pulsing.serialization.avro.records.Pulse</param>
             <param>org.jhk.pulsing.serialization.avro.records.PulseId</param>
             <param>org.jhk.pulsing.serialization.avro.records.User</param>
