@@ -24,7 +24,6 @@ import java.util.concurrent.ConcurrentMap;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.jhk.pulsing.serialization.avro.records.Address;
 import org.jhk.pulsing.serialization.avro.records.User;
 import org.jhk.pulsing.serialization.avro.records.UserId;
 import org.jhk.pulsing.web.common.Result;
@@ -54,12 +53,7 @@ public class UserDao implements IUserDao {
         user.setEmail("mathXphysics@truth.com");
         user.setName("Isaac Newton");
         user.setPassword("genius");
-        
-        Address address = Address.newBuilder().build();
-        address.setAddress("Woolsthorpe-by-Colsterworth, United Kingdom");
-        address.setCoordinates(Stream.of(52.809863D, -0.62877D).collect(Collectors.toList()));
-        
-        user.setAddress(address);
+        user.setCoordinates(Stream.of(52.809863D, -0.62877D).collect(Collectors.toList()));
         
         _MOCKED_USERS.put(userId, user);
         
@@ -71,12 +65,7 @@ public class UserDao implements IUserDao {
         user.setEmail("philosophy@truth.com");
         user.setName("Socrates");
         user.setPassword("genius");
-        
-        address = Address.newBuilder().build();
-        address.setAddress("Athens Greece");
-        address.setCoordinates(Stream.of(37.9667D, 23.7167D).collect(Collectors.toList()));
-        
-        user.setAddress(address);
+        user.setCoordinates(Stream.of(37.9667D, 23.7167D).collect(Collectors.toList()));
         
         _MOCKED_USERS.put(userId, user);
     }

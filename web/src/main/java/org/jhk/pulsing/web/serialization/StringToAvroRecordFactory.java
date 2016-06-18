@@ -25,7 +25,6 @@ import java.util.Map;
 import org.apache.avro.specific.SpecificRecord;
 import org.apache.avro.Schema;
 
-import org.jhk.pulsing.serialization.avro.records.Address;
 import org.jhk.pulsing.serialization.avro.records.Pulse;
 import org.jhk.pulsing.serialization.avro.records.PulseId;
 import org.jhk.pulsing.serialization.avro.records.User;
@@ -46,7 +45,6 @@ public final class StringToAvroRecordFactory implements ConverterFactory<String,
     private static final Map<Class<? extends SpecificRecord>, Schema> _MAPPER = new HashMap<>();
     
     static {
-        _MAPPER.put(Address.class, Address.getClassSchema());
         _MAPPER.put(Pulse.class, Pulse.getClassSchema());
         _MAPPER.put(PulseId.class, PulseId.getClassSchema());
         _MAPPER.put(User.class, User.getClassSchema());

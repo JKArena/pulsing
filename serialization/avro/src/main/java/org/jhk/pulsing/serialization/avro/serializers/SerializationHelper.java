@@ -32,7 +32,6 @@ import org.apache.avro.io.JsonDecoder;
 import org.apache.avro.specific.SpecificDatumReader;
 import org.apache.avro.specific.SpecificDatumWriter;
 import org.apache.avro.specific.SpecificRecord;
-import org.jhk.pulsing.serialization.avro.records.Address;
 import org.jhk.pulsing.serialization.avro.records.Pulse;
 import org.jhk.pulsing.serialization.avro.records.PulseId;
 import org.jhk.pulsing.serialization.avro.records.User;
@@ -73,7 +72,6 @@ public final class SerializationHelper {
     }
     
     static {
-        _AVRO_RECORDS.add(new AvroRecords<Address>(Address.class, Address.getClassSchema()));
         _AVRO_RECORDS.add(new AvroRecords<Pulse>(Pulse.class, Pulse.getClassSchema()));
         _AVRO_RECORDS.add(new AvroRecords<PulseId>(PulseId.class, PulseId.getClassSchema()));
         _AVRO_RECORDS.add(new AvroRecords<User>(User.class, User.getClassSchema()));

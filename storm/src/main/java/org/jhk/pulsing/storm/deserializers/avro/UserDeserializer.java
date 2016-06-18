@@ -35,7 +35,7 @@ import org.slf4j.LoggerFactory;
  */
 public final class UserDeserializer extends BaseFunction {
     
-    public static final Fields FIELDS = new Fields("picture", "id", "address", "email", "name", "password");
+    public static final Fields FIELDS = new Fields("picture", "id", "coordinates", "email", "name", "password");
     
     private static final Logger _LOG = LoggerFactory.getLogger(UserDeserializer.class);
     private static final long serialVersionUID = -5222249102945206582L;
@@ -58,7 +58,7 @@ public final class UserDeserializer extends BaseFunction {
     }
     
     private Values getUserValues(User user) {
-        return new Values(user.getPicture(), user.getId(), user.getAddress(), 
+        return new Values(user.getPicture(), user.getId(), user.getCoordinates(), 
                 user.getEmail(), user.getName(), user.getPassword());
     }
 

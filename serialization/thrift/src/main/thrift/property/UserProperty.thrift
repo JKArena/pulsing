@@ -19,7 +19,6 @@
 
 namespace java org.jhk.pulsing.serialization.thrift.property
 
-include "../common/Address.thrift"
 include "../id/UserId.thrift"
 
 /**
@@ -34,7 +33,7 @@ struct UserProperty {
 
 union UserPropertyValue {
   1: binary picture;
-  2: Address.Address address;
+  2: list<double> coordinates;
   3: string email;
   5: string name;
   6: string password;
