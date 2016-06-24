@@ -19,10 +19,12 @@
 package org.jhk.pulsing.web.publisher;
 
 import java.util.Properties;
+import java.util.concurrent.Future;
 
 import org.apache.avro.specific.SpecificRecord;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
+import org.apache.kafka.clients.producer.RecordMetadata;
 import org.jhk.pulsing.storm.util.PulsingConstants;
 
 /**
@@ -48,11 +50,11 @@ public final class Publisher {
         _producer = createProducer();
     }
     
-    public void produce(String topic, SpecificRecord message) {
+    public Future<RecordMetadata> produce(String topic, SpecificRecord message) {
         
         ProducerRecord<String, SpecificRecord> data = new ProducerRecord<>(topic, message);
         
-        _producer.send(data);
+        return _producer.send(data);
     }
     
     private KafkaProducer<String, SpecificRecord> createProducer() {
