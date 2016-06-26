@@ -25,40 +25,63 @@
 import AvroJson from './avrojson';
 import AbstractAvro from './AbstractAvro';
 
+const FIELD_MAPPER = Symbol('FIELD_MAPPER');
+
 class User extends AbstractAvro {
   
-  constructor() {
+  constructor(json) {
     super();
     
-    this.skeleton = AvroJson('User');
-    this.formMapper = Object.freeze([
-                                     {
-                                       id: 'email',
-                                       unionType: 'string'
-                                     },
-                                     {
-                                       id: 'name',
-                                       unionType: 'string'
-                                     },
-                                     {
-                                       id: 'password',
-                                       unionType: 'string'
-                                     }
-                                     ]);
+    this.json = json || AvroJson('User');
+    this.fieldMapper = User[FIELD_MAPPER];
   }
   
-  formMap(form) {
-    super.formMap(form);
+  get email() {
+    return this.getProperty('email', 'string');
+  }
+  
+  set email(val) {
+    this.json.email = {'string' : val};
+  }
+  
+  get name() {
+    return this.getProperty('name', 'string');
+  }
+  
+  set name(val) {
+    this.json.name = {'string' : val};
+  }
+  
+  get password() {
+    return this.getProperty('password', 'string');
+  }
+  
+  set password(val) {
+    this.json.password = {'string' : val};
+  }
+  
+  static get [FIELD_MAPPER]() {
     
+    return Object.freeze([
+                          {
+                            field: 'email',
+                            formField: true
+                          },
+                          {
+                            field: 'name',
+                            formField: true
+                          },
+                          {
+                            field: 'password',
+                            formField: true
+                          }
+                         ]);
   }
   
   static deserialize(json) {
     console.debug('deserialize', json);
     
-    let user = new User();
-    //TODO map json to user class. have all setters + getters
-    
-    return user;
+    return new User(json);
   }
   
 }

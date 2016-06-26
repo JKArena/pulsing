@@ -107,7 +107,7 @@ public class UserDao implements IUserDao {
         _LOGGER.info("validateUser: " + email + ", " + password);
         
         Optional<User> filteredUser = _MOCKED_USERS.values().stream()
-            .filter(user -> user.getEmail().equals(email) && user.getPassword().equals(password))
+            .filter(user -> { return user.getEmail().toString().equals(email) && user.getPassword().toString().equals(password);})
             .findAny();
         
         return filteredUser.isPresent() ? new Result<User>(SUCCESS, filteredUser.get()) : 

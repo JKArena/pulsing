@@ -69,7 +69,7 @@ const FETCH_RESPONSE_HANDLER = Object.freeze(Object.create(null, {
       
     },
     set: function() {},
-    enumerable: true
+    enumerable: false
   },
   
   'raw': {
