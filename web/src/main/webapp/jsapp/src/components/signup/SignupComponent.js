@@ -132,12 +132,6 @@ class SignupComponent extends AbstractComponent {
                     <HelpBlock>wsad best password</HelpBlock>
                   </FormGroup>
                   
-                  <FormGroup controlId='address' validationState={this.getValidState('address')}>
-                    <ControlLabel>Address</ControlLabel>
-                    <FormControl type='text' name='address' onBlur={this.handleChange.bind(this)} />
-                    <FormControl.Feedback />
-                  </FormGroup>
-                  
                   <FormGroup controlId='avatar' validationState={this.getValidState('avatar')}>
                     <ControlLabel>Picture</ControlLabel>
                     <div>
