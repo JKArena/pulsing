@@ -30,7 +30,7 @@ class AbstractAvro {
       .filter(elementInfo => {return elementInfo.formField})
       .forEach(elementInfo => {
         let field = elementInfo.field;
-        let element = this.scopedElementQuery(form, field); //so strange how they are absolute and need :scope, should have done like jQuery
+        let element = this.scopedElementQuery(form, field); //so strange how they are absolute and need :scope
         let value = element[elementInfo.fieldValueAttr || 'value'];
         
         this[field] = value;
