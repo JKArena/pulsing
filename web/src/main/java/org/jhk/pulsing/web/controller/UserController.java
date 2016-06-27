@@ -21,6 +21,7 @@ package org.jhk.pulsing.web.controller;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
+import org.jhk.pulsing.serialization.avro.records.Picture;
 import org.jhk.pulsing.serialization.avro.records.User;
 import org.jhk.pulsing.serialization.avro.records.UserId;
 import org.jhk.pulsing.web.common.Result;
@@ -49,12 +50,17 @@ public final class UserController extends AbstractController {
     private IUserDao userDao;
     
     @RequestMapping(value="/createUser", method=RequestMethod.POST, consumes={MediaType.MULTIPART_FORM_DATA_VALUE})
-    public @ResponseBody Result<User> createUser(@RequestParam User user, @RequestParam(name="picture", required=false) MultipartFile picture) {
-        _LOGGER.info("createUser: " + user + "; " + (picture != null ? ("picture size is: " + picture.getSize()) : "picture not submitted"));
+    public @ResponseBody Result<User> createUser(@RequestParam User user, @RequestParam(name="picture", required=false) MultipartFile mPicture) {
+        _LOGGER.info("createUser: " + user + "; " + (mPicture != null ? ("picture size is: " + mPicture.getSize()) : "picture not submitted"));
         
-        if(picture != null) {
+        if(mPicture != null) {
             try {
-                user.setPicture(ByteBuffer.wrap(picture.getBytes()));
+                ByteBuffer pBuffer = ByteBuffer.wrap(mPicture.getBytes());
+                
+                Picture picture = Picture.newBuilder().build();
+                picture.setContent(pBuffer);
+                picture.setName(mPicture.getOriginalFilename());
+                user.setPicture(picture);
             }catch(IOException iException) {
                 _LOGGER.error("Could not get picture bytes", iException);
             }

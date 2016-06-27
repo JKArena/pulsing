@@ -26,8 +26,7 @@ class AbstractAvro {
   
   formMap(form) {
     
-    this.fieldMapper
-      .filter(elementInfo => {return elementInfo.formField})
+    this.formMapper
       .forEach(elementInfo => {
         let field = elementInfo.field;
         let element = this.scopedElementQuery(form, field); //so strange how they are absolute and need :scope

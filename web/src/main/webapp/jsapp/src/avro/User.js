@@ -25,7 +25,7 @@
 import AvroJson from './avrojson';
 import AbstractAvro from './AbstractAvro';
 
-const FIELD_MAPPER = Symbol('FIELD_MAPPER');
+const FORM_MAPPER = Symbol('FORM_MAPPER');
 
 class User extends AbstractAvro {
   
@@ -33,7 +33,7 @@ class User extends AbstractAvro {
     super();
     
     this.json = json || AvroJson('User');
-    this.fieldMapper = User[FIELD_MAPPER];
+    this.formMapper = User[FORM_MAPPER];
   }
   
   get email() {
@@ -52,6 +52,12 @@ class User extends AbstractAvro {
     this.json.name = {'string' : val};
   }
   
+  get pictureUrl() {
+    let picture = this.json[picture];
+    
+    return (picture && picture.url) || '';
+  }
+  
   get password() {
     return this.getProperty('password', 'string');
   }
@@ -60,20 +66,17 @@ class User extends AbstractAvro {
     this.json.password = {'string' : val};
   }
   
-  static get [FIELD_MAPPER]() {
+  static get [FORM_MAPPER]() {
     
     return Object.freeze([
                           {
-                            field: 'email',
-                            formField: true
+                            field: 'email'
                           },
                           {
-                            field: 'name',
-                            formField: true
+                            field: 'name'
                           },
                           {
-                            field: 'password',
-                            formField: true
+                            field: 'password'
                           }
                          ]);
   }

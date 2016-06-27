@@ -52,6 +52,7 @@
               <sourceDirectory>${project.basedir}/src/main/avro/</sourceDirectory>
               <outputDirectory>${project.basedir}/src/main/java/</outputDirectory>
               <imports>
+                <import>${project.basedir}/src/main/avro/picture.avsc</import>
                 <import>${project.basedir}/src/main/avro/pulseId.avsc</import>
                 <import>${project.basedir}/src/main/avro/userId.avsc</import>
               </imports>
