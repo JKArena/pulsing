@@ -145,6 +145,24 @@
       </dependency>
 	  
 	  <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-aspects</artifactId>
+        <version>${spring.aspects}</version>
+      </dependency>
+	  
+	  <dependency>
+        <groupId>aspectj</groupId>
+        <artifactId>aspectjweaver</artifactId>
+        <version>${aspectjweaver}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.aspectj</groupId>
+        <artifactId>aspectjrt</artifactId>
+        <version>${aspectjrt}</version>
+      </dependency>
+	  
+	  <dependency>
         <groupId>commons-fileupload</groupId>
         <artifactId>commons-fileupload</artifactId>
         <version>${commons.fileupload}</version>
@@ -223,6 +241,9 @@
 	<spring.integration.kafka>1.3.0.RELEASE</spring.integration.kafka>
 	<spring.boot.websocket>1.3.5.RELEASE</spring.boot.websocket>
 	<spring.messaging>4.2.6.RELEASE</spring.messaging>
+	<spring.aspects>4.3.0.RELEASE</spring.aspects>
+	<aspectjweaver>1.5.4</aspectjweaver>
+	<aspectjrt>1.8.9</aspectjrt>
 	<commons.fileupload>1.3.2</commons.fileupload>
     <commons.io>2.5</commons.io>
 	<javax.servlet.api>3.1.0</javax.servlet.api>

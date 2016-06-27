@@ -19,13 +19,17 @@
 package org.jhk.pulsing.web.dao;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Profile;
 
 /**
  * @author Ji Kim
  */
 @Profile("prod")
+@EnableAspectJAutoProxy
+@ComponentScan({"org.jhk.pulsing.web.aspect"})
 @Configuration
 public class ProdDaoConfig implements IDaoConfig {
     

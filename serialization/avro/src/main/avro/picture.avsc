@@ -17,29 +17,13 @@
  * under the License.
  */
 
-namespace java org.jhk.pulsing.serialization.thrift.property
-
-include "../id/UserId.thrift"
-
-/**
- * User property
- *
- * @author Ji Kim
- */
-struct UserProperty {
-  1: UserId.UserId id;
-  2: UserPropertyValue property;
-}
-
-union UserPropertyValue {
-  1: PicturePropertyValue picture;
-  2: list<double> coordinates;
-  3: string email;
-  5: string name;
-  6: string password;
-}
-
-union PicturePropertyValue {
-  1: binary content;
-  2: string originalFilename;
+{
+  "namespace": "org.jhk.pulsing.serialization.avro.records",
+  "type": "record",
+  "name": "Picture",
+  "fields": [
+    {"name": "content", "type": ["null", "bytes"], "default": null},
+    {"name": "url", "type": ["null", "string"], "default": null},
+    {"name": "name", "type": ["null", "string"], "default": null}
+  ]
 }

@@ -22,7 +22,7 @@
   "type": "record",
   "name": "User",
   "fields": [
-  	{"name": "picture", "type": ["null", "bytes"], "default": null},
+  	{"name": "picture", "type": "Picture", "default": null},
   	{"name": "coordinates", "type": ["null", {"type": "array", "items": "double"}], "default": null},
   	{"name": "email", "type": ["null", "string"], "default": null},
   	{"name": "id", "type": "UserId", "default": null},
