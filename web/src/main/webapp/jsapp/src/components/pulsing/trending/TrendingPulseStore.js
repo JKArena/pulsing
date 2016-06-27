@@ -26,35 +26,30 @@ import {EventEmitter} from 'events';
 
 import TrendingPulseAction from './actions/TrendingPulseAction';
 
-const CHANGE_EVENT = 'change';
+const FETCHED_EVENT = 'fetched';
 
 class TrendingPulseStore extends EventEmitter {
   
-  emitChange() {
-    this.emit(CHANGE_EVENT);
+  emitFetched(trending) {
+    this.emit(FETCHED_EVENT, trending);
   }
   
-  addChangeListener(callback) {
-    this.on(CHANGE_EVENT, callback);
+  addFetchedListener(callback) {
+    this.on(FETCHED_EVENT, callback);
   }
   
-  removeChangeListener(callback) {
-    this.removeListener(CHANGE_EVENT, callback);
+  removeFetchedListener(callback) {
+    this.removeListener(FETCHED_EVENT, callback);
   }
   
-  static get trending() {
-    return new Promise(function(resolve) {
-      
-      TrendingPulseAction.getTrendingPulse
-        .then(function(trending) {
-          
-          resolve(trending);
-        })
-        .catch(function() {
-          resolve([]);
-        });
-      
-    });
+  fetchTrending() {
+    
+    TrendingPulseAction.getTrendingPulse
+      .then(function(trending) {
+        
+        this.emitFetched(trending);
+      }.bind(this));
+    
   }
   
 }

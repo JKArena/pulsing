@@ -28,8 +28,6 @@ import {Grid, Row, Col, Thumbnail, Button} from 'react-bootstrap';
 import React, {Component} from 'react';
 import TrendingPulseStore from './TrendingPulseStore';
 
-const _store = new TrendingPulseStore();
-
 let _trending = new Map();
 
 class TrendingPulseComponent extends Component {
@@ -38,24 +36,16 @@ class TrendingPulseComponent extends Component {
     super(props);
     
     this.state = {};
-    
-    TrendingPulseStore.trending
-      .then(function(result) {
-        
-        _trending = result;
-        this.setState({});
-      }.bind(this))
-      .catch(function(err) {
-        console.error('Error getting trending ', err);
-      });
+    this.store = new TrendingPulseStore();
   }
   
   componentDidMount() {
-    _store.addChangeListener(this._onChange.bind(this));
+    this.store.addFetchedListener(this._onFetched.bind(this));
+    this.store.fetchTrending();
   }
   
   componentWillUnmount() {
-    _store.removeChangeListener(this._onChange.bind(this));
+    this.store.removeFetchedListener(this._onFetched.bind(this));
   }
   
   handleSubscribe(evt) {
@@ -63,9 +53,11 @@ class TrendingPulseComponent extends Component {
     
   }
   
-  _onChange() {
-    console.debug('_onChange');
+  _onFetched(trending) {
+    console.debug('_onFetched', trending);
     
+    _trending = trending;
+    this.setState({});
   }
   
   render() {
