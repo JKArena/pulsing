@@ -24,9 +24,10 @@
 
 require('./TrendingPulse.scss');
 
-import {Grid, Row, Col, Thumbnail, Button} from 'react-bootstrap';
+import {Grid, Row, Col, Thumbnail, Button, Badge} from 'react-bootstrap';
 import React, {Component} from 'react';
 import TrendingPulseStore from './TrendingPulseStore';
+import WebSockets from '../../../common/WebSockets';
 
 let _trending = new Map();
 
@@ -36,20 +37,41 @@ class TrendingPulseComponent extends Component {
     super(props);
     
     this.state = {};
-    this.store = new TrendingPulseStore();
   }
   
   componentDidMount() {
+    console.debug('mounted');
+    this.store = new TrendingPulseStore();
     this.store.addFetchedListener(this._onFetched.bind(this));
     this.store.fetchTrending();
+    
+    this.ws = new WebSockets('pulseSubscribeSocketJS');
+    this.ws.connect()
+      .then(frame => {
+        console.debug('frame', frame);
+        this.sub = this.ws.subscribe('/pulsingTopic/pulseSubscribe', this._onPulseSubscribe.bind(this));
+      });
   }
   
   componentWillUnmount() {
     this.store.removeFetchedListener(this._onFetched.bind(this));
+    this.store = null;
+    
+    this.ws.destroy();
+    this.sub.unsubscribe();
+    
+    this.sub = null;
+    this.ws = null;
   }
   
   handleSubscribe(evt) {
     console.debug('handleSubscribe', evt.target.id);
+    
+    this.ws.send('/pulsingSocket/pulseSubscribeSocketJS', {}, JSON.stringify({pulseId: evt.target.id, userId: 1234})); //TODO: only enable for logged in
+  }
+  
+  _onPulseSubscribe(pulse) {
+    console.debug('_onPulseSubscribe', pulse);
     
   }
   
@@ -67,8 +89,8 @@ class TrendingPulseComponent extends Component {
     trending.forEach((value, key) => {
       
       cols.push(<Col xs={12} sm={6} md={4} lg={3} key={key}>
-        <Thumbnail alt='242x200'>
-          <h3>{value}</h3>
+        <Thumbnail>
+          <h3>{value} <span><Badge>1</Badge></span></h3>
           <p>Description</p>
           <p>
             <Button bsStyle="primary" id={key} onClick={this.handleSubscribe.bind(this)}>Subscribe</Button>
