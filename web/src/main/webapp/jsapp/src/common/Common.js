@@ -22,6 +22,8 @@
  */
 'use strict';
 
+const SPRING_CONTROLLER_SUFFIX = ':8083/pulsing-web/controller/';
+
 export default Object.freeze(
     {
       __proto__: null,
@@ -29,6 +31,11 @@ export default Object.freeze(
       eventCanceller(evt) {
         evt.stopPropagation();
         evt.preventDefault();
+      },
+
+      controllerUrl() {
+        let location = global.location;
+        return location.protocol + '//' + location.hostname + SPRING_CONTROLLER_SUFFIX;
       }
     }
 );
