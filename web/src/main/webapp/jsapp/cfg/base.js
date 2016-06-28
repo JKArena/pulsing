@@ -29,5 +29,11 @@ module.exports = {
       config: `${defaultSettings.srcPath}/config/` + process.env.REACT_WEBPACK_ENV
     }
   },
-  module: {}
+  node: {
+    net: 'empty'
+  },
+  module: {
+    noParse: ['websocket'] //remove later for noParse + externals; acorn throwing a fit otherwise...go node...
+  },
+  externals: ['websocket']
 };

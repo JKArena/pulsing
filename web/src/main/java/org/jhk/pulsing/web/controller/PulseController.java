@@ -62,14 +62,14 @@ public final class PulseController extends AbstractController {
         return pulseDao.getTrendingPulse();
     }
     
-    @MessageMapping("/pulsingSocketJS")
-    @SendTo("/pulsingTopic/subscribePulse")
-    public UserId subscribePulse(Pulse pulse) {
-        _LOGGER.info("subscribePulse: " + pulse);
+    @MessageMapping("/pulseSubscribeSocketJS")
+    @SendTo("/pulsingTopic/pulseSubscribe")
+    public long pulseSubscribe(long pulseId, long userId) {
+        _LOGGER.info("pulseSubscribe: " + pulseId);
         
         //notify new user subscribed to the pulse
         //should have the subscription time out (as a config?)
-        return pulse.getUserId();
+        return userId;
     }
     
 }

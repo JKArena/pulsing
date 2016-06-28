@@ -22,7 +22,8 @@
  */
 'use strict';
 
-const SPRING_CONTROLLER_SUFFIX = ':8083/pulsing-web/controller/';
+import Common from './Common';
+
 const BASIC = Symbol('basic');
 
 const FETCH_RESPONSE_HANDLER = Object.freeze(Object.create(null, {
@@ -86,11 +87,6 @@ const FETCH_RESPONSE_HANDLER = Object.freeze(Object.create(null, {
  })
 );
 
-function controllerUrl() {
-  let location = global.location;
-  return location.protocol + '//' + location.hostname + SPRING_CONTROLLER_SUFFIX;
-}
-
 function fetchContent(request, options, responseType='json') {
   
   return new Promise(function(resolve, reject) {
@@ -128,7 +124,7 @@ export default Object.freeze(
               const DEFAULT_HEADERS = new Headers({'Accept': 'application/json'});
               const DEFAULT_OPTIONS = {method: 'GET',  mode: 'cors', headers: DEFAULT_HEADERS};
 
-              let request = new Request(controllerUrl() + gPath);
+              let request = new Request(Common.controllerUrl() + gPath);
               let gOptions = Object.assign(DEFAULT_OPTIONS, options);
 
               return fetchContent(request, gOptions, 'json');
@@ -147,7 +143,7 @@ export default Object.freeze(
               const DEFAULT_HEADERS = new Headers({'Accept': 'application/json'});
               const DEFAULT_OPTIONS = {method: 'POST',  mode: 'cors', headers: DEFAULT_HEADERS};
 
-              let request = new Request(controllerUrl() + pPath);
+              let request = new Request(Common.controllerUrl() + pPath);
               let pOptions = Object.assign(DEFAULT_OPTIONS, options);
 
               return fetchContent(request, pOptions, 'json');

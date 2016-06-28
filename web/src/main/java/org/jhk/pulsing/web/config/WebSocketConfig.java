@@ -37,9 +37,9 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
         registry.setApplicationDestinationPrefixes("/pulsingSocket");
     }
     
-	@Override
-	public void registerStompEndpoints(StompEndpointRegistry registry) {
-	    registry.addEndpoint("/pulsingSocketJS").withSockJS();
-	}
-	
+    @Override
+    public void registerStompEndpoints(StompEndpointRegistry registry) {
+        registry.addEndpoint("/pulseSubscribeSocketJS").setAllowedOrigins("*").withSockJS();
+    }
+    
 }
