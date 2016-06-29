@@ -77,7 +77,7 @@ public final class UserController extends AbstractController {
     }
     
     @RequestMapping(value="/validateUser", method=RequestMethod.POST, consumes={MediaType.MULTIPART_FORM_DATA_VALUE})
-    public @ResponseBody Result<User> validateUser(@RequestParam("email") String email, @RequestParam("password") String password) {
+    public @ResponseBody Result<User> validateUser(@RequestParam String email, @RequestParam String password) {
         _LOGGER.info("validateUser: " + email + ", " + password);
         
         return userDao.validateUser(email, password);

@@ -60,7 +60,7 @@ class WebSockets {
     return this.stomp.subscribe(topic, callback);
   }
   
-  send(url, headers={}, body={}) {
+  send(url, headers={}, body='') {
     this.stomp.send(url, headers, body);
   }
   

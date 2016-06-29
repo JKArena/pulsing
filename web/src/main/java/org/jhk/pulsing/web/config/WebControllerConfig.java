@@ -24,13 +24,17 @@ import org.apache.avro.specific.SpecificRecord;
 import org.jhk.pulsing.serialization.avro.serializers.SerializationHelper;
 import org.jhk.pulsing.web.controller.PulseController;
 import org.jhk.pulsing.web.controller.UserController;
+import org.jhk.pulsing.web.controller.WebSocketController;
 import org.jhk.pulsing.web.serialization.AvroJsonSerializer;
 import org.jhk.pulsing.web.serialization.JsonAvroDeserializer;
 import org.jhk.pulsing.web.serialization.StringToAvroRecordFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
+import org.springframework.http.converter.FormHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.ResourceHttpMessageConverter;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
@@ -56,8 +60,14 @@ public class WebControllerConfig extends WebMvcConfigurerAdapter {
         return new UserController();
     }
     
+    @Bean(name="webSocketController")
+    public WebSocketController getWebSocketController() {
+        return new WebSocketController();
+    }
+    
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
+        super.addResourceHandlers(registry);
         
         registry.addResourceHandler("/resources/**").addResourceLocations("/resources/**");
     }
@@ -83,6 +93,8 @@ public class WebControllerConfig extends WebMvcConfigurerAdapter {
     
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+        super.configureMessageConverters(converters);
+        
         final Jackson2ObjectMapperBuilder builder = new Jackson2ObjectMapperBuilder();
         
         SerializationHelper.getAvroRecordStream()
@@ -93,6 +105,9 @@ public class WebControllerConfig extends WebMvcConfigurerAdapter {
             });
         
         converters.add(new MappingJackson2HttpMessageConverter(builder.build()));
+        converters.add(new StringHttpMessageConverter());
+        converters.add(new ResourceHttpMessageConverter());
+        converters.add(new FormHttpMessageConverter());
     }
     
 }
