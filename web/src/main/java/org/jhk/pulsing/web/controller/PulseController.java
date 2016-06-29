@@ -22,14 +22,11 @@ import java.util.List;
 
 import org.jhk.pulsing.serialization.avro.records.Pulse;
 import org.jhk.pulsing.serialization.avro.records.PulseId;
-import org.jhk.pulsing.serialization.avro.records.UserId;
 import org.jhk.pulsing.web.common.Result;
 import org.jhk.pulsing.web.dao.IPulseDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -60,16 +57,6 @@ public final class PulseController extends AbstractController {
         _LOGGER.info("getTrendingPulse");
         
         return pulseDao.getTrendingPulse();
-    }
-    
-    @MessageMapping("/pulseSubscribeSocketJS")
-    @SendTo("/pulsingTopic/pulseSubscribe")
-    public long pulseSubscribe(long pulseId, long userId) {
-        _LOGGER.info("pulseSubscribe: " + pulseId);
-        
-        //notify new user subscribed to the pulse
-        //should have the subscription time out (as a config?)
-        return userId;
     }
     
 }

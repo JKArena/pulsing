@@ -66,8 +66,7 @@ class TrendingPulseComponent extends Component {
   
   handleSubscribe(evt) {
     console.debug('handleSubscribe', evt.target.id);
-    
-    this.ws.send('/pulsingSocket/pulseSubscribeSocketJS', {}, JSON.stringify({pulseId: evt.target.id, userId: 1234})); //TODO: only enable for logged in
+    this.ws.send('/pulsingSocket/pulseSubscribeSocketJS', {}, JSON.stringify({pulseId: Number(evt.target.id), userId: 1234})); //TODO: only enable for logged in
   }
   
   _onPulseSubscribe(pulse) {
