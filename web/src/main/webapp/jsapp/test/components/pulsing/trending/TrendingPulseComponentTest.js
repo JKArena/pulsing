@@ -7,7 +7,7 @@
 // import TestUtils from 'react-addons-test-utils';
 import createComponent from 'helpers/shallowRenderHelper';
 
-import TrendingPulseComponent from 'components/pulsing/TrendingPulseComponent.js';
+import TrendingPulseComponent from 'components/pulsing/trending/TrendingPulseComponent.js';
 
 describe('TrendingPulseComponent', () => {
   let component;

@@ -44,24 +44,25 @@ class NavBarComponent extends Component {
     this.state.loggedIn = false;
     Storage.user = null;
     
+    API.publish(TOPICS.AUTH, {loggedIn: false});
     this.setState(this.state);
   }
   
-  loggedIn() {
+  _onAuth(auth) {
     const MAIN = '/';
     
-    this.state.loggedIn = true;
+    this.state.loggedIn = auth.loggedIn;
     this.setState(this.state);
     
     browserHistory.push(MAIN);
   }
   
   componentDidMount() {
-    API.subscribe(TOPICS.AUTH, this.loggedIn.bind(this));
+    API.subscribe(TOPICS.AUTH, this._onAuth.bind(this));
   }
   
   componentWillUnmount() {
-    API.unsubscribe(TOPICS.AUTH, this.loggedIn.bind(this));
+    API.unsubscribe(TOPICS.AUTH, this._onAuth.bind(this));
   }
   
   render() {

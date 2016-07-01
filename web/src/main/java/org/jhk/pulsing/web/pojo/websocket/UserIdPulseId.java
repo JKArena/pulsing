@@ -16,37 +16,38 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.web.config;
-
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-
-import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
+package org.jhk.pulsing.web.pojo.websocket;
 
 /**
  * @author Ji Kim
  */
-public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServletInitializer  {
+public final class UserIdPulseId {
+    
+    private long _userId;
+    private long _pulseId;
+    
+    public long getUserId() {
+        return _userId;
+    }
+    public void setUserId(long userId) {
+        _userId = userId;
+    }
+    public long getPulseId() {
+        return _pulseId;
+    }
+    public void setPulseId(long pulseId) {
+        _pulseId = pulseId;
+    }
     
     @Override
-    public void onStartup(ServletContext servletContext) throws ServletException {
-        super.onStartup(servletContext);
-        servletContext.setInitParameter("spring.profiles.active", "dev");
-    }
-    
-    @Override
-    protected Class<?>[] getRootConfigClasses() {
-        return new Class<?>[]{ Config.class };
-    }
-
-    @Override
-    protected Class<?>[] getServletConfigClasses() {
-        return new Class<?>[]{ WebControllerConfig.class, WebSocketConfig.class };
-    }
-
-    @Override
-    protected String[] getServletMappings() {
-        return new String[]{"/controller/*"};
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("{ userId => ");
+        builder.append(_userId);
+        builder.append(", pulseId => ");
+        builder.append(_pulseId);
+        builder.append(" }");
+        return builder.toString();
     }
     
 }
