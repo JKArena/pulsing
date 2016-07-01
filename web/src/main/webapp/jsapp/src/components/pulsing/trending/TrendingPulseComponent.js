@@ -28,6 +28,8 @@ import {Grid, Row, Col, Thumbnail, Button, Badge} from 'react-bootstrap';
 import React, {Component} from 'react';
 import TrendingPulseStore from './TrendingPulseStore';
 import WebSockets from '../../../common/WebSockets';
+import {TOPICS, API} from '../../../common/PubSub';
+import Storage from '../../../common/Storage';
 
 let _trending = new Map();
 
@@ -36,11 +38,12 @@ class TrendingPulseComponent extends Component {
   constructor(props) {
     super(props);
     
-    this.state = {};
+    this.state = {loggedIn: !!Storage.user};
   }
   
   componentDidMount() {
     console.debug('mounted');
+    
     this.store = new TrendingPulseStore();
     this.store.addFetchedListener(this._onFetched.bind(this));
     this.store.fetchTrending();
@@ -51,9 +54,13 @@ class TrendingPulseComponent extends Component {
         console.debug('frame', frame);
         this.sub = this.ws.subscribe('/pulsingTopic/pulseSubscribe', this._onPulseSubscribe.bind(this));
       });
+    
+    API.subscribe(TOPICS.AUTH, this._onAuth.bind(this));
   }
   
   componentWillUnmount() {
+    console.debug('unmounted');
+    
     this.store.removeFetchedListener(this._onFetched.bind(this));
     this.store = null;
     
@@ -62,11 +69,21 @@ class TrendingPulseComponent extends Component {
     
     this.sub = null;
     this.ws = null;
+    
+    API.unsubscribe(TOPICS.AUTH, this._onAuth.bind(this));
   }
   
   handleSubscribe(evt) {
-    console.debug('handleSubscribe', evt.target.id);
-    this.ws.send('/pulsingSocket/pulseSubscribeSocketJS', {}, JSON.stringify({pulseId: Number(evt.target.id), userId: 1234})); //TODO: only enable for logged in
+    
+    let user = Storage.user;
+    
+    console.debug('handleSubscribe', evt.target.id, user.id);
+    this.ws.send('/pulsingSocket/pulseSubscribeSocketJS', {}, JSON.stringify({pulseId: evt.target.id, userId: user.id.id}));
+  }
+  
+  _onAuth(auth) {
+    this.state.loggedIn = auth.loggedIn;
+    this.setState(this.state);
   }
   
   _onPulseSubscribe(pulse) {
@@ -84,6 +101,7 @@ class TrendingPulseComponent extends Component {
   render() {
     let trending = _trending;
     let cols = [];
+    let loggedIn = this.state.loggedIn;
     
     trending.forEach((value, key) => {
       
@@ -92,7 +110,11 @@ class TrendingPulseComponent extends Component {
           <h3>{value} <span><Badge>1</Badge></span></h3>
           <p>Description</p>
           <p>
-            <Button bsStyle="primary" id={key} onClick={this.handleSubscribe.bind(this)}>Subscribe</Button>
+            {(() => {
+              if(loggedIn) {
+                return <Button bsStyle="primary" id={key} onClick={this.handleSubscribe.bind(this)}>Subscribe</Button>;
+              }
+            })()}
           </p>
         </Thumbnail>
       </Col>);

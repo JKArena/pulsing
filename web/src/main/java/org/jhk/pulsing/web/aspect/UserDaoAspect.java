@@ -60,7 +60,9 @@ public class UserDaoAspect {
         User user = result.getData();
         Picture picture = user.getPicture();
         
-        if(picture != null) {
+        _LOGGER.debug("setPictureUrl" + user);
+        
+        if(picture != null && picture.getName() != null) {
             
             ByteBuffer pBuffer = picture.getContent();
             String path = applicationContext.getServletContext().getRealPath("/resources/img");

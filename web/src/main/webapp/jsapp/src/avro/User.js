@@ -24,6 +24,7 @@
 
 import AvroJson from './avrojson';
 import AbstractAvro from './AbstractAvro';
+import UserId from './UserId';
 
 const FORM_MAPPER = Symbol('FORM_MAPPER');
 
@@ -34,6 +35,10 @@ class User extends AbstractAvro {
     
     this.json = json || AvroJson('User');
     this.formMapper = User[FORM_MAPPER];
+  }
+  
+  get id() {
+    return new UserId(this.json['id']);
   }
   
   get email() {
