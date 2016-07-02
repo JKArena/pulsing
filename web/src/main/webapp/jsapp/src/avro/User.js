@@ -58,9 +58,9 @@ class User extends AbstractAvro {
   }
   
   get pictureUrl() {
-    let picture = this.json[picture];
+    let picture = this.json['picture'];
     
-    return (picture && picture.url) || '';
+    return (picture && picture.url && picture.url.string) || '';
   }
   
   get password() {
