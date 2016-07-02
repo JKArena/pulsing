@@ -22,7 +22,7 @@
  */
 'use strict';
 
-import Common from './Common';
+import Url from './Url';
 
 const BASIC = Symbol('basic');
 
@@ -124,7 +124,7 @@ export default Object.freeze(
               const DEFAULT_HEADERS = new Headers({'Accept': 'application/json'});
               const DEFAULT_OPTIONS = {method: 'GET',  mode: 'cors', headers: DEFAULT_HEADERS};
 
-              let request = new Request(Common.controllerUrl() + gPath);
+              let request = new Request(Url.controllerUrl() + gPath);
               let gOptions = Object.assign(DEFAULT_OPTIONS, options);
 
               return fetchContent(request, gOptions, 'json');
@@ -143,7 +143,7 @@ export default Object.freeze(
               const DEFAULT_HEADERS = new Headers({'Accept': 'application/json'});
               const DEFAULT_OPTIONS = {method: 'POST',  mode: 'cors', headers: DEFAULT_HEADERS};
 
-              let request = new Request(Common.controllerUrl() + pPath);
+              let request = new Request(Url.controllerUrl() + pPath);
               let pOptions = Object.assign(DEFAULT_OPTIONS, options);
 
               return fetchContent(request, pOptions, 'json');

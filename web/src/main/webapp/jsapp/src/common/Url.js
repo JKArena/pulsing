@@ -22,13 +22,29 @@
  */
 'use strict';
 
+const SPRING_CONTROLLER_SUFFIX = ':8083/pulsing-web/controller/';
+const SPRING_ROOT_SUFFIX = ':8083/pulsing-web/';
+
+let PREFIX;
+
+function _url(suffix) {
+  if(!PREFIX) {
+    let location = global.location;
+    PREFIX = location.protocol + '//' + location.hostname
+  }
+  return PREFIX + suffix;
+}
+
 export default Object.freeze(
     {
       __proto__: null,
       
-      eventCanceller(evt) {
-        evt.stopPropagation();
-        evt.preventDefault();
+      rootUrl() {
+        return _url(SPRING_ROOT_SUFFIX);
+      },
+      
+      controllerUrl() {
+        return _url(SPRING_CONTROLLER_SUFFIX);
       }
     }
 );

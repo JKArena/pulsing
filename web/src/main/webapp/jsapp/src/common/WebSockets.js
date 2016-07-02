@@ -22,7 +22,7 @@
  */
 'use strict';
 
-import Common from './Common';
+import Url from './Url';
 
 import SocketJs from 'sockjs-client';
 import StompJs from 'stompjs';
@@ -31,7 +31,7 @@ class WebSockets {
   
   constructor(url) {
     
-    this.socket = new SocketJs(Common.controllerUrl() + url);
+    this.socket = new SocketJs(Url.controllerUrl() + url);
     this.stomp = StompJs.over(this.socket);
     
     this._connected = false;

@@ -18,8 +18,6 @@
  */
 package org.jhk.pulsing.web.controller;
 
-import org.jhk.pulsing.serialization.avro.records.PulseId;
-import org.jhk.pulsing.serialization.avro.records.UserId;
 import org.jhk.pulsing.web.pojo.websocket.UserIdPulseId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
