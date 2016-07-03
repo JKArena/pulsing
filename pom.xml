@@ -25,6 +25,12 @@
       </dependency>
 	  
 	  <dependency>
+	    <groupId>org.jhk.pulsing.db.mysql</groupId>
+        <artifactId>pulsing-db-mysql</artifactId>
+        <version>${pulsing.version}</version>
+      </dependency>
+	  
+	  <dependency>
 	    <groupId>org.jhk.pulsing.storm</groupId>
         <artifactId>pulsing-storm</artifactId>
         <version>${pulsing.version}</version>
@@ -294,6 +300,7 @@
   <modules>
     <module>flume</module>
     <module>hadoop</module>
+	<module>db</module>
     <module>plugin</module>
     <module>serialization</module>
     <module>storm</module>

@@ -16,18 +16,22 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.web.config;
+package org.jhk.pulsing.web.service;
 
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+import org.jhk.pulsing.web.dao.IPulseDao;
+import org.jhk.pulsing.web.dao.IUserDao;
 
 /**
  * @author Ji Kim
  */
-@Configuration
-@ComponentScan({"org.jhk.pulsing.web.service"})
-@Import({WebSocketConfig.class})
-public class Config {
+public interface IServiceConfig {
+    
+    IUserService getUserService();
+    
+    IPulseService getPulseService();
+    
+    IUserDao getUserDao();
+    
+    IPulseDao getPulseDao();
     
 }

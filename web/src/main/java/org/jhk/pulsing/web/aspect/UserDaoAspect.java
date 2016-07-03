@@ -26,6 +26,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 
+import javax.inject.Inject;
+
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
@@ -34,7 +36,6 @@ import org.jhk.pulsing.serialization.avro.records.User;
 import org.jhk.pulsing.web.common.Result;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -48,7 +49,7 @@ public class UserDaoAspect {
     private static final Logger _LOGGER = LoggerFactory.getLogger(UserDaoAspect.class);
     private static final String _RESOURCE_PREFIX = "/resources/img/";
     
-    @Autowired
+    @Inject
     private WebApplicationContext applicationContext;
     
     @AfterReturning(pointcut="execution(org.jhk.pulsing.web.common.Result+ org.jhk.pulsing.web.dao.*.UserDao.*(..))", returning= "result")

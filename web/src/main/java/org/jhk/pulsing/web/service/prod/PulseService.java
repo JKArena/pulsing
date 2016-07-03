@@ -16,33 +16,44 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.web.dao;
+package org.jhk.pulsing.web.service.prod;
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
-import org.springframework.context.annotation.Profile;
+import java.util.List;
+
+import javax.inject.Inject;
+
+import org.jhk.pulsing.serialization.avro.records.Pulse;
+import org.jhk.pulsing.serialization.avro.records.PulseId;
+import org.jhk.pulsing.web.common.Result;
+import org.jhk.pulsing.web.dao.IPulseDao;
+import org.jhk.pulsing.web.service.IPulseService;
 
 /**
  * @author Ji Kim
  */
-@Profile("prod")
-@EnableAspectJAutoProxy
-@ComponentScan({"org.jhk.pulsing.web.aspect"})
-@Configuration
-public class ProdDaoConfig implements IDaoConfig {
+public class PulseService implements IPulseService {
     
-    @Bean
+    @Inject
+    private IPulseDao pulseDao;
+
     @Override
-    public IUserDao getUserDao() {
-        return null;
+    public Result<Pulse> getPulse(PulseId pulseId) {
+        return pulseDao.getPulse(pulseId);
     }
-    
-    @Bean
+
     @Override
-    public IPulseDao getPulseDao() {
-        return null;
+    public Result<PulseId> createPulse(Pulse pulse) {
+        return pulseDao.createPulse(pulse);
+    }
+
+    @Override
+    public Result<PulseId> subscribePulse(Pulse pulse) {
+        return pulseDao.subscribePulse(pulse);
+    }
+
+    @Override
+    public List<Pulse> getTrendingPulse() {
+        return pulseDao.getTrendingPulse();
     }
     
 }
