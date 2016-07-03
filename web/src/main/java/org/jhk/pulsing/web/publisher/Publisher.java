@@ -25,7 +25,7 @@ import org.apache.avro.specific.SpecificRecord;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
-import org.jhk.pulsing.storm.util.PulsingConstants;
+import org.jhk.pulsing.shared.util.PulsingConstants;
 
 /**
  * @author Ji Kim

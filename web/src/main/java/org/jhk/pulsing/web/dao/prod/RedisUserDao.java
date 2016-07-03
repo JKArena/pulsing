@@ -21,7 +21,7 @@ package org.jhk.pulsing.web.dao.prod;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
-import org.jhk.pulsing.storm.util.PulsingConstants;
+import org.jhk.pulsing.shared.util.PulsingConstants;
 
 import redis.clients.jedis.Jedis;
 

@@ -31,11 +31,11 @@
       </dependency>
 	  
 	  <dependency>
-	    <groupId>org.jhk.pulsing.storm</groupId>
-        <artifactId>pulsing-storm</artifactId>
+	    <groupId>org.jhk.pulsing.shared</groupId>
+        <artifactId>pulsing-shared</artifactId>
         <version>${pulsing.version}</version>
       </dependency>
-      
+	  
       <dependency>
         <groupId>org.jhk.pulsing.plugin.maven</groupId>
         <artifactId>pulsing-plugin-maven</artifactId>
@@ -303,6 +303,7 @@
 	<module>db</module>
     <module>plugin</module>
     <module>serialization</module>
+	<module>shared</module>
     <module>storm</module>
     <module>web</module>
   </modules>
