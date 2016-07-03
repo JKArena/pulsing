@@ -16,35 +16,25 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.web.dao;
+package org.jhk.pulsing.web.service;
 
-import org.jhk.pulsing.web.dao.dev.PulseDao;
-import org.jhk.pulsing.web.dao.dev.UserDao;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
-import org.springframework.context.annotation.Profile;
+import java.util.List;
+
+import org.jhk.pulsing.serialization.avro.records.Pulse;
+import org.jhk.pulsing.serialization.avro.records.PulseId;
+import org.jhk.pulsing.web.common.Result;
 
 /**
  * @author Ji Kim
  */
-@Profile("dev")
-@EnableAspectJAutoProxy
-@ComponentScan({"org.jhk.pulsing.web.aspect"})
-@Configuration
-public class DevDaoConfig implements IDaoConfig {
+public interface IPulseService {
     
-    @Bean
-    @Override
-    public IUserDao getUserDao() {
-        return new UserDao();
-    }
+    Result<Pulse> getPulse(PulseId pulseId);
     
-    @Bean
-    @Override
-    public IPulseDao getPulseDao() {
-        return new PulseDao();
-    }
+    Result<PulseId> createPulse(Pulse pulse);
+    
+    Result<PulseId> subscribePulse(Pulse pulse);
+    
+    List<Pulse> getTrendingPulse();
     
 }

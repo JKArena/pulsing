@@ -18,9 +18,14 @@
  */
 package org.jhk.pulsing.web.config;
 
+import javax.servlet.Filter;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 
+import org.springframework.web.filter.CharacterEncodingFilter;
+import org.springframework.web.filter.HiddenHttpMethodFilter;
+import org.springframework.web.filter.HttpPutFormContentFilter;
+import org.springframework.web.filter.ShallowEtagHeaderFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 /**
@@ -31,6 +36,7 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
         super.onStartup(servletContext);
+        
         servletContext.setInitParameter("spring.profiles.active", "dev");
     }
     
@@ -47,6 +53,15 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
     @Override
     protected String[] getServletMappings() {
         return new String[]{"/controller/*"};
+    }
+    
+    @Override
+    protected Filter[] getServletFilters() {
+        CharacterEncodingFilter cFilter = new CharacterEncodingFilter();
+        cFilter.setEncoding("UTF-8");
+        cFilter.setForceEncoding(true);
+        
+        return new Filter[] { new HiddenHttpMethodFilter(), cFilter, new HttpPutFormContentFilter(), new ShallowEtagHeaderFilter() };
     }
     
 }

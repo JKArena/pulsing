@@ -16,15 +16,32 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.web.dao;
+package org.jhk.pulsing.web.dao.prod;
+
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+
+import org.jhk.pulsing.storm.util.PulsingConstants;
+
+import redis.clients.jedis.Jedis;
 
 /**
  * @author Ji Kim
  */
-public interface IDaoConfig {
+public final class RedisUserDao {
     
-    IUserDao getUserDao();
+    private Jedis _jedis;
     
-    IPulseDao getPulseDao();
+    @PostConstruct
+    public void init() {
+        _jedis = new Jedis(PulsingConstants.REDIS_HOST, PulsingConstants.REDIS_PORT);
+    }
+    
+    @PreDestroy
+    public void destroy() {
+        if(_jedis != null && _jedis.isConnected()) {
+            _jedis.quit();
+        }
+    }
     
 }

@@ -16,18 +16,37 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.web.config;
+package org.jhk.pulsing.web.service.dev;
 
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+import javax.inject.Inject;
+
+import org.jhk.pulsing.serialization.avro.records.User;
+import org.jhk.pulsing.serialization.avro.records.UserId;
+import org.jhk.pulsing.web.common.Result;
+import org.jhk.pulsing.web.dao.IUserDao;
+import org.jhk.pulsing.web.service.IUserService;
 
 /**
  * @author Ji Kim
  */
-@Configuration
-@ComponentScan({"org.jhk.pulsing.web.service"})
-@Import({WebSocketConfig.class})
-public class Config {
+public class UserService implements IUserService {
+    
+    @Inject
+    private IUserDao userDao;
+    
+    @Override
+    public Result<User> getUser(UserId userId) {
+        return userDao.getUser(userId);
+    }
+
+    @Override
+    public Result<User> createUser(User user) {
+        return userDao.createUser(user);
+    }
+
+    @Override
+    public Result<User> validateUser(String email, String password) {
+        return userDao.validateUser(email, password);
+    }
     
 }

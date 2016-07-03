@@ -16,18 +16,21 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.web.config;
+package org.jhk.pulsing.web.service;
 
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+import org.jhk.pulsing.serialization.avro.records.User;
+import org.jhk.pulsing.serialization.avro.records.UserId;
+import org.jhk.pulsing.web.common.Result;
 
 /**
  * @author Ji Kim
  */
-@Configuration
-@ComponentScan({"org.jhk.pulsing.web.service"})
-@Import({WebSocketConfig.class})
-public class Config {
+public interface IUserService {
+    
+    Result<User> getUser(UserId userId);
+    
+    Result<User> createUser(User user);
+    
+    Result<User> validateUser(String email, String password);
     
 }

@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.web.controller;
+package org.jhk.pulsing.web.service.dev;
 
 import java.util.List;
 
@@ -25,39 +25,35 @@ import javax.inject.Inject;
 import org.jhk.pulsing.serialization.avro.records.Pulse;
 import org.jhk.pulsing.serialization.avro.records.PulseId;
 import org.jhk.pulsing.web.common.Result;
+import org.jhk.pulsing.web.dao.IPulseDao;
 import org.jhk.pulsing.web.service.IPulseService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * @author Ji Kim
  */
-@Controller
-@RequestMapping("/pulse")
-public final class PulseController extends AbstractController {
-    
-    private static final Logger _LOGGER = LoggerFactory.getLogger(PulseController.class);
+public class PulseService implements IPulseService {
     
     @Inject
-    private IPulseService pulseService;
-    
-    @RequestMapping(value="/createPulse", method=RequestMethod.POST)
-    public @ResponseBody Result<PulseId> createPulse(@RequestBody Pulse pulse) {
-        _LOGGER.info("createPulse: " + pulse);
-        
-        return pulseService.createPulse(pulse);
+    private IPulseDao pulseDao;
+
+    @Override
+    public Result<Pulse> getPulse(PulseId pulseId) {
+        return pulseDao.getPulse(pulseId);
     }
-    
-    @RequestMapping(value="/getTrendingPulse", method=RequestMethod.GET)
-    public @ResponseBody List<Pulse> getTrendingPulse() {
-        _LOGGER.info("getTrendingPulse");
-        
-        return pulseService.getTrendingPulse();
+
+    @Override
+    public Result<PulseId> createPulse(Pulse pulse) {
+        return pulseDao.createPulse(pulse);
+    }
+
+    @Override
+    public Result<PulseId> subscribePulse(Pulse pulse) {
+        return pulseDao.subscribePulse(pulse);
+    }
+
+    @Override
+    public List<Pulse> getTrendingPulse() {
+        return pulseDao.getTrendingPulse();
     }
     
 }
