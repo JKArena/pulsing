@@ -31,7 +31,7 @@ import org.jhk.pulsing.storm.bolts.pulse.PulseDeserializerBolt;
 import org.jhk.pulsing.storm.bolts.pulse.TimeIntervalBolt;
 import org.jhk.pulsing.storm.bolts.pulse.TimeIntervalBuilderBolt;
 import org.jhk.pulsing.storm.bolts.pulse.TimeIntervalPersistorBolt;
-import org.jhk.pulsing.storm.util.PulsingConstants;
+import org.jhk.pulsing.shared.util.PulsingConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

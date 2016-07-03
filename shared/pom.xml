@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.jhk.pulsing</groupId>
+    <artifactId>pulsing-project</artifactId>
+    <version>${pulsing.version}</version>
+  </parent>
+  
+  <groupId>org.jhk.pulsing.shared</groupId>
+  <artifactId>pulsing-shared</artifactId>
+  <version>${pulsing.version}</version>
+  <name>pulsing-shared</name>
+  <url>https://github.com/JHKTruth/pulsing/shared</url>
+  
+  <dependencies>
+    
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
+    
+  </dependencies>
+  
+</project>

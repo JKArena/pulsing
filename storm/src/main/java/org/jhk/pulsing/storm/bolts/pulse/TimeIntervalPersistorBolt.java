@@ -27,7 +27,7 @@ import org.apache.storm.topology.OutputFieldsDeclarer;
 import org.apache.storm.topology.base.BaseBasicBolt;
 import org.apache.storm.tuple.Tuple;
 import org.codehaus.jackson.map.ObjectMapper;
-import org.jhk.pulsing.storm.util.PulsingConstants;
+import org.jhk.pulsing.shared.util.PulsingConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

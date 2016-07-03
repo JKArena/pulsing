@@ -23,8 +23,8 @@
     </dependency>
     
     <dependency>
-      <groupId>org.jhk.pulsing.storm</groupId>
-      <artifactId>pulsing-storm</artifactId>
+      <groupId>org.jhk.pulsing.shared</groupId>
+      <artifactId>pulsing-shared</artifactId>
     </dependency>
     
     <dependency>

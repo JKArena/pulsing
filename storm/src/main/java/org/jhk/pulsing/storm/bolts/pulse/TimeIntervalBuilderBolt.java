@@ -31,7 +31,7 @@ import org.apache.storm.tuple.Fields;
 import org.apache.storm.tuple.Tuple;
 import org.apache.storm.tuple.Values;
 import org.jhk.pulsing.storm.util.CommonBoltStreamUtil;
-import org.jhk.pulsing.storm.util.PulsingConstants;
+import org.jhk.pulsing.shared.util.PulsingConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
