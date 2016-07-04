@@ -15,6 +15,11 @@
   <url>https://github.com/JHKTruth/pulsing/db/mysql</url>
   
   <dependencies>
+
+    <dependency>
+      <groupId>org.jhk.pulsing.shared</groupId>
+      <artifactId>pulsing-shared</artifactId>
+    </dependency>
     
     <dependency>
       <groupId>org.hibernate</groupId>

@@ -31,6 +31,9 @@ public final class PulsingConstants {
     public static final String REDIS_HOST = "localhost";
     public static final int REDIS_PORT = 6379;
     
+    public static final int HASH_CODE_INIT_VALUE = 3;
+    public static final int HASH_CODE_MULTIPLY_VALUE = 31;
+    
     public enum TOPICS {
 		PULSE_SUBSCRIBE;
 	};
