@@ -25,11 +25,15 @@ import org.jhk.pulsing.serialization.avro.records.UserId;
 import org.jhk.pulsing.web.common.Result;
 import org.jhk.pulsing.web.dao.IUserDao;
 import org.jhk.pulsing.web.service.IUserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Ji Kim
  */
 public final class UserService implements IUserService {
+    
+    private static final Logger _LOGGER = LoggerFactory.getLogger(UserService.class);
     
     @Inject
     private IUserDao mySqlUserDao;
@@ -39,6 +43,10 @@ public final class UserService implements IUserService {
     
     @Override
     public Result<User> getUser(UserId userId) {
+        _LOGGER.debug("UserService.getUser" + userId);
+        
+        mySqlUserDao.getUser(userId);
+        
         return null;
     }
 

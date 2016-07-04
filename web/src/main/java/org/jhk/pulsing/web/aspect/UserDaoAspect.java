@@ -61,7 +61,7 @@ public class UserDaoAspect {
         User user = result.getData();
         Picture picture = user.getPicture();
         
-        _LOGGER.debug("setPictureUrl" + user);
+        _LOGGER.debug("UserDaoAspect.setPictureUrl" + user);
         
         if(picture != null && picture.getName() != null) {
             
@@ -85,7 +85,7 @@ public class UserDaoAspect {
             }
             
             if(pFile != null) {
-                _LOGGER.debug("Setting picture url - " + _RESOURCE_PREFIX + pFile.getName());
+                _LOGGER.debug("UserDaoAspect Setting picture url - " + _RESOURCE_PREFIX + pFile.getName());
                 picture.setUrl(_RESOURCE_PREFIX + pFile.getName());
             }
         }
