@@ -18,11 +18,17 @@
  */
 package org.jhk.pulsing.db.mysql.model;
 
+import java.io.Serializable;
+import java.util.Date;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 import org.hibernate.validator.constraints.NotEmpty;
@@ -32,22 +38,28 @@ import org.hibernate.validator.constraints.NotEmpty;
  */
 @Entity
 @Table
-public class User {
+public class User implements Serializable {
     
+    private static final long serialVersionUID = 3496761818540000213L;
+
     @Id @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
     
     @NotEmpty
-    @Column(nullable=false)
+    @Column(nullable=false, name="EMAIL")
     private String email;
     
     @NotEmpty
-    @Column(nullable=false)
+    @Column(nullable=false, name="NAME")
     private String name;
     
     @NotEmpty
-    @Column(nullable=false)
+    @Column(nullable=false, name="PASSWORD")
     private String password;
+    
+    private Date _signedUp;
+    
+    private Image _picture;
     
     public Long getId() {
         return id;
@@ -77,6 +89,24 @@ public class User {
         this.email = email;
     }
     
+    @Column(name="LAST_MODIFIED",
+            updatable=false,
+            insertable=false)
+    @org.hibernate.annotations.Generated(
+            org.hibernate.annotations.GenerationTime.ALWAYS)  
+    public Date getSignedup() {
+        return _signedUp;
+    }
+    
+    @OneToOne(cascade=CascadeType.ALL)
+    @PrimaryKeyJoinColumn
+    public Image getPicture() {
+        return _picture;
+    }
+    public void setPicture(Image picture) {
+        _picture = picture;
+    }
+    
     @Override
     public int hashCode() {
         return id.hashCode();
@@ -95,7 +125,7 @@ public class User {
     public String toString() {
         StringBuilder builder = new StringBuilder();
         
-        builder.append("{");
+        builder.append("User {");
         builder.append("id: " + id + ", ");
         builder.append("email: " + email + ", ");
         builder.append("name: " + name + ", ");

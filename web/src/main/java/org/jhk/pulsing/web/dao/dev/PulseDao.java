@@ -34,7 +34,7 @@ import org.slf4j.LoggerFactory;
 /**
  * @author Ji Kim
  */
-public class PulseDao implements IPulseDao {
+public final class PulseDao implements IPulseDao {
     
     private static final Logger _LOGGER = LoggerFactory.getLogger(PulseDao.class);
     
@@ -66,7 +66,7 @@ public class PulseDao implements IPulseDao {
 
     @Override
     public Result<Pulse> getPulse(PulseId pulseId) {
-        _LOGGER.info("getPulse", pulseId);
+        _LOGGER.info("getPulse: " + pulseId);
         
         Pulse pulse = MOCK_PULSE_MAPPER.get(pulseId);
         Result<Pulse> gResult = pulse == null ? new Result<>(FAILURE, "Failed to get pulse " + pulseId) 
@@ -77,7 +77,7 @@ public class PulseDao implements IPulseDao {
 
     @Override
     public Result<PulseId> createPulse(Pulse pulse) {
-        _LOGGER.info("createPulse", pulse);
+        _LOGGER.info("createPulse: " + pulse);
         
         MOCK_PULSE_MAPPER.put(pulse.getId(), pulse);
         
@@ -87,12 +87,12 @@ public class PulseDao implements IPulseDao {
 
     @Override
     public Result<PulseId> subscribePulse(Pulse pulse) {
-        _LOGGER.info("subscribePulse", pulse);
+        _LOGGER.info("subscribePulse: " + pulse);
         
         Result<PulseId> sResult = new Result<>(SUCCESS, pulse.getId());
         return sResult;
     }
-
+    
     @Override
     public List<Pulse> getTrendingPulse() {
         return MOCK_TRENDING_PULSES;

@@ -31,7 +31,7 @@ import org.jhk.pulsing.web.service.IPulseService;
 /**
  * @author Ji Kim
  */
-public class PulseService implements IPulseService {
+public final class PulseService implements IPulseService {
     
     @Inject
     private IPulseDao pulseDao;

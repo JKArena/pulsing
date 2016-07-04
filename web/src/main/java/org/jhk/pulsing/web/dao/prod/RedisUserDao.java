@@ -21,14 +21,18 @@ package org.jhk.pulsing.web.dao.prod;
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
+import org.jhk.pulsing.serialization.avro.records.User;
+import org.jhk.pulsing.serialization.avro.records.UserId;
 import org.jhk.pulsing.shared.util.PulsingConstants;
+import org.jhk.pulsing.web.common.Result;
+import org.jhk.pulsing.web.dao.IUserDao;
 
 import redis.clients.jedis.Jedis;
 
 /**
  * @author Ji Kim
  */
-public final class RedisUserDao {
+public final class RedisUserDao implements IUserDao {
     
     private Jedis _jedis;
     
@@ -42,6 +46,24 @@ public final class RedisUserDao {
         if(_jedis != null && _jedis.isConnected()) {
             _jedis.quit();
         }
+    }
+
+    @Override
+    public Result<User> getUser(UserId userId) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Result<User> createUser(User user) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public Result<User> validateUser(String email, String password) {
+        // TODO Auto-generated method stub
+        return null;
     }
     
 }

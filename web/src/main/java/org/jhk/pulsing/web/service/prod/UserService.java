@@ -29,10 +29,13 @@ import org.jhk.pulsing.web.service.IUserService;
 /**
  * @author Ji Kim
  */
-public class UserService implements IUserService {
+public final class UserService implements IUserService {
     
     @Inject
     private IUserDao mySqlUserDao;
+    
+    @Inject
+    private IUserDao redisUserDao;
     
     @Override
     public Result<User> getUser(UserId userId) {
