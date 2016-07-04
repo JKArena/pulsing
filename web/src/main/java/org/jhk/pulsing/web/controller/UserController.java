@@ -52,7 +52,7 @@ public final class UserController extends AbstractController {
     
     @RequestMapping(value="/createUser", method=RequestMethod.POST, consumes={MediaType.MULTIPART_FORM_DATA_VALUE})
     public @ResponseBody Result<User> createUser(@RequestParam User user, @RequestParam(name="picture", required=false) MultipartFile mPicture) {
-        _LOGGER.info("createUser: " + user + "; " + (mPicture != null ? ("picture size is: " + mPicture.getSize()) : "picture not submitted"));
+        _LOGGER.info("UserController.createUser: " + user + "; " + (mPicture != null ? ("picture size is: " + mPicture.getSize()) : "picture not submitted"));
         
         if(mPicture != null) {
             try {
@@ -72,14 +72,14 @@ public final class UserController extends AbstractController {
     
     @RequestMapping(value="/getUser", method=RequestMethod.GET)
     public @ResponseBody Result<User> getUser(UserId userId) {
-        _LOGGER.info("getUser: " + userId);
+        _LOGGER.info("UserController.getUser: " + userId);
         
         return userService.getUser(userId);
     }
     
     @RequestMapping(value="/validateUser", method=RequestMethod.POST, consumes={MediaType.MULTIPART_FORM_DATA_VALUE})
     public @ResponseBody Result<User> validateUser(@RequestParam String email, @RequestParam String password) {
-        _LOGGER.info("validateUser: " + email + ", " + password);
+        _LOGGER.info("UserController.validateUser: " + email + ", " + password);
         
         return userService.validateUser(email, password);
     }

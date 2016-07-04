@@ -25,11 +25,18 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 
 import org.hibernate.Session;
+import org.jhk.pulsing.db.mysql.model.User;
+import org.jhk.pulsing.serialization.avro.records.UserId;
+import org.jhk.pulsing.web.service.prod.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Ji Kim
  */
 public final class MySqlUserDao {
+    
+    private static final Logger _LOGGER = LoggerFactory.getLogger(UserService.class);
     
     private static EntityManagerFactory _emFactory;
     
@@ -42,8 +49,18 @@ public final class MySqlUserDao {
         return Session.class.cast(_eManager.getDelegate());
     }
     
+    public User getUser(UserId userId) {
+        _LOGGER.debug("MySqlUserDao.getUser" + userId);
+        
+        User user = User.class.cast( _eManager.getReference(User.class, userId.getId()) );
+        
+        return null;
+    }
+    
     @PostConstruct
     public void init() {
+        _LOGGER.debug("MySqlUserDao.init");
+        
         if(_emFactory == null) {
             _emFactory = Persistence.createEntityManagerFactory("jpa");
         }
@@ -53,6 +70,8 @@ public final class MySqlUserDao {
 
     @PreDestroy
     public void destroy() {
+        _LOGGER.debug("MySqlUserDao.destroy");
+        
         if(_emFactory != null) {
             _emFactory.close();
         }

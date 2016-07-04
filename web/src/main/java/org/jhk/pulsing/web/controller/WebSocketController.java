@@ -36,7 +36,7 @@ public class WebSocketController {
     @MessageMapping("/pulseSubscribeSocketJS")
     @SendTo("/pulsingTopic/pulseSubscribe")
     public long pulseSubscribe(UserIdPulseId userIdPulseid) {
-        _LOGGER.info("pulseSubscribe: " + userIdPulseid);
+        _LOGGER.info("WebSocketController.pulseSubscribe: " + userIdPulseid);
         
         //notify new user subscribed to the pulse
         //should have the subscription time out (as a config?)

@@ -48,14 +48,14 @@ public final class PulseController extends AbstractController {
     
     @RequestMapping(value="/createPulse", method=RequestMethod.POST)
     public @ResponseBody Result<PulseId> createPulse(@RequestBody Pulse pulse) {
-        _LOGGER.info("createPulse: " + pulse);
+        _LOGGER.info("PulseController.createPulse: " + pulse);
         
         return pulseService.createPulse(pulse);
     }
     
     @RequestMapping(value="/getTrendingPulse", method=RequestMethod.GET)
     public @ResponseBody List<Pulse> getTrendingPulse() {
-        _LOGGER.info("getTrendingPulse");
+        _LOGGER.info("PulseController.getTrendingPulse");
         
         return pulseService.getTrendingPulse();
     }

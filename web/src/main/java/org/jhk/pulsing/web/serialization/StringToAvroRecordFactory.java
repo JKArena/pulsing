@@ -66,7 +66,7 @@ public final class StringToAvroRecordFactory implements ConverterFactory<String,
 
         @Override
         public T convert(String source) {
-            _LOGGER.info("Converting type " + _avroType.getName() + " : " + source);
+            _LOGGER.info("StringToAvroRecordFactory.convert " + _avroType.getName() + " : " + source);
             T converted = null;
             
             try {
