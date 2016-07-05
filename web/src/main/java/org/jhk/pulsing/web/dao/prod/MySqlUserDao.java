@@ -18,63 +18,43 @@
  */
 package org.jhk.pulsing.web.dao.prod;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
+import javax.persistence.NamedQuery;
 
-import org.hibernate.Session;
-import org.jhk.pulsing.db.mysql.model.User;
+import org.jhk.pulsing.db.mysql.model.MUser;
 import org.jhk.pulsing.serialization.avro.records.UserId;
 import org.jhk.pulsing.web.service.prod.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author Ji Kim
  */
-public final class MySqlUserDao {
+@Transactional
+@Repository
+public class MySqlUserDao {
     
     private static final Logger _LOGGER = LoggerFactory.getLogger(UserService.class);
     
-    private static EntityManagerFactory _emFactory;
+    @Inject
+    private EntityManagerFactory entityManagerFactory;
     
     /*
      * EntityManager/Session is a single-threaded non-shared object that represents a particular unit of work with the database.
      */
-    private EntityManager _eManager;
+    public EntityManager eManager;
     
-    public Session getSession() {
-        return Session.class.cast(_eManager.getDelegate());
-    }
-    
-    public User getUser(UserId userId) {
+    public MUser getUser(UserId userId) {
         _LOGGER.debug("MySqlUserDao.getUser" + userId);
         
-        User user = User.class.cast( _eManager.getReference(User.class, userId.getId()) );
+        eManager = entityManagerFactory.createEntityManager();
+        MUser user = MUser.class.cast( eManager.getReference(MUser.class, userId.getId()) );
         
         return null;
-    }
-    
-    @PostConstruct
-    public void init() {
-        _LOGGER.debug("MySqlUserDao.init");
-        
-        if(_emFactory == null) {
-            _emFactory = Persistence.createEntityManagerFactory("jpa");
-        }
-        
-        _eManager = _emFactory.createEntityManager();
-    }
-
-    @PreDestroy
-    public void destroy() {
-        _LOGGER.debug("MySqlUserDao.destroy");
-        
-        if(_emFactory != null) {
-            _emFactory.close();
-        }
     }
     
 }

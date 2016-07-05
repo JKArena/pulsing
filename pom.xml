@@ -147,25 +147,25 @@
 	  <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-messaging</artifactId>
-        <version>${spring.messaging}</version>
+        <version>${spring}</version>
       </dependency>
 	  
 	  <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-aspects</artifactId>
-        <version>${spring.aspects}</version>
+        <version>${spring}</version>
       </dependency>
 	  
 	  <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-tx</artifactId>
-        <version>${spring.tx}</version>
+        <version>${spring}</version>
       </dependency>
 	  
 	  <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-orm</artifactId>
-        <version>${spring.orm}</version>
+        <version>${spring}</version>
       </dependency>
 	  
 	  <dependency>
@@ -231,16 +231,16 @@
 	  <dependency>
         <groupId>org.hibernate</groupId>
         <artifactId>hibernate-core</artifactId>
-        <version>${hibernate.core}</version>
+        <version>${hibernate}</version>
       </dependency>
 	  
 	  <dependency>
         <groupId>org.hibernate</groupId>
         <artifactId>hibernate-validator</artifactId>
-        <version>${hibernate.validator}</version>
+        <version>${hibernate}</version>
       </dependency>
 	  
-      <dependency>
+	  <dependency>
         <groupId>org.mortbay.jetty</groupId>
         <artifactId>maven-jetty-plugin</artifactId>
         <version>${jetty}</version>
@@ -273,11 +273,9 @@
     <org.apache.hadoop.hdfs>2.7.2</org.apache.hadoop.hdfs>
     <dfs-datastores>1.3.6</dfs-datastores>
     <cascalog>2.1.1</cascalog>
-    <spring>4.2.6.RELEASE</spring>
+    <spring>4.3.0.RELEASE</spring>
 	<spring.integration.kafka>1.3.0.RELEASE</spring.integration.kafka>
 	<spring.boot.websocket>1.3.5.RELEASE</spring.boot.websocket>
-	<spring.messaging>4.2.6.RELEASE</spring.messaging>
-	<spring.aspects>4.3.0.RELEASE</spring.aspects>
 	<aspectjweaver>1.5.4</aspectjweaver>
 	<aspectjrt>1.8.9</aspectjrt>
 	<commons.fileupload>1.3.2</commons.fileupload>
@@ -287,12 +285,9 @@
     <jetty>9.3.8.v20160314</jetty>
     <kafka.clients>0.9.0.1</kafka.clients>
 	<cassandra.client>3.5</cassandra.client>
-	<spring.tx>4.3.0.RELEASE</spring.tx>
-	<spring.orm>4.3.0.RELEASE</spring.orm>
 	<mysql.connector.java>5.1.9</mysql.connector.java>
-	<hibernate.core>5.2.1.Final</hibernate.core>
-	<hibernate.validator>5.2.4.Final</hibernate.validator>
-    <junit>4.12</junit>
+	<hibernate>5.2.1.Final</hibernate>
+	<junit>4.12</junit>
     <freemarker>2.3.23</freemarker>
     <jedis>2.8.1</jedis>
   </properties>

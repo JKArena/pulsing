@@ -21,24 +21,28 @@ package org.jhk.pulsing.db.mysql.model;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  * @author Ji Kim
  */
-@Entity
-@Table
-public class User implements Serializable {
+@Entity()
+@DynamicInsert
+@DynamicUpdate
+@Table(name="USER")
+public class MUser implements Serializable {
     
     private static final long serialVersionUID = 3496761818540000213L;
 
@@ -57,9 +61,16 @@ public class User implements Serializable {
     @Column(nullable=false, name="PASSWORD")
     private String password;
     
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name="LAST_MODIFIED",
+            updatable=false,
+            insertable=false)
+    @org.hibernate.annotations.Generated(
+            org.hibernate.annotations.GenerationTime.ALWAYS)
     private Date _signedUp;
     
-    private Image _picture;
+    @Embedded
+    private MImage _picture;
     
     public Long getId() {
         return id;
@@ -89,21 +100,14 @@ public class User implements Serializable {
         this.email = email;
     }
     
-    @Column(name="LAST_MODIFIED",
-            updatable=false,
-            insertable=false)
-    @org.hibernate.annotations.Generated(
-            org.hibernate.annotations.GenerationTime.ALWAYS)  
     public Date getSignedup() {
         return _signedUp;
     }
     
-    @OneToOne(cascade=CascadeType.ALL)
-    @PrimaryKeyJoinColumn
-    public Image getPicture() {
+    public MImage getPicture() {
         return _picture;
     }
-    public void setPicture(Image picture) {
+    public void setPicture(MImage picture) {
         _picture = picture;
     }
     
@@ -114,10 +118,10 @@ public class User implements Serializable {
     
     @Override
     public boolean equals(Object instance) {
-        if(!(instance instanceof User)) {
+        if(!(instance instanceof MUser)) {
             return false;
         }
-        User casted = (User) instance;
+        MUser casted = (MUser) instance;
         return casted.id.equals(id);
     }
     
