@@ -22,12 +22,10 @@ import java.io.Serializable;
 import java.sql.Blob;
 
 import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.Embeddable;
+
 import javax.persistence.Lob;
-import javax.persistence.Table;
+import javax.persistence.MappedSuperclass;
 
 import org.hibernate.validator.constraints.NotEmpty;
 import org.jhk.pulsing.shared.util.PulsingConstants;
@@ -35,14 +33,11 @@ import org.jhk.pulsing.shared.util.PulsingConstants;
 /**
  * @author Ji Kim
  */
-@Entity
-@Table(name="IMAGE")
-public class Image implements Serializable {
+@MappedSuperclass
+@Embeddable
+public class MImage implements Serializable {
 
     private static final long serialVersionUID = -8365376799315291584L;
-    
-    @Id @GeneratedValue(strategy=GenerationType.IDENTITY)
-    private Long _id;
     
     private String _name;
     private Blob _content;
@@ -70,12 +65,6 @@ public class Image implements Serializable {
         _content = content;
     }
     
-    public Long getId() {
-        return _id;
-    }
-    public void setId(Long id) {
-        _id = id;
-    }
     @Override
     public int hashCode() {
         int hashCodeVal = PulsingConstants.HASH_CODE_INIT_VALUE;
@@ -85,12 +74,12 @@ public class Image implements Serializable {
     
     @Override
     public boolean equals(Object instance) {
-        if(!(instance instanceof Image)) {
+        if(!(instance instanceof MImage)) {
             return false;
         }
         
-        Image casted = (Image) instance;
-        return casted._id.equals(_id) && casted._name.equals(_name) && casted._content.equals(_content);
+        MImage casted = (MImage) instance;
+        return casted._name.equals(_name) && casted._content.equals(_content);
     }
     
     @Override

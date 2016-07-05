@@ -20,10 +20,12 @@ package org.jhk.pulsing.web.service.prod;
 
 import javax.inject.Inject;
 
+import org.jhk.pulsing.db.mysql.model.MUser;
 import org.jhk.pulsing.serialization.avro.records.User;
 import org.jhk.pulsing.serialization.avro.records.UserId;
 import org.jhk.pulsing.web.common.Result;
 import org.jhk.pulsing.web.dao.IUserDao;
+import org.jhk.pulsing.web.dao.prod.MySqlUserDao;
 import org.jhk.pulsing.web.service.IUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,12 +33,12 @@ import org.slf4j.LoggerFactory;
 /**
  * @author Ji Kim
  */
-public final class UserService implements IUserService {
+public class UserService implements IUserService {
     
     private static final Logger _LOGGER = LoggerFactory.getLogger(UserService.class);
     
     @Inject
-    private IUserDao mySqlUserDao;
+    private MySqlUserDao mySqlUserDao;
     
     @Inject
     private IUserDao redisUserDao;
@@ -47,17 +49,23 @@ public final class UserService implements IUserService {
         
         mySqlUserDao.getUser(userId);
         
-        return null;
+        return new Result<User>(Result.CODE.FAILURE, "to avoid null for now");
     }
 
     @Override
     public Result<User> createUser(User user) {
-        return null;
+        
+        return new Result<User>(Result.CODE.FAILURE, "to avoid null for now");
     }
 
     @Override
     public Result<User> validateUser(String email, String password) {
-        return null;
+        _LOGGER.debug("UserService.validateUser" + email + " - " + password);
+        UserId sample = UserId.newBuilder().build();
+        sample.setId(1234L);
+        mySqlUserDao.getUser(sample);
+        
+        return new Result<User>(Result.CODE.FAILURE, "to avoid null for now");
     }
     
 }
