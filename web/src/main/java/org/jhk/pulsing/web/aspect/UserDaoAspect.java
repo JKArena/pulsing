@@ -53,7 +53,7 @@ public class UserDaoAspect {
     private WebApplicationContext applicationContext;
     
     @AfterReturning(pointcut="execution(org.jhk.pulsing.web.common.Result+ org.jhk.pulsing.web.dao.*.UserDao.*(..))", returning= "result")
-    public void setPictureUrl(JoinPoint joinPoint, Result<User> result) {
+    public void patchUser(JoinPoint joinPoint, Result<User> result) {
         if(result.getCode() != Result.CODE.SUCCESS) {
             return;
         }
@@ -89,6 +89,7 @@ public class UserDaoAspect {
                 picture.setUrl(_RESOURCE_PREFIX + pFile.getName());
             }
         }
+        
     }
     
 }

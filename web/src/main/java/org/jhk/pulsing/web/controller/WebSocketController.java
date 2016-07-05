@@ -18,7 +18,7 @@
  */
 package org.jhk.pulsing.web.controller;
 
-import org.jhk.pulsing.web.pojo.websocket.UserIdPulseId;
+import org.jhk.pulsing.web.websocket.model.UserIdPulseId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.handler.annotation.MessageMapping;

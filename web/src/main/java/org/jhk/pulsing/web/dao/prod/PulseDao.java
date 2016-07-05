@@ -26,11 +26,15 @@ import org.jhk.pulsing.web.common.Result;
 import org.jhk.pulsing.web.dao.IPulseDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author Ji Kim
  */
-public final class PulseDao implements IPulseDao {
+@Transactional
+@Repository
+public class PulseDao implements IPulseDao {
     
     private static final Logger _LOGGER = LoggerFactory.getLogger(PulseDao.class);
     
