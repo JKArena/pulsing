@@ -39,7 +39,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  */
 @Controller
 @RequestMapping("/pulse")
-public final class PulseController extends AbstractController {
+public class PulseController extends AbstractController {
     
     private static final Logger _LOGGER = LoggerFactory.getLogger(PulseController.class);
     

@@ -34,7 +34,7 @@ import org.slf4j.LoggerFactory;
 /**
  * @author Ji Kim
  */
-public final class PulseDao implements IPulseDao {
+public class PulseDao implements IPulseDao {
     
     private static final Logger _LOGGER = LoggerFactory.getLogger(PulseDao.class);
     

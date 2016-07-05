@@ -35,7 +35,7 @@ import org.slf4j.LoggerFactory;
 /**
  * @author Ji Kim
  */
-public final class UserDao implements IUserDao {
+public class UserDao implements IUserDao {
     
     private static final Logger _LOGGER = LoggerFactory.getLogger(UserDao.class);
     

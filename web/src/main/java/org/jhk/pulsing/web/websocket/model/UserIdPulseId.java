@@ -16,12 +16,14 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.web.pojo.websocket;
+package org.jhk.pulsing.web.websocket.model;
+
+import org.jhk.pulsing.shared.util.PulsingConstants;
 
 /**
  * @author Ji Kim
  */
-public final class UserIdPulseId {
+public class UserIdPulseId {
     
     private long _userId;
     private long _pulseId;
@@ -37,6 +39,14 @@ public final class UserIdPulseId {
     }
     public void setPulseId(long pulseId) {
         _pulseId = pulseId;
+    }
+    
+    @Override
+    public int hashCode() {
+        int hashCodeVal = PulsingConstants.HASH_CODE_INIT_VALUE;
+        hashCodeVal = PulsingConstants.HASH_CODE_MULTIPLY_VALUE * hashCodeVal + (int) _userId;
+        hashCodeVal = PulsingConstants.HASH_CODE_MULTIPLY_VALUE * hashCodeVal + (int) _pulseId;
+        return hashCodeVal;
     }
     
     @Override

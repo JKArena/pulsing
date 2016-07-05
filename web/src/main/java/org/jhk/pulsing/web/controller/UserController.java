@@ -43,7 +43,7 @@ import org.springframework.web.multipart.MultipartFile;
  */
 @Controller
 @RequestMapping("/user")
-public final class UserController extends AbstractController {
+public class UserController extends AbstractController {
     
     private static final Logger _LOGGER = LoggerFactory.getLogger(UserController.class);
     

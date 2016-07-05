@@ -25,17 +25,13 @@ import org.jhk.pulsing.web.dao.dev.UserDao;
 import org.jhk.pulsing.web.service.dev.PulseService;
 import org.jhk.pulsing.web.service.dev.UserService;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Profile;
 
 /**
  * @author Ji Kim
  */
 @Profile("dev")
-@EnableAspectJAutoProxy
-@ComponentScan({"org.jhk.pulsing.web.aspect"})
 @Configuration
 public class DevServiceConfig implements IServiceConfig {
     

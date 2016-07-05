@@ -26,13 +26,17 @@ import org.jhk.pulsing.serialization.avro.records.UserId;
 import org.jhk.pulsing.shared.util.PulsingConstants;
 import org.jhk.pulsing.web.common.Result;
 import org.jhk.pulsing.web.dao.IUserDao;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import redis.clients.jedis.Jedis;
 
 /**
  * @author Ji Kim
  */
-public final class RedisUserDao implements IUserDao {
+@Transactional
+@Repository
+public class RedisUserDao implements IUserDao {
     
     private Jedis _jedis;
     
