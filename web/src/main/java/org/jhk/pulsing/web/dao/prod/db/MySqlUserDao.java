@@ -21,12 +21,10 @@ package org.jhk.pulsing.web.dao.prod.db;
 import java.util.List;
 import java.util.Optional;
 
-import javax.annotation.PostConstruct;
 import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.PersistenceContext;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.jhk.pulsing.db.mysql.model.MUser;
 import org.jhk.pulsing.serialization.avro.records.User;
 import org.jhk.pulsing.serialization.avro.records.UserId;
@@ -42,56 +40,62 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Repository
 @Transactional
-public class MySqlUserDao implements IUserOptionalDao {
+public class MySqlUserDao {
     
     private static final Logger _LOGGER = LoggerFactory.getLogger(UserService.class);
     
     @Inject
-    private EntityManagerFactory entityManagerFactory;
-    
-    /*
-     * EntityManager/Session is a single-threaded non-shared object that represents a particular unit of work with the database.
-     */
-    @PersistenceContext
-    private EntityManager eManager;
+    private SessionFactory sessionFactory;
     
     public Optional<User> getUser(UserId userId) {
         _LOGGER.debug("MySqlUserDao.getUser" + userId);
         
-        MUser user = MUser.class.cast(eManager.getReference(MUser.class, userId.getId()));
+        MUser mUser = MUser.class.cast(getSession().getReference(MUser.class, userId.getId()));
         
-        _LOGGER.debug("User is " + user);
-        return Optional.empty();
+        _LOGGER.debug("User is " + mUser);
+        
+        User user = AvroMySqlMappers.mySqlToAvro(mUser);
+        return user != null ? Optional.of(user) : Optional.empty();
     }
 
     public Optional<User> createUser(User user) {
         _LOGGER.debug("MySqlUserDao.createUser" + user);
         
         MUser mUser = AvroMySqlMappers.avroToMysql(user);
-        eManager.persist(mUser);
-        eManager.flush();
+        getSession().persist(mUser);
+        getSession().flush();
         
-        _LOGGER.debug("After create " + mUser);
+        UserId userId = UserId.newBuilder().build();
+        userId.setId(mUser.getId()); //use the generated id
+        user.setId(userId);
         
-        return Optional.empty();
+        return Optional.of(user);
     }
 
     public Optional<User> validateUser(String email, String password) {
         _LOGGER.debug("MySqlUserDao.validateUser" + email + " : " + password);
         
-        List<?> entries = eManager.createNamedQuery("findUser")
+        List<?> entries = getSession().createNamedQuery("findUser")
                 .setParameter("email", email)
                 .setParameter("password", password)
                 .getResultList();
         
         _LOGGER.debug("Result " + entries.size() + " : " + entries);
         
-        return Optional.empty();
+        if(entries == null || entries.size() == 0) {
+            return Optional.empty();
+        }
+        
+        User user = AvroMySqlMappers.mySqlToAvro((MUser) entries.get(0));
+        
+        return Optional.of(user);
     }
     
-    @PostConstruct
-    public void init() {
-        eManager = entityManagerFactory.createEntityManager();
+    /*
+     * EntityManager/Session is a single-threaded non-shared object that represents a particular unit of work with the database.
+     */
+    private Session getSession() {
+        return sessionFactory.getCurrentSession();
     }
     
 }

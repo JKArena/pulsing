@@ -34,7 +34,7 @@ import redis.clients.jedis.Jedis;
  * @author Ji Kim
  */
 @Repository
-public class RedisUserDao implements IUserOptionalDao {
+public class RedisUserDao {
     
     private Jedis _jedis;
     
@@ -50,17 +50,14 @@ public class RedisUserDao implements IUserOptionalDao {
         }
     }
 
-    @Override
     public Optional<User> getUser(UserId userId) {
         return Optional.empty();
     }
 
-    @Override
     public Optional<User> createUser(User user) {
         return Optional.empty();
     }
 
-    @Override
     public Optional<User> validateUser(String email, String password) {
         return Optional.empty();
     }
