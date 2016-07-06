@@ -27,6 +27,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -39,6 +41,12 @@ import org.jhk.pulsing.shared.util.PulsingConstants;
 /**
  * @author Ji Kim
  */
+@NamedQueries({
+  @NamedQuery(
+    name = "findUser",
+    query = "from MUser user where user.email = :email AND user.password = :password"
+  )
+})
 @Entity()
 @DynamicInsert
 @DynamicUpdate
@@ -52,15 +60,15 @@ public class MUser implements Serializable {
     
     @NotEmpty
     @Column(nullable=false, name="EMAIL")
-    private String _email;
+    private String email;
     
     @NotEmpty
     @Column(nullable=false, name="NAME")
-    private String _name;
+    private String name;
     
     @NotEmpty
     @Column(nullable=false, name="PASSWORD")
-    private String _password;
+    private String password;
     
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name="LAST_MODIFIED",
@@ -68,10 +76,10 @@ public class MUser implements Serializable {
             insertable=false)
     @org.hibernate.annotations.Generated(
             org.hibernate.annotations.GenerationTime.ALWAYS)
-    private Date _signedUp;
+    private Date signedUp;
     
     @Embedded
-    private MImage _picture;
+    private MImage picture;
     
     public Long getId() {
         return id;
@@ -81,43 +89,43 @@ public class MUser implements Serializable {
     }
 
     public String getPassword() {
-        return _password;
+        return password;
     }
     public void setPassword(String password) {
-        _password = password;
+        this.password = password;
     }
 
     public String getName() {
-        return _name;
+        return name;
     }
     public void setName(String name) {
-        _name = name;
+        this.name = name;
     }
 
     public String getEmail() {
-        return _email;
+        return email;
     }
     public void setEmail(String email) {
-        _email = email;
+        this.email = email;
     }
     
     public Date getSignedup() {
-        return _signedUp;
+        return signedUp;
     }
     
     public MImage getPicture() {
-        return _picture;
+        return picture;
     }
     public void setPicture(MImage picture) {
-        _picture = picture;
+        this.picture = picture;
     }
     
     @Override
     public int hashCode() {
         int hashCodeVal = PulsingConstants.HASH_CODE_INIT_VALUE;
-        hashCodeVal = PulsingConstants.HASH_CODE_MULTIPLY_VALUE * hashCodeVal + _email.hashCode();
-        hashCodeVal = PulsingConstants.HASH_CODE_MULTIPLY_VALUE * hashCodeVal + _name.hashCode();
-        hashCodeVal = PulsingConstants.HASH_CODE_MULTIPLY_VALUE * hashCodeVal + _password.hashCode();
+        hashCodeVal = PulsingConstants.HASH_CODE_MULTIPLY_VALUE * hashCodeVal + email.hashCode();
+        hashCodeVal = PulsingConstants.HASH_CODE_MULTIPLY_VALUE * hashCodeVal + name.hashCode();
+        hashCodeVal = PulsingConstants.HASH_CODE_MULTIPLY_VALUE * hashCodeVal + password.hashCode();
         return hashCodeVal;
     }
     
@@ -136,9 +144,9 @@ public class MUser implements Serializable {
         
         builder.append("User {");
         builder.append("id: " + id + ", ");
-        builder.append("email: " + _email + ", ");
-        builder.append("name: " + _name + ", ");
-        builder.append("password: " + _password);
+        builder.append("email: " + email + ", ");
+        builder.append("name: " + name + ", ");
+        builder.append("password: " + password);
         builder.append("}");
         
         return builder.toString();

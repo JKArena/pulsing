@@ -65,8 +65,8 @@ public final class AvroMySqlMappers {
             if(buffer.array() != null && buffer.array().length > 0) {
                 try {
                     MImage mImage = new MImage();
-                    mImage.setName(picture.getName().toString());
-                    mImage.setContent(new SerialBlob(buffer.array()));
+                    mImage.setImageName(picture.getName().toString());
+                    mImage.setImageContent(new SerialBlob(buffer.array()));
                     mUser.setPicture(mImage);
                 }catch(Exception except) {
                     except.printStackTrace();
@@ -88,15 +88,15 @@ public final class AvroMySqlMappers {
         user.setPassword(mUser.getPassword());
         
         MImage mImage = mUser.getPicture();
-        if(mImage != null && mImage.getName() != null) {
+        if(mImage != null && mImage.getImageName() != null) {
             
             try {
                 Picture picture = Picture.newBuilder().build();
-                Blob blob = mImage.getContent();
+                Blob blob = mImage.getImageContent();
                 
                 //make sure below is cool since a wrap
                 picture.setContent(ByteBuffer.wrap(blob.getBytes(0L, (int) blob.length())));
-                picture.setName(mImage.getName());
+                picture.setName(mImage.getImageName());
                 user.setPicture(picture);
             } catch (SQLException sException) {
                 sException.printStackTrace();

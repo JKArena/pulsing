@@ -38,32 +38,32 @@ public class MImage implements Serializable {
 
     private static final long serialVersionUID = -8365376799315291584L;
     
-    private String _name;
-    private Blob _content;
+    private String imageName;
+    private Blob imageContent;
     
-    @Column(name="NAME",
+    @Column(name="IMAGE_NAME",
             length=100)
-    public String getName() {
-        return _name;
+    public String getImageName() {
+        return imageName;
     }
-    public void setName(String name) {
-        _name = name;
+    public void setImageName(String imageName) {
+        this.imageName = imageName;
     }
     
     @Lob
-    @Column(name="CONTENT",
+    @Column(name="IMAGE_CONTENT",
             length=65536)
-    public Blob getContent() {
-        return _content;
+    public Blob getImageContent() {
+        return imageContent;
     }
-    public void setContent(Blob content) {
-        _content = content;
+    public void setImageContent(Blob imageContent) {
+        this.imageContent = imageContent;
     }
     
     @Override
     public int hashCode() {
         int hashCodeVal = PulsingConstants.HASH_CODE_INIT_VALUE;
-        hashCodeVal = PulsingConstants.HASH_CODE_MULTIPLY_VALUE * hashCodeVal + _name.hashCode();
+        hashCodeVal = PulsingConstants.HASH_CODE_MULTIPLY_VALUE * hashCodeVal + imageName.hashCode();
         return hashCodeVal;
     }
     
@@ -74,7 +74,7 @@ public class MImage implements Serializable {
         }
         
         MImage casted = (MImage) instance;
-        return casted._name.equals(_name) && casted._content.equals(_content);
+        return casted.imageName.equals(imageName) && casted.imageContent.equals(imageContent);
     }
     
     @Override
@@ -82,7 +82,7 @@ public class MImage implements Serializable {
         
         StringBuilder builder = new StringBuilder();
         builder.append("Image {");
-        builder.append("name: " + _name);
+        builder.append("imageName: " + imageName);
         builder.append("}");
         
         return builder.toString();

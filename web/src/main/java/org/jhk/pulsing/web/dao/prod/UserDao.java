@@ -36,8 +36,10 @@ public class UserDao implements IUserDao {
     
     private static final Logger _LOGGER = LoggerFactory.getLogger(UserDao.class);
     
+    @Inject
     private MySqlUserDao mySqlUserDao;
     
+    @Inject
     private RedisUserDao redisUserDao;
     
     @Override
@@ -67,14 +69,4 @@ public class UserDao implements IUserDao {
         return null;
     }
     
-    @Inject
-    public void setMySqlUserDao(MySqlUserDao mySqlUserDao) {
-        this.mySqlUserDao = mySqlUserDao;
-    }
-    
-    @Inject
-    public void setRedisUserDao(RedisUserDao redisUserDao) {
-        this.redisUserDao = redisUserDao;
-    }
-
 }

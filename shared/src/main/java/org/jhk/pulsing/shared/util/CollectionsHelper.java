@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.web.common;
+package org.jhk.pulsing.shared.util;
 
 import java.util.LinkedList;
 import java.util.List;
