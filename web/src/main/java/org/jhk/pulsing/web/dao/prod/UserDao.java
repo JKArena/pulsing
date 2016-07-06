@@ -48,7 +48,7 @@ public class UserDao implements IUserDao {
         
         mySqlUserDao.getUser(userId);
         
-        return null;
+        return new Result<User>(Result.CODE.FAILURE, "to avoid null for now");
     }
 
     @Override
@@ -57,7 +57,7 @@ public class UserDao implements IUserDao {
         
         mySqlUserDao.createUser(user);
         
-        return null;
+        return new Result<User>(Result.CODE.FAILURE, "to avoid null for now");
     }
 
     @Override
@@ -66,7 +66,7 @@ public class UserDao implements IUserDao {
         
         mySqlUserDao.validateUser(email, password);
         
-        return null;
+        return new Result<User>(Result.CODE.FAILURE, "to avoid null for now");
     }
     
 }

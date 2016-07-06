@@ -53,27 +53,21 @@ public class UserService implements IUserService {
     public Result<User> getUser(UserId userId) {
         _LOGGER.debug("UserService.getUser" + userId);
         
-        userDao.getUser(userId);
-        
-        return new Result<User>(Result.CODE.FAILURE, "to avoid null for now");
+        return userDao.getUser(userId);
     }
 
     @Override
     public Result<User> createUser(User user) {
         _LOGGER.debug("UserService.createUser" + user);
         
-        userDao.createUser(user);
-        
-        return new Result<User>(Result.CODE.FAILURE, "to avoid null for now");
+        return userDao.createUser(user);
     }
 
     @Override
     public Result<User> validateUser(String email, String password) {
         _LOGGER.debug("UserService.validateUser" + email + " - " + password);
         
-        userDao.validateUser(email, password);
-        
-        return new Result<User>(Result.CODE.FAILURE, "to avoid null for now");
+        return userDao.validateUser(email, password);
     }
     
 }
