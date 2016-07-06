@@ -34,6 +34,7 @@ import javax.persistence.TemporalType;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.jhk.pulsing.shared.util.PulsingConstants;
 
 /**
  * @author Ji Kim
@@ -45,21 +46,21 @@ import org.hibernate.validator.constraints.NotEmpty;
 public class MUser implements Serializable {
     
     private static final long serialVersionUID = 3496761818540000213L;
-
+    
     @Id @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
     
     @NotEmpty
     @Column(nullable=false, name="EMAIL")
-    private String email;
+    private String _email;
     
     @NotEmpty
     @Column(nullable=false, name="NAME")
-    private String name;
+    private String _name;
     
     @NotEmpty
     @Column(nullable=false, name="PASSWORD")
-    private String password;
+    private String _password;
     
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name="LAST_MODIFIED",
@@ -80,24 +81,24 @@ public class MUser implements Serializable {
     }
 
     public String getPassword() {
-        return password;
+        return _password;
     }
     public void setPassword(String password) {
-        this.password = password;
+        _password = password;
     }
 
     public String getName() {
-        return name;
+        return _name;
     }
     public void setName(String name) {
-        this.name = name;
+        _name = name;
     }
 
     public String getEmail() {
-        return email;
+        return _email;
     }
     public void setEmail(String email) {
-        this.email = email;
+        _email = email;
     }
     
     public Date getSignedup() {
@@ -113,7 +114,11 @@ public class MUser implements Serializable {
     
     @Override
     public int hashCode() {
-        return id.hashCode();
+        int hashCodeVal = PulsingConstants.HASH_CODE_INIT_VALUE;
+        hashCodeVal = PulsingConstants.HASH_CODE_MULTIPLY_VALUE * hashCodeVal + _email.hashCode();
+        hashCodeVal = PulsingConstants.HASH_CODE_MULTIPLY_VALUE * hashCodeVal + _name.hashCode();
+        hashCodeVal = PulsingConstants.HASH_CODE_MULTIPLY_VALUE * hashCodeVal + _password.hashCode();
+        return hashCodeVal;
     }
     
     @Override
@@ -131,9 +136,9 @@ public class MUser implements Serializable {
         
         builder.append("User {");
         builder.append("id: " + id + ", ");
-        builder.append("email: " + email + ", ");
-        builder.append("name: " + name + ", ");
-        builder.append("password: " + password);
+        builder.append("email: " + _email + ", ");
+        builder.append("name: " + _name + ", ");
+        builder.append("password: " + _password);
         builder.append("}");
         
         return builder.toString();

@@ -18,18 +18,28 @@
  */
 package org.jhk.pulsing.web.service;
 
+import java.sql.SQLException;
+
+import javax.inject.Named;
+import javax.naming.NamingException;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+
 import org.jhk.pulsing.web.dao.IPulseDao;
 import org.jhk.pulsing.web.dao.IUserDao;
 import org.jhk.pulsing.web.dao.prod.PulseDao;
-import org.jhk.pulsing.web.dao.prod.RedisUserDao;
+import org.jhk.pulsing.web.dao.prod.UserDao;
+import org.jhk.pulsing.web.dao.prod.db.MySqlUserDao;
+import org.jhk.pulsing.web.dao.prod.db.RedisUserDao;
 import org.jhk.pulsing.web.service.prod.PulseService;
 import org.jhk.pulsing.web.service.prod.UserService;
-import org.springframework.boot.orm.jpa.EntityScan;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Profile;
+import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.orm.jpa.LocalEntityManagerFactoryBean;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
  * Services will always check redis cache first which will 
@@ -40,9 +50,7 @@ import org.springframework.context.annotation.Profile;
  * @author Ji Kim
  */
 @Profile("prod")
-@EnableAspectJAutoProxy
-@ComponentScan({"org.jhk.pulsing.web.aspect"})
-@EntityScan({"org.jhk.pulsing.db.mysql.model"})
+@EnableTransactionManagement
 @Configuration
 public class ProdServiceConfig implements IServiceConfig {
     
@@ -55,19 +63,43 @@ public class ProdServiceConfig implements IServiceConfig {
     @Bean
     @Override
     public IPulseService getPulseService() {
-        return new PulseService();
+        return new org.jhk.pulsing.web.service.dev.PulseService();
     }
     
     @Bean
     @Override
     public IUserDao getUserDao() {
+        return new UserDao();
+    }
+    
+    @Bean
+    public RedisUserDao getRedisUserDao() {
         return new RedisUserDao();
+    }
+    
+    @Bean
+    public MySqlUserDao getMySqlUserDao() {
+        return new MySqlUserDao();
     }
     
     @Bean
     @Override
     public IPulseDao getPulseDao() {
-        return new PulseDao();
+        return new org.jhk.pulsing.web.dao.dev.PulseDao();
+    }
+    
+    @Bean
+    public LocalEntityManagerFactoryBean entityManagerFactory() {
+        LocalEntityManagerFactoryBean emFactory = new LocalEntityManagerFactoryBean();
+        emFactory.setPersistenceUnitName("pulsing");
+        return emFactory;
+    }
+    
+    @Bean
+    public PlatformTransactionManager transactionManager() throws SQLException {
+        JpaTransactionManager txManager = new JpaTransactionManager();
+        txManager.setEntityManagerFactory(entityManagerFactory().getObject());
+        return txManager;
     }
     
 }
