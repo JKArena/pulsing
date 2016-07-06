@@ -18,56 +18,63 @@
  */
 package org.jhk.pulsing.web.dao.prod;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
+import javax.inject.Inject;
 
 import org.jhk.pulsing.serialization.avro.records.User;
 import org.jhk.pulsing.serialization.avro.records.UserId;
-import org.jhk.pulsing.shared.util.PulsingConstants;
 import org.jhk.pulsing.web.common.Result;
 import org.jhk.pulsing.web.dao.IUserDao;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
-
-import redis.clients.jedis.Jedis;
+import org.jhk.pulsing.web.dao.prod.db.MySqlUserDao;
+import org.jhk.pulsing.web.dao.prod.db.RedisUserDao;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Ji Kim
  */
-@Transactional
-@Repository
-public class RedisUserDao implements IUserDao {
+public class UserDao implements IUserDao {
     
-    private Jedis _jedis;
+    private static final Logger _LOGGER = LoggerFactory.getLogger(UserDao.class);
     
-    @PostConstruct
-    public void init() {
-        _jedis = new Jedis(PulsingConstants.REDIS_HOST, PulsingConstants.REDIS_PORT);
-    }
+    private MySqlUserDao mySqlUserDao;
     
-    @PreDestroy
-    public void destroy() {
-        if(_jedis != null && _jedis.isConnected()) {
-            _jedis.quit();
-        }
-    }
-
+    private RedisUserDao redisUserDao;
+    
     @Override
     public Result<User> getUser(UserId userId) {
-        // TODO Auto-generated method stub
+        _LOGGER.debug("UserDao.getUser " + userId);
+        
+        mySqlUserDao.getUser(userId);
+        
         return null;
     }
 
     @Override
     public Result<User> createUser(User user) {
-        // TODO Auto-generated method stub
+        _LOGGER.debug("UserDao.createUser " + user);
+        
+        mySqlUserDao.createUser(user);
+        
         return null;
     }
 
     @Override
     public Result<User> validateUser(String email, String password) {
-        // TODO Auto-generated method stub
+        _LOGGER.debug("UserDao.validateUser " + email + " : " + password);
+        
+        mySqlUserDao.validateUser(email, password);
+        
         return null;
     }
     
+    @Inject
+    public void setMySqlUserDao(MySqlUserDao mySqlUserDao) {
+        this.mySqlUserDao = mySqlUserDao;
+    }
+    
+    @Inject
+    public void setRedisUserDao(RedisUserDao redisUserDao) {
+        this.redisUserDao = redisUserDao;
+    }
+
 }

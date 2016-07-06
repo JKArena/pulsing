@@ -27,10 +27,14 @@ import org.jhk.pulsing.serialization.avro.records.PulseId;
 import org.jhk.pulsing.web.common.Result;
 import org.jhk.pulsing.web.dao.IPulseDao;
 import org.jhk.pulsing.web.service.IPulseService;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author Ji Kim
  */
+@Transactional
+@Service
 public class PulseService implements IPulseService {
     
     @Inject

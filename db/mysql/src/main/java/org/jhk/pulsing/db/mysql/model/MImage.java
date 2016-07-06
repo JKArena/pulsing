@@ -27,7 +27,6 @@ import javax.persistence.Embeddable;
 import javax.persistence.Lob;
 import javax.persistence.MappedSuperclass;
 
-import org.hibernate.validator.constraints.NotEmpty;
 import org.jhk.pulsing.shared.util.PulsingConstants;
 
 /**
@@ -42,9 +41,7 @@ public class MImage implements Serializable {
     private String _name;
     private Blob _content;
     
-    @NotEmpty
     @Column(name="NAME",
-            nullable=false,
             length=100)
     public String getName() {
         return _name;
@@ -53,10 +50,8 @@ public class MImage implements Serializable {
         _name = name;
     }
     
-    @NotEmpty
     @Lob
     @Column(name="CONTENT",
-            nullable=false,
             length=65536)
     public Blob getContent() {
         return _content;

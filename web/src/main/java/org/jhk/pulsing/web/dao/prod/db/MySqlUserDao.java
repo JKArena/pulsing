@@ -16,27 +16,30 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.web.dao.prod;
+package org.jhk.pulsing.web.dao.prod.db;
 
+import java.util.Optional;
+
+import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.NamedQuery;
 
 import org.jhk.pulsing.db.mysql.model.MUser;
+import org.jhk.pulsing.serialization.avro.records.User;
 import org.jhk.pulsing.serialization.avro.records.UserId;
+import org.jhk.pulsing.web.common.AvroMySqlMappers;
 import org.jhk.pulsing.web.service.prod.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @author Ji Kim
  */
-@Transactional
 @Repository
-public class MySqlUserDao {
+public class MySqlUserDao implements IUserOptionalDao {
     
     private static final Logger _LOGGER = LoggerFactory.getLogger(UserService.class);
     
@@ -46,15 +49,38 @@ public class MySqlUserDao {
     /*
      * EntityManager/Session is a single-threaded non-shared object that represents a particular unit of work with the database.
      */
-    public EntityManager eManager;
+    private EntityManager eManager;
     
-    public MUser getUser(UserId userId) {
+    public Optional<User> getUser(UserId userId) {
         _LOGGER.debug("MySqlUserDao.getUser" + userId);
         
-        eManager = entityManagerFactory.createEntityManager();
-        MUser user = MUser.class.cast( eManager.getReference(MUser.class, userId.getId()) );
+        MUser user = MUser.class.cast(eManager.getReference(MUser.class, userId.getId()));
         
-        return null;
+        _LOGGER.debug("User is " + user);
+        return Optional.empty();
+    }
+
+    public Optional<User> createUser(User user) {
+        _LOGGER.debug("MySqlUserDao.createUser" + user);
+        
+        MUser mUser = AvroMySqlMappers.avroToMysql(user);
+        eManager.persist(mUser);
+        eManager.flush();
+        
+        getUser(user.getId());
+        
+        return Optional.empty();
+    }
+
+    public Optional<User> validateUser(String email, String password) {
+        // TODO Auto-generated method stub
+        
+        return Optional.empty();
+    }
+    
+    @PostConstruct
+    public void init() {
+        eManager = entityManagerFactory.createEntityManager();
     }
     
 }
