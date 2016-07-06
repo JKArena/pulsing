@@ -240,12 +240,6 @@
         <version>${hibernate}</version>
       </dependency>
 	  
-	  <dependency>
-        <groupId>org.mortbay.jetty</groupId>
-        <artifactId>maven-jetty-plugin</artifactId>
-        <version>${jetty}</version>
-      </dependency>
-      
       <dependency>
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
@@ -282,7 +276,6 @@
     <commons.io>2.5</commons.io>
 	<javax.servlet.api>3.1.0</javax.servlet.api>
     <jackson>2.7.4</jackson>
-    <jetty>9.3.8.v20160314</jetty>
     <kafka.clients>0.9.0.1</kafka.clients>
 	<cassandra.client>3.5</cassandra.client>
 	<mysql.connector.java>5.1.9</mysql.connector.java>
@@ -313,27 +306,6 @@
         <configuration>
           <source>1.8</source>
           <target>1.8</target>
-        </configuration>
-      </plugin>
-      
-      <plugin>
-        <groupId>org.eclipse.jetty</groupId>
-        <artifactId>jetty-maven-plugin</artifactId>
-        <version>${jetty}</version>
-        <configuration>
-          <scanIntervalSeconds>10</scanIntervalSeconds>
-          <connectors>
-            <connector implementation="org.mortbay.jetty.nio.SelectChannelConnector">
-              <port>8083</port>
-              <maxIdleTime>60000</maxIdleTime>
-            </connector>
-          </connectors>
-          <contextHandlers>
-            <contextHandler implementation="org.eclipse.jetty.maven.plugin.JettyWebAppContext">
-              <war>${project.basedir}/../web/target/pulsing-web.war</war>
-              <contextPath>/pulsing-web</contextPath>
-            </contextHandler>
-          </contextHandlers>
         </configuration>
       </plugin>
       

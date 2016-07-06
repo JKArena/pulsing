@@ -215,4 +215,4 @@
  * 
  * @author Ji Kim
  */
-package org.jhk.pulsing.web.common;
+package org.jhk.pulsing.shared.util;
