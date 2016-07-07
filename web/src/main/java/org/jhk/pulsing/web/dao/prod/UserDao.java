@@ -18,11 +18,14 @@
  */
 package org.jhk.pulsing.web.dao.prod;
 
+import java.util.Optional;
+
 import javax.inject.Inject;
 
 import org.jhk.pulsing.serialization.avro.records.User;
 import org.jhk.pulsing.serialization.avro.records.UserId;
 import org.jhk.pulsing.web.common.Result;
+import static org.jhk.pulsing.web.common.Result.CODE.*;
 import org.jhk.pulsing.web.dao.IUserDao;
 import org.jhk.pulsing.web.dao.prod.db.MySqlUserDao;
 import org.jhk.pulsing.web.dao.prod.db.RedisUserDao;
@@ -46,27 +49,42 @@ public class UserDao implements IUserDao {
     public Result<User> getUser(UserId userId) {
         _LOGGER.debug("UserDao.getUser " + userId);
         
-        mySqlUserDao.getUser(userId);
+        Result<User> result = new Result<>(FAILURE, "Unable to find " + userId);
+        Optional<User> user = redisUserDao.getUser(userId);
         
-        return new Result<User>(Result.CODE.FAILURE, "to avoid null for now");
+        if(!user.isPresent()) {
+            user = mySqlUserDao.getUser(userId);
+        }
+        
+        if(user.isPresent()) {
+            result = new Result<>(SUCCESS, user.get());
+        }
+        
+        return result;
     }
 
     @Override
     public Result<User> createUser(User user) {
         _LOGGER.debug("UserDao.createUser " + user);
         
-        mySqlUserDao.createUser(user);
+        Result<User> result = new Result<User>(FAILURE, "Failed in creating " + user); 
+        Optional<User> createdUser = mySqlUserDao.createUser(user);
         
-        return new Result<User>(Result.CODE.FAILURE, "to avoid null for now");
+        if(createdUser.isPresent()) {
+            result = new Result<>(SUCCESS, createdUser.get());
+            redisUserDao.createUser(createdUser.get());
+        }
+        
+        return result;
     }
 
     @Override
     public Result<User> validateUser(String email, String password) {
         _LOGGER.debug("UserDao.validateUser " + email + " : " + password);
         
-        mySqlUserDao.validateUser(email, password);
+        Optional<User> user = mySqlUserDao.validateUser(email, password);
         
-        return new Result<User>(Result.CODE.FAILURE, "to avoid null for now");
+        return user.isPresent() ? new Result<User>(SUCCESS, user.get()) : new Result<User>(FAILURE, "Failed in validating " + email + " : " + password);
     }
     
 }

@@ -16,16 +16,16 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.storm.util;
+package org.jhk.pulsing.shared.util;
 
 import java.util.concurrent.TimeUnit;
 
 /**
  * @author Ji Kim
  */
-public final class CommonBoltStreamUtil {
+public final class GenericUtil {
     
-    private CommonBoltStreamUtil() {
+    private GenericUtil() {
         super();
     }
     

@@ -28,6 +28,7 @@ import org.apache.storm.topology.base.BaseBasicBolt;
 import org.apache.storm.tuple.Tuple;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.jhk.pulsing.shared.util.PulsingConstants;
+import org.jhk.pulsing.shared.util.RedisConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,23 +47,15 @@ public final class TimeIntervalPersistorBolt extends BaseBasicBolt {
     
     private Jedis _jedis;
     private ObjectMapper _objectMapper;
-    private int _secondsInterval;
     
     public TimeIntervalPersistorBolt() {
         super();
-
-        _secondsInterval = PulsingConstants.DEFAULT_INTERVAL_SECONDS;
-    }
-    
-    public TimeIntervalPersistorBolt(int secondsInterval) {
-        super();
-        
-        _secondsInterval = secondsInterval;
     }
     
     @Override
     public void prepare(Map stormConf, TopologyContext context) {
-        _jedis = new Jedis(PulsingConstants.REDIS_HOST, PulsingConstants.REDIS_PORT);
+        _jedis = new Jedis(RedisConstants.REDIS_HOST, RedisConstants.REDIS_PORT);
+        _jedis.auth(RedisConstants.REDIS_PASSWORD);
         _objectMapper = new ObjectMapper();
     }
     
@@ -89,7 +82,7 @@ public final class TimeIntervalPersistorBolt extends BaseBasicBolt {
         
         try {
             String timeIntervalSubscription = _objectMapper.writeValueAsString(queue);
-            _jedis.setex("trend-pulse-" + timeInterval, _secondsInterval, timeIntervalSubscription);
+            _jedis.setex(RedisConstants.REDIS_KEY.TRENDING_PULSE_.toString() + timeInterval, RedisConstants.DEFAULT_CACHE_EXPIRE_SECONDS, timeIntervalSubscription);
         } catch (Exception writeException) {
             writeException.printStackTrace();
         }
@@ -121,13 +114,6 @@ public final class TimeIntervalPersistorBolt extends BaseBasicBolt {
         @Override
         public int compareTo(Counter compare) {
             return _count - compare._count;
-        }
-        
-        public Long getId() {
-            return _id;
-        }
-        public int getCount() {
-            return _count;
         }
         
     }

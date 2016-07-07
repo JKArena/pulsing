@@ -90,14 +90,19 @@ public final class AvroMySqlMappers {
         MImage mImage = mUser.getPicture();
         if(mImage != null && mImage.getImageName() != null) {
             
+            Blob blob = mImage.getImageContent();
+            
             try {
-                Picture picture = Picture.newBuilder().build();
-                Blob blob = mImage.getImageContent();
+                int length = (int) blob.length();
                 
-                //make sure below is cool since a wrap
-                picture.setContent(ByteBuffer.wrap(blob.getBytes(0L, (int) blob.length())));
-                picture.setName(mImage.getImageName());
-                user.setPicture(picture);
+                if(length > 0) {
+                    Picture picture = Picture.newBuilder().build();
+                    
+                    //make sure below is cool since a wrap
+                    picture.setContent(ByteBuffer.wrap(blob.getBytes(0L, length)));
+                    picture.setName(mImage.getImageName());
+                    user.setPicture(picture);
+                }
             } catch (SQLException sException) {
                 sException.printStackTrace();
             }
