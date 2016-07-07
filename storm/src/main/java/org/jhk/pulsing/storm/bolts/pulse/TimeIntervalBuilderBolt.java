@@ -30,7 +30,7 @@ import org.apache.storm.topology.base.BaseBasicBolt;
 import org.apache.storm.tuple.Fields;
 import org.apache.storm.tuple.Tuple;
 import org.apache.storm.tuple.Values;
-import org.jhk.pulsing.storm.util.CommonBoltStreamUtil;
+import org.jhk.pulsing.shared.util.GenericUtil;
 import org.jhk.pulsing.shared.util.PulsingConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,7 +49,7 @@ public final class TimeIntervalBuilderBolt extends BaseBasicBolt {
     private int _secondsInterval;
     
     public TimeIntervalBuilderBolt() {
-        this(PulsingConstants.DEFAULT_INTERVAL_SECONDS);
+        this(PulsingConstants.DEFAULT_TRENDING_PULSING_INTERVAL_SECONDS);
     }
     
     public TimeIntervalBuilderBolt(int secondsInterval) {
@@ -90,7 +90,7 @@ public final class TimeIntervalBuilderBolt extends BaseBasicBolt {
     
     private void processTickTuple(BasicOutputCollector outputCollector) {
         
-        Long currTimeInterval = CommonBoltStreamUtil.getTimeInterval(System.nanoTime(), _secondsInterval);
+        Long currTimeInterval = GenericUtil.getTimeInterval(System.nanoTime(), _secondsInterval);
         
         _timeInterval.keySet().stream()
             .filter(entryTI -> (entryTI <= currTimeInterval))

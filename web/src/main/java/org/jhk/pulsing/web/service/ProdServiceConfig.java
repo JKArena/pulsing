@@ -110,6 +110,13 @@ public class ProdServiceConfig implements IServiceConfig {
         return dataSource;
     }
     
+    @Bean
+    public PlatformTransactionManager transactionManager() throws SQLException {
+        HibernateTransactionManager tManager = new HibernateTransactionManager();
+        tManager.setSessionFactory(sessionFactory().getObject()); 
+        return tManager;
+    }
+    
     private Properties hibernateProperties() {
         Properties properties = new Properties();
         properties.put("hibernate.dialect", env.getRequiredProperty("hibernate.dialect"));
@@ -125,13 +132,6 @@ public class ProdServiceConfig implements IServiceConfig {
         properties.put("hibernate.c3p0.idle_test_period", env.getRequiredProperty("hibernate.c3p0.idle_test_period"));
         properties.put("hibernate.id.new_generator_mappings", env.getRequiredProperty("hibernate.id.new_generator_mappings"));
         return properties;
-    }
-    
-    @Bean
-    public PlatformTransactionManager transactionManager() throws SQLException {
-        HibernateTransactionManager tManager = new HibernateTransactionManager();
-        tManager.setSessionFactory(sessionFactory().getObject()); 
-        return tManager;
     }
     
 }

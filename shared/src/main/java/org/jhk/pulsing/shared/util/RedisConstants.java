@@ -19,24 +19,24 @@
 package org.jhk.pulsing.shared.util;
 
 /**
+ * Created a separate one, since might increase in size due to keys
+ * 
  * @author Ji Kim
  */
-public final class PulsingConstants {
+public final class RedisConstants {
     
-    public static final int DEFAULT_TRENDING_PULSING_INTERVAL_SECONDS = 15;
-    
-    public static final String DEFAULT_BOOTSTRAP_HOST = "0.0.0.0";
-    public static final int DEFAULT_BOOTSTRAP_PORT = 9092;
-    
-    public static final int HASH_CODE_INIT_VALUE = 3;
-    public static final int HASH_CODE_MULTIPLY_VALUE = 31;
-    
-    public enum TOPICS {
-		PULSE_SUBSCRIBE;
-	};
-    
-    private PulsingConstants() {
+    private RedisConstants() {
         super();
+    }
+    
+    public static final String REDIS_HOST = "localhost";
+    public static final int REDIS_PORT = 6379;
+    public static final String REDIS_PASSWORD = "wsad";
+    
+    public static final int DEFAULT_CACHE_EXPIRE_SECONDS = 86400;
+    
+    public enum REDIS_KEY {
+        TRENDING_PULSE_, USER_;
     }
     
 }

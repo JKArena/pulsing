@@ -29,7 +29,6 @@ import org.jhk.pulsing.db.mysql.model.MUser;
 import org.jhk.pulsing.serialization.avro.records.User;
 import org.jhk.pulsing.serialization.avro.records.UserId;
 import org.jhk.pulsing.web.common.AvroMySqlMappers;
-import org.jhk.pulsing.web.service.prod.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
@@ -42,7 +41,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class MySqlUserDao {
     
-    private static final Logger _LOGGER = LoggerFactory.getLogger(UserService.class);
+    private static final Logger _LOGGER = LoggerFactory.getLogger(MySqlUserDao.class);
     
     @Inject
     private SessionFactory sessionFactory;
@@ -50,12 +49,14 @@ public class MySqlUserDao {
     public Optional<User> getUser(UserId userId) {
         _LOGGER.debug("MySqlUserDao.getUser" + userId);
         
-        MUser mUser = MUser.class.cast(getSession().getReference(MUser.class, userId.getId()));
+        MUser mUser = getSession().find(MUser.class, userId.getId());
         
-        _LOGGER.debug("User is " + mUser);
-        
-        User user = AvroMySqlMappers.mySqlToAvro(mUser);
-        return user != null ? Optional.of(user) : Optional.empty();
+        if(mUser != null) {
+            _LOGGER.debug("User is " + mUser);
+            return Optional.of(AvroMySqlMappers.mySqlToAvro(mUser));
+        }else {
+            return Optional.empty();
+        }
     }
 
     public Optional<User> createUser(User user) {
@@ -86,9 +87,7 @@ public class MySqlUserDao {
             return Optional.empty();
         }
         
-        User user = AvroMySqlMappers.mySqlToAvro((MUser) entries.get(0));
-        
-        return Optional.of(user);
+        return Optional.of(AvroMySqlMappers.mySqlToAvro((MUser) entries.get(0)));
     }
     
     /*
