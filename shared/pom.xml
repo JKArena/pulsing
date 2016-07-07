@@ -5,12 +5,11 @@
   <parent>
     <groupId>org.jhk.pulsing</groupId>
     <artifactId>pulsing-project</artifactId>
-    <version>${pulsing.version}</version>
+	<version>${pulsing.version}</version>
   </parent>
   
   <groupId>org.jhk.pulsing.shared</groupId>
   <artifactId>pulsing-shared</artifactId>
-  <version>${pulsing.version}</version>
   <name>pulsing-shared</name>
   <url>https://github.com/JHKTruth/pulsing/shared</url>
   

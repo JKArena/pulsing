@@ -5,12 +5,11 @@
   <parent>
     <groupId>org.jhk.pulsing.serialization</groupId>
     <artifactId>pulsing-serialization</artifactId>
-    <version>${pulsing.version}</version>
+	<version>${pulsing.version}</version>
   </parent>
   
   <groupId>org.jhk.pulsing.serialization.thrift</groupId>
   <artifactId>pulsing-thrift</artifactId>
-  <version>${pulsing.version}</version>
   <name>pulsing-thrift</name>
   <url>https://github.com/JHKTruth/pulsingserialization/thrift</url>
   
