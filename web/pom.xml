@@ -10,7 +10,6 @@
   
   <groupId>org.jhk.pulsing.web</groupId>
   <artifactId>pulsing-web</artifactId>
-  <version>${pulsing.version}</version>
   <packaging>war</packaging>
   <name>pulsing-web</name>
   <url>http://maven.apache.org</url>

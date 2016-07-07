@@ -5,12 +5,11 @@
   <parent>
     <groupId>org.jhk.pulsing.db</groupId>
     <artifactId>pulsing-db</artifactId>
-    <version>${pulsing.version}</version>
+	<version>${pulsing.version}</version>
   </parent>
   
   <groupId>org.jhk.pulsing.db.mysql</groupId>
   <artifactId>pulsing-db-mysql</artifactId>
-  <version>${pulsing.version}</version>
   <name>pulsing-db-mysql</name>
   <url>https://github.com/JHKTruth/pulsing/db/mysql</url>
   
