@@ -99,7 +99,7 @@ public final class AvroMySqlMappers {
                     Picture picture = Picture.newBuilder().build();
                     
                     //make sure below is cool since a wrap
-                    picture.setContent(ByteBuffer.wrap(blob.getBytes(0L, length)));
+                    picture.setContent(ByteBuffer.wrap(blob.getBytes(1L, length)));
                     picture.setName(mImage.getImageName());
                     user.setPicture(picture);
                 }
