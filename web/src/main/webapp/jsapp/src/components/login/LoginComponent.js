@@ -43,22 +43,25 @@ class LoginComponent extends AbstractComponent {
           email: 0, //-1 invalid, 0 initial, 1 valid
           password: 0
         },
-        loginErrorMsg: ''
+        errorMsg: ''
     };
   }
   
-  handleSubmit() {
+  handleSubmit(evt) {
     console.debug('logging in');
+    if(!super.handleSubmit(evt)) {
+      return;
+    }
     
     LoginAction.loginUser('loginBtn', 'loginform')
       .then(() => {
         //save the user and update the store
-        this.state.loginErrorMsg = '';
+        this.state.errorMsg = '';
         
         API.publish(TOPICS.AUTH, {loggedIn: true});
       })
       .catch(message => {
-        this.state.loginErrorMsg = message;
+        this.state.errorMsg = message;
         this.setState(this.state);
       });
   }
@@ -96,10 +99,10 @@ class LoginComponent extends AbstractComponent {
                   
                   {(() => {
                     
-                    if(this.state.loginErrorMsg) {
+                    if(this.state.errorMsg) {
                       return <div>
                         <Panel header='Login Error' bsStyle='danger'>
-                          {this.state.loginErrorMsg}
+                          {this.state.errorMsg}
                         </Panel>
                       </div>;
                     }

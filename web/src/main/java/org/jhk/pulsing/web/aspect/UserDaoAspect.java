@@ -59,6 +59,7 @@ public class UserDaoAspect {
         }
         
         User user = result.getData();
+        user.setPassword(""); //blank out password
         Picture picture = user.getPicture();
         
         _LOGGER.debug("UserDaoAspect.setPictureUrl" + user);

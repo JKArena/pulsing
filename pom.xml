@@ -276,7 +276,7 @@
     <commons.io>2.5</commons.io>
 	<javax.servlet.api>3.1.0</javax.servlet.api>
     <jackson>2.7.4</jackson>
-    <kafka.clients>0.9.0.1</kafka.clients>
+    <kafka.clients>0.10.0.0</kafka.clients>
 	<cassandra.client>3.5</cassandra.client>
 	<mysql.connector.java>5.1.9</mysql.connector.java>
 	<hibernate>5.2.1.Final</hibernate>

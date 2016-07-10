@@ -42,11 +42,9 @@ class SignupComponent extends AbstractComponent {
         validity: {
           email: 0, //-1 invalid, 0 initial, 1 valid
           password: 0,
-          name: 0,
-          address: 0,
-          avatar: 0
+          name: 0
         },
-        signupErrorMsg: ''
+        errorMsg: ''
     };
   }
   
@@ -85,18 +83,21 @@ class SignupComponent extends AbstractComponent {
     reader.readAsDataURL(file);
   }
   
-  handleSubmit() {
+  handleSubmit(evt) {
     console.debug('signing up');
+    if(!super.handleSubmit(evt)) {
+      return;
+    }
     
     SignupAction.signup('signupBtn', 'signupform', 'avatar')
       .then(() => {
         //save the user and update the store
-        this.state.loginErrorMsg = '';
+        this.state.errorMsg = '';
         
         API.publish(TOPICS.AUTH, {loggedIn: true});
       })
       .catch(message => {
-        this.state.loginErrorMsg = message;
+        this.state.errorMsg = message;
         this.setState(this.state);
       });
   }
@@ -132,7 +133,7 @@ class SignupComponent extends AbstractComponent {
                     <HelpBlock>wsad best password</HelpBlock>
                   </FormGroup>
                   
-                  <FormGroup controlId='avatar' validationState={this.getValidState('avatar')}>
+                  <FormGroup controlId='avatar'>
                     <ControlLabel>Picture</ControlLabel>
                     <div>
                       <Image id='avatar' rounded src='/images/dropzone.png' style={{'maxHeight': '300px'}} />
@@ -142,10 +143,10 @@ class SignupComponent extends AbstractComponent {
                   
                   {(() => {
                     
-                    if(this.state.signupErrorMsg) {
+                    if(this.state.errorMsg) {
                       return <div>
                         <Panel header='Signup Error' bsStyle='danger'>
-                          {this.state.signupErrorMsg}
+                          {this.state.errorMsg}
                         </Panel>
                       </div>;
                     }

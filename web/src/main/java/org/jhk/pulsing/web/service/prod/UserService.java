@@ -18,12 +18,16 @@
  */
 package org.jhk.pulsing.web.service.prod;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.inject.Inject;
 
 import org.jhk.pulsing.serialization.avro.records.User;
 import org.jhk.pulsing.serialization.avro.records.UserId;
+import org.jhk.pulsing.shared.util.PulsingConstants;
 import org.jhk.pulsing.web.common.Result;
 import org.jhk.pulsing.web.dao.IUserDao;
+import org.jhk.pulsing.web.publisher.Publisher;
 import org.jhk.pulsing.web.service.IUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,6 +53,8 @@ public class UserService implements IUserService {
     @Inject
     private IUserDao userDao;
     
+    private Publisher _stormPublisher;
+    
     @Override
     public Result<User> getUser(UserId userId) {
         _LOGGER.debug("UserService.getUser" + userId);
@@ -60,7 +66,13 @@ public class UserService implements IUserService {
     public Result<User> createUser(User user) {
         _LOGGER.debug("UserService.createUser" + user);
         
-        return userDao.createUser(user);
+        Result<User> cUser = userDao.createUser(user);
+        
+        if(cUser.getCode() == Result.CODE.SUCCESS) {
+            _stormPublisher.produce(PulsingConstants.TOPICS.USER_CREATE.toString(), cUser.getData());
+        }
+        
+        return cUser;
     }
 
     @Override
@@ -68,6 +80,18 @@ public class UserService implements IUserService {
         _LOGGER.debug("UserService.validateUser" + email + " - " + password);
         
         return userDao.validateUser(email, password);
+    }
+    
+    @PostConstruct
+    public void init() {
+        _stormPublisher = new Publisher();
+    }
+    
+    @PreDestroy
+    public void destroy() {
+        if(_stormPublisher != null) {
+            _stormPublisher.close();
+        }
     }
     
 }

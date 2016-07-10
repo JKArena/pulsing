@@ -43,6 +43,32 @@ class AbstractComponent extends Component {
     }
   }
   
+  handleSubmit() {
+    console.debug('checking validity');
+    
+    let validity = this.state.validity;
+    if(!validity) {
+      return true;
+    }
+    
+    //just to remember "of" loop, guess only time to use this loop
+    //is when one wishes to break + return from (otherwise forEach)
+    let msg = [];
+    for(let key of Object.keys(validity)) {
+      if(validity[key] !== 1) {
+        msg.push(key);
+      }
+    }
+    
+    if(msg.length === 0) {
+      return true;
+    }else {
+      this.state.errorMsg = 'Fields: ' + msg.join(', ') + ' invalid.';
+      this.setState(this.state);
+      return false;
+    }
+  }
+  
   getValidState(elementId) {
     let state;
     
