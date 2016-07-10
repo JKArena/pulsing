@@ -42,13 +42,14 @@ public final class UserDeserializer extends BaseFunction {
     
     @Override
     public void execute(TridentTuple tuple, TridentCollector collector) {
-        _LOG.debug("UserDeserializer.execute: " + tuple);
+        _LOG.info("UserDeserializer.execute: " + tuple);
         
         String userString = tuple.getString(0);
         
         try {
             
             User user = SerializationHelper.deserializeFromJSONStringToAvro(User.class, User.getClassSchema(), userString);
+            _LOG.info("UserDeserializer.execute deserialized to " + user);
             collector.emit(getUserValues(user));
             
         } catch (IOException decodeException) {

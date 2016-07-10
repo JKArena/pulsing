@@ -19,53 +19,82 @@
 package org.jhk.pulsing.web.publisher;
 
 import java.util.Properties;
-import java.util.concurrent.Future;
 
 import org.apache.avro.specific.SpecificRecord;
+import org.apache.kafka.clients.producer.Callback;
 import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
 import org.jhk.pulsing.shared.util.PulsingConstants;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Ji Kim
  */
 public final class Publisher {
     
+    private static final Logger _LOGGER = LoggerFactory.getLogger(Publisher.class);
+    private static final Properties _DEFAULT_PROPERTIES = new Properties();
+    
+    static {
+        _DEFAULT_PROPERTIES.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, PulsingConstants.DEFAULT_BOOTSTRAP_HOST + ":" + PulsingConstants.DEFAULT_BOOTSTRAP_PORT);
+        _DEFAULT_PROPERTIES.put(ProducerConfig.ACKS_CONFIG, "all");
+        _DEFAULT_PROPERTIES.put(ProducerConfig.RETRIES_CONFIG, 3);
+        _DEFAULT_PROPERTIES.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer");
+        _DEFAULT_PROPERTIES.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, "org.jhk.pulsing.serialization.avro.serializers.KafkaAvroJSONSerializer");
+    }
+    
     private KafkaProducer<String, SpecificRecord> _producer;
-    private String _bootstrapAddress;
+    private Properties _properties;
     
     public Publisher() {
-        this(PulsingConstants.DEFAULT_BOOTSTRAP_HOST, PulsingConstants.DEFAULT_BOOTSTRAP_PORT);
-    }
-    
-    public Publisher(String bHost, int bPort) {
-        this(bHost + ":" + bPort);
-    }
-    
-    public Publisher(String bootstrapAddress) {
         super();
         
-        _bootstrapAddress = bootstrapAddress;
-        _producer = createProducer();
+        _properties = _DEFAULT_PROPERTIES;
     }
     
-    public Future<RecordMetadata> produce(String topic, SpecificRecord message) {
+    public Publisher(Properties properties) {
+        super();
+        
+        _properties = properties;
+    }
+    
+    public void produce(String topic, SpecificRecord message, Callback cb) {
+        _LOGGER.debug("Publisher.produce " + topic + " : " + message);
+        
+        if(_producer == null) {
+            _producer = createProducer();
+        }
         
         ProducerRecord<String, SpecificRecord> data = new ProducerRecord<>(topic, message);
-        
-        return _producer.send(data);
+        _producer.send(data, cb);
+    }
+    
+    public void produce(String topic, SpecificRecord message) {
+        produce(topic, message , new Callback() {
+            
+            @Override
+            public void onCompletion(RecordMetadata rMetadata, Exception exception) {
+                
+                _LOGGER.debug("metadata: {topic: " + rMetadata.topic() + ", partition: " + rMetadata.partition() + ", offset: " + rMetadata.offset() + "}");
+                if(exception != null) {
+                    exception.printStackTrace();
+                }
+            }
+            
+        });
+    }
+    
+    public void close() {
+        if(_producer != null) {
+            _producer.close();
+        }
     }
     
     private KafkaProducer<String, SpecificRecord> createProducer() {
-        
-        Properties props = new Properties();
-        
-        props.put("bootstrap.servers", _bootstrapAddress);
-        props.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
-        props.put("value.serializer", "org.jhk.pulsing.serialization.avro.serializers.KafkaAvroJSONSerializer");
-        
-        return new KafkaProducer<>(props);
+        return new KafkaProducer<>(_properties);
     }
     
 }

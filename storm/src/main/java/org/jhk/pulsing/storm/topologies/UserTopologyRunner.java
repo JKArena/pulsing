@@ -30,17 +30,17 @@ import org.slf4j.LoggerFactory;
 /**
  * @author Ji Kim
  */
-public final class TopologyRunner {
+public final class UserTopologyRunner {
     
-    private static final Logger _LOG = LoggerFactory.getLogger(TopologyRunner.class);
+    private static final Logger _LOG = LoggerFactory.getLogger(UserTopologyRunner.class);
     
     public static void main(String[] args) throws AlreadyAliveException, InvalidTopologyException, AuthorizationException {
         
         if(args == null || args.length == 0) {
-            _LOG.debug("TopologyRunner: running local");
+            _LOG.debug("UserTopologyRunner: running local");
             runLocalCluster();
         }else {
-            _LOG.debug("TopologyRunner: running remote");
+            _LOG.debug("UserTopologyRunner: running remote");
             runRemoteCluster();
         }
         
@@ -53,7 +53,6 @@ public final class TopologyRunner {
         
         LocalCluster cluster = new LocalCluster();
         
-        cluster.submitTopology("pulse-subscribe-topology", config, PulseSubscribeTopologyBuilder.build());
         cluster.submitTopology("user-topology", config, UserTopologyBuilder.build());
         
     }
@@ -63,8 +62,6 @@ public final class TopologyRunner {
         Config config = new Config();
         config.setNumWorkers(2);
         config.setMessageTimeoutSecs(60);
-        
-        StormSubmitter.submitTopology("pulse-subscribe-topology", config, PulseSubscribeTopologyBuilder.build());
         StormSubmitter.submitTopology("user-topology", config, UserTopologyBuilder.build());
         
     }

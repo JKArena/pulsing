@@ -27,6 +27,7 @@ import org.apache.storm.kafka.trident.TridentKafkaConfig;
 import org.apache.storm.spout.SchemeAsMultiScheme;
 import org.apache.storm.trident.TridentTopology;
 import org.apache.storm.tuple.Fields;
+import org.jhk.pulsing.shared.util.PulsingConstants;
 import org.jhk.pulsing.storm.deserializers.avro.UserDeserializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,7 +55,7 @@ public final class UserTopologyBuilder {
     
     private static TransactionalTridentKafkaSpout buildSpout() {
         BrokerHosts host = new ZkHosts("localhost");
-        TridentKafkaConfig spoutConfig = new TridentKafkaConfig(host, "user-submission");
+        TridentKafkaConfig spoutConfig = new TridentKafkaConfig(host, PulsingConstants.TOPICS.USER_CREATE.toString());
         spoutConfig.scheme = new SchemeAsMultiScheme(new StringScheme());
         return new TransactionalTridentKafkaSpout(spoutConfig);
     }
