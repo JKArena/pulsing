@@ -32,7 +32,7 @@ public final class PulsingConstants {
     public static final int HASH_CODE_MULTIPLY_VALUE = 31;
     
     public enum TOPICS {
-		PULSE_SUBSCRIBE;
+		PULSE_SUBSCRIBE, USER_CREATE;
 	};
     
     private PulsingConstants() {
