@@ -27,6 +27,7 @@ import AbstractAvro from './AbstractAvro';
 import UserId from './UserId';
 
 const FORM_MAPPER = Symbol('FORM_MAPPER');
+const U_GEOLOCATION_OPTS = {'timeout': 30000, 'maximumAge': 30000};
 
 class User extends AbstractAvro {
   
@@ -35,10 +36,22 @@ class User extends AbstractAvro {
     
     this.json = json || AvroJson('User');
     this.formMapper = User[FORM_MAPPER];
+    global.navigator.geolocation.getCurrentPosition(this._onPosition.bind(this));
+  }
+  
+  _onPosition(position) {
+    console.debug('position ', position);
+    
+    let coords = position.coords;
+    this.coordinates = [coords.latitude, coords.longitude];
   }
   
   get id() {
     return new UserId(this.json['id']);
+  }
+  
+  set coordinates(coords) {
+    this.json.coordinates = {'double': coords};
   }
   
   get email() {

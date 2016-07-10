@@ -33,4 +33,5 @@ struct PulseProperty {
 
 union PulsePropertyValue {
   1: string value;
+  2: list<double> coordinates;
 }
