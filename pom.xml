@@ -75,19 +75,19 @@
       <dependency>
 	    <groupId>org.apache.storm</groupId>
         <artifactId>storm-core</artifactId>
-        <version>${org.apache.storm.core}</version>
+        <version>${storm}</version>
       </dependency>
       
       <dependency>
 	    <groupId>org.apache.storm</groupId>
         <artifactId>storm-kafka</artifactId>
-        <version>${org.apache.storm.kafka}</version>
+        <version>${storm}</version>
       </dependency>
       
       <dependency>
 	    <groupId>org.apache.storm</groupId>
         <artifactId>storm-starter</artifactId>
-        <version>${org.apache.storm.starter}</version>
+        <version>${storm}</version>
       </dependency>
       
       <dependency>
@@ -124,12 +124,6 @@
         <groupId>org.springframework</groupId>
         <artifactId>spring-webmvc</artifactId>
         <version>${spring}</version>
-      </dependency>
-      
-	  <dependency>
- 	    <groupId>org.springframework.integration</groupId>
-        <artifactId>spring-integration-kafka</artifactId>
-        <version>${spring.integration.kafka}</version>
       </dependency>
       
       <dependency>
@@ -240,6 +234,43 @@
         <version>${hibernate}</version>
       </dependency>
 	  
+	  <!-- need to copy below to storm since doesn't come packaged -->
+	  <dependency>
+        <groupId>org.apache.curator</groupId>
+        <artifactId>curator-client</artifactId>
+        <version>${curator}</version>
+      </dependency>
+
+	  <dependency>
+        <groupId>org.apache.curator</groupId>
+        <artifactId>curator-framework</artifactId>
+        <version>${curator}</version>
+      </dependency>
+	  
+	  <dependency>
+        <groupId>org.apache.zookeeper</groupId>
+        <artifactId>zookeeper</artifactId>
+        <version>${zookeeper}</version>
+      </dependency>
+	  
+	  <dependency>
+        <groupId>com.googlecode.json-simple</groupId>
+        <artifactId>json-simple</artifactId>
+        <version>${json.simple}</version>
+      </dependency>
+	  
+	  <dependency>
+        <groupId>com.yammer.metrics</groupId>
+        <artifactId>metrics-core</artifactId>
+        <version>${yammer}</version>
+      </dependency>
+	  
+	  <dependency>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <version>${assembly}</version>
+      </dependency>
+	  
       <dependency>
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
@@ -257,9 +288,12 @@
   
   <properties>
     <pulsing.version>0.1-SNAPSHOT</pulsing.version>
-    <org.apache.storm.core>1.0.0</org.apache.storm.core>
-    <org.apache.storm.kafka>1.0.0</org.apache.storm.kafka>
-    <org.apache.storm.starter>1.0.0</org.apache.storm.starter>
+	<assembly>2.6</assembly>
+    <storm>1.0.3-SNAPSHOT</storm> <!-- Replace with version from main repository later; there currently is a bug STORM-1907 in 1.0.x artifact that fails it in starting a worker -->
+	<curator>3.1.0</curator> <!-- 2.1.0 -->
+	<zookeeper>3.4.6</zookeeper>
+	<json.simple>1.1.1</json.simple>
+	<yammer>2.2.0</yammer>
     <org.apache.thrift>0.9.3</org.apache.thrift>
     <org.apache.avro>1.8.0</org.apache.avro>
     <org.apache.hadoop.core>1.2.1</org.apache.hadoop.core>
@@ -268,7 +302,6 @@
     <dfs-datastores>1.3.6</dfs-datastores>
     <cascalog>2.1.1</cascalog>
     <spring>4.3.0.RELEASE</spring>
-	<spring.integration.kafka>1.3.0.RELEASE</spring.integration.kafka>
 	<spring.boot.websocket>1.3.5.RELEASE</spring.boot.websocket>
 	<aspectjweaver>1.5.4</aspectjweaver>
 	<aspectjrt>1.8.9</aspectjrt>

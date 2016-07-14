@@ -1,0 +1,34 @@
+bin/windows/kafka-topics.bat --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic USER_CREATE
+
+START:
+cd $KAFKA
+bin/windows/zookeeper-server-start.bat config/zookeeper.properties
+bin/windows/kafka-server-start.bat config/server.properties
+
+cd $STORM
+bin/storm.cmd supervisor
+bin/storm.cmd nimbus
+
+
+STOP:
+cd $STORM
+bin/storm.cmd kill
+
+cd $KAFKA
+bin/windows/kafka-server-stop.bat
+bin/windows/zookeeper-server-stop.bat
+
+
+storm ui =>
+bin/storm.cmd ui
+http://localhost:9500/index.html
+
+ui port:
+9500
+zookeeper port:
+2181
+nimbus port:
+6627
+
+bin/storm.cmd jar ../pulsing-storm-assembly-0.1-SNAPSHOT.jar org.jhk.pulsing.storm.topologies.PulseTopologyRunner remote
+bin/storm.cmd jar ../pulsing-storm-assembly-0.1-SNAPSHOT.jar org.jhk.pulsing.storm.topologies.UserTopologyRunner remote

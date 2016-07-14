@@ -40,7 +40,7 @@ public final class UserTopologyBuilder {
     private static final Logger _LOG = LoggerFactory.getLogger(UserTopologyBuilder.class);
     
     public static StormTopology build() {
-        _LOG.debug("UserTopologyBuilder.build");
+        _LOG.info("UserTopologyBuilder.build");
         
         TridentTopology topology = new TridentTopology();
         topology.newStream("user-submission-spout", buildSpout())

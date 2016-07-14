@@ -25,7 +25,7 @@ public final class PulsingConstants {
     
     public static final int DEFAULT_TRENDING_PULSING_INTERVAL_SECONDS = 15;
     
-    public static final String DEFAULT_BOOTSTRAP_HOST = "0.0.0.0";
+    public static final String DEFAULT_BOOTSTRAP_HOST = "localhost";
     public static final int DEFAULT_BOOTSTRAP_PORT = 9092;
     
     public static final int HASH_CODE_INIT_VALUE = 3;

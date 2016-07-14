@@ -60,8 +60,8 @@ public final class UserTopologyRunner {
     private static void runRemoteCluster() throws AlreadyAliveException, InvalidTopologyException, AuthorizationException {
         
         Config config = new Config();
-        config.setNumWorkers(2);
-        config.setMessageTimeoutSecs(60);
+        config.setNumWorkers(1);
+        config.setMessageTimeoutSecs(300);
         StormSubmitter.submitTopology("user-topology", config, UserTopologyBuilder.build());
         
     }
