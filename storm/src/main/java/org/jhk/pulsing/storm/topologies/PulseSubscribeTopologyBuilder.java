@@ -43,7 +43,7 @@ public final class PulseSubscribeTopologyBuilder {
     private static final Logger _LOG = LoggerFactory.getLogger(PulseSubscribeTopologyBuilder.class);
     
     public static StormTopology build() {
-        _LOG.debug("PulseSubscribeTopologyBuilder.build");
+        _LOG.info("PulseSubscribeTopologyBuilder.build");
         
         TopologyBuilder builder = new TopologyBuilder();
         builder.setSpout("pulse-subscribe-spout", buildSpout());

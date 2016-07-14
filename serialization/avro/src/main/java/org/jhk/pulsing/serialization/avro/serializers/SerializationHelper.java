@@ -87,6 +87,7 @@ public final class SerializationHelper {
         T deserialized = null;
         
         try {
+            _LOGGER.info("SerializationHelper.deserializeFromJSONStringToAvro : " + clazz.getName() + " - " + jsonString); 
             
             JsonDecoder decoder = DecoderFactory.get().jsonDecoder(schema, jsonString);
             SpecificDatumReader<T> reader = new SpecificDatumReader<T>(schema);
@@ -105,7 +106,9 @@ public final class SerializationHelper {
         T deserialized = null;
         
         try {
-        
+            
+            _LOGGER.info("SerializationHelper.deserializeFromJSONStringToAvro : " + clazz.getName() + " - " + jsonString);
+            
             JsonDecoder decoder = DecoderFactory.get().jsonDecoder(rSchema, jsonString);
             SpecificDatumReader<T> reader = new SpecificDatumReader<T>(wSchema, rSchema);
             deserialized = reader.read(null, decoder);
@@ -127,12 +130,16 @@ public final class SerializationHelper {
         
         try {
             
+            @SuppressWarnings("unchecked")
+            Class<T> clazz = (Class<T>) obj.getClass();
+            
+            _LOGGER.info("SerializationHelper.serializeAvroTypeToJSONString : " + clazz.getName() + " - " + obj);
+            
             Schema schema = ((SpecificRecord) obj).getSchema();
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             Encoder encoder = EncoderFactory.get().jsonEncoder(schema, out);
             
-            @SuppressWarnings("unchecked")
-            SpecificDatumWriter<T> writer = new SpecificDatumWriter<T>((Class<T>) obj.getClass());
+            SpecificDatumWriter<T> writer = new SpecificDatumWriter<T>(clazz);
             writer.write(obj, encoder);
             encoder.flush();
             
