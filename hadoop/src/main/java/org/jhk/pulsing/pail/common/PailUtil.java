@@ -26,6 +26,10 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.jhk.pulsing.hadoop.common.Constants;
+import org.jhk.pulsing.pail.thrift.AbstractThriftPailStructure;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import static org.jhk.pulsing.hadoop.common.Constants.DIRECTORIES.*;
 
 import com.backtype.hadoop.pail.Pail;
@@ -36,40 +40,46 @@ import com.backtype.hadoop.pail.Pail.TypedRecordOutputStream;
  */
 public final class PailUtil {
     
+    private static final Logger _LOG = LoggerFactory.getLogger(PailUtil.class);
+    
     private PailUtil() {
         super();
     }
     
     /**
-     * When moving new data to the master data
+     * Move new data to the master data
      * 
      * @param masterPail
      * @param newDataPail
      * @throws IOException
      */
-    public static void ingest(Pail masterPail, Pail newDataPail) throws IOException {
+    public static void ingest(Pail<?> masterPail, Pail<?> newDataPail) throws IOException {
+        _LOG.info("PailUtil.ingest " + masterPail.getInstanceRoot() + " - " + newDataPail.getInstanceRoot());
+        
         FileSystem fSystem = FileSystem.get(new Configuration());
         
         fSystem.delete(new Path(Constants.getTempWorkingDirectory(null)), true);
         fSystem.mkdirs(new Path(Constants.getTempWorkingDirectory(null)));
         
-        Pail snapShotPail = newDataPail.snapshot(Constants.getTempWorkingDirectory(TEMP_NEW_DATA_SNAPSHOT));
+        Pail<?> snapShotPail = newDataPail.snapshot(Constants.getTempWorkingDirectory(TEMP_NEW_DATA_SNAPSHOT));
         appendNewData(masterPail, snapShotPail);
         newDataPail.deleteSnapshot(snapShotPail);
     }
     
-    private static void appendNewData(Pail masterPail, Pail snapshotPail) throws IOException {
-        Pail shreddedPail = PailTapUtil.shred();
+    private static void appendNewData(Pail<?> masterPail, Pail<?> snapshotPail) throws IOException {
+        Pail<?> shreddedPail = PailTapUtil.shred();
         masterPail.absorb(shreddedPail);
     }
     
-    public static <T extends Comparable<T>> void writePailStructures(String path, ThriftPailStructure<T> tpStructure,
+    public static <T extends Comparable<T>> void writePailStructures(String path, AbstractThriftPailStructure<T> tpStructure,
                                                                         List<T> content) throws IOException {
+        _LOG.info("PailUtil.writePailStructures " + path);
+        
         Pail<T> pail = (Pail<T>) Pail.create(path, tpStructure);
         TypedRecordOutputStream out = pail.openWrite();
         
-        for(T trav : content) {
-            out.writeObject(trav);
+        for(T struct : content) {
+            out.writeObject(struct);
         }
         
         out.close();
@@ -79,8 +89,8 @@ public final class PailUtil {
         List<T> entries = new LinkedList<>();
         Pail<T> pails = new Pail<T>(path);
         
-        for(T entry : pails) {
-            entries.add(entry);
+        for(T pail : pails) {
+            entries.add(pail);
         }
         
         return entries;

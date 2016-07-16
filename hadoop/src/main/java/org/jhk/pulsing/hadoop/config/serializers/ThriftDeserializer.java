@@ -7,42 +7,50 @@ import org.apache.thrift.TException;
 import org.apache.thrift.protocol.TCompactProtocol;
 import org.apache.thrift.protocol.TProtocol;
 import org.apache.thrift.transport.TIOStreamTransport;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-public final class ThriftDeserializer implements Deserializer<TBase> {
+public final class ThriftDeserializer implements Deserializer<TBase<?, ?>> {
+    
+    private static final Logger _LOG = LoggerFactory.getLogger(ThriftDeserializer.class);
 
-    private TBase prototype;
+    private TBase<?, ?> prototype;
     private TIOStreamTransport sTransport;
     private TProtocol protocol;
 
     private DataInputStream dIStream;
 
-    public ThriftDeserializer(Class<TBase> c) {
+    public ThriftDeserializer(Class<TBase<?, ?>> clazz) {
+        
         try {
-            prototype = c.newInstance();
+            prototype = clazz.newInstance();
         } catch (Exception e) {
-            throw new RuntimeException("Could not create " + c, e);
+            throw new RuntimeException("Could not create " + clazz, e);
         }
-
     }
 
-    public void open(InputStream in) throws IOException {
-        dIStream = new DataInputStream(in);
-        sTransport = new TIOStreamTransport(in);
+    public void open(InputStream iStream) throws IOException {
+        dIStream = new DataInputStream(iStream);
+        sTransport = new TIOStreamTransport(iStream);
         protocol = new TCompactProtocol(sTransport);
     }
 
-    public TBase deserialize(TBase t) throws IOException {
+    public TBase<?, ?> deserialize(TBase<?, ?> tObject) throws IOException {
+        _LOG.info("ThriftDeserializer.deserialize " + tObject);
+        
         WritableUtils.readVInt(dIStream);
-        TBase object = prototype.deepCopy();
+        TBase<?, ?> object = prototype.deepCopy();
+        
         try {
             object.read(protocol);
         } catch (TException e) {
             throw new IOException(e.toString());
         }
+        
         return object;
     }
 
