@@ -30,6 +30,7 @@ public final class EnumDeserializer implements Deserializer<TEnum> {
         }
         
     }
+    
     public void open(InputStream iStream) throws IOException {
         dIStream = new DataInputStream(iStream);
     }
