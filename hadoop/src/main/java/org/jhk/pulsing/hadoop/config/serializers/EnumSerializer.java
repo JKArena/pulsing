@@ -29,4 +29,5 @@ public final class EnumSerializer implements Serializer<TEnum> {
             dOStream.close();
         }
     }
+    
 }
