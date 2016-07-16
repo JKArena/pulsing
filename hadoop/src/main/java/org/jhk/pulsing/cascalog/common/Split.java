@@ -18,6 +18,8 @@
  */
 package org.jhk.pulsing.cascalog.common;
 
+import java.util.Arrays;
+
 import cascading.flow.FlowProcess;
 import cascading.operation.FunctionCall;
 import cascading.tuple.Tuple;
@@ -42,10 +44,11 @@ public final class Split extends CascalogFunction {
     public void operate(FlowProcess process, FunctionCall call) {
         
         String sentence = call.getArguments().getString(0);
-        for(String word : sentence.split(_delim)) {
-            call.getOutputCollector().add(new Tuple(word));
-        }
         
+        Arrays.asList(sentence.split(_delim)).stream()
+            .forEach(word -> {
+                call.getOutputCollector().add(new Tuple(word));
+            });
     }
 
 }

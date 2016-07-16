@@ -16,34 +16,38 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.pail.common;
+package org.jhk.pulsing.pail.thrift;
 
 import org.apache.thrift.TBase;
 import org.apache.thrift.TDeserializer;
 import org.apache.thrift.TException;
 import org.apache.thrift.TSerializer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.backtype.hadoop.pail.PailStructure;
 
 /**
  * @author Ji Kim
  */
-public abstract class ThriftPailStructure<T extends Comparable<T>> 
+public abstract class AbstractThriftPailStructure<T extends Comparable<T>> 
                                             implements PailStructure<T> {
-
+    
     private static final long serialVersionUID = 8824535385349855885L;
+    
+    private static final Logger _LOG = LoggerFactory.getLogger(AbstractThriftPailStructure.class);
     
     private transient TSerializer serializer;
     private transient TDeserializer deserializer;
     
-    private TSerializer getSerializer() {
+    private synchronized TSerializer getSerializer() {
         if(serializer == null) {
             serializer = new TSerializer();
         }
         return serializer;
     }
     
-    private TDeserializer getDeserializer() {
+    private synchronized TDeserializer getDeserializer() {
         if(deserializer == null) {
             deserializer = new TDeserializer();
         }
@@ -52,10 +56,12 @@ public abstract class ThriftPailStructure<T extends Comparable<T>>
     
     @Override
     public T deserialize(byte[] serialized) {
+        _LOG.debug("ThriftPailStructure.deserialize " + serialized.length);
+        
         T thriftObject = createThriftObject();
         
         try {
-            getDeserializer().deserialize((TBase) thriftObject, serialized);
+            getDeserializer().deserialize((TBase<?, ?>) thriftObject, serialized);
         } catch (TException dsException) {
             throw new RuntimeException(dsException);
         }
@@ -65,8 +71,10 @@ public abstract class ThriftPailStructure<T extends Comparable<T>>
 
     @Override
     public byte[] serialize(T object) {
+        _LOG.debug("ThriftPailStructure.serialize " + object);
+        
         try {
-            return getSerializer().serialize((TBase) object);
+            return getSerializer().serialize((TBase<?, ?>) object);
         } catch (TException sException) {
             throw new RuntimeException(sException);
         }

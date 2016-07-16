@@ -16,17 +16,25 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.pail.thrift;
+package org.jhk.pulsing.pail.thrift.structures;
 
 import java.util.List;
+
+import org.jhk.pulsing.pail.thrift.IFieldStructure;
 
 /**
  * @author Ji Kim
  */
-interface FieldStructure {
-    
-    boolean isValidTarget(String[] dirs);
-    
-    void fillTarget(List<String> ret, Object val);
-    
+public final class EdgeStructure implements IFieldStructure {
+
+    @Override
+    public boolean isValidTarget(String[] dirs) {
+        return true;
+    }
+
+    @Override
+    public void fillTarget(List<String> ret, Object val) {
+        
+    }
+
 }

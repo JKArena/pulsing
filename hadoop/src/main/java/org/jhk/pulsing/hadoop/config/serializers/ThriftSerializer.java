@@ -7,13 +7,17 @@ import org.apache.thrift.TException;
 import org.apache.thrift.protocol.TCompactProtocol;
 import org.apache.thrift.protocol.TProtocol;
 import org.apache.thrift.transport.TIOStreamTransport;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-public final class ThriftSerializer implements Serializer<TBase> {
+public final class ThriftSerializer implements Serializer<TBase<?, ?>> {
+    
+    private static final Logger _LOG = LoggerFactory.getLogger(ThriftSerializer.class);
     
     private TIOStreamTransport sTransport;
     private TProtocol protocol;
@@ -22,8 +26,8 @@ public final class ThriftSerializer implements Serializer<TBase> {
     private OutputStream realOutStream;
     private DataOutputStream dOStream;
 
-    public void open(OutputStream out) throws IOException {
-        realOutStream = out;
+    public void open(OutputStream oStream) throws IOException {
+        realOutStream = oStream;
         dOStream = new DataOutputStream(realOutStream);
 
         buffer = new ByteArrayOutputStream();
@@ -31,10 +35,12 @@ public final class ThriftSerializer implements Serializer<TBase> {
         protocol = new TCompactProtocol(sTransport);
     }
 
-    public void serialize(TBase t) throws IOException {
+    public void serialize(TBase<?, ?> tObject) throws IOException {
+        _LOG.info("ThriftSerializer.serialize " + tObject);
+        
         try {
             buffer.reset();
-            t.write(protocol);
+            tObject.write(protocol);
 
             WritableUtils.writeVInt(dOStream, buffer.size());
             buffer.writeTo(realOutStream);

@@ -25,12 +25,13 @@ import java.util.List;
 import org.jhk.pulsing.hadoop.common.Constants;
 import static org.jhk.pulsing.hadoop.common.Constants.DIRECTORIES.*;
 import org.jhk.pulsing.pail.common.PailTap.PailTapOptions;
-import org.jhk.pulsing.pail.thrift.SplitDataPailstructure;
+import org.jhk.pulsing.pail.thrift.structures.SplitDataPailstructure;
 import org.jhk.pulsing.serialization.thrift.data.DataUnit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.backtype.hadoop.pail.Pail;
 import com.backtype.hadoop.pail.PailSpec;
-import com.backtype.hadoop.pail.PailStructure;
 
 import cascalog.ops.IdentityBuffer;
 import cascalog.ops.RandLong;
@@ -41,6 +42,8 @@ import jcascalog.Subquery;
  * @author Ji Kim
  */
 public final class PailTapUtil {
+    
+    private static final Logger _LOG = LoggerFactory.getLogger(PailTapUtil.class);
     
     private PailTapUtil() {
         super();
@@ -69,9 +72,11 @@ public final class PailTapUtil {
     }
     
     public static Pail shred() throws IOException {
+        
         PailTap source = new PailTap(Constants.getTempWorkingDirectory(TEMP_SNAPSHOT));
         PailTap sink = splitDataTap(Constants.getTempWorkingDirectory(TEMP_SHREDDED));
         
+        _LOG.info("PailTapUtil.shred " + source.getPath() + " - " + sink.getPath());
         Subquery reduced = new Subquery("?rand", "?data")
                 .predicate(source, "_", "?data-in")
                 .predicate(new RandLong())
@@ -94,9 +99,11 @@ public final class PailTapUtil {
      * @return
      */
     public static PailTap splitDataTap(String path) {
+        _LOG.info("PailTapUtil.splitDataTap " + path);
+        
         PailTapOptions options = new PailTapOptions();
         
-        options.spec = new PailSpec((PailStructure) new SplitDataPailstructure());
+        options.spec = new PailSpec(new SplitDataPailstructure());
         return new PailTap(path, options);
     }
     

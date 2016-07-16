@@ -42,18 +42,22 @@ public final class PailTap extends Hfs {
     
     private static final long serialVersionUID = 8703299458671063700L;
 
-    private static Logger LOG = Logger.getLogger(PailTap.class);
+    private static Logger _LOG = Logger.getLogger(PailTap.class);
     
     private String _pailRoot;
     private PailTapOptions _options;
 
     public static PailSpec makeSpec(PailSpec given, PailStructure structure) {
+        _LOG.info("PailTap.makeSpec " + given + " - " + structure);
+        
         return (given == null)
                 ? PailFormatFactory.getDefaultCopy().setStructure(structure)
                 : given.setStructure(structure);
     }
 
     public static class PailTapOptions implements Serializable {
+        
+        private static final long serialVersionUID = -223153844745184308L;
         
         public PailSpec spec = null;
         public String fieldName = "bytes";
@@ -250,7 +254,7 @@ public final class PailTap extends Hfs {
                     String rel = Utils.join(attr, "/");
                     pail.getSubPail(rel); // ensure the path exists
                     Path toAdd = new Path(root, rel);
-                    LOG.info("Adding input path " + toAdd.toString());
+                    _LOG.info("Adding input path " + toAdd.toString());
                     FileInputFormat.addInputPath(conf, toAdd);
                 }
             } else {
@@ -270,8 +274,8 @@ public final class PailTap extends Hfs {
             String infoMessage) {
         if (!conf.get("mapred.job.tracker", "").equalsIgnoreCase("local")
                 && qualifiedPath.toUri().getScheme().equalsIgnoreCase("file")) {
-            if (LOG.isInfoEnabled()) {
-                LOG.info(infoMessage + toString());
+            if (_LOG.isInfoEnabled()) {
+                _LOG.info(infoMessage + toString());
             }
 
             conf.set("mapred.job.tracker", "local"); // force job to run locally
@@ -294,20 +298,20 @@ public final class PailTap extends Hfs {
         FileSystem fs = p.getFileSystem();
         Path tmpPath = new Path(_pailRoot, "_temporary");
         if (fs.exists(tmpPath)) {
-            LOG.info("Deleting _temporary directory left by Hadoop job: "
+            _LOG.info("Deleting _temporary directory left by Hadoop job: "
                     + tmpPath.toString());
             fs.delete(tmpPath, true);
         }
 
         Path tmp2Path = new Path(_pailRoot, "_temporary2");
         if (fs.exists(tmp2Path)) {
-            LOG.info("Deleting _temporary2 directory: " + tmp2Path.toString());
+            _LOG.info("Deleting _temporary2 directory: " + tmp2Path.toString());
             fs.delete(tmp2Path, true);
         }
 
         Path logPath = new Path(_pailRoot, "_logs");
         if (fs.exists(logPath)) {
-            LOG.info("Deleting _logs directory left by Hadoop job: "
+            _LOG.info("Deleting _logs directory left by Hadoop job: "
                     + logPath.toString());
             fs.delete(logPath, true);
         }
