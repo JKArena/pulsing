@@ -24,11 +24,11 @@ import java.io.IOException;
 import java.util.Arrays;
 
 import static org.jhk.pulsing.cascalog.flow.useridnorm.FunctionBuffer.*;
-import org.jhk.pulsing.hadoop.common.Constants;
-import static org.jhk.pulsing.hadoop.common.Constants.DIRECTORIES.*;
 
 import org.jhk.pulsing.pail.common.PailTapUtil;
 import org.jhk.pulsing.serialization.thrift.data.DataUnit;
+import org.jhk.pulsing.shared.util.HadoopConstants;
+import static org.jhk.pulsing.shared.util.HadoopConstants.DIRECTORIES.*;
 
 import cascading.flow.FlowProcess;
 import cascading.flow.hadoop.HadoopFlowProcess;
@@ -50,15 +50,15 @@ public final class UserIdNormalizationFlow {
     public static void normalizeUserIds() throws IOException {
         
         initializeUserIdNormalization();
-        int numberOfIterations = userIdNormalizationIterationLoop();
+        int numberOfIterations = userIdNormalizationIterationLoop(); //temp path with this iteration is the final one to use
     }
     
     private static void initializeUserIdNormalization() {
         
-        Tap equivs = PailTapUtil.attributetap(Constants.PAIL_MASTER_WORKSPACE, 
+        Tap equivs = PailTapUtil.attributetap(HadoopConstants.PAIL_MASTER_WORKSPACE, 
                                                 DataUnit._Fields.EQUIV);
         
-        Api.execute(Api.hfsSeqfile(Constants.getTempWorkingDirectory(TEMP_EQUIVS_ITERATE) + "0"), 
+        Api.execute(Api.hfsSeqfile(HadoopConstants.getTempWorkingDirectory(TEMP_EQUIVS_ITERATE) + "0"), 
                     new Subquery("?node1", "?node2")
                         .predicate(equivs, "_", "?data")
                         .predicate(new EdgifyEquiv(), "?node1", "?node2"));
@@ -77,10 +77,10 @@ public final class UserIdNormalizationFlow {
     }
     
     private static Tap userIdNormalizationIteration(int i) {
-        Tap source = (Tap) Api.hfsSeqfile(Constants.getTempWorkingDirectory(TEMP_EQUIVS_ITERATE) + (i-1));
-        Tap sink = (Tap) Api.hfsSeqfile(Constants.getTempWorkingDirectory(TEMP_EQUIVS_ITERATE) + i);
+        Tap source = (Tap) Api.hfsSeqfile(HadoopConstants.getTempWorkingDirectory(TEMP_EQUIVS_ITERATE) + (i-1));
+        Tap sink = (Tap) Api.hfsSeqfile(HadoopConstants.getTempWorkingDirectory(TEMP_EQUIVS_ITERATE) + i);
         
-        Tap progressSink = (Tap) Api.hfsSeqfile(Constants.getTempWorkingDirectory(TEMP_EQUIVS_ITERATE) + "-new");
+        Tap progressSink = (Tap) Api.hfsSeqfile(HadoopConstants.getTempWorkingDirectory(TEMP_EQUIVS_ITERATE) + "-new");
         
         Subquery iteration = iterationQuery(source);
         Subquery newEdgeSet = new Subquery("?node1", "?node2")

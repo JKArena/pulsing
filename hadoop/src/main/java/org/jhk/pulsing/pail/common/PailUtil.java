@@ -25,15 +25,15 @@ import java.util.List;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
-import org.jhk.pulsing.hadoop.common.Constants;
-import org.jhk.pulsing.pail.thrift.AbstractThriftPailStructure;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static org.jhk.pulsing.hadoop.common.Constants.DIRECTORIES.*;
-
 import com.backtype.hadoop.pail.Pail;
 import com.backtype.hadoop.pail.Pail.TypedRecordOutputStream;
+
+import org.jhk.pulsing.shared.util.HadoopConstants;
+import static org.jhk.pulsing.shared.util.HadoopConstants.DIRECTORIES.*;
+import org.jhk.pulsing.pail.thrift.AbstractThriftPailStructure;
 
 /**
  * @author Ji Kim
@@ -58,10 +58,10 @@ public final class PailUtil {
         
         FileSystem fSystem = FileSystem.get(new Configuration());
         
-        fSystem.delete(new Path(Constants.getTempWorkingDirectory(null)), true);
-        fSystem.mkdirs(new Path(Constants.getTempWorkingDirectory(null)));
+        fSystem.delete(new Path(HadoopConstants.getTempWorkingDirectory(null)), true);
+        fSystem.mkdirs(new Path(HadoopConstants.getTempWorkingDirectory(null)));
         
-        Pail<?> snapShotPail = newDataPail.snapshot(Constants.getTempWorkingDirectory(TEMP_NEW_DATA_SNAPSHOT));
+        Pail<?> snapShotPail = newDataPail.snapshot(HadoopConstants.getTempWorkingDirectory(TEMP_NEW_DATA_SNAPSHOT));
         appendNewData(masterPail, snapShotPail);
         newDataPail.deleteSnapshot(snapShotPail);
     }

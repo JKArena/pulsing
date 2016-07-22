@@ -22,11 +22,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jhk.pulsing.hadoop.common.Constants;
-import static org.jhk.pulsing.hadoop.common.Constants.DIRECTORIES.*;
-import org.jhk.pulsing.pail.common.PailTap.PailTapOptions;
-import org.jhk.pulsing.pail.thrift.structures.SplitDataPailstructure;
-import org.jhk.pulsing.serialization.thrift.data.DataUnit;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,6 +32,12 @@ import cascalog.ops.IdentityBuffer;
 import cascalog.ops.RandLong;
 import jcascalog.Api;
 import jcascalog.Subquery;
+
+import org.jhk.pulsing.shared.util.HadoopConstants;
+import static org.jhk.pulsing.shared.util.HadoopConstants.DIRECTORIES.*;
+import org.jhk.pulsing.pail.common.PailTap.PailTapOptions;
+import org.jhk.pulsing.pail.thrift.structures.SplitDataPailstructure;
+import org.jhk.pulsing.serialization.thrift.data.DataUnit;
 
 /**
  * @author Ji Kim
@@ -73,8 +74,8 @@ public final class PailTapUtil {
     
     public static Pail shred() throws IOException {
         
-        PailTap source = new PailTap(Constants.getTempWorkingDirectory(TEMP_SNAPSHOT));
-        PailTap sink = splitDataTap(Constants.getTempWorkingDirectory(TEMP_SHREDDED));
+        PailTap source = new PailTap(HadoopConstants.getTempWorkingDirectory(TEMP_SNAPSHOT));
+        PailTap sink = splitDataTap(HadoopConstants.getTempWorkingDirectory(TEMP_SHREDDED));
         
         _LOG.info("PailTapUtil.shred " + source.getPath() + " - " + sink.getPath());
         Subquery reduced = new Subquery("?rand", "?data")
@@ -86,7 +87,7 @@ public final class PailTapUtil {
         
         Api.execute(sink,  new Subquery("?data").predicate(reduced, "_", "?data"));
         
-        Pail shreddedPail = new Pail(Constants.getTempWorkingDirectory(TEMP_SHREDDED));
+        Pail shreddedPail = new Pail(HadoopConstants.getTempWorkingDirectory(TEMP_SHREDDED));
         shreddedPail.consolidate();
         
         return shreddedPail;
