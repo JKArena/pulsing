@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.hadoop.common;
+package org.jhk.pulsing.shared.util;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -33,7 +33,7 @@ import org.xml.sax.helpers.DefaultHandler;
 /**
  * @author Ji Kim
  */
-public final class Constants {
+public final class HadoopConstants {
     
     public static final boolean IS_WINDOWS_SYSTEM;
     
@@ -47,6 +47,10 @@ public final class Constants {
     private static final String MASTER_WORKSPACE_KEY = "MASTER_WORKSPACE";
     private static final String TEMP_WORKSPACE_KEY = "TEMP_WORKSPACE";
     private static final String CONFIG_XML = "config.xml";
+    
+    private HadoopConstants() {
+        super();
+    }
     
     static {
         
@@ -64,10 +68,6 @@ public final class Constants {
         PAIL_TEMP_WORKSPACE = tempParseMap.get(TEMP_WORKSPACE_KEY);
     }
     
-    private Constants() {
-        super();
-    }
-    
     public static String getTempWorkingDirectory(DIRECTORIES directory) {
         if(directory == null) {
             return PAIL_TEMP_WORKSPACE;
@@ -78,7 +78,7 @@ public final class Constants {
     private static void parseSetProperties(Map<String, String> tempParseMap) throws IOException, ParserConfigurationException, SAXException{
         
         SAXParser parser = SAXParserFactory.newInstance().newSAXParser();
-        parser.parse(Constants.class.getResourceAsStream(CONFIG_XML), new DefaultHandler(){
+        parser.parse(HadoopConstants.class.getResourceAsStream(CONFIG_XML), new DefaultHandler(){
             
             private boolean windows = false;
             private boolean nonWindows = false;

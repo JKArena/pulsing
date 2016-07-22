@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
   <non-windows>
-    <master-workspace>/data/hadoop/temp/</master-workspace>
+    <master-workspace>/data/hadoop/master/</master-workspace>
     <temp-workspace>/data/hadoop/temp/</temp-workspace>    
   </non-windows>
   <windows>
