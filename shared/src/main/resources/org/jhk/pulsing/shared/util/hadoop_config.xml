@@ -1,11 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
-  <non-windows>
-    <master-workspace>/data/hadoop/master/</master-workspace>
-    <temp-workspace>/data/hadoop/temp/</temp-workspace>    
-  </non-windows>
-  <windows>
-    <master-workspace>D:\data\hadoop\master\</master-workspace>
-    <temp-workspace>D:\data\hadoop\temp\</temp-workspace>
-  </windows>
+  <master-workspace>/data/hadoop/master/</master-workspace>
+  <temp-workspace>/data/hadoop/temp/</temp-workspace>    
 </config>

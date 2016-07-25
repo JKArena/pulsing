@@ -35,8 +35,6 @@ import org.xml.sax.helpers.DefaultHandler;
  */
 public final class HadoopConstants {
     
-    public static final boolean IS_WINDOWS_SYSTEM;
-    
     public static final String PAIL_MASTER_WORKSPACE;
     private static final String PAIL_TEMP_WORKSPACE;
     
@@ -53,8 +51,6 @@ public final class HadoopConstants {
     }
     
     static {
-        
-        IS_WINDOWS_SYSTEM = (System.getProperty("line.separator").equals("\r\n"));
         
         Map<String, String> tempParseMap = new HashMap<>();
         
@@ -80,9 +76,6 @@ public final class HadoopConstants {
         SAXParser parser = SAXParserFactory.newInstance().newSAXParser();
         parser.parse(HadoopConstants.class.getResourceAsStream(CONFIG_XML), new DefaultHandler(){
             
-            private boolean windows = false;
-            private boolean nonWindows = false;
-            
             private boolean masterWorkSpace = false;
             private boolean tempWorkSpace = false;
             
@@ -91,12 +84,7 @@ public final class HadoopConstants {
             public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
                 super.startElement(uri, localName, qName, attributes);
                 
-                if(qName.equals("windows")){
-                    windows = true;
-                }else if(qName.equals("non-windows")){
-                    windows = false;
-                    nonWindows = true;
-                }else if(qName.equals("temp-workspace")){
+                if(qName.equals("temp-workspace")){
                     tempWorkSpace = true;
                 }else if(qName.equals("master-workspace")) {
                     masterWorkSpace = true;
@@ -114,19 +102,11 @@ public final class HadoopConstants {
                 }
                 
                 if(masterWorkSpace) {
-                    if((windows && IS_WINDOWS_SYSTEM) || (nonWindows && !IS_WINDOWS_SYSTEM)) {
-                        tempParseMap.put(MASTER_WORKSPACE_KEY, currValue);
-                    }
+                    tempParseMap.put(MASTER_WORKSPACE_KEY, currValue);
                     masterWorkSpace = false;
                 } else if(tempWorkSpace){
-                    if((windows && IS_WINDOWS_SYSTEM) || (nonWindows && !IS_WINDOWS_SYSTEM)) {
-                        tempParseMap.put(TEMP_WORKSPACE_KEY, currValue);
-                    }
+                    tempParseMap.put(TEMP_WORKSPACE_KEY, currValue);
                     tempWorkSpace = false;
-                }else if(windows){
-                    windows = false;
-                }else if(nonWindows){
-                    nonWindows = false;
                 }
             }
             
