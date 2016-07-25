@@ -1,3 +1,15 @@
+Mac
+HDFS daemons
+start-dfs.sh
+stop-dfs.sh
+
+Yarn daemons
+start-yarn.sh
+stop-yarn.sh
+
+hadoop jar pulsing-hadoop-0.1-SNAPSHOT.jar org.jhk.pulsing.hadoop.job.PulsingPopular -conf $HDFS\conf\hadoop-localhost.xml
+
+Windows
 bin/windows/kafka-topics.bat --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic USER_CREATE
 
 START:
