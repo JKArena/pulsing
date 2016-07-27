@@ -99,13 +99,13 @@
 	    <dependency>
         <groupId>org.apache.storm</groupId>
         <artifactId>storm-hdfs</artifactId>
-        <version>${storm.hdfs}</version>
+        <version>${storm}</version>
       </dependency>
 	  
       <dependency>
         <groupId>org.apache.storm</groupId>
         <artifactId>storm-redis</artifactId>
-        <version>${storm.redis}</version>
+        <version>${storm}</version>
       </dependency>
       
       <dependency>
@@ -307,10 +307,8 @@
   <properties>
     <pulsing.version>0.1-SNAPSHOT</pulsing.version>
 	  <shade>2.4.3</shade>
-    <storm>1.0.2-SNAPSHOT</storm> <!-- Replace with version from main repository later; there currently is a bug STORM-1907 in 1.0.x artifact that fails it in starting a worker -->
-	  <storm.hdfs>1.0.1</storm.hdfs>	<!-- Below 2 are same as above storm so sync up later (just need to use locally built storm b/c of bug) -->
-	  <storm.redis>1.0.1</storm.redis>
-	  <curator>3.1.0</curator> <!-- 2.1.0 -->
+    <storm>1.0.3-SNAPSHOT</storm> <!-- Replace with version from main repository later; there currently is a bug STORM-1907 in 1.0.x artifact that fails it in starting a worker -->
+	  <curator>2.9.1</curator>
 	  <zookeeper>3.4.6</zookeeper>
 	  <json.simple>1.1.1</json.simple>
 	  <yammer>2.2.0</yammer>
