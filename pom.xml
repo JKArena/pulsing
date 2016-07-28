@@ -13,25 +13,25 @@
     <dependencies>
       
       <dependency>
-	      <groupId>org.jhk.pulsing.serialization.avro</groupId>
+        <groupId>org.jhk.pulsing.serialization.avro</groupId>
         <artifactId>pulsing-avro</artifactId>
         <version>${pulsing.version}</version>
       </dependency>
       
       <dependency>
-	      <groupId>org.jhk.pulsing.serialization.thrift</groupId>
+        <groupId>org.jhk.pulsing.serialization.thrift</groupId>
         <artifactId>pulsing-thrift</artifactId>
         <version>${pulsing.version}</version>
       </dependency>
 
       <dependency>
-	      <groupId>org.jhk.pulsing.db.mysql</groupId>
+        <groupId>org.jhk.pulsing.db.mysql</groupId>
         <artifactId>pulsing-db-mysql</artifactId>
         <version>${pulsing.version}</version>
       </dependency>
 	  
-	    <dependency>
-	      <groupId>org.jhk.pulsing.shared</groupId>
+      <dependency>
+        <groupId>org.jhk.pulsing.shared</groupId>
         <artifactId>pulsing-shared</artifactId>
         <version>${pulsing.version}</version>
       </dependency>
@@ -43,33 +43,33 @@
       </dependency>
       
       <dependency>
-	      <groupId>org.apache.hadoop</groupId>
-	      <artifactId>hadoop-core</artifactId>
-	      <version>${org.apache.hadoop.core}</version>
+        <groupId>org.apache.hadoop</groupId>
+        <artifactId>hadoop-core</artifactId>
+        <version>${org.apache.hadoop.core}</version>
       </dependency>
       
       <dependency>
-	      <groupId>org.apache.hadoop</groupId>
-	      <artifactId>hadoop-common</artifactId>
-	      <version>${org.apache.hadoop}</version>
+        <groupId>org.apache.hadoop</groupId>
+        <artifactId>hadoop-common</artifactId>
+        <version>${org.apache.hadoop}</version>
       </dependency>
       
       <dependency>
-	      <groupId>org.apache.hadoop</groupId>
-	      <artifactId>hadoop-hdfs</artifactId>
-	      <version>${org.apache.hadoop}</version>
-      </dependency>
-	  
-	    <dependency>
-	      <groupId>org.apache.hadoop</groupId>
-	      <artifactId>hadoop-client</artifactId>
-	      <version>${org.apache.hadoop}</version>
+        <groupId>org.apache.hadoop</groupId>
+        <artifactId>hadoop-hdfs</artifactId>
+        <version>${org.apache.hadoop}</version>
       </dependency>
 	  
       <dependency>
-	      <groupId>com.backtype</groupId>
-	      <artifactId>dfs-datastores</artifactId>
-	      <version>${dfs-datastores}</version>
+        <groupId>org.apache.hadoop</groupId>
+        <artifactId>hadoop-client</artifactId>
+        <version>${org.apache.hadoop}</version>
+      </dependency>
+	  
+      <dependency>
+        <groupId>com.backtype</groupId>
+        <artifactId>dfs-datastores</artifactId>
+        <version>${dfs-datastores}</version>
       </dependency>
       
       <dependency>
@@ -79,24 +79,24 @@
       </dependency>
       
       <dependency>
-	      <groupId>org.apache.storm</groupId>
+        <groupId>org.apache.storm</groupId>
         <artifactId>storm-core</artifactId>
         <version>${storm}</version>
       </dependency>
       
       <dependency>
-	      <groupId>org.apache.storm</groupId>
+        <groupId>org.apache.storm</groupId>
         <artifactId>storm-kafka</artifactId>
         <version>${storm}</version>
       </dependency>
       
       <dependency>
-	      <groupId>org.apache.storm</groupId>
+        <groupId>org.apache.storm</groupId>
         <artifactId>storm-starter</artifactId>
         <version>${storm}</version>
       </dependency>
 	  
-	    <dependency>
+      <dependency>
         <groupId>org.apache.storm</groupId>
         <artifactId>storm-hdfs</artifactId>
         <version>${storm}</version>
@@ -109,21 +109,27 @@
       </dependency>
       
       <dependency>
-	      <groupId>org.apache.thrift</groupId>
+        <groupId>org.apache.thrift</groupId>
         <artifactId>libthrift</artifactId>
         <version>${org.apache.thrift}</version>
       </dependency>
       
       <dependency>
-	      <groupId>org.apache.avro</groupId>
+        <groupId>org.apache.avro</groupId>
         <artifactId>avro</artifactId>
         <version>${org.apache.avro}</version>
       </dependency>
       
       <dependency>
-	      <groupId>org.apache.kafka</groupId>
+        <groupId>org.apache.kafka</groupId>
         <artifactId>kafka-clients</artifactId>
-        <version>${kafka.clients}</version>
+        <version>${kafka}</version>
+      </dependency>
+	  
+      <dependency>
+        <groupId>org.apache.kafka</groupId>
+        <artifactId>kafka_2.10</artifactId>
+        <version>${kafka}</version>
       </dependency>
       
       <dependency>
@@ -150,37 +156,37 @@
         <version>${spring}</version>
       </dependency>
 	  
-	    <dependency>
+      <dependency>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-websocket</artifactId>
         <version>${spring.boot.websocket}</version>
       </dependency>
 	  
-	    <dependency>
+      <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-messaging</artifactId>
         <version>${spring}</version>
       </dependency>
 	  
-	    <dependency>
+      <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-aspects</artifactId>
         <version>${spring}</version>
       </dependency>
 	  
-	    <dependency>
+      <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-tx</artifactId>
         <version>${spring}</version>
       </dependency>
 	  
-	    <dependency>
+      <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-orm</artifactId>
         <version>${spring}</version>
       </dependency>
 	  
-	    <dependency>
+      <dependency>
         <groupId>aspectj</groupId>
         <artifactId>aspectjweaver</artifactId>
         <version>${aspectjweaver}</version>
@@ -192,28 +198,28 @@
         <version>${aspectjrt}</version>
       </dependency>
 	  
-	    <dependency>
+      <dependency>
         <groupId>commons-fileupload</groupId>
         <artifactId>commons-fileupload</artifactId>
         <version>${commons.fileupload}</version>
       </dependency>
 	  
-	    <dependency>
+      <dependency>
         <groupId>commons-io</groupId>
         <artifactId>commons-io</artifactId>
         <version>${commons.io}</version>
       </dependency>
       
       <dependency>
-	      <groupId>com.fasterxml.jackson.core</groupId>
-	      <artifactId>jackson-core</artifactId>
-	      <version>${jackson}</version>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-core</artifactId>
+        <version>${jackson}</version>
       </dependency>
 
       <dependency>
-	      <groupId>com.fasterxml.jackson.core</groupId>
-	      <artifactId>jackson-databind</artifactId>
-	      <version>${jackson}</version>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-databind</artifactId>
+        <version>${jackson}</version>
       </dependency>
 
       <dependency>
@@ -223,67 +229,36 @@
       </dependency>
       
       <dependency>
-	      <groupId>redis.clients</groupId>
-	      <artifactId>jedis</artifactId>
-	      <version>${jedis}</version>
+        <groupId>redis.clients</groupId>
+        <artifactId>jedis</artifactId>
+        <version>${jedis}</version>
       </dependency>
 	  
-	    <dependency>
+      <dependency>
         <groupId>org.apache.cassandra</groupId>
         <artifactId>cassandra-clientutil</artifactId>
         <version>${cassandra.client}</version>
       </dependency>
 	  
-	    <dependency>
+      <dependency>
         <groupId>mysql</groupId>
         <artifactId>mysql-connector-java</artifactId>
         <version>${mysql.connector.java}</version>
       </dependency>
       
-	    <dependency>
+      <dependency>
         <groupId>org.hibernate</groupId>
         <artifactId>hibernate-core</artifactId>
         <version>${hibernate}</version>
       </dependency>
 	  
-	    <dependency>
+      <dependency>
         <groupId>org.hibernate</groupId>
         <artifactId>hibernate-validator</artifactId>
         <version>${hibernate}</version>
       </dependency>
 	  
-	    <!-- need to copy below to storm since doesn't come packaged -->
-	    <dependency>
-        <groupId>org.apache.curator</groupId>
-        <artifactId>curator-client</artifactId>
-        <version>${curator}</version>
-      </dependency>
-
-	    <dependency>
-        <groupId>org.apache.curator</groupId>
-        <artifactId>curator-framework</artifactId>
-        <version>${curator}</version>
-      </dependency>
-	  
-	    <dependency>
-        <groupId>org.apache.zookeeper</groupId>
-        <artifactId>zookeeper</artifactId>
-        <version>${zookeeper}</version>
-      </dependency>
-	  
-	    <dependency>
-        <groupId>com.googlecode.json-simple</groupId>
-        <artifactId>json-simple</artifactId>
-        <version>${json.simple}</version>
-      </dependency>
-	  
-	    <dependency>
-        <groupId>com.yammer.metrics</groupId>
-        <artifactId>metrics-core</artifactId>
-        <version>${yammer}</version>
-      </dependency>
-	  
-	    <dependency>
+      <dependency>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-shade-plugin</artifactId>
         <version>${shade}</version>
@@ -298,7 +273,7 @@
       <dependency>
         <groupId>org.freemarker</groupId>
         <artifactId>freemarker</artifactId>
-	      <version>${freemarker}</version>
+        <version>${freemarker}</version>
       </dependency>
       
     </dependencies>
@@ -306,12 +281,8 @@
   
   <properties>
     <pulsing.version>0.1-SNAPSHOT</pulsing.version>
-	  <shade>2.4.3</shade>
+    <shade>2.4.3</shade>
     <storm>1.0.3-SNAPSHOT</storm> <!-- Replace with version from main repository later; there currently is a bug STORM-1907 in 1.0.x artifact that fails it in starting a worker -->
-	  <curator>2.9.1</curator>
-	  <zookeeper>3.4.6</zookeeper>
-	  <json.simple>1.1.1</json.simple>
-	  <yammer>2.2.0</yammer>
     <org.apache.thrift>0.9.3</org.apache.thrift>
     <org.apache.avro>1.8.0</org.apache.avro>
     <org.apache.hadoop.core>1.2.1</org.apache.hadoop.core>
@@ -319,28 +290,28 @@
     <dfs-datastores>1.3.6</dfs-datastores>
     <cascalog>2.1.1</cascalog>
     <spring>4.3.0.RELEASE</spring>
-	  <spring.boot.websocket>1.3.5.RELEASE</spring.boot.websocket>
-	  <aspectjweaver>1.5.4</aspectjweaver>
-	  <aspectjrt>1.8.9</aspectjrt>
-	  <commons.fileupload>1.3.2</commons.fileupload>
+    <spring.boot.websocket>1.3.5.RELEASE</spring.boot.websocket>
+    <aspectjweaver>1.5.4</aspectjweaver>
+    <aspectjrt>1.8.9</aspectjrt>
+    <commons.fileupload>1.3.2</commons.fileupload>
     <commons.io>2.5</commons.io>
-	  <javax.servlet.api>3.1.0</javax.servlet.api>
+    <javax.servlet.api>3.1.0</javax.servlet.api>
     <jackson>2.7.4</jackson>
-    <kafka.clients>0.10.0.0</kafka.clients>
-	  <cassandra.client>3.5</cassandra.client>
-	  <mysql.connector.java>5.1.9</mysql.connector.java>
-	  <hibernate>5.2.1.Final</hibernate>
-	  <junit>4.12</junit>
+    <kafka>0.10.0.0</kafka> <!-- 0.8.2.2 on windows -->
+    <cassandra.client>3.5</cassandra.client>
+    <mysql.connector.java>5.1.9</mysql.connector.java>
+    <hibernate>5.2.1.Final</hibernate>
+    <junit>4.12</junit>
     <freemarker>2.3.23</freemarker>
     <jedis>2.8.1</jedis>
   </properties>
   
   <modules>
     <module>hadoop</module>
-	  <module>db</module>
+    <module>db</module>
     <module>plugin</module>
     <module>serialization</module>
-	  <module>shared</module>
+    <module>shared</module>
     <module>storm</module>
     <module>web</module>
   </modules>
