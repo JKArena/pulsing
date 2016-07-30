@@ -28,6 +28,7 @@ import org.apache.storm.tuple.Tuple;
 import org.apache.storm.tuple.Values;
 import org.jhk.pulsing.serialization.avro.records.Pulse;
 import org.jhk.pulsing.serialization.avro.serializers.SerializationHelper;
+import static org.jhk.pulsing.storm.common.FieldConstants.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,7 +37,7 @@ import org.slf4j.LoggerFactory;
  */
 public final class PulseDeserializerBolt extends BaseBasicBolt {
     
-    public static final Fields FIELDS = new Fields("action", "id", "userId", "timeStamp", "value");
+    public static final Fields FIELDS = new Fields(ACTION, ID, USER_ID, TIMESTAMP, VALUE);
     
     private static final Logger _LOG = LoggerFactory.getLogger(PulseDeserializerBolt.class);
     private static final long serialVersionUID = 9003236874311323612L;

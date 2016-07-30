@@ -19,16 +19,30 @@
 package org.jhk.pulsing.storm.topologies;
 
 import org.apache.storm.generated.StormTopology;
+import org.apache.storm.hdfs.trident.HdfsState;
+import org.apache.storm.hdfs.trident.HdfsStateFactory;
+import org.apache.storm.hdfs.trident.HdfsUpdater;
+import org.apache.storm.hdfs.trident.format.DefaultFileNameFormat;
+import org.apache.storm.hdfs.trident.format.DelimitedRecordFormat;
+import org.apache.storm.hdfs.trident.format.FileNameFormat;
+import org.apache.storm.hdfs.trident.format.RecordFormat;
+import org.apache.storm.hdfs.trident.rotation.FileRotationPolicy;
+import org.apache.storm.hdfs.trident.rotation.FileSizeRotationPolicy;
 import org.apache.storm.kafka.BrokerHosts;
 import org.apache.storm.kafka.StringScheme;
 import org.apache.storm.kafka.ZkHosts;
 import org.apache.storm.kafka.trident.TransactionalTridentKafkaSpout;
 import org.apache.storm.kafka.trident.TridentKafkaConfig;
 import org.apache.storm.spout.SchemeAsMultiScheme;
+import org.apache.storm.trident.Stream;
+import org.apache.storm.trident.TridentState;
 import org.apache.storm.trident.TridentTopology;
+import org.apache.storm.trident.state.StateFactory;
 import org.apache.storm.tuple.Fields;
+import org.jhk.pulsing.shared.util.HadoopConstants;
 import org.jhk.pulsing.shared.util.PulsingConstants;
 import org.jhk.pulsing.storm.deserializers.avro.UserDeserializer;
+import org.jhk.pulsing.storm.serializers.thrift.UserSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,14 +57,39 @@ public final class UserTopologyBuilder {
         _LOG.info("UserTopologyBuilder.build");
         
         TridentTopology topology = new TridentTopology();
-        topology.newStream("user-submission-spout", buildSpout())
+        Stream stream = topology.newStream("user-submission-spout", buildSpout())
             .each(
                     new Fields("str"), 
                     new UserDeserializer(), 
                     UserDeserializer.FIELDS
                     );
         
+        hdfsStatePersist(stream);
+        
         return topology.build();
+    }
+    
+    private static void hdfsStatePersist(Stream stream) {
+        _LOG.info("UserTopologyBuilder.hdfsPersist");
+        
+        FileNameFormat fnFormat = new DefaultFileNameFormat()
+                .withPath(HadoopConstants.getWorkingDirectory(null))
+                .withPrefix("PulsingUser");
+        
+        RecordFormat rFormat = new DelimitedRecordFormat()
+                .withFields(UserSerializer.FIELDS);
+        
+        FileRotationPolicy rPolicy = new FileSizeRotationPolicy(10.0f, FileSizeRotationPolicy.Units.MB);
+        
+        HdfsState.Options opts = new HdfsState.HdfsFileOptions()
+                .withFileNameFormat(fnFormat)
+                .withRecordFormat(rFormat)
+                .withRotationPolicy(rPolicy)
+                .withFsUrl(HadoopConstants.HDFS_URL_PORT);
+        
+        StateFactory sFactory = new HdfsStateFactory().withOptions(opts);
+        
+        TridentState tState = stream.partitionPersist(sFactory, UserSerializer.FIELDS, new HdfsUpdater(), new Fields());
     }
     
     private static TransactionalTridentKafkaSpout buildSpout() {

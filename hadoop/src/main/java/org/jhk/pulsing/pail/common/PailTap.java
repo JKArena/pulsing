@@ -88,6 +88,7 @@ public final class PailTap extends Hfs {
 
         public PailScheme(PailTapOptions options) {
             super(new Fields("pail_root", options.fieldName), Fields.ALL);
+            
             _options = options;
         }
 
@@ -97,6 +98,7 @@ public final class PailTap extends Hfs {
 
         protected Object deserialize(BytesWritable record) {
             PailStructure structure = getStructure();
+            
             if (structure instanceof BinaryPailStructure) {
                 return record;
             } else {

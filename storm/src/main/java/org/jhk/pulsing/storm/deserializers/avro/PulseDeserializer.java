@@ -27,13 +27,14 @@ import org.apache.storm.tuple.Fields;
 import org.apache.storm.tuple.Values;
 import org.jhk.pulsing.serialization.avro.records.Pulse;
 import org.jhk.pulsing.serialization.avro.serializers.SerializationHelper;
+import static org.jhk.pulsing.storm.common.FieldConstants.*;
 
 /**
  * @author Ji Kim
  */
 public class PulseDeserializer extends BaseFunction {
     
-    public static final Fields FIELDS = new Fields("action", "id", "userId", "timeStamp", "value");
+    public static final Fields FIELDS = new Fields(ACTION, ID, USER_ID, TIMESTAMP, VALUE);
     
     private static final long serialVersionUID = 4863013986214675297L;
     

@@ -1,6 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
   <property>
+    <name>master.workspace</name>
+    <value>/data/master/</value>
+  </property>
+  
+  <property>
+    <name>newdata.workspace</name>
+    <value>/data/newdata/</value>
+  </property>
+  
+  <property>
+    <name>rootdata.workspace</name>
+    <value>/data/</value>
+  </property>
+  
+  <property>
     <name>fs.defaultFS</name>
     <value>hdfs://localhost</value>
   </property>

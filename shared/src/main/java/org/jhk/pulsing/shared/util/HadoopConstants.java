@@ -18,6 +18,7 @@
  */
 package org.jhk.pulsing.shared.util;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -35,16 +36,20 @@ import org.xml.sax.helpers.DefaultHandler;
  */
 public final class HadoopConstants {
     
-    public static final String PAIL_MASTER_WORKSPACE;
-    private static final String PAIL_TEMP_WORKSPACE;
+    public static final String HDFS_URL_PORT = "hdfs://localhost:54310";
+    
+    public static final String MASTER_WORKSPACE;
+    public static final String NEW_DATA_WORKSPACE;
+    private static final String ROOT_DATA_WORKSPACE;
     
     public enum DIRECTORIES {
-        TEMP_NEW_DATA_SNAPSHOT, TEMP_SNAPSHOT, TEMP_SHREDDED, TEMP_EQUIVS_ITERATE;
+        TEMP, TEMP_NEW_DATA_SNAPSHOT, TEMP_SNAPSHOT, TEMP_SHREDDED, TEMP_EQUIVS_ITERATE;
     };
     
     private static final String MASTER_WORKSPACE_KEY = "MASTER_WORKSPACE";
-    private static final String TEMP_WORKSPACE_KEY = "TEMP_WORKSPACE";
-    private static final String CONFIG_XML = "config.xml";
+    private static final String NEW_DATA_WORKSPACE_KEY = "NEW_DATA_WORKSPACE";
+    private static final String ROOT_DATA_WORKSPACE_KEY = "ROOT_DATA_WORKSPACE";
+    private static final String CONFIG_XML = "hadoop-localhost.xml";
     
     private HadoopConstants() {
         super();
@@ -60,15 +65,24 @@ public final class HadoopConstants {
             throw new RuntimeException("Failure in parsing of " + CONFIG_XML, exception);
         }
         
-        PAIL_MASTER_WORKSPACE = tempParseMap.get(MASTER_WORKSPACE_KEY);
-        PAIL_TEMP_WORKSPACE = tempParseMap.get(TEMP_WORKSPACE_KEY);
+        MASTER_WORKSPACE = tempParseMap.get(MASTER_WORKSPACE_KEY);
+        NEW_DATA_WORKSPACE = tempParseMap.get(NEW_DATA_WORKSPACE_KEY);
+        ROOT_DATA_WORKSPACE = tempParseMap.get(ROOT_DATA_WORKSPACE_KEY);
     }
     
-    public static String getTempWorkingDirectory(DIRECTORIES directory) {
-        if(directory == null) {
-            return PAIL_TEMP_WORKSPACE;
+    public static String getWorkingDirectory(DIRECTORIES... paths) {
+        if(paths == null || paths.length == 0) {
+            throw new IllegalArgumentException("Can't pass null or empty");
         }
-        return PAIL_TEMP_WORKSPACE + directory;
+        
+        StringBuilder wDirectory = new StringBuilder(ROOT_DATA_WORKSPACE);
+        
+        for(DIRECTORIES dir : paths) {
+            wDirectory.append(dir);
+            wDirectory.append(File.separator);
+        }
+        
+        return wDirectory.toString();
     }
     
     private static void parseSetProperties(Map<String, String> tempParseMap) throws IOException, ParserConfigurationException, SAXException{
@@ -77,17 +91,20 @@ public final class HadoopConstants {
         parser.parse(HadoopConstants.class.getResourceAsStream(CONFIG_XML), new DefaultHandler(){
             
             private boolean masterWorkSpace = false;
-            private boolean tempWorkSpace = false;
+            private boolean newDataWorkSpace = false;
+            private boolean rootDataWorkSpace = false;
             
             private StringBuilder nodeValue;
             
             public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
                 super.startElement(uri, localName, qName, attributes);
                 
-                if(qName.equals("temp-workspace")){
-                    tempWorkSpace = true;
-                }else if(qName.equals("master-workspace")) {
+                if(qName.equals("newdata.workspace")){
+                    newDataWorkSpace = true;
+                }else if(qName.equals("master.workspace")) {
                     masterWorkSpace = true;
+                }else if(qName.equals("rootdata.workspace")) {
+                    rootDataWorkSpace = true;
                 }
                 
                 nodeValue = new StringBuilder();
@@ -104,10 +121,14 @@ public final class HadoopConstants {
                 if(masterWorkSpace) {
                     tempParseMap.put(MASTER_WORKSPACE_KEY, currValue);
                     masterWorkSpace = false;
-                } else if(tempWorkSpace){
-                    tempParseMap.put(TEMP_WORKSPACE_KEY, currValue);
-                    tempWorkSpace = false;
+                } else if(newDataWorkSpace) {
+                    tempParseMap.put(NEW_DATA_WORKSPACE_KEY, currValue);
+                    newDataWorkSpace = false;
+                } else if(rootDataWorkSpace) {
+                    tempParseMap.put(ROOT_DATA_WORKSPACE_KEY, currValue);
+                    rootDataWorkSpace = false;
                 }
+                
             }
             
             public void characters(char[] ch, int start, int length) throws SAXException {
