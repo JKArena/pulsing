@@ -30,8 +30,7 @@ include "../id/UserId.thrift"
 union PulseEdge {
   1: required UserId.UserId userId;
   2: required PulseId.PulseId pulseId;
-  3: i64 timeStamp;
-  4: ACTION action;
+  3: ACTION action;
 }
 
 enum ACTION {

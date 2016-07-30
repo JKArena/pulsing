@@ -30,8 +30,9 @@ import org.apache.storm.topology.base.BaseBasicBolt;
 import org.apache.storm.tuple.Fields;
 import org.apache.storm.tuple.Tuple;
 import org.apache.storm.tuple.Values;
-import org.jhk.pulsing.shared.util.GenericUtil;
+import org.jhk.pulsing.shared.util.Util;
 import org.jhk.pulsing.shared.util.PulsingConstants;
+import static org.jhk.pulsing.storm.common.FieldConstants.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -77,7 +78,7 @@ public final class TimeIntervalBuilderBolt extends BaseBasicBolt {
         if(isTickTuple(tuple)) {
             processTickTuple(outputCollector);
         }else {
-            processTimeIntervalValue(tuple, tuple.getLongByField("timeInterval"));
+            processTimeIntervalValue(tuple, tuple.getLongByField(TIME_INTERVAL));
         }
         
     }
@@ -90,7 +91,7 @@ public final class TimeIntervalBuilderBolt extends BaseBasicBolt {
     
     private void processTickTuple(BasicOutputCollector outputCollector) {
         
-        Long currTimeInterval = GenericUtil.getTimeInterval(System.nanoTime(), _secondsInterval);
+        Long currTimeInterval = Util.getTimeInterval(System.nanoTime(), _secondsInterval);
         
         _timeInterval.keySet().stream()
             .filter(entryTI -> (entryTI <= currTimeInterval))
@@ -102,7 +103,7 @@ public final class TimeIntervalBuilderBolt extends BaseBasicBolt {
     }
     
     private void processTimeIntervalValue(Tuple tuple, Long timeInterval) {
-        Long id = tuple.getLongByField("id");
+        Long id = tuple.getLongByField(ID);
         
         Map<Long, Integer> count = _timeInterval.get(timeInterval);
         if(count == null) {
@@ -115,7 +116,7 @@ public final class TimeIntervalBuilderBolt extends BaseBasicBolt {
     
     @Override
     public void declareOutputFields(OutputFieldsDeclarer fieldsDeclarer) {
-        fieldsDeclarer.declare(new Fields("timeInterval", "idCounterMap"));
+        fieldsDeclarer.declare(new Fields(TIME_INTERVAL, ID_COUNTER_MAP));
     }
     
 }

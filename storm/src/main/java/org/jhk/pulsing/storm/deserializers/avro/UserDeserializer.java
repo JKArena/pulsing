@@ -27,6 +27,7 @@ import org.apache.storm.tuple.Fields;
 import org.apache.storm.tuple.Values;
 import org.jhk.pulsing.serialization.avro.records.User;
 import org.jhk.pulsing.serialization.avro.serializers.SerializationHelper;
+import static org.jhk.pulsing.storm.common.FieldConstants.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,7 +36,7 @@ import org.slf4j.LoggerFactory;
  */
 public final class UserDeserializer extends BaseFunction {
     
-    public static final Fields FIELDS = new Fields("picture", "id", "coordinates", "email", "name", "password");
+    public static final Fields FIELDS = new Fields(PICTURE, ID, COORDINATES, EMAIL, NAME, PASSWORD);
     
     private static final Logger _LOG = LoggerFactory.getLogger(UserDeserializer.class);
     private static final long serialVersionUID = -5222249102945206582L;

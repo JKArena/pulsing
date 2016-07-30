@@ -23,15 +23,25 @@ import java.util.concurrent.TimeUnit;
 /**
  * @author Ji Kim
  */
-public final class GenericUtil {
+public final class Util {
     
-    private GenericUtil() {
+    private Util() {
         super();
     }
     
     public static Long getTimeInterval(Long timestampNano, int timeInterval) {
         Long timestampSeconds = TimeUnit.SECONDS.convert(timestampNano, TimeUnit.NANOSECONDS);
         return timestampSeconds / timeInterval;
+    }
+    
+    /**
+     * Just fo convenience, since will be used a lot
+     * 
+     * @param nanoTime
+     * @return
+     */
+    public static int convertNanoToSeconds(long nanoTime) {
+        return (int) TimeUnit.SECONDS.convert(nanoTime, TimeUnit.NANOSECONDS);
     }
     
 }

@@ -58,12 +58,12 @@ public final class PailUtil {
         
         FileSystem fSystem = FileSystem.get(new Configuration());
         
-        fSystem.delete(new Path(HadoopConstants.getTempWorkingDirectory(null)), true);
-        fSystem.mkdirs(new Path(HadoopConstants.getTempWorkingDirectory(null)));
+        fSystem.delete(new Path(HadoopConstants.getWorkingDirectory(TEMP)), true);
+        fSystem.mkdirs(new Path(HadoopConstants.getWorkingDirectory(TEMP)));
         
-        Pail<?> snapShotPail = newDataPail.snapshot(HadoopConstants.getTempWorkingDirectory(TEMP_NEW_DATA_SNAPSHOT));
+        Pail<?> snapShotPail = newDataPail.snapshot(HadoopConstants.getWorkingDirectory(TEMP, TEMP_NEW_DATA_SNAPSHOT));
         appendNewData(masterPail, snapShotPail);
-        newDataPail.deleteSnapshot(snapShotPail);
+        newDataPail.deleteSnapshot(snapShotPail); //note that this API delets ONLY the data that exists in the snapshot
     }
     
     private static void appendNewData(Pail<?> masterPail, Pail<?> snapshotPail) throws IOException {

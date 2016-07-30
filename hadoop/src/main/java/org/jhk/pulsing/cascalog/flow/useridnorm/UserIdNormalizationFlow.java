@@ -55,10 +55,10 @@ public final class UserIdNormalizationFlow {
     
     private static void initializeUserIdNormalization() {
         
-        Tap equivs = PailTapUtil.attributetap(HadoopConstants.PAIL_MASTER_WORKSPACE, 
+        Tap equivs = PailTapUtil.attributetap(HadoopConstants.MASTER_WORKSPACE, 
                                                 DataUnit._Fields.EQUIV);
         
-        Api.execute(Api.hfsSeqfile(HadoopConstants.getTempWorkingDirectory(TEMP_EQUIVS_ITERATE) + "0"), 
+        Api.execute(Api.hfsSeqfile(HadoopConstants.getWorkingDirectory(TEMP_EQUIVS_ITERATE) + "0"), 
                     new Subquery("?node1", "?node2")
                         .predicate(equivs, "_", "?data")
                         .predicate(new EdgifyEquiv(), "?node1", "?node2"));
@@ -77,10 +77,10 @@ public final class UserIdNormalizationFlow {
     }
     
     private static Tap userIdNormalizationIteration(int i) {
-        Tap source = (Tap) Api.hfsSeqfile(HadoopConstants.getTempWorkingDirectory(TEMP_EQUIVS_ITERATE) + (i-1));
-        Tap sink = (Tap) Api.hfsSeqfile(HadoopConstants.getTempWorkingDirectory(TEMP_EQUIVS_ITERATE) + i);
+        Tap source = (Tap) Api.hfsSeqfile(HadoopConstants.getWorkingDirectory(TEMP_EQUIVS_ITERATE) + (i-1));
+        Tap sink = (Tap) Api.hfsSeqfile(HadoopConstants.getWorkingDirectory(TEMP_EQUIVS_ITERATE) + i);
         
-        Tap progressSink = (Tap) Api.hfsSeqfile(HadoopConstants.getTempWorkingDirectory(TEMP_EQUIVS_ITERATE) + "-new");
+        Tap progressSink = (Tap) Api.hfsSeqfile(HadoopConstants.getWorkingDirectory(TEMP_EQUIVS_ITERATE) + "-new");
         
         Subquery iteration = iterationQuery(source);
         Subquery newEdgeSet = new Subquery("?node1", "?node2")

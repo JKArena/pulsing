@@ -24,8 +24,9 @@ import org.apache.storm.topology.base.BaseBasicBolt;
 import org.apache.storm.tuple.Fields;
 import org.apache.storm.tuple.Tuple;
 import org.apache.storm.tuple.Values;
-import org.jhk.pulsing.shared.util.GenericUtil;
+import org.jhk.pulsing.shared.util.Util;
 import org.jhk.pulsing.shared.util.PulsingConstants;
+import static org.jhk.pulsing.storm.common.FieldConstants.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,16 +54,16 @@ public final class TimeIntervalBolt extends BaseBasicBolt {
     public void execute(Tuple tuple, BasicOutputCollector outputCollector) {
         _LOG.debug("TimeIntervalBolt.execute: " + tuple);
         
-        Long timeStamp = tuple.getLongByField("timeStamp");
-        Long id = tuple.getLongByField("id");
+        Long timeStamp = tuple.getLongByField(TIMESTAMP);
+        Long id = tuple.getLongByField(ID);
         
-        outputCollector.emit(new Values(GenericUtil.getTimeInterval(timeStamp, _secondsInterval),
+        outputCollector.emit(new Values(Util.getTimeInterval(timeStamp, _secondsInterval),
                                         id));
     }
 
     @Override
     public void declareOutputFields(OutputFieldsDeclarer fieldsDeclarer) {
-        fieldsDeclarer.declare(new Fields("timeInterval", "id"));
+        fieldsDeclarer.declare(new Fields(TIME_INTERVAL, ID));
     }
     
 }

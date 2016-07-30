@@ -74,8 +74,8 @@ public final class PailTapUtil {
     
     public static Pail shred() throws IOException {
         
-        PailTap source = new PailTap(HadoopConstants.getTempWorkingDirectory(TEMP_SNAPSHOT));
-        PailTap sink = splitDataTap(HadoopConstants.getTempWorkingDirectory(TEMP_SHREDDED));
+        PailTap source = new PailTap(HadoopConstants.getWorkingDirectory(TEMP, TEMP_SNAPSHOT));
+        PailTap sink = splitDataTap(HadoopConstants.getWorkingDirectory(TEMP, TEMP_SHREDDED));
         
         _LOG.info("PailTapUtil.shred " + source.getPath() + " - " + sink.getPath());
         Subquery reduced = new Subquery("?rand", "?data")
@@ -87,7 +87,7 @@ public final class PailTapUtil {
         
         Api.execute(sink,  new Subquery("?data").predicate(reduced, "_", "?data"));
         
-        Pail shreddedPail = new Pail(HadoopConstants.getTempWorkingDirectory(TEMP_SHREDDED));
+        Pail shreddedPail = new Pail(HadoopConstants.getWorkingDirectory(TEMP, TEMP_SHREDDED));
         shreddedPail.consolidate();
         
         return shreddedPail;
