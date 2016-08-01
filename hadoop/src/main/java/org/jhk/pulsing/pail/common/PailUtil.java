@@ -42,10 +42,6 @@ public final class PailUtil {
     
     private static final Logger _LOG = LoggerFactory.getLogger(PailUtil.class);
     
-    private PailUtil() {
-        super();
-    }
-    
     /**
      * Move new data to the master data
      * 
@@ -58,17 +54,37 @@ public final class PailUtil {
         
         FileSystem fSystem = FileSystem.get(new Configuration());
         
+        /*
+         * In order to avoid race condition:
+         * 1) Create a temp directory
+         * 2) Create a snapshot of the newDataPail
+         * 3) Delete the snapshot (deleteSnapShot removes from the original pail only the data that exists in the snapshot)
+         */
         fSystem.delete(new Path(HadoopConstants.getWorkingDirectory(TEMP)), true);
         fSystem.mkdirs(new Path(HadoopConstants.getWorkingDirectory(TEMP)));
         
-        Pail<?> snapShotPail = newDataPail.snapshot(HadoopConstants.getWorkingDirectory(TEMP, TEMP_NEW_DATA_SNAPSHOT));
-        appendNewData(masterPail, snapShotPail);
-        newDataPail.deleteSnapshot(snapShotPail); //note that this API delets ONLY the data that exists in the snapshot
+        String tempSnapShotPath = HadoopConstants.getWorkingDirectory(TEMP, SNAPSHOT);
+        Pail<?> snapShotPail = newDataPail.snapshot(tempSnapShotPath);
+        
+        appendNewData(tempSnapShotPath, HadoopConstants.getWorkingDirectory(TEMP, SHREDDED), masterPail);
+        newDataPail.deleteSnapshot(snapShotPail);
     }
     
-    private static void appendNewData(Pail<?> masterPail, Pail<?> snapshotPail) throws IOException {
-        Pail<?> shreddedPail = PailTapUtil.shred();
-        masterPail.absorb(shreddedPail);
+    
+    /**
+     * Master dataset is vertically partitioned by property or edge type.
+     * As the new data/pail is a dumping ground for new data, so each file may contain data units of all property types 
+     * and edges. Before this data can be appended to the master dataset, it must first be reorganized to be consistent 
+     * with the structure used for the master dataset pail (need to shred it).
+     * 
+     * @param sourcePath - i.e. new data path
+     * @param shredPath
+     * @param sinkPail - i.e. master data
+     * @throws IOException
+     */
+    private static void appendNewData(String sourcePath, String shredPath, Pail<?> sinkPail) throws IOException {
+        Pail<?> shreddedPail = PailTapUtil.shred(sourcePath, shredPath);
+        sinkPail.absorb(shreddedPail);
     }
     
     public static <T extends Comparable<T>> void writePailStructures(String path, AbstractThriftPailStructure<T> tpStructure,
@@ -86,6 +102,8 @@ public final class PailUtil {
     }
     
     public static <T extends Comparable<T>> List<T> readPailStructures(String path, T struct) throws IOException {
+        _LOG.info("PailUtil.readPailStructures " + path + " : " + struct);
+        
         List<T> entries = new LinkedList<>();
         Pail<T> pails = new Pail<T>(path);
         
@@ -94,5 +112,9 @@ public final class PailUtil {
         }
         
         return entries;
+    }
+    
+    private PailUtil() {
+        super();
     }
 }

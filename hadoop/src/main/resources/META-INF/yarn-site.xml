@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+  
+  <!-- 
+  The hostname of the machine the resource manager runs on.
+  
+  ${y.rm.hostname}
+   -->
+  <property>
+    <name>yarn.resourcemanager.hostname</name>
+    <value>0.0.0.0</value>
+  </property>
+  
+  <!-- 
+  The hostname and port that the resource manager's RPC server runs on
+  
+  ${y.rm.hostname}:8032
+   -->
+  <property>
+    <name>yarn.resourcemanager.address</name>
+    <value>0.0.0.0:8032</value>
+  </property>
+  
+  <!-- 
+  A list of directories where node managers allow containers to store intermediate data. The data 
+  is cleared out when the application ends.
+  
+  ${hadoop.tmp.dir}/nm-local-dir
+   -->
+  <property>
+    <name>yarn.nodemanager.local-dirs</name>
+    <value>/hadoop/yarn/nm-local-dir</value>
+  </property>
+  
+  <!-- 
+  A list of auxiliary services run by the node manager. A service is implemented by the class defined by the
+  property yarn.nodemanager.auxservices.service-name.class. By default, no auxiliary services are specified.
+   -->
+  <property>
+    <name>yarn.nodemanager.aux-services</name>
+    <value>mapreduce-shuffle</value>
+  </property>
+  
+  <!-- 
+  The amount of physical memory (in MB) that may be allocated to containers being run by the node manager
+   -->
+  <property>
+    <name>yarn.nodemanager.resource.memory-mb</name>
+    <value>16384</value>
+  </property>
+  
+  <!-- 
+  The ratio of virtual to physical memory for containers. Virtual memory usage may exceed the allocation by this amount.
+   -->
+  <property>
+    <name>yarn.nodemanager.vmem-pmem-ratio</name>
+    <value>2.1</value>
+  </property>
+  
+  <!-- 
+  The number of CPU cores that may be allocated to containers being run by the node manager.
+   -->
+  <property>
+    <name>yarn.nodemanager.resource.cpu-vcores</name>
+    <value>16</value>
+  </property>
+  
+</configuration>
