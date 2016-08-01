@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+  <hadoop>
+    <property>
+      <name>master.workspace</name>
+      <value>/hadoop/data/master/</value>
+    </property>
+    
+    <property>
+      <name>newdata.workspace</name>
+      <value>/hadoop/data/newdata/</value>
+    </property>
+    
+    <property>
+      <name>rootdata.workspace</name>
+      <value>/hadoop/data/</value>
+    </property>
+  </hadoop>
+</configuration>

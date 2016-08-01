@@ -33,8 +33,6 @@ import cascalog.ops.RandLong;
 import jcascalog.Api;
 import jcascalog.Subquery;
 
-import org.jhk.pulsing.shared.util.HadoopConstants;
-import static org.jhk.pulsing.shared.util.HadoopConstants.DIRECTORIES.*;
 import org.jhk.pulsing.pail.common.PailTap.PailTapOptions;
 import org.jhk.pulsing.pail.thrift.structures.SplitDataPailstructure;
 import org.jhk.pulsing.serialization.thrift.data.DataUnit;
@@ -46,10 +44,6 @@ public final class PailTapUtil {
     
     private static final Logger _LOG = LoggerFactory.getLogger(PailTapUtil.class);
     
-    private PailTapUtil() {
-        super();
-    }
-    
     /**
      * Returns reading a subset of the data within the pail
      * 
@@ -58,6 +52,7 @@ public final class PailTapUtil {
      * @return
      */
     public static PailTap attributetap(String path, final DataUnit._Fields... fields) {
+        _LOG.info("PailTapUtil.attributetap " + path + " : " + fields);
         
         PailTapOptions options = new PailTapOptions();
         
@@ -72,10 +67,19 @@ public final class PailTapUtil {
         return new PailTap(path, options);
     }
     
-    public static Pail shred() throws IOException {
+    /**
+     * Given the source Path
+     * 
+     * @param sourcePath - i.e. new data snapshot
+     * @param shredPath
+     * @return
+     * @throws IOException
+     */
+    public static Pail shred(String sourcePath, String shredPath) throws IOException {
+        _LOG.info("PailTapUtil.shred " + sourcePath + ", " + shredPath);
         
-        PailTap source = new PailTap(HadoopConstants.getWorkingDirectory(TEMP, TEMP_SNAPSHOT));
-        PailTap sink = splitDataTap(HadoopConstants.getWorkingDirectory(TEMP, TEMP_SHREDDED));
+        PailTap source = new PailTap(sourcePath);
+        PailTap sink = splitDataTap(shredPath);
         
         _LOG.info("PailTapUtil.shred " + source.getPath() + " - " + sink.getPath());
         Subquery reduced = new Subquery("?rand", "?data")
@@ -87,7 +91,7 @@ public final class PailTapUtil {
         
         Api.execute(sink,  new Subquery("?data").predicate(reduced, "_", "?data"));
         
-        Pail shreddedPail = new Pail(HadoopConstants.getWorkingDirectory(TEMP, TEMP_SHREDDED));
+        Pail shreddedPail = new Pail(shredPath);
         shreddedPail.consolidate();
         
         return shreddedPail;
@@ -106,6 +110,10 @@ public final class PailTapUtil {
         
         options.spec = new PailSpec(new SplitDataPailstructure());
         return new PailTap(path, options);
+    }
+    
+    private PailTapUtil() {
+        super();
     }
     
 }

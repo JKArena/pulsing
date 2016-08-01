@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+  
+  <!-- 
+  The list of directories where the namenode stores its persistent metadata. The namenode stores a 
+  copy of the metadata in each directory in the list.
+  
+  file://${hadoop.tmp.dir}/dfs/name
+   -->
+  <property>
+    <name>dfs.namenode.name.dir</name>
+    <value>/hadoop/hdfs/name</value>
+  </property>
+  
+  <!-- 
+  A list of directories where the datanode stores blocks. Each block is stored in only one of these directories
+  
+  file://${hadoop.tmp.dir}/dfs/data
+   -->
+  <property>
+    <name>dfs.datanode.data.dir</name>
+    <value>/hadoop/hdfs/data</value>
+  </property>
+  
+  <!-- 
+  A list of directories where the secondary namenode stores checkpoints. It stores a copy of the checkpoint in each 
+  directory in the list.
+  
+  file://${hadoop.tmp.dir}/dfs/namesecondary 
+   -->
+  <property>
+    <name>dfs.namenode.checkpoint.dir</name>
+    <value>/hadoop/hdfs/namesecondary</value>
+  </property>
+  
+</configuration>

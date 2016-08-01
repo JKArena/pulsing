@@ -36,20 +36,20 @@ import org.xml.sax.helpers.DefaultHandler;
  */
 public final class HadoopConstants {
     
-    public static final String HDFS_URL_PORT = "hdfs://localhost:54310";
+    public static final String HDFS_URL_PORT = "hdfs://localhost";
     
     public static final String MASTER_WORKSPACE;
     public static final String NEW_DATA_WORKSPACE;
     private static final String ROOT_DATA_WORKSPACE;
     
     public enum DIRECTORIES {
-        TEMP, TEMP_NEW_DATA_SNAPSHOT, TEMP_SNAPSHOT, TEMP_SHREDDED, TEMP_EQUIVS_ITERATE;
+        TEMP, SNAPSHOT, SHREDDED, EQUIVS_ITERATE;
     };
     
-    private static final String MASTER_WORKSPACE_KEY = "MASTER_WORKSPACE";
-    private static final String NEW_DATA_WORKSPACE_KEY = "NEW_DATA_WORKSPACE";
-    private static final String ROOT_DATA_WORKSPACE_KEY = "ROOT_DATA_WORKSPACE";
-    private static final String CONFIG_XML = "hadoop-localhost.xml";
+    private static final String MASTER_WORKSPACE_KEY = "master.workspace";
+    private static final String NEW_DATA_WORKSPACE_KEY = "newdata.workspace";
+    private static final String ROOT_DATA_WORKSPACE_KEY = "rootdata.workspace";
+    private static final String CONFIG_XML = "config.xml";
     
     private HadoopConstants() {
         super();
@@ -90,51 +90,44 @@ public final class HadoopConstants {
         SAXParser parser = SAXParserFactory.newInstance().newSAXParser();
         parser.parse(HadoopConstants.class.getResourceAsStream(CONFIG_XML), new DefaultHandler(){
             
-            private boolean masterWorkSpace = false;
-            private boolean newDataWorkSpace = false;
-            private boolean rootDataWorkSpace = false;
+            private boolean nameStart = false;
+            private boolean valueStart = false;
             
-            private StringBuilder nodeValue;
+            private StringBuilder propertyName;
+            private StringBuilder propertyValue;
             
             public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
                 super.startElement(uri, localName, qName, attributes);
                 
-                if(qName.equals("newdata.workspace")){
-                    newDataWorkSpace = true;
-                }else if(qName.equals("master.workspace")) {
-                    masterWorkSpace = true;
-                }else if(qName.equals("rootdata.workspace")) {
-                    rootDataWorkSpace = true;
+                if(qName.equals("name")){
+                    nameStart = true;
+                    propertyName = new StringBuilder();
+                }else if(qName.equals("value")) {
+                    valueStart = true;
+                    propertyValue = new StringBuilder();
                 }
                 
-                nodeValue = new StringBuilder();
             }
             
             public void endElement(String uri, String localName, String qName) throws SAXException {
                 super.endElement(uri, localName, qName);
                 
-                String currValue = null;
-                if(nodeValue != null){
-                    currValue = nodeValue.toString().trim();
+                if(nameStart) {
+                    nameStart = false;
+                } else if (valueStart) {
+                    valueStart = false;
+                    tempParseMap.put(propertyName.toString(), propertyValue.toString());
                 }
-                
-                if(masterWorkSpace) {
-                    tempParseMap.put(MASTER_WORKSPACE_KEY, currValue);
-                    masterWorkSpace = false;
-                } else if(newDataWorkSpace) {
-                    tempParseMap.put(NEW_DATA_WORKSPACE_KEY, currValue);
-                    newDataWorkSpace = false;
-                } else if(rootDataWorkSpace) {
-                    tempParseMap.put(ROOT_DATA_WORKSPACE_KEY, currValue);
-                    rootDataWorkSpace = false;
-                }
-                
             }
             
             public void characters(char[] ch, int start, int length) throws SAXException {
                 super.characters(ch, start, length);
                 
-                nodeValue.append(new String(ch, start, length));
+                if(nameStart) {
+                    propertyName.append(new String(ch, start, length));
+                } else if (valueStart) {
+                    propertyValue.append(new String(ch, start, length));
+                }
             }
             
         });

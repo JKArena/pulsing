@@ -12,6 +12,16 @@ place the *-site.xml configuration files there and set the HADOOP_CONF_DIR envir
 
 hadoop jar pulsing-hadoop-0.1-SNAPSHOT.jar org.jhk.pulsing.hadoop.job.User -conf $HDFS\conf\hadoop-localhost.xml
 
+hdfs namenode -format
+hdfs getconf -namenodes
+
+hadoop fs -mkdir <dir>
+
+8020 default port for namenode
+8032 default port for yarn
+
+hadoop fs -copyFromLocal test.txt hdfs://localhost/data/...
+
 Windows
 bin/windows/kafka-topics.bat --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic USER_CREATE
 
