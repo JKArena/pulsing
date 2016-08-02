@@ -15,5 +15,10 @@
       <name>rootdata.workspace</name>
       <value>/data/</value>
     </property>
+    
+    <property>
+      <name>url.port</name>
+      <value>hdfs://localhost</value>
+    </property>
   </hadoop>
 </configuration>
