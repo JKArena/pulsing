@@ -36,7 +36,7 @@ import org.xml.sax.helpers.DefaultHandler;
  */
 public final class HadoopConstants {
     
-    public static final String HDFS_URL_PORT = "hdfs://localhost";
+    public static final String HDFS_URL_PORT;
     
     public static final String MASTER_WORKSPACE;
     public static final String NEW_DATA_WORKSPACE;
@@ -46,9 +46,6 @@ public final class HadoopConstants {
         TEMP, SNAPSHOT, SHREDDED, EQUIVS_ITERATE;
     };
     
-    private static final String MASTER_WORKSPACE_KEY = "master.workspace";
-    private static final String NEW_DATA_WORKSPACE_KEY = "newdata.workspace";
-    private static final String ROOT_DATA_WORKSPACE_KEY = "rootdata.workspace";
     private static final String CONFIG_XML = "config.xml";
     
     static {
@@ -61,9 +58,10 @@ public final class HadoopConstants {
             throw new RuntimeException("Failure in parsing of " + CONFIG_XML, exception);
         }
         
-        MASTER_WORKSPACE = tempParseMap.get(MASTER_WORKSPACE_KEY);
-        NEW_DATA_WORKSPACE = tempParseMap.get(NEW_DATA_WORKSPACE_KEY);
-        ROOT_DATA_WORKSPACE = tempParseMap.get(ROOT_DATA_WORKSPACE_KEY);
+        MASTER_WORKSPACE = tempParseMap.get("master.workspace");
+        NEW_DATA_WORKSPACE = tempParseMap.get("newdata.workspace");
+        ROOT_DATA_WORKSPACE = tempParseMap.get("rootdata.workspace");
+        HDFS_URL_PORT = tempParseMap.get("url.port");
     }
     
     public static String getWorkingDirectory(DIRECTORIES... paths) {
