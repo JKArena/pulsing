@@ -3,7 +3,7 @@
   
   <!-- 
   Hadoop control scripts (but not the daemons) rely on SSH to perform cluster-wide operations. For example, 
-  there is a script for stopping and starting all the daemons in the cluster. Control scripts are optional--cluster-wide 
+  there is a script for stopping and starting all the daemons in the cluster. Control scripts are optional-cluster-wide 
   operations can be performed by other mechanisms, too such as a distributed shell or dedicated Hadoop management applications.
   
   SSH needs to be setup to allow passwordless login for the hdfs and yarn users from machines in the cluster.
@@ -15,6 +15,7 @@
   <!--
   The default filesystem. THe URI defines the hostname and port that the namenode's RPC server runs on.
   
+  netstat -anp tcp | grep 8020
   The default port is 8020.
    -->
   <property>

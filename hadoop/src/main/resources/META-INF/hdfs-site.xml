@@ -9,7 +9,7 @@
    -->
   <property>
     <name>dfs.namenode.name.dir</name>
-    <value>/hadoop/hdfs/name</value>
+    <value>file:////hadoop/hdfs/name</value>
   </property>
   
   <!-- 
@@ -19,7 +19,7 @@
    -->
   <property>
     <name>dfs.datanode.data.dir</name>
-    <value>/hadoop/hdfs/data</value>
+    <value>file:////hadoop/hdfs/data</value>
   </property>
   
   <!-- 
@@ -30,7 +30,7 @@
    -->
   <property>
     <name>dfs.namenode.checkpoint.dir</name>
-    <value>/hadoop/hdfs/namesecondary</value>
+    <value>file:////hadoop/hdfs/namesecondary</value>
   </property>
   
 </configuration>
