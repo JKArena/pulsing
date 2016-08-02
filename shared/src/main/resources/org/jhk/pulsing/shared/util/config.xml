@@ -3,17 +3,17 @@
   <hadoop>
     <property>
       <name>master.workspace</name>
-      <value>/hadoop/data/master/</value>
+      <value>/data/master/</value>
     </property>
     
     <property>
       <name>newdata.workspace</name>
-      <value>/hadoop/data/newdata/</value>
+      <value>/data/newdata/</value>
     </property>
     
     <property>
       <name>rootdata.workspace</name>
-      <value>/hadoop/data/</value>
+      <value>/data/</value>
     </property>
   </hadoop>
 </configuration>

@@ -33,15 +33,6 @@
   </property>
   
   <!-- 
-  A list of auxiliary services run by the node manager. A service is implemented by the class defined by the
-  property yarn.nodemanager.auxservices.service-name.class. By default, no auxiliary services are specified.
-   -->
-  <property>
-    <name>yarn.nodemanager.aux-services</name>
-    <value>mapreduce-shuffle</value>
-  </property>
-  
-  <!-- 
   The amount of physical memory (in MB) that may be allocated to containers being run by the node manager
    -->
   <property>
