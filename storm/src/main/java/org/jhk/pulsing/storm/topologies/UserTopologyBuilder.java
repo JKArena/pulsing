@@ -40,7 +40,7 @@ import org.apache.storm.trident.TridentTopology;
 import org.apache.storm.trident.state.StateFactory;
 import org.apache.storm.tuple.Fields;
 import org.jhk.pulsing.shared.util.HadoopConstants;
-import org.jhk.pulsing.shared.util.PulsingConstants;
+import org.jhk.pulsing.shared.util.CommonConstants;
 import org.jhk.pulsing.storm.deserializers.avro.UserDeserializer;
 import org.jhk.pulsing.storm.serializers.thrift.UserSerializer;
 import org.slf4j.Logger;
@@ -73,7 +73,7 @@ public final class UserTopologyBuilder {
         _LOG.info("UserTopologyBuilder.hdfsPersist");
         
         FileNameFormat fnFormat = new DefaultFileNameFormat()
-                .withPath(HadoopConstants.getWorkingDirectory(null))
+                .withPath(HadoopConstants.NEW_DATA_WORKSPACE)
                 .withPrefix("PulsingUser");
         
         RecordFormat rFormat = new DelimitedRecordFormat()
@@ -94,7 +94,7 @@ public final class UserTopologyBuilder {
     
     private static TransactionalTridentKafkaSpout buildSpout() {
         BrokerHosts host = new ZkHosts("localhost");
-        TridentKafkaConfig spoutConfig = new TridentKafkaConfig(host, PulsingConstants.TOPICS.USER_CREATE.toString());
+        TridentKafkaConfig spoutConfig = new TridentKafkaConfig(host, CommonConstants.TOPICS.USER_CREATE.toString());
         spoutConfig.scheme = new SchemeAsMultiScheme(new StringScheme());
         return new TransactionalTridentKafkaSpout(spoutConfig);
     }

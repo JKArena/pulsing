@@ -26,7 +26,7 @@ import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
-import org.jhk.pulsing.shared.util.PulsingConstants;
+import org.jhk.pulsing.shared.util.CommonConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,7 +39,7 @@ public final class Publisher {
     private static final Properties _DEFAULT_PROPERTIES = new Properties();
     
     static {
-        _DEFAULT_PROPERTIES.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, PulsingConstants.DEFAULT_BOOTSTRAP_HOST + ":" + PulsingConstants.DEFAULT_BOOTSTRAP_PORT);
+        _DEFAULT_PROPERTIES.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, CommonConstants.DEFAULT_BOOTSTRAP_HOST + ":" + CommonConstants.DEFAULT_BOOTSTRAP_PORT);
         _DEFAULT_PROPERTIES.put(ProducerConfig.ACKS_CONFIG, "all");
         _DEFAULT_PROPERTIES.put(ProducerConfig.RETRIES_CONFIG, 3);
         _DEFAULT_PROPERTIES.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer");

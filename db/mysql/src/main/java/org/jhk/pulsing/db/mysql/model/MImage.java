@@ -27,7 +27,7 @@ import javax.persistence.Embeddable;
 import javax.persistence.Lob;
 import javax.persistence.MappedSuperclass;
 
-import org.jhk.pulsing.shared.util.PulsingConstants;
+import org.jhk.pulsing.shared.util.CommonConstants;
 
 /**
  * @author Ji Kim
@@ -62,8 +62,8 @@ public class MImage implements Serializable {
     
     @Override
     public int hashCode() {
-        int hashCodeVal = PulsingConstants.HASH_CODE_INIT_VALUE;
-        hashCodeVal = PulsingConstants.HASH_CODE_MULTIPLY_VALUE * hashCodeVal + imageName.hashCode();
+        int hashCodeVal = CommonConstants.HASH_CODE_INIT_VALUE;
+        hashCodeVal = CommonConstants.HASH_CODE_MULTIPLY_VALUE * hashCodeVal + imageName.hashCode();
         return hashCodeVal;
     }
     

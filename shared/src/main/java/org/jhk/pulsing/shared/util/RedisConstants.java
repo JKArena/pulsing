@@ -18,6 +18,9 @@
  */
 package org.jhk.pulsing.shared.util;
 
+import java.io.IOException;
+import java.util.Properties;
+
 /**
  * Created a separate one, since might increase in size due to keys
  * 
@@ -25,18 +28,34 @@ package org.jhk.pulsing.shared.util;
  */
 public final class RedisConstants {
     
-    private RedisConstants() {
-        super();
-    }
+    public static final String REDIS_HOST;
+    public static final int REDIS_PORT;
+    public static final String REDIS_PASSWORD;
     
-    public static final String REDIS_HOST = "localhost";
-    public static final int REDIS_PORT = 6379;
-    public static final String REDIS_PASSWORD = "wsad";
-    
-    public static final int DEFAULT_CACHE_EXPIRE_SECONDS = 86400;
+    public static final int DEFAULT_CACHE_EXPIRE_SECONDS;
     
     public enum REDIS_KEY {
         TRENDING_PULSE_, USER_;
+    }
+    
+    static {
+        
+        Properties props = new Properties();
+        
+        try {
+            props.load(RedisConstants.class.getResourceAsStream("redis.properties"));
+            
+            REDIS_HOST = props.getProperty("host");
+            REDIS_PORT = Integer.parseInt(props.getProperty("port"));
+            REDIS_PASSWORD = props.getProperty("password");
+            DEFAULT_CACHE_EXPIRE_SECONDS = Integer.parseInt(props.getProperty("cache_expire"));
+        } catch (IOException ioExcept) {
+            throw new RuntimeException("Error while reading redis.properties", ioExcept);
+        }
+    }
+    
+    private RedisConstants() {
+        super();
     }
     
 }

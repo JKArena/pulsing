@@ -31,7 +31,7 @@ import org.jhk.pulsing.storm.bolts.pulse.PulseDeserializerBolt;
 import org.jhk.pulsing.storm.bolts.pulse.TimeIntervalBolt;
 import org.jhk.pulsing.storm.bolts.pulse.TimeIntervalBuilderBolt;
 import org.jhk.pulsing.storm.bolts.pulse.TimeIntervalPersistorBolt;
-import org.jhk.pulsing.shared.util.PulsingConstants;
+import org.jhk.pulsing.shared.util.CommonConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -70,7 +70,7 @@ public final class PulseSubscribeTopologyBuilder {
     private static KafkaSpout buildSpout() {
         BrokerHosts host = new ZkHosts("localhost");
         
-        SpoutConfig spoutConfig = new SpoutConfig(host, PulsingConstants.TOPICS.PULSE_SUBSCRIBE.toString(), 
+        SpoutConfig spoutConfig = new SpoutConfig(host, CommonConstants.TOPICS.PULSE_SUBSCRIBE.toString(), 
                                                     "/kafkastorm", "trending-pulse-subscribe");
         
         spoutConfig.scheme = new SchemeAsMultiScheme(new StringScheme());

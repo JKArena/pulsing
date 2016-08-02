@@ -18,15 +18,18 @@
  */
 package org.jhk.pulsing.shared.util;
 
+import java.io.IOException;
+import java.util.Properties;
+
 /**
  * @author Ji Kim
  */
-public final class PulsingConstants {
+public final class CommonConstants {
     
-    public static final int DEFAULT_TRENDING_PULSING_INTERVAL_SECONDS = 15;
+    public static final int DEFAULT_TRENDING_PULSING_INTERVAL_SECONDS;
     
-    public static final String DEFAULT_BOOTSTRAP_HOST = "localhost";
-    public static final int DEFAULT_BOOTSTRAP_PORT = 9092;
+    public static final String DEFAULT_BOOTSTRAP_HOST;
+    public static final int DEFAULT_BOOTSTRAP_PORT;
     
     public static final int HASH_CODE_INIT_VALUE = 3;
     public static final int HASH_CODE_MULTIPLY_VALUE = 31;
@@ -34,8 +37,23 @@ public final class PulsingConstants {
     public enum TOPICS {
 		PULSE_SUBSCRIBE, USER_CREATE;
 	};
+	
+	static {
+        
+        Properties props = new Properties();
+        
+        try {
+            props.load(RedisConstants.class.getResourceAsStream("common.properties"));
+            
+            DEFAULT_TRENDING_PULSING_INTERVAL_SECONDS = Integer.parseInt(props.getProperty("trending_pulse_interval_seconds"));
+            DEFAULT_BOOTSTRAP_HOST = props.getProperty("bootstrap_host");
+            DEFAULT_BOOTSTRAP_PORT = Integer.parseInt(props.getProperty("bootstrap_port"));
+        } catch (IOException ioExcept) {
+            throw new RuntimeException("Error while reading common.properties", ioExcept);
+        }
+    }
     
-    private PulsingConstants() {
+    private CommonConstants() {
         super();
     }
     
