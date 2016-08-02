@@ -36,7 +36,7 @@ import javax.persistence.TemporalType;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.validator.constraints.NotEmpty;
-import org.jhk.pulsing.shared.util.PulsingConstants;
+import org.jhk.pulsing.shared.util.CommonConstants;
 
 /**
  * @author Ji Kim
@@ -122,10 +122,10 @@ public class MUser implements Serializable {
     
     @Override
     public int hashCode() {
-        int hashCodeVal = PulsingConstants.HASH_CODE_INIT_VALUE;
-        hashCodeVal = PulsingConstants.HASH_CODE_MULTIPLY_VALUE * hashCodeVal + email.hashCode();
-        hashCodeVal = PulsingConstants.HASH_CODE_MULTIPLY_VALUE * hashCodeVal + name.hashCode();
-        hashCodeVal = PulsingConstants.HASH_CODE_MULTIPLY_VALUE * hashCodeVal + password.hashCode();
+        int hashCodeVal = CommonConstants.HASH_CODE_INIT_VALUE;
+        hashCodeVal = CommonConstants.HASH_CODE_MULTIPLY_VALUE * hashCodeVal + email.hashCode();
+        hashCodeVal = CommonConstants.HASH_CODE_MULTIPLY_VALUE * hashCodeVal + name.hashCode();
+        hashCodeVal = CommonConstants.HASH_CODE_MULTIPLY_VALUE * hashCodeVal + password.hashCode();
         return hashCodeVal;
     }
     

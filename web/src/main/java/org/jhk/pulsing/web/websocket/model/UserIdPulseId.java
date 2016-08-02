@@ -18,7 +18,7 @@
  */
 package org.jhk.pulsing.web.websocket.model;
 
-import org.jhk.pulsing.shared.util.PulsingConstants;
+import org.jhk.pulsing.shared.util.CommonConstants;
 
 /**
  * @author Ji Kim
@@ -43,9 +43,9 @@ public class UserIdPulseId {
     
     @Override
     public int hashCode() {
-        int hashCodeVal = PulsingConstants.HASH_CODE_INIT_VALUE;
-        hashCodeVal = PulsingConstants.HASH_CODE_MULTIPLY_VALUE * hashCodeVal + (int) _userId;
-        hashCodeVal = PulsingConstants.HASH_CODE_MULTIPLY_VALUE * hashCodeVal + (int) _pulseId;
+        int hashCodeVal = CommonConstants.HASH_CODE_INIT_VALUE;
+        hashCodeVal = CommonConstants.HASH_CODE_MULTIPLY_VALUE * hashCodeVal + (int) _userId;
+        hashCodeVal = CommonConstants.HASH_CODE_MULTIPLY_VALUE * hashCodeVal + (int) _pulseId;
         return hashCodeVal;
     }
     

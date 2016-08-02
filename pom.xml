@@ -263,6 +263,12 @@
         <artifactId>maven-shade-plugin</artifactId>
         <version>${shade}</version>
       </dependency>
+      
+      <dependency>
+        <groupId>com.google.code.maven-replacer-plugin</groupId>
+        <artifactId>replacer</artifactId>
+        <version>${replacer}</version>
+      </dependency>
 	  
       <dependency>
         <groupId>junit</groupId>
@@ -282,6 +288,7 @@
   <properties>
     <pulsing.version>0.1-SNAPSHOT</pulsing.version>
     <shade>2.4.3</shade>
+    <replacer>1.5.3</replacer>
     <storm>1.0.3-SNAPSHOT</storm> <!-- Replace with version from main repository later; there currently is a bug STORM-1907 in 1.0.x artifact that fails it in starting a worker -->
     <org.apache.thrift>0.9.3</org.apache.thrift>
     <org.apache.avro>1.8.0</org.apache.avro>

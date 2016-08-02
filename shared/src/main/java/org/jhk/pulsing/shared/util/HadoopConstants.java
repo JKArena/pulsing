@@ -51,10 +51,6 @@ public final class HadoopConstants {
     private static final String ROOT_DATA_WORKSPACE_KEY = "rootdata.workspace";
     private static final String CONFIG_XML = "config.xml";
     
-    private HadoopConstants() {
-        super();
-    }
-    
     static {
         
         Map<String, String> tempParseMap = new HashMap<>();
@@ -132,6 +128,10 @@ public final class HadoopConstants {
             
         });
         
+    }
+    
+    private HadoopConstants() {
+        super();
     }
     
 }

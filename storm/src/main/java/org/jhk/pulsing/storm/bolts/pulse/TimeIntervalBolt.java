@@ -25,7 +25,7 @@ import org.apache.storm.tuple.Fields;
 import org.apache.storm.tuple.Tuple;
 import org.apache.storm.tuple.Values;
 import org.jhk.pulsing.shared.util.Util;
-import org.jhk.pulsing.shared.util.PulsingConstants;
+import org.jhk.pulsing.shared.util.CommonConstants;
 import static org.jhk.pulsing.storm.common.FieldConstants.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,7 +41,7 @@ public final class TimeIntervalBolt extends BaseBasicBolt {
     private int _secondsInterval;
     
     public TimeIntervalBolt() {
-        this(PulsingConstants.DEFAULT_TRENDING_PULSING_INTERVAL_SECONDS);
+        this(CommonConstants.DEFAULT_TRENDING_PULSING_INTERVAL_SECONDS);
     }
     
     public TimeIntervalBolt(int secondsInterval) {

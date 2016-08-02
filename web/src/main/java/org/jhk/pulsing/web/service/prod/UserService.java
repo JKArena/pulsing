@@ -24,7 +24,7 @@ import javax.inject.Inject;
 
 import org.jhk.pulsing.serialization.avro.records.User;
 import org.jhk.pulsing.serialization.avro.records.UserId;
-import org.jhk.pulsing.shared.util.PulsingConstants;
+import org.jhk.pulsing.shared.util.CommonConstants;
 import org.jhk.pulsing.web.common.Result;
 import org.jhk.pulsing.web.dao.IUserDao;
 import org.jhk.pulsing.web.publisher.Publisher;
@@ -69,7 +69,7 @@ public class UserService implements IUserService {
         Result<User> cUser = userDao.createUser(user);
         
         if(cUser.getCode() == Result.CODE.SUCCESS) {
-            _stormPublisher.produce(PulsingConstants.TOPICS.USER_CREATE.toString(), cUser.getData());
+            _stormPublisher.produce(CommonConstants.TOPICS.USER_CREATE.toString(), cUser.getData());
         }
         
         return cUser;
