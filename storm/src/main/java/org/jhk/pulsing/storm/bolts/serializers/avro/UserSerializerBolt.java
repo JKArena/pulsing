@@ -16,54 +16,39 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.storm.bolts.pulse;
+package org.jhk.pulsing.storm.bolts.serializers.avro;
 
 import org.apache.storm.topology.BasicOutputCollector;
 import org.apache.storm.topology.OutputFieldsDeclarer;
 import org.apache.storm.topology.base.BaseBasicBolt;
-import org.apache.storm.tuple.Fields;
 import org.apache.storm.tuple.Tuple;
 import org.apache.storm.tuple.Values;
-import org.jhk.pulsing.shared.util.Util;
-import org.jhk.pulsing.shared.util.CommonConstants;
-import static org.jhk.pulsing.storm.common.FieldConstants.*;
+import org.jhk.pulsing.serialization.thrift.data.Data;
+import org.jhk.pulsing.storm.common.SerializerCommon;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * @author Ji Kim
  */
-public final class TimeIntervalBolt extends BaseBasicBolt {
+public final class UserSerializerBolt extends BaseBasicBolt {
     
-    private static final Logger _LOG = LoggerFactory.getLogger(TimeIntervalBolt.class);
-    private static final long serialVersionUID = 3963343874691297355L;
+    private static final long serialVersionUID = 5216255208403673287L;
+    private static final Logger _LOG = LoggerFactory.getLogger(UserSerializerBolt.class);
     
-    private int _secondsInterval;
-    
-    public TimeIntervalBolt() {
-        this(CommonConstants.DEFAULT_TRENDING_PULSING_INTERVAL_SECONDS);
-    }
-    
-    public TimeIntervalBolt(int secondsInterval) {
-        super();
-        
-        _secondsInterval = secondsInterval;
-    }
-
     @Override
     public void execute(Tuple tuple, BasicOutputCollector outputCollector) {
-        _LOG.debug("TimeIntervalBolt.execute: " + tuple);
+        _LOG.info("UserSerializerBolt.execute " + tuple);
         
-        Long timeStamp = tuple.getLongByField(TIMESTAMP);
-        Long id = tuple.getLongByField(ID);
+        Data uData = SerializerCommon.constructThriftUser(tuple);
         
-        outputCollector.emit(new Values(Util.getTimeInterval(timeStamp, _secondsInterval),
-                                        id));
+        _LOG.info("Serialized to thrift " + uData);
+        outputCollector.emit(new Values(uData));
     }
 
     @Override
     public void declareOutputFields(OutputFieldsDeclarer fieldsDeclarer) {
-        fieldsDeclarer.declare(new Fields(TIME_INTERVAL, ID));
+        fieldsDeclarer.declare(SerializerCommon.FIELDS_DATA);
     }
-    
+
 }

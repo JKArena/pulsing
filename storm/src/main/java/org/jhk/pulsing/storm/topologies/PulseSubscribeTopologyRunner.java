@@ -24,24 +24,24 @@ import org.apache.storm.StormSubmitter;
 import org.apache.storm.generated.AlreadyAliveException;
 import org.apache.storm.generated.AuthorizationException;
 import org.apache.storm.generated.InvalidTopologyException;
-import org.jhk.pulsing.storm.topologies.builders.PulseTopologyBuilder;
+import org.jhk.pulsing.storm.topologies.builders.PulseSubscribeTopologyBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * @author Ji Kim
  */
-public final class PulseTopologyRunner {
+public class PulseSubscribeTopologyRunner {
     
-    private static final Logger _LOG = LoggerFactory.getLogger(PulseTopologyRunner.class);
+    private static final Logger _LOG = LoggerFactory.getLogger(PulseSubscribeTopologyRunner.class);
     
     public static void main(String[] args) throws AlreadyAliveException, InvalidTopologyException, AuthorizationException {
         
         if(args == null || args.length == 0) {
-            _LOG.debug("PulseTopologyRunner: running local");
+            _LOG.debug("PulseSubscribeTopologyRunner: running local");
             runLocalCluster();
         }else {
-            _LOG.debug("PulseTopologyRunner: running remote");
+            _LOG.debug("PulseSubscribeTopologyRunner: running remote");
             runRemoteCluster();
         }
         
@@ -54,7 +54,7 @@ public final class PulseTopologyRunner {
         
         LocalCluster cluster = new LocalCluster();
         
-        cluster.submitTopology("pulse-topology", config, PulseTopologyBuilder.build());
+        cluster.submitTopology("pulse-subscribe-topology", config, PulseSubscribeTopologyBuilder.build());
         
     }
     
@@ -64,7 +64,7 @@ public final class PulseTopologyRunner {
         config.setNumWorkers(4);
         config.setMessageTimeoutSecs(60);
         
-        StormSubmitter.submitTopology("pulse-topology", config, PulseTopologyBuilder.build());
+        StormSubmitter.submitTopology("pulse-subscribe-topology", config, PulseSubscribeTopologyBuilder.build());
         
     }
     

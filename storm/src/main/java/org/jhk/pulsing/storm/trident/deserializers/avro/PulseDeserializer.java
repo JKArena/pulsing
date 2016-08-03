@@ -16,57 +16,42 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.storm.bolts.pulse;
+package org.jhk.pulsing.storm.trident.deserializers.avro;
 
 import java.io.IOException;
-
-import org.apache.storm.topology.BasicOutputCollector;
-import org.apache.storm.topology.OutputFieldsDeclarer;
-import org.apache.storm.topology.base.BaseBasicBolt;
-import org.apache.storm.tuple.Fields;
-import org.apache.storm.tuple.Tuple;
+import org.apache.storm.trident.operation.BaseFunction;
+import org.apache.storm.trident.operation.TridentCollector;
+import org.apache.storm.trident.tuple.TridentTuple;
 import org.apache.storm.tuple.Values;
 import org.jhk.pulsing.serialization.avro.records.Pulse;
 import org.jhk.pulsing.serialization.avro.serializers.SerializationHelper;
-import static org.jhk.pulsing.storm.common.FieldConstants.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * @author Ji Kim
  */
-public final class PulseDeserializerBolt extends BaseBasicBolt {
+public class PulseDeserializer extends BaseFunction {
     
-    public static final Fields FIELDS = new Fields(ACTION, ID, USER_ID, TIMESTAMP, VALUE);
-    
-    private static final Logger _LOG = LoggerFactory.getLogger(PulseDeserializerBolt.class);
-    private static final long serialVersionUID = 9003236874311323612L;
+    private static final long serialVersionUID = 4863013986214675297L;
     
     @Override
-    public void execute(Tuple tuple, BasicOutputCollector outputCollector) {
-        _LOG.debug("PulseDeserializerBolt.execute: " + tuple);
+    public void execute(TridentTuple tuple, TridentCollector collector) {
         
         String pulseString = tuple.getString(0);
         
         try {
             
             Pulse pulse = SerializationHelper.deserializeFromJSONStringToAvro(Pulse.class, Pulse.getClassSchema(), pulseString);
-            outputCollector.emit(getPulseValues(pulse));
+            collector.emit(getPulseValues(pulse));
             
         } catch (IOException decodeException) {
-            outputCollector.reportError(decodeException);
+            collector.reportError(decodeException);
         }
         
     }
     
     private Values getPulseValues(Pulse pulse) {
         return new Values(pulse.getAction().toString(), pulse.getId().getId(), pulse.getUserId().getId(), 
-                pulse.getTimeStamp(), pulse.getValue());
-    }
-
-    @Override
-    public void declareOutputFields(OutputFieldsDeclarer fieldsDeclarer) {
-        fieldsDeclarer.declare(FIELDS);
+                pulse.getTimeStamp(), pulse.getValue(), pulse.getCoordinates());
     }
 
 }

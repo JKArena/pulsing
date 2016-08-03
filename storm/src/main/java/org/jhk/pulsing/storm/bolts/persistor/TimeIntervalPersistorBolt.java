@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.storm.bolts.pulse;
+package org.jhk.pulsing.storm.bolts.persistor;
 
 import java.util.Map;
 import java.util.PriorityQueue;
@@ -41,8 +41,8 @@ import redis.clients.jedis.Jedis;
  */
 public final class TimeIntervalPersistorBolt extends BaseBasicBolt {
     
-    private static final Logger _LOG = LoggerFactory.getLogger(TimeIntervalPersistorBolt.class);
     private static final long serialVersionUID = -884268616402022174L;
+    private static final Logger _LOG = LoggerFactory.getLogger(TimeIntervalPersistorBolt.class);
     private static final int HEAP_MAX_SIZE = 20;
     
     private Jedis _jedis;

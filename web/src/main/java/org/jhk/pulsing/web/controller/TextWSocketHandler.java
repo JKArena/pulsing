@@ -16,21 +16,25 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.storm.filter;
+package org.jhk.pulsing.web.controller;
 
-import org.apache.storm.trident.operation.BaseFilter;
-import org.apache.storm.trident.tuple.TridentTuple;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.web.socket.TextMessage;
+import org.springframework.web.socket.WebSocketSession;
+import org.springframework.web.socket.handler.TextWebSocketHandler;
 
 /**
  * @author Ji Kim
  */
-public final class PulseSubscribeFilter extends BaseFilter {
+public class TextWSocketHandler extends TextWebSocketHandler {
     
-    private static final long serialVersionUID = -5563080957922894127L;
-
+    private static final Logger _LOGGER = LoggerFactory.getLogger(TextWSocketHandler.class);
+    
     @Override
-    public boolean isKeep(TridentTuple tuple) {
-        return tuple.getStringByField("action").equals("SUBSCRIBE");
+    protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
+        _LOGGER.info("TextWSocketHandler.handleTextMessage " + message);
+        
     }
     
 }

@@ -16,31 +16,17 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.storm.aggregator;
-
-import org.apache.storm.trident.operation.CombinerAggregator;
-import org.apache.storm.trident.tuple.TridentTuple;
+package org.jhk.pulsing.storm.common;
 
 /**
  * @author Ji Kim
  */
-public final class Counter implements CombinerAggregator<Long> {
-
-    private static final long serialVersionUID = -7930085122578857788L;
-
-    @Override
-    public Long combine(Long first, Long second) {
-        return (first.longValue() + second.longValue());
-    }
-
-    @Override
-    public Long init(TridentTuple tuple) {
-        return 1L;
-    }
-
-    @Override
-    public Long zero() {
-        return 0L;
+public final class OtherConstants {
+    
+    public static final int DEFAULT_INTERVAL_SECONDS = 15;
+    
+    private OtherConstants() {
+        super();
     }
     
 }

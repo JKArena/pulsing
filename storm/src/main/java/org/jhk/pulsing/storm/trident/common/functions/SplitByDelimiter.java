@@ -16,47 +16,37 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.storm.deserializers.avro;
-
-import java.io.IOException;
+package org.jhk.pulsing.storm.trident.common.functions;
 
 import org.apache.storm.trident.operation.BaseFunction;
 import org.apache.storm.trident.operation.TridentCollector;
 import org.apache.storm.trident.tuple.TridentTuple;
-import org.apache.storm.tuple.Fields;
 import org.apache.storm.tuple.Values;
-import org.jhk.pulsing.serialization.avro.records.Pulse;
-import org.jhk.pulsing.serialization.avro.serializers.SerializationHelper;
-import static org.jhk.pulsing.storm.common.FieldConstants.*;
 
 /**
  * @author Ji Kim
  */
-public class PulseDeserializer extends BaseFunction {
+public final class SplitByDelimiter extends BaseFunction {
     
-    public static final Fields FIELDS = new Fields(ACTION, ID, USER_ID, TIMESTAMP, VALUE);
+    private static final long serialVersionUID = -2998820117900478659L;
     
-    private static final long serialVersionUID = 4863013986214675297L;
+    private String _delim;
     
+    public SplitByDelimiter(String delim) {
+        super();
+        
+        _delim = delim;
+    }
+
     @Override
     public void execute(TridentTuple tuple, TridentCollector collector) {
         
-        String pulseString = tuple.getString(0);
-        
-        try {
-            
-            Pulse pulse = SerializationHelper.deserializeFromJSONStringToAvro(Pulse.class, Pulse.getClassSchema(), pulseString);
-            collector.emit(getPulseValues(pulse));
-            
-        } catch (IOException decodeException) {
-            collector.reportError(decodeException);
+        for(String entry : tuple.getString(0).split(_delim)) {
+            if(entry.length() > 0) {
+                collector.emit(new Values(entry));
+            }
         }
         
     }
     
-    private Values getPulseValues(Pulse pulse) {
-        return new Values(pulse.getAction().toString(), pulse.getId().getId(), pulse.getUserId().getId(), 
-                pulse.getTimeStamp(), pulse.getValue());
-    }
-
 }

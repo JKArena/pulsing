@@ -18,18 +18,24 @@
  */
 package org.jhk.pulsing.web.config;
 
+import org.jhk.pulsing.web.controller.TextWSocketHandler;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
+import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.config.annotation.AbstractWebSocketMessageBrokerConfigurer;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
+import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
+import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
 
 /**
  * @author Ji Kim
  */
 @Configuration
 @EnableWebSocketMessageBroker
-public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
+public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer
+                                implements WebSocketConfigurer {
     
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
@@ -40,6 +46,16 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer {
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/pulseSubscribeSocketJS").setAllowedOrigins("*").withSockJS();
+    }
+    
+    @Override
+    public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
+        registry.addHandler(getTextWebSocketHandler(), "/pulsingTextWS").setAllowedOrigins("*").withSockJS();
+    }
+    
+    @Bean
+    public WebSocketHandler getTextWebSocketHandler() {
+        return new TextWSocketHandler();
     }
     
 }

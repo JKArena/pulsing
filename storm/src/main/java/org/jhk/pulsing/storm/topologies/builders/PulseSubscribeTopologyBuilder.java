@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.storm.topologies;
+package org.jhk.pulsing.storm.topologies.builders;
 
 import org.apache.storm.generated.StormTopology;
 import org.apache.storm.kafka.BrokerHosts;
@@ -27,10 +27,10 @@ import org.apache.storm.kafka.ZkHosts;
 import org.apache.storm.spout.SchemeAsMultiScheme;
 import org.apache.storm.topology.TopologyBuilder;
 import org.apache.storm.tuple.Fields;
-import org.jhk.pulsing.storm.bolts.pulse.PulseDeserializerBolt;
-import org.jhk.pulsing.storm.bolts.pulse.TimeIntervalBolt;
-import org.jhk.pulsing.storm.bolts.pulse.TimeIntervalBuilderBolt;
-import org.jhk.pulsing.storm.bolts.pulse.TimeIntervalPersistorBolt;
+import org.jhk.pulsing.storm.bolts.deserializers.avro.PulseDeserializerBolt;
+import org.jhk.pulsing.storm.bolts.persistor.TimeIntervalPersistorBolt;
+import org.jhk.pulsing.storm.bolts.time.TimeIntervalBolt;
+import org.jhk.pulsing.storm.bolts.time.TimeIntervalBuilderBolt;
 import org.jhk.pulsing.shared.util.CommonConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,13 +48,13 @@ public final class PulseSubscribeTopologyBuilder {
         TopologyBuilder builder = new TopologyBuilder();
         builder.setSpout("pulse-subscribe-spout", buildSpout());
         
-        builder.setBolt("pulse-deserializer", new PulseDeserializerBolt(), 4) //sets executors, namely threads
+        builder.setBolt("pulse-avro-deserialize", new PulseDeserializerBolt(), 4) //sets executors, namely threads
                 .setNumTasks(4) //num tasks is number of instances of this bolt
                 .shuffleGrouping("pulse-subscribe-spout");
         
         builder.setBolt("pulse-subscribe-interval-extractor", new TimeIntervalBolt(), 2)
                 .setNumTasks(2)
-                .shuffleGrouping("pulse-deserializer");
+                .shuffleGrouping("pulse-avro-deserialize");
         
         builder.setBolt("pulse-subscribe-interval-builder", new TimeIntervalBuilderBolt(), 4)
                 .setNumTasks(4)
