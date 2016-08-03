@@ -16,27 +16,28 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.storm.serializers.thrift;
+package org.jhk.pulsing.storm.common;
 
-import org.apache.storm.trident.operation.BaseFunction;
-import org.apache.storm.trident.operation.TridentCollector;
-import org.apache.storm.trident.tuple.TridentTuple;
+import java.util.List;
+
+import static org.jhk.pulsing.serialization.thrift.edges.ACTION.*;
+import static org.jhk.pulsing.storm.common.FieldConstants.*;
+
 import org.apache.storm.tuple.Fields;
-import org.apache.storm.tuple.Values;
+import org.apache.storm.tuple.ITuple;
 import org.jhk.pulsing.serialization.avro.records.Picture;
 import org.jhk.pulsing.serialization.thrift.data.Data;
 import org.jhk.pulsing.serialization.thrift.data.DataUnit;
 import org.jhk.pulsing.serialization.thrift.data.Pedigree;
+import org.jhk.pulsing.serialization.thrift.edges.PulseEdge;
+import org.jhk.pulsing.serialization.thrift.id.PulseId;
 import org.jhk.pulsing.serialization.thrift.id.UserId;
 import org.jhk.pulsing.serialization.thrift.property.PicturePropertyValue;
+import org.jhk.pulsing.serialization.thrift.property.PulseProperty;
+import org.jhk.pulsing.serialization.thrift.property.PulsePropertyValue;
 import org.jhk.pulsing.serialization.thrift.property.UserProperty;
 import org.jhk.pulsing.serialization.thrift.property.UserPropertyValue;
 import org.jhk.pulsing.shared.util.Util;
-
-import static org.jhk.pulsing.storm.common.FieldConstants.*;
-
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -45,24 +46,56 @@ import org.slf4j.LoggerFactory;
  * 
  * @author Ji Kim
  */
-public final class UserSerializer extends BaseFunction {
+public final class SerializerCommon {
     
-    public static final Fields FIELDS = new Fields(DATA);
+    private static final Logger _LOG = LoggerFactory.getLogger(SerializerCommon.class);
     
-    private static final Logger _LOG = LoggerFactory.getLogger(UserSerializer.class);
-    private static final long serialVersionUID = 2492968329072034376L;
-
-    @Override
-    public void execute(TridentTuple tuple, TridentCollector collector) {
-        _LOG.info("UserSerializer.execute " + tuple);
+    public static final Fields FIELDS_DATA = new Fields(DATA);
+    
+    public static Data constructThriftPulse(ITuple tuple) {
+        _LOG.info("SerializerCommon.constructThriftPulse " + tuple);
         
-        Data uData = populateThriftUser(tuple);
+        Data data = new Data();
+        data.setPedigree(new Pedigree(Util.convertNanoToSeconds(tuple.getLongByField(TIMESTAMP))));
         
-        _LOG.info("Serialized to thrift " + uData);
-        collector.emit(new Values(uData));
+        DataUnit dUnit = new DataUnit();
+        data.setDataunit(dUnit);
+        
+        PulseProperty pProperty = new PulseProperty();
+        dUnit.setPulse_property(pProperty);
+        
+        PulseId pId = PulseId.id(tuple.getLongByField(ID));
+        PulsePropertyValue ppValue = new PulsePropertyValue();
+        pProperty.setId(pId);
+        pProperty.setProperty(ppValue);
+        
+        ppValue.setValue(tuple.getStringByField(VALUE));
+        @SuppressWarnings("unchecked")
+        List<Double> coordinates = (List<Double>) tuple.getValueByField(COORDINATES);
+        if(coordinates != null) {
+            ppValue.setCoordinates(coordinates);
+        }
+        
+        PulseEdge pEdge = new PulseEdge();
+        dUnit.setPulse(pEdge);
+        
+        pEdge.setUserId(UserId.id(tuple.getLongByField(USER_ID)));
+        pEdge.setPulseId(pId);
+        
+        String action = tuple.getStringByField(ACTION);
+        
+        switch(action) {
+        case "CREATE": pEdge.setAction(CREATE); break;
+        case "SUBSCRIBE": pEdge.setAction(SUBSCRIBE); break;
+        case "UNSUBSCRIBE": pEdge.setAction(UNSUBSCRIBE); break;
+        case "DELETE": pEdge.setAction(DELETE); break;
+        }
+        
+        return data;
     }
     
-    private Data populateThriftUser(TridentTuple tuple) {
+    public static Data constructThriftUser(ITuple tuple) {
+        _LOG.info("SerializerCommon.constructThriftUser " + tuple);
         
         Data data = new Data();
         data.setPedigree(new Pedigree(Util.convertNanoToSeconds(System.nanoTime())));
@@ -95,6 +128,10 @@ public final class UserSerializer extends BaseFunction {
         }
         
         return data;
+    }
+    
+    private SerializerCommon() {
+        super();
     }
     
 }

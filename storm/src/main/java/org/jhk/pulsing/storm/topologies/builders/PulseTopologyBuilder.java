@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.storm.topologies;
+package org.jhk.pulsing.storm.topologies.builders;
 
 import org.apache.storm.generated.StormTopology;
 import org.apache.storm.hdfs.trident.HdfsState;
@@ -39,29 +39,30 @@ import org.apache.storm.trident.TridentState;
 import org.apache.storm.trident.TridentTopology;
 import org.apache.storm.trident.state.StateFactory;
 import org.apache.storm.tuple.Fields;
-import org.jhk.pulsing.shared.util.HadoopConstants;
 import org.jhk.pulsing.shared.util.CommonConstants;
-import org.jhk.pulsing.storm.deserializers.avro.UserDeserializer;
-import org.jhk.pulsing.storm.serializers.thrift.UserSerializer;
+import org.jhk.pulsing.shared.util.HadoopConstants;
+import org.jhk.pulsing.storm.common.DeserializerCommon;
+import org.jhk.pulsing.storm.common.SerializerCommon;
+import org.jhk.pulsing.storm.trident.deserializers.avro.PulseDeserializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * @author Ji Kim
  */
-public final class UserTopologyBuilder {
+public final class PulseTopologyBuilder {
     
-    private static final Logger _LOG = LoggerFactory.getLogger(UserTopologyBuilder.class);
+    private static final Logger _LOG = LoggerFactory.getLogger(PulseTopologyBuilder.class);
     
     public static StormTopology build() {
-        _LOG.info("UserTopologyBuilder.build");
+        _LOG.info("PulseTopologyBuilder.build");
         
         TridentTopology topology = new TridentTopology();
-        Stream stream = topology.newStream("user-submission-spout", buildSpout())
+        Stream stream = topology.newStream("pulse-create-spout", buildSpout())
             .each(
                     new Fields("str"), 
-                    new UserDeserializer(), 
-                    UserDeserializer.FIELDS
+                    new PulseDeserializer(), 
+                    DeserializerCommon.PULSE_DESERIALIZE_FIELDS
                     );
         
         hdfsStatePersist(stream);
@@ -70,14 +71,14 @@ public final class UserTopologyBuilder {
     }
     
     private static void hdfsStatePersist(Stream stream) {
-        _LOG.info("UserTopologyBuilder.hdfsPersist");
+        _LOG.info("PulseTopologyBuilder.hdfsPersistBolt");
         
         FileNameFormat fnFormat = new DefaultFileNameFormat()
                 .withPath(HadoopConstants.NEW_DATA_WORKSPACE)
-                .withPrefix("PulsingUser");
+                .withPrefix("PulseCreate");
         
         RecordFormat rFormat = new DelimitedRecordFormat()
-                .withFields(UserSerializer.FIELDS);
+                .withFields(SerializerCommon.FIELDS_DATA);
         
         FileRotationPolicy rPolicy = new FileSizeRotationPolicy(10.0f, FileSizeRotationPolicy.Units.MB);
         
@@ -89,14 +90,14 @@ public final class UserTopologyBuilder {
         
         StateFactory sFactory = new HdfsStateFactory().withOptions(opts);
         
-        TridentState tState = stream.partitionPersist(sFactory, UserSerializer.FIELDS, new HdfsUpdater(), new Fields());
+        TridentState tState = stream.partitionPersist(sFactory, SerializerCommon.FIELDS_DATA, new HdfsUpdater(), new Fields());
     }
     
     private static TransactionalTridentKafkaSpout buildSpout() {
         BrokerHosts host = new ZkHosts("localhost");
-        TridentKafkaConfig spoutConfig = new TridentKafkaConfig(host, CommonConstants.TOPICS.USER_CREATE.toString());
+        TridentKafkaConfig spoutConfig = new TridentKafkaConfig(host, CommonConstants.TOPICS.PULSE_CREATE.toString());
         spoutConfig.scheme = new SchemeAsMultiScheme(new StringScheme());
         return new TransactionalTridentKafkaSpout(spoutConfig);
     }
-
+    
 }

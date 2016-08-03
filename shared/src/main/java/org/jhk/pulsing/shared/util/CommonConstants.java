@@ -26,8 +26,6 @@ import java.util.Properties;
  */
 public final class CommonConstants {
     
-    public static final int DEFAULT_TRENDING_PULSING_INTERVAL_SECONDS;
-    
     public static final String DEFAULT_BOOTSTRAP_HOST;
     public static final int DEFAULT_BOOTSTRAP_PORT;
     
@@ -35,7 +33,7 @@ public final class CommonConstants {
     public static final int HASH_CODE_MULTIPLY_VALUE = 31;
     
     public enum TOPICS {
-		PULSE_SUBSCRIBE, USER_CREATE;
+		PULSE_SUBSCRIBE, USER_CREATE, PULSE_CREATE;
 	};
 	
 	static {
@@ -45,7 +43,6 @@ public final class CommonConstants {
         try {
             props.load(RedisConstants.class.getResourceAsStream("common.properties"));
             
-            DEFAULT_TRENDING_PULSING_INTERVAL_SECONDS = Integer.parseInt(props.getProperty("trending_pulse_interval_seconds"));
             DEFAULT_BOOTSTRAP_HOST = props.getProperty("bootstrap_host");
             DEFAULT_BOOTSTRAP_PORT = Integer.parseInt(props.getProperty("bootstrap_port"));
         } catch (IOException ioExcept) {

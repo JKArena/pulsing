@@ -24,6 +24,7 @@ import org.apache.storm.StormSubmitter;
 import org.apache.storm.generated.AlreadyAliveException;
 import org.apache.storm.generated.AuthorizationException;
 import org.apache.storm.generated.InvalidTopologyException;
+import org.jhk.pulsing.storm.topologies.builders.UserTopologyBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

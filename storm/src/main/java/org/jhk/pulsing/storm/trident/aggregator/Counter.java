@@ -16,37 +16,31 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.storm.common.functions;
+package org.jhk.pulsing.storm.trident.aggregator;
 
-import org.apache.storm.trident.operation.BaseFunction;
-import org.apache.storm.trident.operation.TridentCollector;
+import org.apache.storm.trident.operation.CombinerAggregator;
 import org.apache.storm.trident.tuple.TridentTuple;
-import org.apache.storm.tuple.Values;
 
 /**
  * @author Ji Kim
  */
-public final class SplitByDelimiter extends BaseFunction {
-    
-    private static final long serialVersionUID = -2998820117900478659L;
-    
-    private String _delim;
-    
-    public SplitByDelimiter(String delim) {
-        super();
-        
-        _delim = delim;
+public final class Counter implements CombinerAggregator<Long> {
+
+    private static final long serialVersionUID = -7930085122578857788L;
+
+    @Override
+    public Long combine(Long first, Long second) {
+        return (first.longValue() + second.longValue());
     }
 
     @Override
-    public void execute(TridentTuple tuple, TridentCollector collector) {
-        
-        for(String entry : tuple.getString(0).split(_delim)) {
-            if(entry.length() > 0) {
-                collector.emit(new Values(entry));
-            }
-        }
-        
+    public Long init(TridentTuple tuple) {
+        return 1L;
+    }
+
+    @Override
+    public Long zero() {
+        return 0L;
     }
     
 }

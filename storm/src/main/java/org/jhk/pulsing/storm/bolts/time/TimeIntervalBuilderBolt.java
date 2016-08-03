@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.storm.bolts.pulse;
+package org.jhk.pulsing.storm.bolts.time;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -31,8 +31,8 @@ import org.apache.storm.tuple.Fields;
 import org.apache.storm.tuple.Tuple;
 import org.apache.storm.tuple.Values;
 import org.jhk.pulsing.shared.util.Util;
-import org.jhk.pulsing.shared.util.CommonConstants;
 import static org.jhk.pulsing.storm.common.FieldConstants.*;
+import org.jhk.pulsing.storm.common.OtherConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,8 +41,8 @@ import org.slf4j.LoggerFactory;
  */
 public final class TimeIntervalBuilderBolt extends BaseBasicBolt {
     
-    private static final Logger _LOG = LoggerFactory.getLogger(TimeIntervalBuilderBolt.class);
     private static final long serialVersionUID = -94783556828622026L;
+    private static final Logger _LOG = LoggerFactory.getLogger(TimeIntervalBuilderBolt.class);
     
     private static final int DEFAULT_TICK_TUPLE_FREQ_SECONDS = 60;
     
@@ -50,7 +50,7 @@ public final class TimeIntervalBuilderBolt extends BaseBasicBolt {
     private int _secondsInterval;
     
     public TimeIntervalBuilderBolt() {
-        this(CommonConstants.DEFAULT_TRENDING_PULSING_INTERVAL_SECONDS);
+        this(OtherConstants.DEFAULT_INTERVAL_SECONDS);
     }
     
     public TimeIntervalBuilderBolt(int secondsInterval) {
