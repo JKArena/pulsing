@@ -39,8 +39,8 @@ public final class DeserializerCommon {
     }
     
     public static Values getUserValues(User user) {
-        return new Values(user.getPicture(), user.getId(), user.getCoordinates(), 
-                user.getEmail(), user.getName(), user.getPassword());
+        return new Values(user.getPicture(), user.getId().getId(), user.getCoordinates(), 
+                user.getEmail().toString(), user.getName().toString(), user.getPassword().toString());
     }
     
     private DeserializerCommon() {

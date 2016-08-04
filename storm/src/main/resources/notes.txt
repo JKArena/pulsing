@@ -10,7 +10,7 @@ stop-yarn.sh
 Another way of managing configuration settings. Copy the etc/hadoop directory from Hadoop installation to another location, 
 place the *-site.xml configuration files there and set the HADOOP_CONF_DIR environment variable to the alternative location.
 
-hadoop fs -mkdir hdfs://localhost/data
+hadoop fs -mkdir hdfs://localhost/data/master
 
 hadoop jar pulsing-hadoop-0.1-SNAPSHOT.jar org.jhk.pulsing.hadoop.job.User -conf $HDFS\conf\hadoop-localhost.xml
 
