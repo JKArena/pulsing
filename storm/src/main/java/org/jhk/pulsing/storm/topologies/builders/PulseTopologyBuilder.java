@@ -41,9 +41,8 @@ import org.apache.storm.trident.state.StateFactory;
 import org.apache.storm.tuple.Fields;
 import org.jhk.pulsing.shared.util.CommonConstants;
 import org.jhk.pulsing.shared.util.HadoopConstants;
-import org.jhk.pulsing.storm.common.DeserializerCommon;
-import org.jhk.pulsing.storm.common.SerializerCommon;
-import org.jhk.pulsing.storm.trident.deserializers.avro.PulseDeserializer;
+import org.jhk.pulsing.storm.common.FieldConstants;
+import org.jhk.pulsing.storm.trident.deserializers.avro.PulseDeserializerFunction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -61,8 +60,8 @@ public final class PulseTopologyBuilder {
         Stream stream = topology.newStream("pulse-create-spout", buildSpout())
             .each(
                     new Fields("str"), 
-                    new PulseDeserializer(), 
-                    DeserializerCommon.PULSE_DESERIALIZE_FIELDS
+                    new PulseDeserializerFunction(), 
+                    FieldConstants.AVRO_PULSE_DESERIALIZE_FIELD
                     );
         
         hdfsStatePersist(stream);
@@ -78,7 +77,7 @@ public final class PulseTopologyBuilder {
                 .withPrefix("PulseCreate");
         
         RecordFormat rFormat = new DelimitedRecordFormat()
-                .withFields(SerializerCommon.FIELDS_DATA);
+                .withFields(FieldConstants.THRIFT_DATA_FIELD);
         
         FileRotationPolicy rPolicy = new FileSizeRotationPolicy(10.0f, FileSizeRotationPolicy.Units.MB);
         
@@ -90,7 +89,7 @@ public final class PulseTopologyBuilder {
         
         StateFactory sFactory = new HdfsStateFactory().withOptions(opts);
         
-        TridentState tState = stream.partitionPersist(sFactory, SerializerCommon.FIELDS_DATA, new HdfsUpdater(), new Fields());
+        TridentState tState = stream.partitionPersist(sFactory, FieldConstants.THRIFT_DATA_FIELD, new HdfsUpdater(), new Fields());
     }
     
     private static TransactionalTridentKafkaSpout buildSpout() {

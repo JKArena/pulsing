@@ -38,9 +38,9 @@ import org.apache.storm.spout.SchemeAsMultiScheme;
 import org.apache.storm.topology.TopologyBuilder;
 import org.jhk.pulsing.shared.util.CommonConstants;
 import org.jhk.pulsing.shared.util.HadoopConstants;
+import org.jhk.pulsing.storm.bolts.converter.avroTothrift.UserConverterBolt;
 import org.jhk.pulsing.storm.bolts.deserializers.avro.UserDeserializerBolt;
-import org.jhk.pulsing.storm.bolts.serializers.avro.UserSerializerBolt;
-import org.jhk.pulsing.storm.common.SerializerCommon;
+import org.jhk.pulsing.storm.common.FieldConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -61,13 +61,13 @@ public final class UserTopologyBuilder {
                 .setNumTasks(2) //num tasks is number of instances of this bolt
                 .shuffleGrouping("user-create-spout");
         
-        builder.setBolt("user-thrift-serialize", new UserSerializerBolt(), 2)
+        builder.setBolt("user-avor-thrift-converter", new UserConverterBolt(), 2)
                 .setNumTasks(2)
                 .shuffleGrouping("user-avro-deserialize");
         
         builder.setBolt("user-hdfs", hdfsBolt(), 2)
             .setNumTasks(2)
-            .shuffleGrouping("user-thrift-serialize");
+            .shuffleGrouping("user-avor-thrift-converter");
         
         return builder.createTopology();
     }
@@ -78,7 +78,7 @@ public final class UserTopologyBuilder {
                 .withPrefix("UserCreate");
         
         RecordFormat rFormat = new DelimitedRecordFormat()
-                .withFields(SerializerCommon.FIELDS_DATA);
+                .withFields(FieldConstants.THRIFT_DATA_FIELD);
         
         // sync the filesystem after every 1k tuples (setting to 1 for testing)
         SyncPolicy sPolicy = new CountSyncPolicy(1);

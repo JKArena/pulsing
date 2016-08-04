@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.storm.trident.serializers.thrift;
+package org.jhk.pulsing.storm.trident.converter.avroTothrift;
 
 import org.apache.storm.trident.operation.BaseFunction;
 import org.apache.storm.trident.operation.TridentCollector;
@@ -25,21 +25,21 @@ import org.apache.storm.tuple.Values;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.jhk.pulsing.serialization.thrift.data.Data;
-import org.jhk.pulsing.storm.common.SerializerCommon;
+import org.jhk.pulsing.storm.common.ConverterCommon;
 
 /**
  * @author Ji Kim
  */
-public final class UserSerializer extends BaseFunction {
+public final class UserConverterFunction extends BaseFunction {
     
     private static final long serialVersionUID = 2492968329072034376L;
-    private static final Logger _LOG = LoggerFactory.getLogger(UserSerializer.class);
+    private static final Logger _LOG = LoggerFactory.getLogger(UserConverterFunction.class);
     
     @Override
     public void execute(TridentTuple tuple, TridentCollector collector) {
-        _LOG.info("UserSerializer.execute " + tuple);
+        _LOG.info("UserConverter.execute " + tuple);
         
-        Data uData = SerializerCommon.constructThriftUser(tuple);
+        Data uData = ConverterCommon.convertUserAvroToThrift(tuple);
         
         _LOG.info("Serialized to thrift " + uData);
         collector.emit(new Values(uData));
