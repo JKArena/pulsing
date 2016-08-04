@@ -16,33 +16,37 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.storm.trident.serializers.thrift;
+package org.jhk.pulsing.storm.trident.deserializers.avro;
 
+import java.io.IOException;
 import org.apache.storm.trident.operation.BaseFunction;
 import org.apache.storm.trident.operation.TridentCollector;
 import org.apache.storm.trident.tuple.TridentTuple;
 import org.apache.storm.tuple.Values;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.jhk.pulsing.serialization.thrift.data.Data;
-import org.jhk.pulsing.storm.common.SerializerCommon;
+import org.jhk.pulsing.serialization.avro.records.Pulse;
+import org.jhk.pulsing.serialization.avro.serializers.SerializationHelper;
 
 /**
  * @author Ji Kim
  */
-public final class PulseSerializer extends BaseFunction {
+public class PulseDeserializerFunction extends BaseFunction {
     
-    private static final long serialVersionUID = -5758523170843394585L;
-    private static final Logger _LOG = LoggerFactory.getLogger(PulseSerializer.class);
+    private static final long serialVersionUID = 4863013986214675297L;
     
     @Override
     public void execute(TridentTuple tuple, TridentCollector collector) {
-        _LOG.info("PulseSerializer.execute " + tuple);
         
-        Data pData = SerializerCommon.constructThriftPulse(tuple);
+        String pulseString = tuple.getString(0);
         
-        _LOG.info("Serialized to thrift " + pData);
-        collector.emit(new Values(pData));
+        try {
+            
+            Pulse pulse = SerializationHelper.deserializeFromJSONStringToAvro(Pulse.class, Pulse.getClassSchema(), pulseString);
+            collector.emit(new Values(pulse));
+            
+        } catch (IOException decodeException) {
+            collector.reportError(decodeException);
+        }
+        
     }
     
 }

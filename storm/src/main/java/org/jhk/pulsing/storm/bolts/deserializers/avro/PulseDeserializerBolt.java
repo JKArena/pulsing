@@ -24,9 +24,10 @@ import org.apache.storm.topology.BasicOutputCollector;
 import org.apache.storm.topology.OutputFieldsDeclarer;
 import org.apache.storm.topology.base.BaseBasicBolt;
 import org.apache.storm.tuple.Tuple;
+import org.apache.storm.tuple.Values;
 import org.jhk.pulsing.serialization.avro.records.Pulse;
 import org.jhk.pulsing.serialization.avro.serializers.SerializationHelper;
-import org.jhk.pulsing.storm.common.DeserializerCommon;
+import org.jhk.pulsing.storm.common.FieldConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,7 +48,7 @@ public final class PulseDeserializerBolt extends BaseBasicBolt {
         try {
             
             Pulse pulse = SerializationHelper.deserializeFromJSONStringToAvro(Pulse.class, Pulse.getClassSchema(), pulseString);
-            outputCollector.emit(DeserializerCommon.getPulseValues(pulse));
+            outputCollector.emit(new Values(pulse));
             
         } catch (IOException decodeException) {
             outputCollector.reportError(decodeException);
@@ -57,7 +58,7 @@ public final class PulseDeserializerBolt extends BaseBasicBolt {
     
     @Override
     public void declareOutputFields(OutputFieldsDeclarer fieldsDeclarer) {
-        fieldsDeclarer.declare(DeserializerCommon.PULSE_DESERIALIZE_FIELDS);
+        fieldsDeclarer.declare(FieldConstants.AVRO_PULSE_DESERIALIZE_FIELD);
     }
 
 }

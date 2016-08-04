@@ -16,17 +16,15 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.storm.bolts.deserializers.avro;
-
-import java.io.IOException;
+package org.jhk.pulsing.storm.bolts.converter.avroTothrift;
 
 import org.apache.storm.topology.BasicOutputCollector;
 import org.apache.storm.topology.OutputFieldsDeclarer;
 import org.apache.storm.topology.base.BaseBasicBolt;
 import org.apache.storm.tuple.Tuple;
 import org.apache.storm.tuple.Values;
-import org.jhk.pulsing.serialization.avro.records.User;
-import org.jhk.pulsing.serialization.avro.serializers.SerializationHelper;
+import org.jhk.pulsing.serialization.thrift.data.Data;
+import org.jhk.pulsing.storm.common.ConverterCommon;
 import org.jhk.pulsing.storm.common.FieldConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,30 +32,24 @@ import org.slf4j.LoggerFactory;
 /**
  * @author Ji Kim
  */
-public final class UserDeserializerBolt extends BaseBasicBolt {
+public final class UserConverterBolt extends BaseBasicBolt {
     
-    private static final long serialVersionUID = 204666646818722549L;
-    private static final Logger _LOG = LoggerFactory.getLogger(UserDeserializerBolt.class);
+    private static final long serialVersionUID = 5216255208403673287L;
+    private static final Logger _LOG = LoggerFactory.getLogger(UserConverterBolt.class);
     
     @Override
     public void execute(Tuple tuple, BasicOutputCollector outputCollector) {
-        _LOG.debug("UserDeserializerBolt.execute: " + tuple);
+        _LOG.info("UserConverterBolt.execute " + tuple);
         
-        String userString = tuple.getString(0);
+        Data uData = ConverterCommon.convertUserAvroToThrift(tuple);
         
-        try {
-            
-            User user = SerializationHelper.deserializeFromJSONStringToAvro(User.class, User.getClassSchema(), userString);
-            outputCollector.emit(new Values(user));
-            
-        } catch (IOException decodeException) {
-            outputCollector.reportError(decodeException);
-        }
+        _LOG.info("Converted to thrift " + uData);
+        outputCollector.emit(new Values(uData));
     }
-    
+
     @Override
     public void declareOutputFields(OutputFieldsDeclarer fieldsDeclarer) {
-        fieldsDeclarer.declare(FieldConstants.AVRO_USER_DESERIALIZE_FIELD);
+        fieldsDeclarer.declare(FieldConstants.THRIFT_DATA_FIELD);
     }
 
 }

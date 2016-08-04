@@ -24,7 +24,7 @@ import org.apache.storm.trident.tuple.TridentTuple;
 /**
  * @author Ji Kim
  */
-public final class Counter implements CombinerAggregator<Long> {
+public final class CounterAggregator implements CombinerAggregator<Long> {
 
     private static final long serialVersionUID = -7930085122578857788L;
 

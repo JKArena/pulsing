@@ -29,8 +29,10 @@ import org.apache.storm.topology.TopologyBuilder;
 import org.apache.storm.tuple.Fields;
 import org.jhk.pulsing.storm.bolts.deserializers.avro.PulseDeserializerBolt;
 import org.jhk.pulsing.storm.bolts.persistor.TimeIntervalPersistorBolt;
+import org.jhk.pulsing.storm.bolts.time.PulseAvroIdTimeStampExtractorBolt;
 import org.jhk.pulsing.storm.bolts.time.TimeIntervalBolt;
 import org.jhk.pulsing.storm.bolts.time.TimeIntervalBuilderBolt;
+import org.jhk.pulsing.storm.common.FieldConstants;
 import org.jhk.pulsing.shared.util.CommonConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,14 +54,18 @@ public final class PulseSubscribeTopologyBuilder {
                 .setNumTasks(4) //num tasks is number of instances of this bolt
                 .shuffleGrouping("pulse-subscribe-spout");
         
+        builder.setBolt("pulse-avro-id-timestamp-extractor", new PulseAvroIdTimeStampExtractorBolt(), 4)
+                .setNumTasks(2)
+                .shuffleGrouping("pulse-subscribe-spout");
+        
         builder.setBolt("pulse-subscribe-interval-extractor", new TimeIntervalBolt(), 2)
                 .setNumTasks(2)
-                .shuffleGrouping("pulse-avro-deserialize");
+                .shuffleGrouping("pulse-avro-id-timestamp-extractor");
         
         builder.setBolt("pulse-subscribe-interval-builder", new TimeIntervalBuilderBolt(), 4)
                 .setNumTasks(4)
                 .fieldsGrouping("pulse-subscribe-interval-extractor", 
-                                new Fields("timeInterval"));
+                                new Fields(FieldConstants.TIME_INTERVAL));
         
         builder.setBolt("pulse-subscribe-interval-persistor", new TimeIntervalPersistorBolt())
                 .shuffleGrouping("pulse-subscribe-interval-builder");

@@ -16,42 +16,33 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.storm.trident.deserializers.avro;
+package org.jhk.pulsing.storm.trident.converter.avroTothrift;
 
-import java.io.IOException;
 import org.apache.storm.trident.operation.BaseFunction;
 import org.apache.storm.trident.operation.TridentCollector;
 import org.apache.storm.trident.tuple.TridentTuple;
 import org.apache.storm.tuple.Values;
-import org.jhk.pulsing.serialization.avro.records.Pulse;
-import org.jhk.pulsing.serialization.avro.serializers.SerializationHelper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.jhk.pulsing.serialization.thrift.data.Data;
+import org.jhk.pulsing.storm.common.ConverterCommon;
 
 /**
  * @author Ji Kim
  */
-public class PulseDeserializer extends BaseFunction {
+public final class PulseConverterFunction extends BaseFunction {
     
-    private static final long serialVersionUID = 4863013986214675297L;
+    private static final long serialVersionUID = -5758523170843394585L;
+    private static final Logger _LOG = LoggerFactory.getLogger(PulseConverterFunction.class);
     
     @Override
     public void execute(TridentTuple tuple, TridentCollector collector) {
+        _LOG.info("PulseConverter.execute " + tuple);
         
-        String pulseString = tuple.getString(0);
+        Data pData = ConverterCommon.convertPulseAvroToThrift(tuple);
         
-        try {
-            
-            Pulse pulse = SerializationHelper.deserializeFromJSONStringToAvro(Pulse.class, Pulse.getClassSchema(), pulseString);
-            collector.emit(getPulseValues(pulse));
-            
-        } catch (IOException decodeException) {
-            collector.reportError(decodeException);
-        }
-        
+        _LOG.info("Serialized to thrift " + pData);
+        collector.emit(new Values(pData));
     }
     
-    private Values getPulseValues(Pulse pulse) {
-        return new Values(pulse.getAction().toString(), pulse.getId().getId(), pulse.getUserId().getId(), 
-                pulse.getTimeStamp(), pulse.getValue(), pulse.getCoordinates());
-    }
-
 }

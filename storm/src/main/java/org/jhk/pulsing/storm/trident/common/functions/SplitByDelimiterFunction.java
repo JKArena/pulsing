@@ -26,13 +26,13 @@ import org.apache.storm.tuple.Values;
 /**
  * @author Ji Kim
  */
-public final class SplitByDelimiter extends BaseFunction {
+public final class SplitByDelimiterFunction extends BaseFunction {
     
     private static final long serialVersionUID = -2998820117900478659L;
     
     private String _delim;
     
-    public SplitByDelimiter(String delim) {
+    public SplitByDelimiterFunction(String delim) {
         super();
         
         _delim = delim;

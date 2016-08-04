@@ -16,39 +16,40 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.storm.bolts.serializers.avro;
+package org.jhk.pulsing.storm.bolts.time;
+
+import static org.jhk.pulsing.storm.common.FieldConstants.*;
 
 import org.apache.storm.topology.BasicOutputCollector;
 import org.apache.storm.topology.OutputFieldsDeclarer;
 import org.apache.storm.topology.base.BaseBasicBolt;
+import org.apache.storm.tuple.Fields;
 import org.apache.storm.tuple.Tuple;
 import org.apache.storm.tuple.Values;
-import org.jhk.pulsing.serialization.thrift.data.Data;
-import org.jhk.pulsing.storm.common.SerializerCommon;
+import org.jhk.pulsing.serialization.avro.records.Pulse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * @author Ji Kim
  */
-public final class UserSerializerBolt extends BaseBasicBolt {
-    
-    private static final long serialVersionUID = 5216255208403673287L;
-    private static final Logger _LOG = LoggerFactory.getLogger(UserSerializerBolt.class);
+public final class PulseAvroIdTimeStampExtractorBolt extends BaseBasicBolt {
+
+    private static final long serialVersionUID = -8825186311978632181L;
+    private static final Logger _LOG = LoggerFactory.getLogger(PulseAvroIdTimeStampExtractorBolt.class);
     
     @Override
     public void execute(Tuple tuple, BasicOutputCollector outputCollector) {
-        _LOG.info("UserSerializerBolt.execute " + tuple);
+        _LOG.info("PulseAvroIdTimeStampExtractorBolt.execute: " + tuple);
         
-        Data uData = SerializerCommon.constructThriftUser(tuple);
+        Pulse pulse = (Pulse) tuple.getValueByField(AVRO_PULSE);
         
-        _LOG.info("Serialized to thrift " + uData);
-        outputCollector.emit(new Values(uData));
+        outputCollector.emit(new Values(pulse.getTimeStamp(), pulse.getId().getId()));
     }
 
     @Override
     public void declareOutputFields(OutputFieldsDeclarer fieldsDeclarer) {
-        fieldsDeclarer.declare(SerializerCommon.FIELDS_DATA);
+        fieldsDeclarer.declare(new Fields(TIMESTAMP, ID));
     }
 
 }

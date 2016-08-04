@@ -18,27 +18,28 @@
  */
 package org.jhk.pulsing.storm.common;
 
+import org.apache.storm.tuple.Fields;
+
 /**
  * @author Ji Kim
  */
 public final class FieldConstants {
     
-    public static final String PICTURE = "picture";
     public static final String ID = "id"; 
-    public static final String COORDINATES = "coordinates";
-    public static final String EMAIL = "email";
-    public static final String NAME = "name";
-    public static final String PASSWORD = "password";
-    
-    public static final String ACTION = "action"; 
-    public static final String USER_ID = "userId";
     public static final String TIMESTAMP = "timeStamp";
-    public static final String VALUE = "value";
     
     public static final String TIME_INTERVAL = "timeInterval";
     public static final String ID_COUNTER_MAP = "idCounterMap";
     
     public static final String DATA = "data";
+    
+    public static final String AVRO_USER = "AVRO_USER";
+    public static final String AVRO_PULSE = "AVRO_PULSE";
+    
+    public static final Fields AVRO_USER_DESERIALIZE_FIELD = new Fields(AVRO_USER);
+    public static final Fields AVRO_PULSE_DESERIALIZE_FIELD = new Fields(AVRO_PULSE);
+    
+    public static final Fields THRIFT_DATA_FIELD = new Fields(DATA);
     
     private FieldConstants() {
         super();

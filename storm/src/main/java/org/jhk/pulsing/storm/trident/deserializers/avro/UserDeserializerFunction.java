@@ -32,10 +32,10 @@ import org.slf4j.LoggerFactory;
 /**
  * @author Ji Kim
  */
-public final class UserDeserializer extends BaseFunction {
+public final class UserDeserializerFunction extends BaseFunction {
     
     private static final long serialVersionUID = -5222249102945206582L;
-    private static final Logger _LOG = LoggerFactory.getLogger(UserDeserializer.class);
+    private static final Logger _LOG = LoggerFactory.getLogger(UserDeserializerFunction.class);
     
     @Override
     public void execute(TridentTuple tuple, TridentCollector collector) {
@@ -47,7 +47,7 @@ public final class UserDeserializer extends BaseFunction {
             
             User user = SerializationHelper.deserializeFromJSONStringToAvro(User.class, User.getClassSchema(), userString);
             _LOG.info("UserDeserializer.execute deserialized to " + user);
-            collector.emit(getUserValues(user));
+            collector.emit(new Values(user));
             
         } catch (IOException decodeException) {
             collector.reportError(decodeException);
@@ -55,9 +55,4 @@ public final class UserDeserializer extends BaseFunction {
         
     }
     
-    private Values getUserValues(User user) {
-        return new Values(user.getPicture(), user.getId(), user.getCoordinates(), 
-                user.getEmail(), user.getName(), user.getPassword());
-    }
-
 }

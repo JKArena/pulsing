@@ -23,9 +23,10 @@ import java.util.List;
 import static org.jhk.pulsing.serialization.thrift.edges.ACTION.*;
 import static org.jhk.pulsing.storm.common.FieldConstants.*;
 
-import org.apache.storm.tuple.Fields;
 import org.apache.storm.tuple.ITuple;
 import org.jhk.pulsing.serialization.avro.records.Picture;
+import org.jhk.pulsing.serialization.avro.records.Pulse;
+import org.jhk.pulsing.serialization.avro.records.User;
 import org.jhk.pulsing.serialization.thrift.data.Data;
 import org.jhk.pulsing.serialization.thrift.data.DataUnit;
 import org.jhk.pulsing.serialization.thrift.data.Pedigree;
@@ -46,17 +47,17 @@ import org.slf4j.LoggerFactory;
  * 
  * @author Ji Kim
  */
-public final class SerializerCommon {
+public final class ConverterCommon {
     
-    private static final Logger _LOG = LoggerFactory.getLogger(SerializerCommon.class);
+    private static final Logger _LOG = LoggerFactory.getLogger(ConverterCommon.class);
     
-    public static final Fields FIELDS_DATA = new Fields(DATA);
-    
-    public static Data constructThriftPulse(ITuple tuple) {
-        _LOG.info("SerializerCommon.constructThriftPulse " + tuple);
+    public static Data convertPulseAvroToThrift(ITuple tuple) {
+        _LOG.info("ConverterCommon.convertPulseAvroToThrift " + tuple);
+        
+        Pulse pulse = (Pulse) tuple.getValueByField(AVRO_PULSE);
         
         Data data = new Data();
-        data.setPedigree(new Pedigree(Util.convertNanoToSeconds(tuple.getLongByField(TIMESTAMP))));
+        data.setPedigree(new Pedigree(Util.convertNanoToSeconds(pulse.getTimeStamp())));
         
         DataUnit dUnit = new DataUnit();
         data.setDataunit(dUnit);
@@ -64,14 +65,14 @@ public final class SerializerCommon {
         PulseProperty pProperty = new PulseProperty();
         dUnit.setPulse_property(pProperty);
         
-        PulseId pId = PulseId.id(tuple.getLongByField(ID));
+        PulseId pId = PulseId.id(pulse.getId().getId());
         PulsePropertyValue ppValue = new PulsePropertyValue();
         pProperty.setId(pId);
         pProperty.setProperty(ppValue);
         
-        ppValue.setValue(tuple.getStringByField(VALUE));
-        @SuppressWarnings("unchecked")
-        List<Double> coordinates = (List<Double>) tuple.getValueByField(COORDINATES);
+        ppValue.setValue(pulse.getValue().toString());
+        
+        List<Double> coordinates = pulse.getCoordinates();
         if(coordinates != null) {
             ppValue.setCoordinates(coordinates);
         }
@@ -79,10 +80,10 @@ public final class SerializerCommon {
         PulseEdge pEdge = new PulseEdge();
         dUnit.setPulse(pEdge);
         
-        pEdge.setUserId(UserId.id(tuple.getLongByField(USER_ID)));
+        pEdge.setUserId(UserId.id(pulse.getUserId().getId()));
         pEdge.setPulseId(pId);
         
-        String action = tuple.getStringByField(ACTION);
+        String action = pulse.getAction().toString();
         
         switch(action) {
         case "CREATE": pEdge.setAction(CREATE); break;
@@ -94,8 +95,10 @@ public final class SerializerCommon {
         return data;
     }
     
-    public static Data constructThriftUser(ITuple tuple) {
-        _LOG.info("SerializerCommon.constructThriftUser " + tuple);
+    public static Data convertUserAvroToThrift(ITuple tuple) {
+        _LOG.info("ConverterCommon.convertUserAvroToThrift " + tuple);
+        
+        User user = (User) tuple.getValueByField(AVRO_USER);
         
         Data data = new Data();
         data.setPedigree(new Pedigree(Util.convertNanoToSeconds(System.nanoTime())));
@@ -107,20 +110,19 @@ public final class SerializerCommon {
         dUnit.setUser_property(uProperty);
         
         UserPropertyValue upValue = new UserPropertyValue();
-        uProperty.setId(UserId.id(tuple.getLongByField(ID)));
+        uProperty.setId(UserId.id(user.getId().getId()));
         uProperty.setProperty(upValue);
         
-        upValue.setEmail(tuple.getStringByField(EMAIL));
-        upValue.setPassword(tuple.getStringByField(PASSWORD));
-        upValue.setName(tuple.getStringByField(NAME));
+        upValue.setEmail(user.getEmail().toString());
+        upValue.setPassword(user.getPassword().toString());
+        upValue.setName(user.getName().toString());
         
-        @SuppressWarnings("unchecked")
-        List<Double> coordinates = (List<Double>) tuple.getValueByField(COORDINATES);
+        List<Double> coordinates = user.getCoordinates();
         if(coordinates != null) {
             upValue.setCoordinates(coordinates);
         }
         
-        Picture avroPicture = (Picture) tuple.getValueByField(PICTURE);
+        Picture avroPicture = user.getPicture();
         if(avroPicture != null && avroPicture.getName() != null) {
             //research how others are passing byte data over messaging. The easiest solution 
             //is to encode the byte into base 64 string, but the size increase is 2-3 times original
@@ -130,7 +132,7 @@ public final class SerializerCommon {
         return data;
     }
     
-    private SerializerCommon() {
+    private ConverterCommon() {
         super();
     }
     
