@@ -121,7 +121,7 @@ public final class SerializerCommon {
         }
         
         Picture avroPicture = (Picture) tuple.getValueByField(PICTURE);
-        if(avroPicture != null) {
+        if(avroPicture != null && avroPicture.getName() != null) {
             //research how others are passing byte data over messaging. The easiest solution 
             //is to encode the byte into base 64 string, but the size increase is 2-3 times original
             upValue.setPicture(PicturePropertyValue.originalFilename(avroPicture.getName().toString()));
