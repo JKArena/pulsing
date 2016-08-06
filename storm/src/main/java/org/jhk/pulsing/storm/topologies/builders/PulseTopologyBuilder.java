@@ -23,7 +23,6 @@ import org.apache.storm.hdfs.trident.HdfsState;
 import org.apache.storm.hdfs.trident.HdfsStateFactory;
 import org.apache.storm.hdfs.trident.HdfsUpdater;
 import org.apache.storm.hdfs.trident.format.DefaultFileNameFormat;
-import org.apache.storm.hdfs.trident.format.DelimitedRecordFormat;
 import org.apache.storm.hdfs.trident.format.FileNameFormat;
 import org.apache.storm.hdfs.trident.format.RecordFormat;
 import org.apache.storm.hdfs.trident.rotation.FileRotationPolicy;
@@ -42,6 +41,7 @@ import org.apache.storm.tuple.Fields;
 import org.jhk.pulsing.shared.util.CommonConstants;
 import org.jhk.pulsing.shared.util.HadoopConstants;
 import org.jhk.pulsing.storm.common.FieldConstants;
+import org.jhk.pulsing.storm.hadoop.trident.ThriftDataRecordFormatFunction;
 import org.jhk.pulsing.storm.trident.deserializers.avro.PulseDeserializerFunction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -76,8 +76,7 @@ public final class PulseTopologyBuilder {
                 .withPath(HadoopConstants.NEW_DATA_WORKSPACE)
                 .withPrefix("PulseCreate");
         
-        RecordFormat rFormat = new DelimitedRecordFormat()
-                .withFields(FieldConstants.THRIFT_DATA_FIELD);
+        RecordFormat rFormat = new ThriftDataRecordFormatFunction();
         
         FileRotationPolicy rPolicy = new FileSizeRotationPolicy(10.0f, FileSizeRotationPolicy.Units.MB);
         
