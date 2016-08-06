@@ -21,7 +21,6 @@ package org.jhk.pulsing.storm.topologies.builders;
 import org.apache.storm.generated.StormTopology;
 import org.apache.storm.hdfs.bolt.HdfsBolt;
 import org.apache.storm.hdfs.bolt.format.DefaultFileNameFormat;
-import org.apache.storm.hdfs.bolt.format.DelimitedRecordFormat;
 import org.apache.storm.hdfs.bolt.format.FileNameFormat;
 import org.apache.storm.hdfs.bolt.format.RecordFormat;
 import org.apache.storm.hdfs.bolt.rotation.FileRotationPolicy;
@@ -40,7 +39,7 @@ import org.jhk.pulsing.shared.util.CommonConstants;
 import org.jhk.pulsing.shared.util.HadoopConstants;
 import org.jhk.pulsing.storm.bolts.converter.avroTothrift.UserConverterBolt;
 import org.jhk.pulsing.storm.bolts.deserializers.avro.UserDeserializerBolt;
-import org.jhk.pulsing.storm.common.FieldConstants;
+import org.jhk.pulsing.storm.hadoop.bolt.ThriftDataRecordFormatBolt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -77,8 +76,7 @@ public final class UserTopologyBuilder {
                 .withPath(HadoopConstants.NEW_DATA_WORKSPACE)
                 .withPrefix("UserCreate");
         
-        RecordFormat rFormat = new DelimitedRecordFormat()
-                .withFields(FieldConstants.THRIFT_DATA_FIELD);
+        RecordFormat rFormat = new ThriftDataRecordFormatBolt();
         
         // sync the filesystem after every 1k tuples (setting to 1 for testing)
         SyncPolicy sPolicy = new CountSyncPolicy(1);

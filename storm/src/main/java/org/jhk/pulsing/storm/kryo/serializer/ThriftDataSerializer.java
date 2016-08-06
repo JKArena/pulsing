@@ -20,9 +20,9 @@ package org.jhk.pulsing.storm.kryo.serializer;
 
 import org.apache.thrift.TDeserializer;
 import org.apache.thrift.TException;
-import org.apache.thrift.TSerializer;
 import org.apache.thrift.protocol.TBinaryProtocol;
 import org.jhk.pulsing.serialization.thrift.data.Data;
+import org.jhk.pulsing.storm.common.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,7 +46,8 @@ public final class ThriftDataSerializer extends Serializer<Data> {
         Data data = new Data();
         
         try {
-            //TODO make sure that it comes in read, at the moment since single machine won't be serializing and deserializing
+            //TODO make sure that it comes in read (meaning the buffer), at the moment 
+            //since single machine won't be serializing and deserializing
             dSerializer.deserialize(data, input.getBuffer()); 
         } catch (TException tException) {
             tException.printStackTrace();
@@ -56,17 +57,10 @@ public final class ThriftDataSerializer extends Serializer<Data> {
     }
 
     @Override
-    public void write(Kryo kryo, Output output, Data object) {
-        _LOG.info("ThriftDataSerializer.write " + object);
+    public void write(Kryo kryo, Output output, Data tData) {
+        _LOG.info("ThriftDataSerializer.write " + tData);
         
-        TSerializer serializer = new TSerializer(new TBinaryProtocol.Factory());
-        
-        try {
-            byte[] bytes = serializer.serialize(object);
-            output.write(bytes);
-        } catch (TException tException) {
-            tException.printStackTrace();
-        }
+        output.write(Util.serializeThriftData(tData));
     }
 
 }

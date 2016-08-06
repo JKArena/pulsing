@@ -18,30 +18,36 @@
  */
 package org.jhk.pulsing.storm.common;
 
-import org.apache.storm.tuple.Fields;
+import org.apache.thrift.TException;
+import org.apache.thrift.TSerializer;
+import org.apache.thrift.protocol.TBinaryProtocol;
+import org.jhk.pulsing.serialization.thrift.data.Data;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Ji Kim
  */
-public final class FieldConstants {
+public final class Util {
     
-    public static final String ID = "ID"; 
-    public static final String TIMESTAMP = "TIMESTAMP";
+    private static final Logger _LOG = LoggerFactory.getLogger(Util.class);
     
-    public static final String TIME_INTERVAL = "TIME_INTERVAL";
-    public static final String ID_COUNTER_MAP = "ID_COUNTER_MAP";
+    public static byte[] serializeThriftData(Data tData) {
+        _LOG.info("Util.serializeThriftData: " + tData);
+        
+        TSerializer serializer = new TSerializer(new TBinaryProtocol.Factory());
+        byte[] bytes = new byte[0];
+        
+        try {
+            bytes = serializer.serialize(tData);
+        } catch (TException tException) {
+            tException.printStackTrace();
+        }
+        
+        return bytes;
+    }
     
-    public static final String THRIFT_DATA = "THRIFT_DATA";
-    
-    public static final String AVRO_USER = "AVRO_USER";
-    public static final String AVRO_PULSE = "AVRO_PULSE";
-    
-    public static final Fields AVRO_USER_DESERIALIZE_FIELD = new Fields(AVRO_USER);
-    public static final Fields AVRO_PULSE_DESERIALIZE_FIELD = new Fields(AVRO_PULSE);
-    
-    public static final Fields THRIFT_DATA_FIELD = new Fields(THRIFT_DATA);
-    
-    private FieldConstants() {
+    private Util() {
         super();
     }
     
