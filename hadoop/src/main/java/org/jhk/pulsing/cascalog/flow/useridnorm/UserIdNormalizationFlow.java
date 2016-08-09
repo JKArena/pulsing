@@ -101,7 +101,7 @@ public final class UserIdNormalizationFlow {
         int iteration = 1;
         
         while(true) {
-            Tap progressEdgesSink =userIdNormalizationIteration(iteration);
+            Tap progressEdgesSink = userIdNormalizationIteration(iteration);
             FlowProcess flowProcess = new HadoopFlowProcess(new JobConf());
             
             if(!flowProcess.openTapForRead(progressEdgesSink).hasNext()) {

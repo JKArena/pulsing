@@ -1,4 +1,6 @@
 Mac
+
+Hadoop
 HDFS daemons
 start-dfs.sh
 stop-dfs.sh
@@ -7,12 +9,20 @@ Yarn daemons
 start-yarn.sh
 stop-yarn.sh
 
+localhost:8088
+http://localhost:50070/explorer.html
+
+Look into Apache Oozie for running jobs
+
 Another way of managing configuration settings. Copy the etc/hadoop directory from Hadoop installation to another location, 
 place the *-site.xml configuration files there and set the HADOOP_CONF_DIR environment variable to the alternative location.
 
 hadoop fs -mkdir hdfs://localhost/data/master
 
-hadoop jar pulsing-hadoop-0.1-SNAPSHOT.jar org.jhk.pulsing.hadoop.job.User -conf $HDFS\conf\hadoop-localhost.xml
+hadoop jar pulsing-hadoop-0.1-SNAPSHOT.jar org.jhk.pulsing.hadoop.job.NewDataIngestorJob -libjars ${LIBJARS} 
+
+id hadoop
+sudo dseditgroup -o edit -a hadoop -t user hadoop
 
 hdfs namenode -format
 hdfs getconf -namenodes
@@ -23,6 +33,14 @@ hadoop fs -mkdir <dir>
 8032 default port for yarn
 
 hadoop fs -copyFromLocal dummy.txt hdfs://localhost/hadoop/data/newdata
+
+Cassandra
+Note that cassandra under the hood lower cases all the content (i.e. table name), so best to use 
+the snake pattern foo_stuff
+bin/cqlsh
+CREATE KEYSPACE pulsing_single WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 1};
+USE pulsing_single;
+CREATE TABLE user (id  long, name text, email text, PRIMARY KEY (id)); 
 
 Windows
 bin/windows/kafka-topics.bat --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic USER_CREATE
