@@ -30,9 +30,9 @@ import org.apache.storm.topology.base.BaseBasicBolt;
 import org.apache.storm.tuple.Fields;
 import org.apache.storm.tuple.Tuple;
 import org.apache.storm.tuple.Values;
+import org.jhk.pulsing.shared.util.CommonConstants;
 import org.jhk.pulsing.shared.util.Util;
 import static org.jhk.pulsing.storm.common.FieldConstants.*;
-import org.jhk.pulsing.storm.common.OtherConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,7 +50,7 @@ public final class TimeIntervalBuilderBolt extends BaseBasicBolt {
     private int _secondsInterval;
     
     public TimeIntervalBuilderBolt() {
-        this(OtherConstants.DEFAULT_INTERVAL_SECONDS);
+        this(CommonConstants.STORM_DEFAULT_INTERVAL_SECONDS);
     }
     
     public TimeIntervalBuilderBolt(int secondsInterval) {

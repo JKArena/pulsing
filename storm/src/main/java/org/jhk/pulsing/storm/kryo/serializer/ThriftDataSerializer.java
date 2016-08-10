@@ -61,6 +61,7 @@ public final class ThriftDataSerializer extends Serializer<Data> {
         _LOG.info("ThriftDataSerializer.write " + tData);
         
         output.write(Util.serializeThriftData(tData));
+        output.flush();
     }
 
 }

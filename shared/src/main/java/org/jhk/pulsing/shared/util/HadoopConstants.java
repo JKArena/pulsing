@@ -46,7 +46,7 @@ public final class HadoopConstants {
         TEMP, SNAPSHOT, SHREDDED, EQUIVS_ITERATE;
     };
     
-    private static final String CONFIG_XML = "config.xml";
+    private static final String HADOOP_CONFIG_XML = "hadoop_config.xml";
     
     static {
         
@@ -55,7 +55,7 @@ public final class HadoopConstants {
         try{
             parseSetProperties(tempParseMap);
         }catch(Exception exception){
-            throw new RuntimeException("Failure in parsing of " + CONFIG_XML, exception);
+            throw new RuntimeException("Failure in parsing of " + HADOOP_CONFIG_XML, exception);
         }
         
         MASTER_WORKSPACE = tempParseMap.get("master.workspace");
@@ -82,7 +82,7 @@ public final class HadoopConstants {
     private static void parseSetProperties(Map<String, String> tempParseMap) throws IOException, ParserConfigurationException, SAXException{
         
         SAXParser parser = SAXParserFactory.newInstance().newSAXParser();
-        parser.parse(HadoopConstants.class.getResourceAsStream(CONFIG_XML), new DefaultHandler(){
+        parser.parse(HadoopConstants.class.getResourceAsStream(HADOOP_CONFIG_XML), new DefaultHandler(){
             
             private boolean nameStart = false;
             private boolean valueStart = false;
