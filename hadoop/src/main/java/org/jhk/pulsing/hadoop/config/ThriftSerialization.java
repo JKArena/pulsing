@@ -1,13 +1,10 @@
 package org.jhk.pulsing.hadoop.config;
 
 import java.util.Comparator;
-import java.util.HashMap;
-import java.util.Map;
 
 import org.apache.hadoop.io.serializer.Deserializer;
 import org.apache.hadoop.io.serializer.Serialization;
 import org.apache.hadoop.io.serializer.Serializer;
-import org.apache.hadoop.io.serializer.WritableSerialization;
 import org.apache.thrift.TBase;
 import org.apache.thrift.TEnum;
 import org.jhk.pulsing.hadoop.config.serializers.EnumDeserializer;
@@ -17,16 +14,8 @@ import org.jhk.pulsing.hadoop.config.serializers.ThriftDeserializer;
 import org.jhk.pulsing.hadoop.config.serializers.ThriftSerializer;
 
 import cascading.tuple.Comparison;
-import jcascalog.Api;
 
 public final class ThriftSerialization implements Serialization, Comparison {
-    
-    public static void setApplicationConfig() {
-        Map<String, String> config = new HashMap<>();
-        
-        config.put("io.serializations", ThriftSerialization.class.getName() + "," + WritableSerialization.class.getName());
-        Api.setApplicationConf(config);
-    }
     
     @Override
     public boolean accept(Class clazz) {

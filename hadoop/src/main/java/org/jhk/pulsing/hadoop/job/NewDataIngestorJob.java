@@ -23,12 +23,18 @@ import static org.jhk.pulsing.shared.util.HadoopConstants.DIRECTORIES.TEMP;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
+import org.apache.hadoop.io.serializer.WritableSerialization;
+import org.jhk.pulsing.hadoop.config.ThriftSerialization;
 import org.jhk.pulsing.pail.common.PailTap;
 import org.jhk.pulsing.pail.common.PailTapUtil;
 import org.jhk.pulsing.shared.util.HadoopConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import jcascalog.Api;
 
 /**
  * @author Ji Kim
@@ -41,6 +47,9 @@ public final class NewDataIngestorJob {
         _LOG.info("NewDataIngestorJob " + Arrays.toString(args));
         
         try {
+            
+            setApplicationConfig();
+            
             PailTap masterPT = new PailTap(HadoopConstants.HDFS_URL_PORT + HadoopConstants.MASTER_WORKSPACE);
             PailTap newDataPT = new PailTap(HadoopConstants.HDFS_URL_PORT + HadoopConstants.NEW_DATA_WORKSPACE);
             
@@ -51,6 +60,13 @@ public final class NewDataIngestorJob {
             ioException.printStackTrace();
         }
         
+    }
+    
+    public static void setApplicationConfig() {
+        Map<String, String> config = new HashMap<>();
+        
+        config.put("io.serializations", ThriftSerialization.class.getName() + "," + WritableSerialization.class.getName());
+        Api.setApplicationConf(config);
     }
     
 }
