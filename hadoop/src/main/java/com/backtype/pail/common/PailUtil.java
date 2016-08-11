@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.pail.common;
+package com.backtype.pail.common;
 
 import java.io.IOException;
 import java.util.LinkedList;
@@ -36,7 +36,8 @@ import static org.jhk.pulsing.shared.util.HadoopConstants.DIRECTORIES.*;
 import org.jhk.pulsing.pail.thrift.AbstractThriftPailStructure;
 
 /**
- * @author Ji Kim
+ * Some of the things from Nathan Marz, since not distributed in repo with  
+ * changes for cascade 3.x and minor tweaks
  */
 public final class PailUtil {
     

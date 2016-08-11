@@ -46,6 +46,11 @@
 	</dependency>
     
     <dependency>
+      <groupId>com.backtype</groupId>
+      <artifactId>dfs-datastores-cascading</artifactId>
+    </dependency>
+    
+    <dependency>
       <groupId>cascalog</groupId>
       <artifactId>cascalog</artifactId>
     </dependency>
@@ -68,11 +73,6 @@
     <dependency>
       <groupId>com.datastax.cassandra</groupId>
       <artifactId>cassandra-driver-core</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>com.datastax.cassandra</groupId>
-      <artifactId>cassandra-driver-mapping</artifactId>
     </dependency>
 
     <dependency>

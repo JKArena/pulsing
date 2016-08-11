@@ -134,11 +134,6 @@
 
     <dependency>
       <groupId>com.datastax.cassandra</groupId>
-      <artifactId>cassandra-driver-mapping</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>com.datastax.cassandra</groupId>
       <artifactId>cassandra-driver-extras</artifactId>
     </dependency>
     

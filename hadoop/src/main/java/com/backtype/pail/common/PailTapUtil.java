@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.pail.common;
+package com.backtype.pail.common;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -25,6 +25,8 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.backtype.cascading.tap.PailTap;
+import com.backtype.cascading.tap.PailTap.PailTapOptions;
 import com.backtype.hadoop.pail.Pail;
 import com.backtype.hadoop.pail.PailSpec;
 
@@ -33,12 +35,12 @@ import cascalog.ops.RandLong;
 import jcascalog.Api;
 import jcascalog.Subquery;
 
-import org.jhk.pulsing.pail.common.PailTap.PailTapOptions;
 import org.jhk.pulsing.pail.thrift.structures.SplitDataPailstructure;
 import org.jhk.pulsing.serialization.thrift.data.DataUnit;
 
 /**
- * @author Ji Kim
+ * Some of the things from Nathan Marz, since not distributed in repo with  
+ * changes for cascade 3.x and minor tweaks
  */
 public final class PailTapUtil {
     
