@@ -71,6 +71,12 @@
         <artifactId>dfs-datastores</artifactId>
         <version>${dfs-datastores}</version>
       </dependency>
+
+      <dependency>
+        <groupId>com.backtype</groupId>
+        <artifactId>dfs-datastores-cascading</artifactId>
+        <version>${dfs-datastores}</version>
+      </dependency>
       
       <dependency>
         <groupId>cascalog</groupId>
@@ -263,13 +269,15 @@
         <artifactId>cassandra-driver-core</artifactId>
         <version>${cassandra.driver}</version>
       </dependency>
-
+<!--
+Maybe in the future but for now better control and practice (esp since mappings usually end up in 
+descent loss of performance)
       <dependency>
         <groupId>com.datastax.cassandra</groupId>
         <artifactId>cassandra-driver-mapping</artifactId>
         <version>${cassandra.driver}</version>
       </dependency>
-
+-->
       <dependency>
         <groupId>com.datastax.cassandra</groupId>
         <artifactId>cassandra-driver-extras</artifactId>
