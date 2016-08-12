@@ -41,9 +41,9 @@
     </dependency>
     
     <dependency>
-	  <groupId>com.backtype</groupId>
-	  <artifactId>dfs-datastores</artifactId>
-	</dependency>
+	    <groupId>com.backtype</groupId>
+	    <artifactId>dfs-datastores</artifactId>
+	  </dependency>
     
     <dependency>
       <groupId>com.backtype</groupId>
