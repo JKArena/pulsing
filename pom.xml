@@ -354,6 +354,7 @@ descent loss of performance)
   
   <modules>
     <module>hadoop</module>
+    <module>hive</module>
     <module>db</module>
     <module>plugin</module>
     <module>serialization</module>
