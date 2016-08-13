@@ -44,9 +44,7 @@ public final class TimeIntervalBuilderBolt extends BaseBasicBolt {
     private static final long serialVersionUID = -94783556828622026L;
     private static final Logger _LOG = LoggerFactory.getLogger(TimeIntervalBuilderBolt.class);
     
-    private static final int DEFAULT_TICK_TUPLE_FREQ_SECONDS = 60;
-    
-    private Map<Long, Map<Long, Integer>> _timeInterval;
+    private Map<Integer, Map<Long, Integer>> _timeInterval;
     private int _secondsInterval;
     
     public TimeIntervalBuilderBolt() {
@@ -62,7 +60,7 @@ public final class TimeIntervalBuilderBolt extends BaseBasicBolt {
     @Override
     public Map<String, Object> getComponentConfiguration() {
         Config config = new Config();
-        config.put(Config.TOPOLOGY_TICK_TUPLE_FREQ_SECS, DEFAULT_TICK_TUPLE_FREQ_SECONDS);
+        config.put(Config.TOPOLOGY_TICK_TUPLE_FREQ_SECS, CommonConstants.DEFAULT_STORM_TICK_TUPLE_FREQ_SECONDS);
         return config;
     }
     
@@ -78,11 +76,17 @@ public final class TimeIntervalBuilderBolt extends BaseBasicBolt {
         if(isTickTuple(tuple)) {
             processTickTuple(outputCollector);
         }else {
-            processTimeIntervalValue(tuple, tuple.getLongByField(TIME_INTERVAL));
+            processTimeIntervalValue(tuple, tuple.getIntegerByField(TIME_INTERVAL));
         }
         
     }
     
+    /**
+     * Whether the tuple is from system or not
+     * 
+     * @param tuple
+     * @return
+     */
     private boolean isTickTuple(Tuple tuple) {
         String sourceComponent = tuple.getSourceComponent();
         String sourceStreamId = tuple.getSourceStreamId();
@@ -91,18 +95,19 @@ public final class TimeIntervalBuilderBolt extends BaseBasicBolt {
     
     private void processTickTuple(BasicOutputCollector outputCollector) {
         
-        Long currTimeInterval = Util.getTimeInterval(System.nanoTime(), _secondsInterval);
+        int currTimeInterval = Util.getTimeInterval(System.nanoTime(), _secondsInterval);
         
         _timeInterval.keySet().stream()
             .filter(entryTI -> (entryTI <= currTimeInterval))
             .forEach(filteredTI -> {
+                //the entry is past the current interval so emit them
                 Map<Long, Integer> idValueCounter = _timeInterval.remove(filteredTI);
                 outputCollector.emit(new Values(filteredTI, idValueCounter));
             });
         
     }
     
-    private void processTimeIntervalValue(Tuple tuple, Long timeInterval) {
+    private void processTimeIntervalValue(Tuple tuple, Integer timeInterval) {
         Long id = tuple.getLongByField(ID);
         
         Map<Long, Integer> count = _timeInterval.get(timeInterval);

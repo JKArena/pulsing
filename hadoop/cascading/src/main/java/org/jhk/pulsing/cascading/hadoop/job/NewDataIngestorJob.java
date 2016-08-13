@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.cascading.adoop.job;
+package org.jhk.pulsing.cascading.hadoop.job;
 
 import static org.jhk.pulsing.shared.util.HadoopConstants.DIRECTORIES.SHREDDED;
 import static org.jhk.pulsing.shared.util.HadoopConstants.DIRECTORIES.TEMP;
