@@ -29,13 +29,13 @@ public final class Util {
         super();
     }
     
-    public static Long getTimeInterval(Long timestampNano, int timeInterval) {
-        Long timestampSeconds = TimeUnit.SECONDS.convert(timestampNano, TimeUnit.NANOSECONDS);
+    public static int getTimeInterval(Long timestampNano, int timeInterval) {
+        int timestampSeconds = convertNanoToSeconds(timestampNano);
         return timestampSeconds / timeInterval;
     }
     
     /**
-     * Just fo convenience, since will be used a lot
+     * Just for convenience, since will be used a lot
      * 
      * @param nanoTime
      * @return

@@ -353,9 +353,8 @@ descent loss of performance)
   </properties>
   
   <modules>
-    <module>hadoop</module>
-    <module>hive</module>
     <module>db</module>
+    <module>hadoop</module>
     <module>plugin</module>
     <module>serialization</module>
     <module>shared</module>

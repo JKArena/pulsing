@@ -28,6 +28,11 @@ public final class FieldConstants {
     public static final String ID = "ID"; 
     public static final String TIMESTAMP = "TIMESTAMP";
     
+    public static final String USER_ID = "USER_ID";
+    public static final String COORDINATES = "COORDINATES";
+    public static final String VALUE = "VALUE";
+    public static final String ACTION = "ACTION";
+    
     public static final String TIME_INTERVAL = "TIME_INTERVAL";
     public static final String ID_COUNTER_MAP = "ID_COUNTER_MAP";
     

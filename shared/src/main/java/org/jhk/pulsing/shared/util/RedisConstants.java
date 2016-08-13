@@ -32,10 +32,10 @@ public final class RedisConstants {
     public static final int REDIS_PORT;
     public static final String REDIS_PASSWORD;
     
-    public static final int DEFAULT_CACHE_EXPIRE_SECONDS;
+    public static final int CACHE_EXPIRE_DAY;
     
     public enum REDIS_KEY {
-        TRENDING_PULSE_, USER_;
+        SUBSCRIBE_PULSE_, USER_;
     }
     
     static {
@@ -48,7 +48,7 @@ public final class RedisConstants {
             REDIS_HOST = props.getProperty("host");
             REDIS_PORT = Integer.parseInt(props.getProperty("port"));
             REDIS_PASSWORD = props.getProperty("password");
-            DEFAULT_CACHE_EXPIRE_SECONDS = Integer.parseInt(props.getProperty("cache_expire"));
+            CACHE_EXPIRE_DAY = Integer.parseInt(props.getProperty("cache_expire_day"));
         } catch (IOException ioExcept) {
             throw new RuntimeException("Error while reading redis.properties", ioExcept);
         }

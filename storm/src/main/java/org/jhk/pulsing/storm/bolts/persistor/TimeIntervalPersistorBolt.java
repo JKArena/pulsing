@@ -19,7 +19,6 @@
 package org.jhk.pulsing.storm.bolts.persistor;
 
 import java.util.Map;
-import java.util.PriorityQueue;
 
 import org.apache.storm.task.TopologyContext;
 import org.apache.storm.topology.BasicOutputCollector;
@@ -43,7 +42,6 @@ public final class TimeIntervalPersistorBolt extends BaseBasicBolt {
     
     private static final long serialVersionUID = -884268616402022174L;
     private static final Logger _LOG = LoggerFactory.getLogger(TimeIntervalPersistorBolt.class);
-    private static final int HEAP_MAX_SIZE = 20;
     
     private Jedis _jedis;
     private ObjectMapper _objectMapper;
@@ -63,26 +61,13 @@ public final class TimeIntervalPersistorBolt extends BaseBasicBolt {
     public void execute(Tuple tuple, BasicOutputCollector outputCollector) {
         _LOG.debug("TimeIntervalPersistorBolt.execute: " + tuple);
         
-        Long timeInterval = tuple.getLongByField(TIME_INTERVAL);
+        int timeInterval = tuple.getIntegerByField(TIME_INTERVAL);
         Map<Long, Integer> counter = (Map<Long, Integer>) tuple.getValueByField(ID_COUNTER_MAP);
         
-        //make it a min heap to constrain the HEAP_MAX_SIZE
-        PriorityQueue<Counter> queue = new PriorityQueue<Counter>();
-        
-        for(Long id : counter.keySet()) {
-            int count = counter.get(id);
-            
-            if(queue.size() < HEAP_MAX_SIZE) {
-                queue.offer(new Counter(id, count));
-            }else if(queue.size() < HEAP_MAX_SIZE) {
-                queue.poll();
-                queue.offer(new Counter(id, count));
-            }
-        }
-        
+        //When displaying query from whenever-to-whenever time interval based on range wanted and aggregate the count
         try {
-            String timeIntervalSubscription = _objectMapper.writeValueAsString(queue);
-            _jedis.setex(RedisConstants.REDIS_KEY.TRENDING_PULSE_.toString() + timeInterval, RedisConstants.DEFAULT_CACHE_EXPIRE_SECONDS, timeIntervalSubscription);
+            String timeIntervalSubscription = _objectMapper.writeValueAsString(counter);
+            _jedis.setex(RedisConstants.REDIS_KEY.SUBSCRIBE_PULSE_.toString() + timeInterval, RedisConstants.CACHE_EXPIRE_DAY, timeIntervalSubscription);
         } catch (Exception writeException) {
             writeException.printStackTrace();
         }
@@ -97,25 +82,6 @@ public final class TimeIntervalPersistorBolt extends BaseBasicBolt {
 
     @Override
     public void declareOutputFields(OutputFieldsDeclarer fieldsDeclarer) {
-    }
-    
-    private class Counter implements Comparable<Counter> {
-        
-        private Long _id;
-        private int _count;
-        
-        private Counter(Long id, int count) {
-            super();
-            
-            _id = id;
-            _count = count;
-        }
-        
-        @Override
-        public int compareTo(Counter compare) {
-            return _count - compare._count;
-        }
-        
     }
     
 }
