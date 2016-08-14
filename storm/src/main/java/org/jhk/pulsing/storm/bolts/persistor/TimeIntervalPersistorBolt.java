@@ -19,13 +19,13 @@
 package org.jhk.pulsing.storm.bolts.persistor;
 
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.apache.storm.task.TopologyContext;
 import org.apache.storm.topology.BasicOutputCollector;
 import org.apache.storm.topology.OutputFieldsDeclarer;
 import org.apache.storm.topology.base.BaseBasicBolt;
 import org.apache.storm.tuple.Tuple;
-import org.codehaus.jackson.map.ObjectMapper;
 import static org.jhk.pulsing.storm.common.FieldConstants.*;
 import org.jhk.pulsing.shared.util.RedisConstants;
 import org.slf4j.Logger;
@@ -34,8 +34,6 @@ import org.slf4j.LoggerFactory;
 import redis.clients.jedis.Jedis;
 
 /**
- * Use DRPC instead w/ memory?
- * 
  * @author Ji Kim
  */
 public final class TimeIntervalPersistorBolt extends BaseBasicBolt {
@@ -44,8 +42,6 @@ public final class TimeIntervalPersistorBolt extends BaseBasicBolt {
     private static final Logger _LOG = LoggerFactory.getLogger(TimeIntervalPersistorBolt.class);
     
     private Jedis _jedis;
-    private ObjectMapper _objectMapper;
-    
     public TimeIntervalPersistorBolt() {
         super();
     }
@@ -54,7 +50,6 @@ public final class TimeIntervalPersistorBolt extends BaseBasicBolt {
     public void prepare(Map stormConf, TopologyContext context) {
         _jedis = new Jedis(RedisConstants.REDIS_HOST, RedisConstants.REDIS_PORT);
         _jedis.auth(RedisConstants.REDIS_PASSWORD);
-        _objectMapper = new ObjectMapper();
     }
     
     @Override
@@ -63,11 +58,13 @@ public final class TimeIntervalPersistorBolt extends BaseBasicBolt {
         
         int timeInterval = tuple.getIntegerByField(TIME_INTERVAL);
         Map<Long, Integer> counter = (Map<Long, Integer>) tuple.getValueByField(ID_COUNTER_MAP);
+        Map<String, Double> timeIntervalValues = counter.entrySet()
+                .stream()
+                .collect(Collectors.toMap(entryKey -> entryKey.getKey().toString(), entryVal -> new Double(entryVal.getValue())));
         
-        //When displaying query from whenever-to-whenever time interval based on range wanted and aggregate the count
+        //When displaying query from whenever-to-whenever time interval range, union and return
         try {
-            String timeIntervalSubscription = _objectMapper.writeValueAsString(counter);
-            _jedis.setex(RedisConstants.REDIS_KEY.SUBSCRIBE_PULSE_.toString() + timeInterval, RedisConstants.CACHE_EXPIRE_DAY, timeIntervalSubscription);
+            _jedis.zadd(RedisConstants.REDIS_KEY.SUBSCRIBE_PULSE_.toString() + timeInterval, timeIntervalValues);
         } catch (Exception writeException) {
             writeException.printStackTrace();
         }
