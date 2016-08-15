@@ -44,7 +44,7 @@ public final class TimeIntervalBuilderBolt extends BaseBasicBolt {
     private static final long serialVersionUID = -94783556828622026L;
     private static final Logger _LOG = LoggerFactory.getLogger(TimeIntervalBuilderBolt.class);
     
-    private Map<Integer, Map<Long, Integer>> _timeInterval;
+    private Map<Long, Map<Long, Integer>> _timeInterval;
     private int _secondsInterval;
     
     public TimeIntervalBuilderBolt() {
@@ -76,7 +76,7 @@ public final class TimeIntervalBuilderBolt extends BaseBasicBolt {
         if(isTickTuple(tuple)) {
             processTickTuple(outputCollector);
         }else {
-            processTimeIntervalValue(tuple, tuple.getIntegerByField(TIME_INTERVAL));
+            processTimeIntervalValue(tuple, tuple.getLongByField(TIME_INTERVAL));
         }
         
     }
@@ -95,7 +95,7 @@ public final class TimeIntervalBuilderBolt extends BaseBasicBolt {
     
     private void processTickTuple(BasicOutputCollector outputCollector) {
         
-        int currTimeInterval = Util.getTimeInterval(System.nanoTime(), _secondsInterval);
+        long currTimeInterval = Util.getTimeInterval(System.nanoTime(), _secondsInterval);
         
         _timeInterval.keySet().stream()
             .filter(entryTI -> (entryTI <= currTimeInterval))
@@ -107,7 +107,7 @@ public final class TimeIntervalBuilderBolt extends BaseBasicBolt {
         
     }
     
-    private void processTimeIntervalValue(Tuple tuple, Integer timeInterval) {
+    private void processTimeIntervalValue(Tuple tuple, Long timeInterval) {
         Long id = tuple.getLongByField(ID);
         
         Map<Long, Integer> count = _timeInterval.get(timeInterval);
