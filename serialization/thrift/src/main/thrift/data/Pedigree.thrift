@@ -17,17 +17,13 @@
  * under the License.
  */
 
-namespace java org.jhk.pulsing.serialization.thrift.property
-
-include "../id/UserId.thrift"
-include "./UserPropertyValue.thrift"
+namespace java org.jhk.pulsing.serialization.thrift.data
 
 /**
- * User property
+ * Pedigree
  *
  * @author Ji Kim
  */
-struct UserProperty {
-  1: UserId.UserId id;
-  2: UserPropertyValue.UserPropertyValue property;
+struct Pedigree {
+  1: required i32 true_as_of_secs;
 }

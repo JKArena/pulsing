@@ -20,6 +20,7 @@
 namespace java org.jhk.pulsing.serialization.thrift.property
 
 include "../id/PulseId.thrift"
+include "./PulsePropertyValue.thrift"
 
 /**
  * Pulse property
@@ -28,10 +29,5 @@ include "../id/PulseId.thrift"
  */
 struct PulseProperty {
   1: PulseId.PulseId id;
-  2: PulsePropertyValue property;
-}
-
-union PulsePropertyValue {
-  1: string value;
-  2: list<double> coordinates;
+  2: PulsePropertyValue.PulsePropertyValue property;
 }

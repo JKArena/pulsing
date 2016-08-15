@@ -19,15 +19,12 @@
 
 namespace java org.jhk.pulsing.serialization.thrift.property
 
-include "../id/UserId.thrift"
-include "./UserPropertyValue.thrift"
-
 /**
- * User property
+ * Picture property value
  *
  * @author Ji Kim
  */
-struct UserProperty {
-  1: UserId.UserId id;
-  2: UserPropertyValue.UserPropertyValue property;
+union PicturePropertyValue {
+  1: binary content;
+  2: string originalFilename;
 }

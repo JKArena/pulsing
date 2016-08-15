@@ -12,8 +12,8 @@
     </property>
     
     <property>
-      <name>rootdata.workspace</name>
-      <value>/data/</value>
+      <name>tempdata.workspace</name>
+      <value>/tmp/</value>
     </property>
     
     <property>

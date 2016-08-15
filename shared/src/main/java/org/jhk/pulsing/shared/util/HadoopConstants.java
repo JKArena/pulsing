@@ -40,7 +40,7 @@ public final class HadoopConstants {
     
     public static final String MASTER_WORKSPACE;
     public static final String NEW_DATA_WORKSPACE;
-    private static final String ROOT_DATA_WORKSPACE;
+    private static final String TEMP_DATA_WORKSPACE;
     
     public enum DIRECTORIES {
         TEMP, SNAPSHOT, SHREDDED, EQUIVS_ITERATE;
@@ -60,7 +60,7 @@ public final class HadoopConstants {
         
         MASTER_WORKSPACE = tempParseMap.get("master.workspace");
         NEW_DATA_WORKSPACE = tempParseMap.get("newdata.workspace");
-        ROOT_DATA_WORKSPACE = tempParseMap.get("rootdata.workspace");
+        TEMP_DATA_WORKSPACE = tempParseMap.get("tempdata.workspace");
         HDFS_URL_PORT = tempParseMap.get("url.port");
     }
     
@@ -69,7 +69,7 @@ public final class HadoopConstants {
             throw new IllegalArgumentException("Can't pass null or empty");
         }
         
-        StringBuilder wDirectory = new StringBuilder(ROOT_DATA_WORKSPACE);
+        StringBuilder wDirectory = new StringBuilder(TEMP_DATA_WORKSPACE);
         
         for(DIRECTORIES dir : paths) {
             wDirectory.append(dir);
