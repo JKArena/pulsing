@@ -70,7 +70,7 @@ public class RedisUserDao {
         
         try {
             String userJson = SerializationHelper.serializeAvroTypeToJSONString(user);
-            _jedis.setex(USER_.toString() + user.getId().getId(), RedisConstants.DEFAULT_CACHE_EXPIRE_SECONDS, userJson);            
+            _jedis.setex(USER_.toString() + user.getId().getId(), RedisConstants.CACHE_EXPIRE_DAY, userJson);            
             oUser = Optional.of(user);
         } catch (IOException sException) {
             sException.printStackTrace();

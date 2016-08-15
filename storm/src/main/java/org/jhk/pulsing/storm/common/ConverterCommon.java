@@ -57,7 +57,7 @@ public final class ConverterCommon {
         Pulse pulse = (Pulse) tuple.getValueByField(AVRO_PULSE);
         
         Data data = new Data();
-        data.setPedigree(new Pedigree(Util.convertNanoToSeconds(pulse.getTimeStamp())));
+        data.setPedigree(new Pedigree((int) Util.convertNanoToSeconds(pulse.getTimeStamp())));
         
         DataUnit dUnit = new DataUnit();
         data.setDataunit(dUnit);
@@ -101,7 +101,7 @@ public final class ConverterCommon {
         User user = (User) tuple.getValueByField(AVRO_USER);
         
         Data data = new Data();
-        data.setPedigree(new Pedigree(Util.convertNanoToSeconds(System.nanoTime())));
+        data.setPedigree(new Pedigree((int) Util.convertNanoToSeconds(System.nanoTime())));
         
         DataUnit dUnit = new DataUnit();
         data.setDataunit(dUnit);
