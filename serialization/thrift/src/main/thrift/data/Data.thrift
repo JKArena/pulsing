@@ -19,12 +19,8 @@
 
 namespace java org.jhk.pulsing.serialization.thrift.data
 
-include "../property/PulseProperty.thrift"
-include "../property/UserProperty.thrift"
-
-include "../edges/EquivEdge.thrift"
-include "../edges/FriendEdge.thrift"
-include "../edges/PulseEdge.thrift"
+include "./DataUnit.thrift"
+include "./Pedigree.thrift"
 
 /**
  * Data content
@@ -32,18 +28,6 @@ include "../edges/PulseEdge.thrift"
  * @author Ji Kim
  */
 struct Data {
-  1: required DataUnit dataunit;
-  2: required Pedigree pedigree;
-}
-
-struct Pedigree {
-  1: required i32 true_as_of_secs;
-}
-
-union DataUnit {
-  1: UserProperty.UserProperty user_property;
-  2: PulseProperty.PulseProperty pulse_property;
-  3: EquivEdge.EquivEdge equiv;
-  4: FriendEdge.FriendEdge friends;
-  5: PulseEdge.PulseEdge pulse;
+  1: required DataUnit.DataUnit dataunit;
+  2: required Pedigree.Pedigree pedigree;
 }

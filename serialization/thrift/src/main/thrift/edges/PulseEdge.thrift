@@ -21,6 +21,7 @@ namespace java org.jhk.pulsing.serialization.thrift.edges
 
 include "../id/PulseId.thrift"
 include "../id/UserId.thrift"
+include "./ACTION.thrift"
 
 /**
  * Edge for user and pulse
@@ -30,12 +31,5 @@ include "../id/UserId.thrift"
 union PulseEdge {
   1: required UserId.UserId userId;
   2: required PulseId.PulseId pulseId;
-  3: ACTION action;
-}
-
-enum ACTION {
-  CREATE = 1;
-  SUBSCRIBE = 2;
-  UNSUBSCRIBE = 3;
-  DELETE = 4;
+  3: ACTION.ACTION action;
 }

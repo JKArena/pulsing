@@ -17,17 +17,24 @@
  * under the License.
  */
 
-namespace java org.jhk.pulsing.serialization.thrift.property
+namespace java org.jhk.pulsing.serialization.thrift.data
 
-include "../id/UserId.thrift"
-include "./UserPropertyValue.thrift"
+include "../property/PulseProperty.thrift"
+include "../property/UserProperty.thrift"
+
+include "../edges/EquivEdge.thrift"
+include "../edges/FriendEdge.thrift"
+include "../edges/PulseEdge.thrift"
 
 /**
- * User property
+ * DataUnit
  *
  * @author Ji Kim
  */
-struct UserProperty {
-  1: UserId.UserId id;
-  2: UserPropertyValue.UserPropertyValue property;
+union DataUnit {
+  1: UserProperty.UserProperty user_property;
+  2: PulseProperty.PulseProperty pulse_property;
+  3: EquivEdge.EquivEdge equiv;
+  4: FriendEdge.FriendEdge friends;
+  5: PulseEdge.PulseEdge pulse;
 }

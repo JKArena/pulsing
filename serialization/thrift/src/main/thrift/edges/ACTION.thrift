@@ -17,17 +17,16 @@
  * under the License.
  */
 
-namespace java org.jhk.pulsing.serialization.thrift.property
-
-include "../id/UserId.thrift"
-include "./UserPropertyValue.thrift"
+namespace java org.jhk.pulsing.serialization.thrift.edges
 
 /**
- * User property
+ * Edge for user and pulse
  *
  * @author Ji Kim
  */
-struct UserProperty {
-  1: UserId.UserId id;
-  2: UserPropertyValue.UserPropertyValue property;
+enum ACTION {
+  CREATE = 1;
+  SUBSCRIBE = 2;
+  UNSUBSCRIBE = 3;
+  DELETE = 4;
 }
