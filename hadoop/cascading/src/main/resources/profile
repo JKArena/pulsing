@@ -1,0 +1,24 @@
+export MAVEN=/usr/local/lib/maven/apache-maven-3.3.9/bin
+export KAFKA=/usr/local/lib/kafka/kafka_2.10-0.10.0.0
+export STORM=/usr/local/lib/storm/apache-storm-1.0.1
+export HADOOP_HOME=/usr/local/lib/hadoop/hadoop-2.7.2
+export REDIS=/usr/local/lib/redis/redis-3.2.1
+export BISON=/usr/local/lib/bison/bison-3.0.4/src
+export MYSQL=/usr/local/mysql
+export PULSING=/Users/jikim/repository/pulsing/
+export CASSANDRA=/usr/local/lib/cassandra/apache-cassandra-3.7
+export PATH=$MAVEN:$KAFKA:$STORM:$HADOOP_HOME/bin:$HADOOP_HOME/sbin:$PATH
+export HLJ=/hadoop/libjars
+export LIBJARS_CASSANDRA=$HLJ/cassandra-clientutil-3.7.jar,$HLJ/cassandra-driver-core-3.1.0.jar,$HLJ/cassandra-driver-extras-3.1.0.jar,$HLJ/cassandra-driver-mapping-3.1.0.jar
+export LIBJARS_CASCALOG=$HLJ/math.combinatorics-0.0.4.jar,$HLJ/jackknife-0.1.7.jar,$HLJ/clojure-1.7.0.jar,$HLJ/jgrapht-core-0.9.0.jar,$HLJ/cascading-core-3.1.0.jar,$HLJ/cascading-hadoop-3.1.0.jar,$HLJ/dfs-datastores-1.3.6.jar,$HLJ/cascalog-2.1.1.jar,$HLJ/cascalog-checkpoint-2.1.1.jar,$HLJ/cascalog-core-2.1.1.jar,$HLJ/cascalog-math-2.1.1.jar,$HLJ/cascalog-more-taps-2.1.1.jar,$HLJ/midje-cascalog-2.1.1.jar
+
+export LIB_OTHER=$HLJ/libthrift-0.9.3.jar,$HLJ/pulsing-shared-0.1-SNAPSHOT.jar,$HLJ/pulsing-thrift-0.1-SNAPSHOT.jar
+
+export LIBJARS=$LIBJARS_CASSANDRA,$LIBJARS_CASCALOG,$LIB_OTHER
+export HADOOP_CLASSPATH=`echo $LIBJARS | tr ',' ':'`
+
+export PATH=$CASSANDRA:$REDIS:$MYSQL$BISON:$PATH
+# Setting PATH for Python 2.7
+# The original version is saved in .bash_profile.pysave
+PATH="/Library/Frameworks/Python.framework/Versions/2.7/bin:${PATH}"
+export PATH
