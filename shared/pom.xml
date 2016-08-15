@@ -16,6 +16,11 @@
   <dependencies>
     
     <dependency>
+      <groupId>ch.hsr</groupId>
+      <artifactId>geohash</artifactId>
+    </dependency>
+    
+    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <scope>test</scope>
