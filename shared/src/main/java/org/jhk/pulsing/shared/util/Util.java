@@ -29,8 +29,16 @@ public final class Util {
         super();
     }
     
-    public static int getTimeInterval(Long timestampNano, int timeInterval) {
-        int timestampSeconds = convertNanoToSeconds(timestampNano);
+    /**
+     * Given a timestamp convert it to seconds and split it to the provided 
+     * timeInterval 
+     * 
+     * @param timestampNano
+     * @param timeInterval
+     * @return
+     */
+    public static long getTimeInterval(Long timestampNano, int timeInterval) {
+        long timestampSeconds = convertNanoToSeconds(timestampNano);
         return timestampSeconds / timeInterval;
     }
     
@@ -40,8 +48,8 @@ public final class Util {
      * @param nanoTime
      * @return
      */
-    public static int convertNanoToSeconds(long nanoTime) {
-        return (int) TimeUnit.SECONDS.convert(nanoTime, TimeUnit.NANOSECONDS);
+    public static long convertNanoToSeconds(long nanoTime) {
+        return TimeUnit.SECONDS.convert(nanoTime, TimeUnit.NANOSECONDS);
     }
     
 }
