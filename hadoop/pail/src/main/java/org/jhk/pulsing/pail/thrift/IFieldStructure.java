@@ -16,40 +16,17 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.cascading.pail.thrift.structures;
+package org.jhk.pulsing.pail.thrift;
 
-import java.util.Collections;
 import java.util.List;
-
-import org.jhk.pulsing.cascading.pail.thrift.AbstractThriftPailStructure;
-import org.jhk.pulsing.serialization.thrift.data.Data;
 
 /**
  * @author Ji Kim
  */
-public class DataPailStructure extends AbstractThriftPailStructure<Data> {
-
-    private static final long serialVersionUID = 2750979512797745877L;
-
-    @Override
-    public boolean isValidTarget(String... dirs) {
-        return true;
-    }
+public interface IFieldStructure {
     
-    @SuppressWarnings("unchecked")
-    @Override
-    public List<String> getTarget(Data object) {
-        return Collections.EMPTY_LIST;
-    }
-
-    @Override
-    public Class<Data> getType() {
-        return Data.class;
-    }
-
-    @Override
-    public Data createThriftObject() {
-        return new Data();
-    }
-
+    boolean isValidTarget(String[] dirs);
+    
+    void fillTarget(List<String> ret, Object val);
+    
 }

@@ -35,12 +35,12 @@ import cascalog.ops.RandLong;
 import jcascalog.Api;
 import jcascalog.Subquery;
 
-import org.jhk.pulsing.cascading.pail.thrift.structures.SplitDataPailstructure;
+import org.jhk.pulsing.pail.thrift.structures.SplitDataPailstructure;
 import org.jhk.pulsing.serialization.thrift.data.DataUnit;
 
 /**
  * Some of the things from Nathan Marz, since not distributed in repo with  
- * changes for cascade 3.x and minor tweaks
+ * changes for cascade 2.5.x and minor tweaks
  */
 public final class PailTapUtil {
     
@@ -53,6 +53,7 @@ public final class PailTapUtil {
      * @param fields
      * @return
      */
+    @SuppressWarnings("unchecked")
     public static PailTap attributetap(String path, final DataUnit._Fields... fields) {
         _LOG.info("PailTapUtil.attributetap " + path + " : " + fields);
         

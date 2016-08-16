@@ -16,11 +16,11 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.cascading.pail.thrift.structures;
+package org.jhk.pulsing.pail.thrift.structures;
 
 import java.util.List;
 
-import org.jhk.pulsing.cascading.pail.thrift.IFieldStructure;
+import org.jhk.pulsing.pail.thrift.IFieldStructure;
 
 /**
  * @author Ji Kim
