@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.cascading.pail.thrift.structures;
+package org.jhk.pulsing.pail.thrift.structures;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -30,7 +30,7 @@ import org.apache.thrift.TUnion;
 import org.apache.thrift.meta_data.FieldMetaData;
 import org.apache.thrift.meta_data.FieldValueMetaData;
 import org.apache.thrift.meta_data.StructMetaData;
-import org.jhk.pulsing.cascading.pail.thrift.IFieldStructure;
+import org.jhk.pulsing.pail.thrift.IFieldStructure;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

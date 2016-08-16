@@ -16,6 +16,7 @@
   <modules>
     <module>cascading</module>
     <module>hive</module>
+    <module>pail</module>
   </modules>
   
 </project>

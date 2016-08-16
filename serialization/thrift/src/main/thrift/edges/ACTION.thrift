@@ -29,4 +29,6 @@ enum ACTION {
   SUBSCRIBE = 2;
   UNSUBSCRIBE = 3;
   DELETE = 4;
+  FRIENDED = 5;
+  UNFRIENDED = 6;
 }

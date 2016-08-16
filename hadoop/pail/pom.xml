@@ -8,10 +8,10 @@
 	  <version>${pulsing.version}</version>
   </parent>
   
-  <groupId>org.jhk.pulsing.hadoop.cascading</groupId>
-  <artifactId>pulsing-hadoop-cascading</artifactId>
-  <name>pulsing-hadoop-cascading</name>
-  <url>https://github.com/JHKTruth/pulsing/hadoop/cascading</url>
+  <groupId>org.jhk.pulsing.hadoop.pail</groupId>
+  <artifactId>pulsing-hadoop-pail</artifactId>
+  <name>pulsing-hadoop-pail</name>
+  <url>https://github.com/JHKTruth/pulsing/hadoop/pail</url>
   
   <dependencies>
     
@@ -21,15 +21,25 @@
     </dependency>
 
     <dependency>
-      <groupId>org.jhk.pulsing.hadoop.pail</groupId>
-      <artifactId>pulsing-hadoop-pail</artifactId>
-    </dependency>
-    
-    <dependency>
       <groupId>org.jhk.pulsing.shared</groupId>
       <artifactId>pulsing-shared</artifactId>
     </dependency>
+
+    <dependency>
+	    <groupId>com.backtype</groupId>
+	    <artifactId>dfs-datastores</artifactId>
+	  </dependency>
     
+    <dependency>
+      <groupId>com.backtype</groupId>
+      <artifactId>dfs-datastores-cascading</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>cascalog</groupId>
+      <artifactId>cascalog</artifactId>
+    </dependency>
+
     <dependency>
       <groupId>org.apache.hadoop</groupId>
       <artifactId>hadoop-core</artifactId>
@@ -44,42 +54,7 @@
       <groupId>org.apache.hadoop</groupId>
       <artifactId>hadoop-hdfs</artifactId>
     </dependency>
-    
-    <dependency>
-      <groupId>cascalog</groupId>
-      <artifactId>cascalog</artifactId>
-    </dependency>
-    
-    <dependency>
-      <groupId>cascading</groupId>
-      <artifactId>cascading-core</artifactId>
-    </dependency>
 
-    <dependency>
-      <groupId>cascading</groupId>
-      <artifactId>cascading-hadoop</artifactId>
-    </dependency>
-    
-    <dependency>
-      <groupId>org.apache.cassandra</groupId>
-      <artifactId>cassandra-clientutil</artifactId>
-    </dependency>
-    
-    <dependency>
-      <groupId>com.datastax.cassandra</groupId>
-      <artifactId>cassandra-driver-core</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>com.datastax.cassandra</groupId>
-      <artifactId>cassandra-driver-extras</artifactId>
-    </dependency>
-    
-    <dependency>
-      <groupId>org.jgrapht</groupId>
-      <artifactId>jgrapht-ext</artifactId>
-    </dependency>
-    
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>

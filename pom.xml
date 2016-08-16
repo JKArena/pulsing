@@ -25,6 +25,12 @@
       </dependency>
 
       <dependency>
+        <groupId>org.jhk.pulsing.hadoop.pail</groupId>
+        <artifactId>pulsing-hadoop-pail</artifactId>
+        <version>${pulsing.version}</version>
+      </dependency>
+
+      <dependency>
         <groupId>org.jhk.pulsing.db.mysql</groupId>
         <artifactId>pulsing-db-mysql</artifactId>
         <version>${pulsing.version}</version>

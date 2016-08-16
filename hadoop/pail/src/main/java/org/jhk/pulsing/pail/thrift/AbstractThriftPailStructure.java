@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.cascading.pail.thrift;
+package org.jhk.pulsing.pail.thrift;
 
 import org.apache.thrift.TBase;
 import org.apache.thrift.TDeserializer;

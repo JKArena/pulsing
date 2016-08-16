@@ -20,6 +20,7 @@
 namespace java org.jhk.pulsing.serialization.thrift.edges
 
 include "../id/UserId.thrift"
+include "./ACTION.thrift"
 
 /**
  * Edge for connecting userIds with friends
@@ -29,10 +30,5 @@ include "../id/UserId.thrift"
 union FriendEdge {
   1: required UserId.UserId firstId;
   2: required UserId.UserId secondId;
-  3: ACTION action;
-}
-
-enum ACTION {
-  FRIENDED = 1;
-  UNFRIENDED = 2;
+  3: ACTION.ACTION action;
 }
