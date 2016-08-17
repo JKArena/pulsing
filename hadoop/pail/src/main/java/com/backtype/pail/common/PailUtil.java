@@ -100,6 +100,7 @@ public final class PailUtil {
         }
         
         out.close();
+        _LOG.info("PailUtil.writePailStructures: successfully wrote " + content.size());
     }
     
     public static <T extends Comparable<T>> List<T> readPailStructures(String path, T struct) throws IOException {

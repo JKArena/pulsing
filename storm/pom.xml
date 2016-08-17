@@ -26,6 +26,11 @@
     </dependency>
     
     <dependency>
+      <groupId>org.jhk.pulsing.hadoop.pail</groupId>
+      <artifactId>pulsing-hadoop-pail</artifactId>
+    </dependency>
+    
+    <dependency>
       <groupId>org.jhk.pulsing.shared</groupId>
       <artifactId>pulsing-shared</artifactId>
     </dependency>
@@ -90,43 +95,5 @@
     </dependency>
     
   </dependencies>
-  
-  <build>
-  
-    <plugins>
-    
-      <plugin>
-        <artifactId>maven-shade-plugin</artifactId>
-        <executions>
-          <execution>
-            <phase>package</phase>
-            <goals>
-              <goal>shade</goal>
-            </goals>
-            <configuration>
-              <createDependencyReducedPom>true</createDependencyReducedPom>
-              <finalName>pulsing-storm-shade-${pulsing.version}</finalName>
-              <artifactSet>
-                <excludes>
-                  <exclude>org.apache.logging.log4j:*:jar:</exclude>
-                  <exclude>org.slf4j:**:jar:</exclude>
-                  <exclude>log4j:log4j:jar:</exclude>
-                </excludes>
-              </artifactSet>
-              <transformers>
-                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
-                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                  <mainClass></mainClass>
-                </transformer>
-              </transformers>
-            </configuration>
-          </execution>
-        </executions>
-        
-      </plugin>
-      
-    </plugins>
-    
-  </build>
   
 </project>

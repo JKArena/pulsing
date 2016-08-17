@@ -26,9 +26,9 @@
     </dependency>
 
     <dependency>
-	    <groupId>com.backtype</groupId>
-	    <artifactId>dfs-datastores</artifactId>
-	  </dependency>
+      <groupId>com.backtype</groupId>
+	  <artifactId>dfs-datastores</artifactId>
+	</dependency>
     
     <dependency>
       <groupId>com.backtype</groupId>
@@ -40,11 +40,6 @@
       <artifactId>cascalog</artifactId>
     </dependency>
 
-    <dependency>
-      <groupId>org.apache.hadoop</groupId>
-      <artifactId>hadoop-core</artifactId>
-    </dependency>
-    
     <dependency>
       <groupId>org.apache.hadoop</groupId>
       <artifactId>hadoop-common</artifactId>
