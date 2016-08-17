@@ -38,8 +38,10 @@ public final class HadoopConstants {
     
     public static final String HDFS_URL_PORT;
     
-    public static final String MASTER_WORKSPACE;
-    public static final String NEW_DATA_WORKSPACE;
+    public static final String PAIL_MASTER_WORKSPACE;
+    public static final String HIVE_MASTER_WORKSPACE;
+    public static final String PAIL_NEW_DATA_WORKSPACE;
+    public static final String HIVE_NEW_DATA_WORKSPACE;
     private static final String TEMP_DATA_WORKSPACE;
     
     public enum DIRECTORIES {
@@ -58,8 +60,10 @@ public final class HadoopConstants {
             throw new RuntimeException("Failure in parsing of " + HADOOP_CONFIG_XML, exception);
         }
         
-        MASTER_WORKSPACE = tempParseMap.get("master.workspace");
-        NEW_DATA_WORKSPACE = tempParseMap.get("newdata.workspace");
+        PAIL_MASTER_WORKSPACE = tempParseMap.get("pail.master.workspace");
+        HIVE_MASTER_WORKSPACE = tempParseMap.get("hive.master.workspace");
+        PAIL_NEW_DATA_WORKSPACE = tempParseMap.get("pail.newdata.workspace");
+        HIVE_NEW_DATA_WORKSPACE = tempParseMap.get("hive.newdata.workspace");
         TEMP_DATA_WORKSPACE = tempParseMap.get("tempdata.workspace");
         HDFS_URL_PORT = tempParseMap.get("url.port");
     }

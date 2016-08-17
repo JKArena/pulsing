@@ -2,13 +2,23 @@
 <configuration>
   <hadoop>
     <property>
-      <name>master.workspace</name>
-      <value>/data/master/</value>
+      <name>hive.master.workspace</name>
+      <value>/data/hivemaster/</value>
     </property>
     
     <property>
-      <name>newdata.workspace</name>
-      <value>/data/newdata/</value>
+      <name>pail.master.workspace</name>
+      <value>/data/pailmaster/</value>
+    </property>
+    
+    <property>
+      <name>hive.newdata.workspace</name>
+      <value>/data/hivenewdata/</value>
+    </property>
+    
+    <property>
+      <name>pail.newdata.workspace</name>
+      <value>/data/pailnewdata/</value>
     </property>
     
     <property>

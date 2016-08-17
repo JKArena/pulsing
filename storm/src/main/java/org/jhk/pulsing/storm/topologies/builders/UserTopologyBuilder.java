@@ -39,6 +39,7 @@ import org.jhk.pulsing.shared.util.CommonConstants;
 import org.jhk.pulsing.shared.util.HadoopConstants;
 import org.jhk.pulsing.storm.bolts.converter.avroTothrift.UserConverterBolt;
 import org.jhk.pulsing.storm.bolts.deserializers.avro.UserDeserializerBolt;
+import org.jhk.pulsing.storm.bolts.persistor.PailDataPersistorBolt;
 import org.jhk.pulsing.storm.hadoop.bolt.ThriftDataRecordFormatBolt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,16 +65,22 @@ public final class UserTopologyBuilder {
                 .setNumTasks(2)
                 .shuffleGrouping("user-avro-deserialize");
         
+        builder.setBolt("user-pail", new PailDataPersistorBolt("UserCreate"), 2)
+                .setNumTasks(2)
+                .shuffleGrouping("user-avor-thrift-converter");
+        
+        /*
         builder.setBolt("user-hdfs", hdfsBolt(), 2)
-            .setNumTasks(2)
-            .shuffleGrouping("user-avor-thrift-converter");
+                .setNumTasks(2)
+                .shuffleGrouping("user-avor-thrift-converter");
+        */
         
         return builder.createTopology();
     }
     
     private static HdfsBolt hdfsBolt() {
         FileNameFormat fnFormat = new DefaultFileNameFormat()
-                .withPath(HadoopConstants.NEW_DATA_WORKSPACE)
+                .withPath(HadoopConstants.PAIL_NEW_DATA_WORKSPACE)
                 .withPrefix("UserCreate");
         
         RecordFormat rFormat = new ThriftDataRecordFormatBolt();

@@ -30,9 +30,11 @@
       <artifactId>pulsing-shared</artifactId>
     </dependency>
     
+    <!-- TODO: refactor code and try to remove this (pail and etc seem to rely heavily on cascade 2.5.x and older hadoop API -->
     <dependency>
       <groupId>org.apache.hadoop</groupId>
       <artifactId>hadoop-core</artifactId>
+      <version>1.2.1</version>
     </dependency>
     
     <dependency>

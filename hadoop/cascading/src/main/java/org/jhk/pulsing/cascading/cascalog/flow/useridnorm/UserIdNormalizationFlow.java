@@ -59,7 +59,7 @@ public final class UserIdNormalizationFlow {
     
     private static void initializeUserIdNormalization() {
         
-        Tap equivs = PailTapUtil.attributetap(HadoopConstants.MASTER_WORKSPACE, 
+        Tap equivs = PailTapUtil.attributetap(HadoopConstants.PAIL_MASTER_WORKSPACE, 
                                                 DataUnit._Fields.EQUIV);
         
         Api.execute(Api.hfsSeqfile(_TEMP_EQUIVS_ITERATE_DIR + "0"), 

@@ -73,7 +73,7 @@ public final class PulseTopologyBuilder {
         _LOG.info("PulseTopologyBuilder.hdfsPersistBolt");
         
         FileNameFormat fnFormat = new DefaultFileNameFormat()
-                .withPath(HadoopConstants.NEW_DATA_WORKSPACE)
+                .withPath(HadoopConstants.PAIL_NEW_DATA_WORKSPACE)
                 .withPrefix("PulseCreate");
         
         RecordFormat rFormat = new ThriftDataRecordFormatFunction();
