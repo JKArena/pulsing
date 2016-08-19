@@ -23,6 +23,19 @@
     <value>hdfs://0.0.0.0</value>
   </property>
   
+  <property>
+    <name>io.serializations</name>
+    <value>org.jhk.pulsing.cascading.hadoop.config.ThriftSerialization,org.apache.hadoop.io.serializer.WritableSerialization,org.apache.hadoop.io.serializer.avro.AvroSpecificSerialization,org.apache.hadoop.io.serializer.avro.AvroReflectSerialization</value>
+  </property>
+  <!-- 
+  <property>
+    <name>cascading.serialization.tokens</name>
+    <value>
+      130=org.jhk.FooWritable,
+      131=org.jhk.BarWritable
+    </value>
+  </property>
+   -->
   <!-- 
   You may configure access control lists in the hadoop-policy.xml configuration file to control which 
   users and groups have permission to connect to each Hadoop service. Services are defined at the protocol
