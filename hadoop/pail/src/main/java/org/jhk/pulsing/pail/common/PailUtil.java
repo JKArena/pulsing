@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package com.backtype.pail.common;
+package org.jhk.pulsing.pail.common;
 
 import java.io.IOException;
 import java.util.LinkedList;
@@ -33,11 +33,12 @@ import com.backtype.hadoop.pail.Pail.TypedRecordOutputStream;
 
 import org.jhk.pulsing.shared.util.HadoopConstants;
 import static org.jhk.pulsing.shared.util.HadoopConstants.DIRECTORIES.*;
+
 import org.jhk.pulsing.pail.thrift.AbstractThriftPailStructure;
 
 /**
  * Some of the things from Nathan Marz, since not distributed in repo with  
- * changes for cascade 2.5.x and minor tweaks
+ * changes for cascade 2.5.x and hadoop
  */
 public final class PailUtil {
     

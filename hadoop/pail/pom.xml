@@ -58,6 +58,35 @@
     
   </dependencies>
   
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <version>${antrun}</version>
+        <executions>
+          <execution>
+            <id>repack</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>run</goal>
+            </goals>
+            <configuration>
+              <target>
+                <unzip src="${com.backtype:dfs-datastores:jar}" dest="${project.build.directory}/tmp"/>
+                <copy todir="${project.build.directory}/tmp/com">
+                  <fileset dir="${project.build.directory}/classes/com" />
+                  <fileset dir="${project.build.sourceDirectory}/com" />
+                </copy>
+                <zip basedir="${project.build.directory}/tmp" destfile="${project.build.directory}/dfs-datastores-1.3.6.jar"/>
+              </target>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+  
   <repositories>
     <repository>
       <id>clojars.org</id>

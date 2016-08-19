@@ -42,6 +42,7 @@ public abstract class AbstractThriftPailStructure<T extends Comparable<T>>
     
     private synchronized TSerializer getSerializer() {
         if(serializer == null) {
+            _LOG.info("AbstractThriftPailStructure.getSerializer");
             serializer = new TSerializer();
         }
         return serializer;
@@ -49,6 +50,7 @@ public abstract class AbstractThriftPailStructure<T extends Comparable<T>>
     
     private synchronized TDeserializer getDeserializer() {
         if(deserializer == null) {
+            _LOG.info("AbstractThriftPailStructure.getDeserializer");
             deserializer = new TDeserializer();
         }
         return deserializer;

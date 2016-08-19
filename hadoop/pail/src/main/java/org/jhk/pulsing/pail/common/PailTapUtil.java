@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package com.backtype.pail.common;
+package org.jhk.pulsing.pail.common;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -40,7 +40,7 @@ import org.jhk.pulsing.serialization.thrift.data.DataUnit;
 
 /**
  * Some of the things from Nathan Marz, since not distributed in repo with  
- * changes for cascade 2.5.x and minor tweaks
+ * changes for cascade 2.5.x and hadoop
  */
 public final class PailTapUtil {
     
@@ -66,6 +66,7 @@ public final class PailTapUtil {
                     }
                 }}
         };
+        options.spec = new PailSpec(new SplitDataPailstructure());
         
         return new PailTap(path, options);
     }
@@ -81,7 +82,7 @@ public final class PailTapUtil {
     public static Pail shred(String sourcePath, String shredPath) throws IOException {
         _LOG.info("PailTapUtil.shred " + sourcePath + ", " + shredPath);
         
-        PailTap source = new PailTap(sourcePath);
+        PailTap source = splitDataTap(sourcePath);
         PailTap sink = splitDataTap(shredPath);
         
         _LOG.info("PailTapUtil.shred " + source.getPath() + " - " + sink.getPath());
