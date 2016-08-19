@@ -325,6 +325,12 @@ descent loss of performance)
         <artifactId>freemarker</artifactId>
         <version>${freemarker}</version>
       </dependency>
+
+      <dependency>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <version>${antrun}</version>
+      </dependency>
       
     </dependencies>
   </dependencyManagement>
@@ -356,6 +362,7 @@ descent loss of performance)
     <junit>4.12</junit>
     <freemarker>2.3.23</freemarker>
     <jedis>2.8.1</jedis>
+    <antrun>1.8</antrun>
   </properties>
   
   <modules>

@@ -24,21 +24,19 @@ import java.net.UnknownHostException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import org.apache.storm.task.TopologyContext;
 import org.apache.storm.topology.BasicOutputCollector;
 import org.apache.storm.topology.OutputFieldsDeclarer;
 import org.apache.storm.topology.base.BaseBasicBolt;
 import org.apache.storm.tuple.Tuple;
+import org.jhk.pulsing.pail.common.PailUtil;
 import org.jhk.pulsing.pail.thrift.structures.SplitDataPailstructure;
 import org.jhk.pulsing.serialization.thrift.data.Data;
 import org.jhk.pulsing.shared.util.HadoopConstants;
 import org.jhk.pulsing.storm.common.FieldConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.backtype.pail.common.PailUtil;
 
 /**
  * @author Ji Kim
@@ -53,28 +51,28 @@ public final class PailDataPersistorBolt extends BaseBasicBolt {
     
     private static int _COUNTER = 0;
     
-    private Optional<String> _prefix;
-    private Optional<String> _lHost;
+    private String _prefix;
+    private String _lHost;
     
     public PailDataPersistorBolt() {
         super();
         
-        _prefix = Optional.empty();
-        _lHost = Optional.empty();
+        _prefix = "";
+        _lHost = "";
     }
     
     public PailDataPersistorBolt(String prefix) {
         super();
         
-        _prefix = Optional.of(prefix + _DELIM);
-        _lHost = Optional.empty();
+        _prefix = prefix + _DELIM;
+        _lHost = "";
     }
     
     @Override
     public void prepare(Map stormConf, TopologyContext context) {
         try {
             InetAddress lHost = InetAddress.getLocalHost();
-            _lHost = Optional.of(lHost.getHostName() + _DELIM);
+            _lHost = lHost.getHostName() + _DELIM;
         } catch (UnknownHostException uhException) {
             
         }
@@ -100,8 +98,8 @@ public final class PailDataPersistorBolt extends BaseBasicBolt {
     }
     
     private String generateFileName() {
-        StringBuilder builder = new StringBuilder(_prefix.orElse(""));
-        builder.append(_lHost.orElse(""));
+        StringBuilder builder = new StringBuilder(_prefix);
+        builder.append(_lHost);
         builder.append(System.nanoTime());
         builder.append(_DELIM);
         builder.append(_COUNTER++);

@@ -36,6 +36,7 @@ import org.xml.sax.helpers.DefaultHandler;
  */
 public final class HadoopConstants {
     
+    public static final String CONFIG_FS_DEFAULT_KEY = "fs.defaultFS";
     public static final String HDFS_URL_PORT;
     
     public static final String PAIL_MASTER_WORKSPACE;
