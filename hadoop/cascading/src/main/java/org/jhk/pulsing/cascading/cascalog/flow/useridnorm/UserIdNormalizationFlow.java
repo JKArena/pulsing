@@ -25,10 +25,9 @@ import java.util.Arrays;
 
 import static org.jhk.pulsing.cascading.cascalog.flow.useridnorm.FunctionBuffer.*;
 
+import org.jhk.pulsing.pail.common.PailTapUtil;
 import org.jhk.pulsing.serialization.thrift.data.DataUnit;
 import org.jhk.pulsing.shared.util.HadoopConstants;
-
-import com.backtype.pail.common.PailTapUtil;
 
 import static org.jhk.pulsing.shared.util.HadoopConstants.DIRECTORIES.*;
 
