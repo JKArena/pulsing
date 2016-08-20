@@ -34,11 +34,11 @@ import org.slf4j.LoggerFactory;
 /**
  * @author Ji Kim
  */
-public final class SplitDataPailstructure extends DataPailStructure {
+public final class SplitDataPailStructure extends DataPailStructure {
     
     private static final long serialVersionUID = 2970071032803343849L;
     
-    private static final Logger _LOG = LoggerFactory.getLogger(SplitDataPailstructure.class);
+    private static final Logger _LOG = LoggerFactory.getLogger(SplitDataPailStructure.class);
     
     private static Map<Short, IFieldStructure> validFieldMap = new HashMap<>();
     
@@ -61,7 +61,7 @@ public final class SplitDataPailstructure extends DataPailStructure {
     
     @Override
     public List<String> getTarget(Data object) {
-        _LOG.debug("SplitDataPailstructure.getTarget " + object);
+        _LOG.debug("SplitDataPailStructure.getTarget " + object);
         
         List<String> target = new ArrayList<>();
         DataUnit dUnit = object.getDataunit();
@@ -69,13 +69,13 @@ public final class SplitDataPailstructure extends DataPailStructure {
         target.add(""+id);
         validFieldMap.get(id).fillTarget(target,  dUnit.getFieldValue());
         
-        _LOG.debug("SplitDataPailstructure.getTarget returning " + target);
+        _LOG.debug("SplitDataPailStructure.getTarget returning " + target);
         return target;
     }
     
     @Override
     public boolean isValidTarget(String... dirs) {
-        _LOG.debug("SplitDataPailstructure.isValidTarget " + dirs);
+        _LOG.debug("SplitDataPailStructure.isValidTarget " + dirs);
         
         if(dirs.length == 0) {
             return false;
