@@ -18,48 +18,40 @@
  */
 package org.jhk.pulsing.cascading.hadoop.job.pail;
 
-import java.net.URI;
 import java.util.Arrays;
 
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.FileStatus;
-import org.apache.hadoop.fs.FileSystem;
-import org.apache.hadoop.fs.Path;
-import org.jhk.pulsing.pail.common.PailUtil;
 import org.jhk.pulsing.pail.thrift.structures.DataPailStructure;
 import org.jhk.pulsing.pail.thrift.structures.SplitDataPailStructure;
 import org.jhk.pulsing.shared.util.HadoopConstants;
+import org.jhk.pulsing.shared.util.HadoopConstants.PAIL_NEW_DATA_PATH;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.backtype.hadoop.pail.Pail;
 
 /**
+ * Since have been deleting and restarting from fresh for all db and etc, 
+ * just a convenience job for creating new setup.
+ * 
  * @author Ji Kim
  */
-public final class PailNewDataIngestorJob {
+public final class PailReinitJob {
     
-    private static final Logger _LOG = LoggerFactory.getLogger(PailNewDataIngestorJob.class);
+    private static final Logger _LOG = LoggerFactory.getLogger(PailReinitJob.class);
     
     public static void main(String[] args) {
-        _LOG.info("PailNewDataIngestorJob " + Arrays.toString(args));
+        _LOG.info("PailReinitJob " + Arrays.toString(args));
         
         try {
             Configuration config = new Configuration();
             String fsDefault = config.get(HadoopConstants.CONFIG_FS_DEFAULT_KEY);
-            URI pNewDataUri = URI.create(fsDefault + HadoopConstants.PAIL_NEW_DATA_WORKSPACE);
             
-            FileSystem fs = FileSystem.get(pNewDataUri, config);
-            Path pNewDataPath = new Path(pNewDataUri);
-            
-            Pail<SplitDataPailStructure> pMasterData = new Pail<>(fsDefault + HadoopConstants.PAIL_MASTER_WORKSPACE);
-            
-            //listing it out separately for now, but should go to same pail
-            FileStatus[] fStatus = fs.listStatus(pNewDataPath);
-            for(FileStatus status : fStatus) {
-                Pail<DataPailStructure> pp = new Pail<>(status.getPath().toString());
-                PailUtil.ingest(pMasterData, pp);
+            for(PAIL_NEW_DATA_PATH pNewDataPath : HadoopConstants.PAIL_NEW_DATA_PATH.values()) {
+                Pail.create(fsDefault + HadoopConstants.PAIL_NEW_DATA_WORKSPACE + pNewDataPath.toString(), new DataPailStructure());
             }
+            
+            Pail.create(fsDefault + HadoopConstants.PAIL_MASTER_WORKSPACE, new SplitDataPailStructure());
             
         } catch (Exception exception) {
             _LOG.error("Crud something went wrong!!!!!!!!!!");

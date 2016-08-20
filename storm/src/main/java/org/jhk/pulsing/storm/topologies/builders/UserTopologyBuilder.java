@@ -65,7 +65,7 @@ public final class UserTopologyBuilder {
                 .setNumTasks(2)
                 .shuffleGrouping("user-avro-deserialize");
         
-        builder.setBolt("user-pail", new PailDataPersistorBolt("UserCreate"), 2)
+        builder.setBolt("user-pail-data-persistor", new PailDataPersistorBolt(HadoopConstants.PAIL_NEW_DATA_PATH.USER), 2)
                 .setNumTasks(2)
                 .shuffleGrouping("user-avor-thrift-converter");
         

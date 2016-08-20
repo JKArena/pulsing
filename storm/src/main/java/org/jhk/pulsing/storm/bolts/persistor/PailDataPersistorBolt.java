@@ -19,21 +19,18 @@
 package org.jhk.pulsing.storm.bolts.persistor;
 
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
-import org.apache.storm.task.TopologyContext;
 import org.apache.storm.topology.BasicOutputCollector;
 import org.apache.storm.topology.OutputFieldsDeclarer;
 import org.apache.storm.topology.base.BaseBasicBolt;
 import org.apache.storm.tuple.Tuple;
 import org.jhk.pulsing.pail.common.PailUtil;
-import org.jhk.pulsing.pail.thrift.structures.SplitDataPailstructure;
+import org.jhk.pulsing.pail.thrift.structures.DataPailStructure;
 import org.jhk.pulsing.serialization.thrift.data.Data;
 import org.jhk.pulsing.shared.util.HadoopConstants;
+import org.jhk.pulsing.shared.util.HadoopConstants.PAIL_NEW_DATA_PATH;
 import org.jhk.pulsing.storm.common.FieldConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,36 +43,19 @@ public final class PailDataPersistorBolt extends BaseBasicBolt {
     private static final long serialVersionUID = -6734265634986696958L;
     private static final Logger _LOG = LoggerFactory.getLogger(PailDataPersistorBolt.class);
     
-    private static final String _DELIM = "-";
     private static final String HADOOP_PAIL_NEW_DATA_PATH = HadoopConstants.HDFS_URL_PORT + HadoopConstants.PAIL_NEW_DATA_WORKSPACE;
     
-    private static int _COUNTER = 0;
+    private PAIL_NEW_DATA_PATH _newDataPath;
     
-    private String _prefix;
-    private String _lHost;
-    
-    public PailDataPersistorBolt() {
+    private PailDataPersistorBolt() {
         super();
         
-        _prefix = "";
-        _lHost = "";
     }
     
-    public PailDataPersistorBolt(String prefix) {
+    public PailDataPersistorBolt(PAIL_NEW_DATA_PATH newDataPath) {
         super();
         
-        _prefix = prefix + _DELIM;
-        _lHost = "";
-    }
-    
-    @Override
-    public void prepare(Map stormConf, TopologyContext context) {
-        try {
-            InetAddress lHost = InetAddress.getLocalHost();
-            _lHost = lHost.getHostName() + _DELIM;
-        } catch (UnknownHostException uhException) {
-            
-        }
+        _newDataPath = newDataPath;
     }
     
     @Override
@@ -86,26 +66,17 @@ public final class PailDataPersistorBolt extends BaseBasicBolt {
         List<Data> datas = new LinkedList<>();
         datas.add(data);
         
-        String path = HADOOP_PAIL_NEW_DATA_PATH + generateFileName();
+        String path = HADOOP_PAIL_NEW_DATA_PATH + _newDataPath.toString();
         _LOG.info("PailDataPersistorBolt.execute: writing to " + path + ", " + datas.size());
         
         try {
-            PailUtil.writePailStructures(path, new SplitDataPailstructure(), datas);
+            PailUtil.writePailStructures(path, new DataPailStructure(), datas);
         } catch (IOException pioException) {
             _LOG.error("RIP me ToT!!!!!!!!!!!!!!!!!!!", pioException);
             pioException.printStackTrace();
         } 
     }
     
-    private String generateFileName() {
-        StringBuilder builder = new StringBuilder(_prefix);
-        builder.append(_lHost);
-        builder.append(System.nanoTime());
-        builder.append(_DELIM);
-        builder.append(_COUNTER++);
-        return builder.toString();
-    }
-
     @Override
     public void declareOutputFields(OutputFieldsDeclarer fieldsDeclarer) {
     }

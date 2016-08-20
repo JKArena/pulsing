@@ -35,7 +35,8 @@ import cascalog.ops.RandLong;
 import jcascalog.Api;
 import jcascalog.Subquery;
 
-import org.jhk.pulsing.pail.thrift.structures.SplitDataPailstructure;
+import org.jhk.pulsing.pail.thrift.structures.DataPailStructure;
+import org.jhk.pulsing.pail.thrift.structures.SplitDataPailStructure;
 import org.jhk.pulsing.serialization.thrift.data.DataUnit;
 
 /**
@@ -66,8 +67,7 @@ public final class PailTapUtil {
                     }
                 }}
         };
-        options.spec = new PailSpec(new SplitDataPailstructure());
-        
+        options.spec = new PailSpec(new DataPailStructure());
         return new PailTap(path, options);
     }
     
@@ -82,7 +82,7 @@ public final class PailTapUtil {
     public static Pail shred(String sourcePath, String shredPath) throws IOException {
         _LOG.info("PailTapUtil.shred " + sourcePath + ", " + shredPath);
         
-        PailTap source = splitDataTap(sourcePath);
+        PailTap source = new PailTap(sourcePath);
         PailTap sink = splitDataTap(shredPath);
         
         _LOG.info("PailTapUtil.shred " + source.getPath() + " - " + sink.getPath());
@@ -112,7 +112,7 @@ public final class PailTapUtil {
         
         PailTapOptions options = new PailTapOptions();
         
-        options.spec = new PailSpec(new SplitDataPailstructure());
+        options.spec = new PailSpec(new SplitDataPailStructure());
         return new PailTap(path, options);
     }
     

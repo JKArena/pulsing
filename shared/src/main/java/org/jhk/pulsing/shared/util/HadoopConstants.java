@@ -45,6 +45,10 @@ public final class HadoopConstants {
     public static final String HIVE_NEW_DATA_WORKSPACE;
     private static final String TEMP_DATA_WORKSPACE;
     
+    public enum PAIL_NEW_DATA_PATH {
+        USER;
+    }
+    
     public enum DIRECTORIES {
         TEMP, SNAPSHOT, SHREDDED, EQUIVS_ITERATE;
     };

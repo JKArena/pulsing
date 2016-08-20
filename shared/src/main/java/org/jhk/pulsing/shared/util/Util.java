@@ -18,6 +18,9 @@
  */
 package org.jhk.pulsing.shared.util;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -25,8 +28,27 @@ import java.util.concurrent.TimeUnit;
  */
 public final class Util {
     
-    private Util() {
-        super();
+    public static final String DELIM = "-";
+    
+    private static int _COUNTER;
+    private static Optional<String> _LOCAL_HOST;
+    
+    static {
+        try {
+            InetAddress lHost = InetAddress.getLocalHost();
+            _LOCAL_HOST = Optional.of(lHost.getHostName() + DELIM);
+        } catch (UnknownHostException uhException) {
+        }
+    }
+    
+    public static String generateUniqueId(String prefix) {
+        StringBuilder builder = new StringBuilder(prefix);
+        builder.append(DELIM);
+        builder.append(_LOCAL_HOST.orElse(""));
+        builder.append(System.nanoTime());
+        builder.append(DELIM);
+        builder.append(_COUNTER++);
+        return builder.toString();
     }
     
     /**
@@ -52,4 +74,7 @@ public final class Util {
         return TimeUnit.SECONDS.convert(nanoTime, TimeUnit.NANOSECONDS);
     }
     
+    private Util() {
+        super();
+    }
 }
