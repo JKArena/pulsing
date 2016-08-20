@@ -1,0 +1,2 @@
+pkill -f CassandraDaemon;
+
