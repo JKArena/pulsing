@@ -331,6 +331,12 @@ descent loss of performance)
         <artifactId>maven-antrun-plugin</artifactId>
         <version>${antrun}</version>
       </dependency>
+
+      <dependency>
+        <groupId>net.agkn</groupId>
+        <artifactId>hll</artifactId>
+        <version>${hyperloglog}</version>
+      </dependency>
       
     </dependencies>
   </dependencyManagement>
@@ -363,6 +369,7 @@ descent loss of performance)
     <freemarker>2.3.23</freemarker>
     <jedis>2.8.1</jedis>
     <antrun>1.8</antrun>
+    <hyperloglog>1.6.0</hyperloglog>
   </properties>
   
   <modules>
