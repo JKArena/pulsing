@@ -25,6 +25,9 @@ import org.jhk.pulsing.serialization.avro.records.User;
 import org.jhk.pulsing.serialization.avro.records.UserId;
 import org.jhk.pulsing.serialization.avro.serializers.SerializationHelper;
 import org.jhk.pulsing.shared.util.RedisConstants;
+import org.jhk.pulsing.web.common.Result;
+import static org.jhk.pulsing.web.common.Result.CODE.*;
+import org.jhk.pulsing.web.dao.IUserDao;
 import org.jhk.pulsing.web.dao.prod.db.AbstractRedisDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,10 +39,12 @@ import org.springframework.stereotype.Repository;
  * @author Ji Kim
  */
 @Repository
-public class RedisUserDao extends AbstractRedisDao {
+public class RedisUserDao extends AbstractRedisDao
+                            implements IUserDao {
     
     private static final Logger _LOGGER = LoggerFactory.getLogger(RedisUserDao.class);
     
+    @Override
     public Optional<User> getUser(UserId userId) {
         _LOGGER.debug("RedisUserDao.getUser " + userId);
         
@@ -56,21 +61,23 @@ public class RedisUserDao extends AbstractRedisDao {
         
         return user;
     }
-
-    public Optional<User> createUser(User user) {
+    
+    @Override
+    public Result<User> createUser(User user) {
         _LOGGER.debug("RedisUserDao.createUser " + user);
         
-        Optional<User> oUser = Optional.empty();
+        Result<User> result;
         
         try {
             String userJson = SerializationHelper.serializeAvroTypeToJSONString(user);
             getJedis().setex(USER_.toString() + user.getId().getId(), RedisConstants.CACHE_EXPIRE_DAY, userJson);            
-            oUser = Optional.of(user);
+            result = new Result<>(SUCCESS, user);
         } catch (IOException sException) {
+            result = new Result<>(FAILURE, sException.getMessage());
             sException.printStackTrace();
         }
         
-        return oUser;
+        return result;
     }
     
 }

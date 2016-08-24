@@ -18,9 +18,6 @@
  */
 package org.jhk.pulsing.web.service;
 
-import org.jhk.pulsing.web.dao.IPulseDao;
-import org.jhk.pulsing.web.dao.IUserDao;
-
 /**
  * @author Ji Kim
  */
@@ -29,9 +26,5 @@ public interface IServiceConfig {
     IUserService getUserService();
     
     IPulseService getPulseService();
-    
-    IUserDao getUserDao();
-    
-    IPulseDao getPulseDao();
     
 }

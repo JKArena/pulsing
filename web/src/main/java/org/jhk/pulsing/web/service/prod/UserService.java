@@ -18,13 +18,17 @@
  */
 package org.jhk.pulsing.web.service.prod;
 
+import java.util.Optional;
+
 import javax.inject.Inject;
 
 import org.jhk.pulsing.serialization.avro.records.User;
 import org.jhk.pulsing.serialization.avro.records.UserId;
 import org.jhk.pulsing.shared.util.CommonConstants;
 import org.jhk.pulsing.web.common.Result;
-import org.jhk.pulsing.web.dao.IUserDao;
+import static org.jhk.pulsing.web.common.Result.CODE.*;
+import org.jhk.pulsing.web.dao.prod.db.redis.RedisUserDao;
+import org.jhk.pulsing.web.dao.prod.db.sql.MySqlUserDao;
 import org.jhk.pulsing.web.service.IUserService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,18 +49,35 @@ public class UserService extends AbstractStormPublisher
                             implements IUserService {
     
     @Inject
-    private IUserDao userDao;
+    private MySqlUserDao mySqlUserDao;
+    
+    @Inject
+    private RedisUserDao redisUserDao;
     
     @Override
     public Result<User> getUser(UserId userId) {
-        return userDao.getUser(userId);
+        Result<User> result = new Result<>(FAILURE, "Unable to find " + userId);
+        //TODO: remove later as holding this data in redis useless, but for docing 
+        //for other data
+        Optional<User> user = redisUserDao.getUser(userId);
+        
+        if(!user.isPresent()) {
+            user = mySqlUserDao.getUser(userId);
+        }
+        
+        if(user.isPresent()) {
+            result = new Result<>(SUCCESS, user.get());
+        }
+        
+        return result;
     }
 
     @Override
     public Result<User> createUser(User user) {
-        Result<User> cUser = userDao.createUser(user);
+        Result<User> cUser = new Result<User>(FAILURE, "Failed in creating " + user); 
         
-        if(cUser.getCode() == Result.CODE.SUCCESS) {
+        if(cUser.getCode() == SUCCESS) {
+            redisUserDao.createUser(cUser.getData());
             getStormPublisher().produce(CommonConstants.TOPICS.USER_CREATE.toString(), cUser.getData());
         }
         
@@ -65,7 +86,9 @@ public class UserService extends AbstractStormPublisher
 
     @Override
     public Result<User> validateUser(String email, String password) {
-        return userDao.validateUser(email, password);
+        Optional<User> user = mySqlUserDao.validateUser(email, password);
+        
+        return user.isPresent() ? new Result<>(SUCCESS, user.get()) : new Result<>(FAILURE, "Failed in validating " + email + " : " + password);
     }
     
 }

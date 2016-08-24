@@ -18,6 +18,13 @@
  */
 package org.jhk.pulsing.web.dao.prod.db.redis;
 
+import java.util.Optional;
+
+import org.jhk.pulsing.serialization.avro.records.Pulse;
+import org.jhk.pulsing.serialization.avro.records.PulseId;
+import org.jhk.pulsing.web.common.Result;
+import static org.jhk.pulsing.web.common.Result.CODE.*;
+import org.jhk.pulsing.web.dao.IPulseDao;
 import org.jhk.pulsing.web.dao.prod.db.AbstractRedisDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,8 +34,23 @@ import org.springframework.stereotype.Repository;
  * @author Ji Kim
  */
 @Repository
-public class RedisPulseDao extends AbstractRedisDao {
+public class RedisPulseDao extends AbstractRedisDao
+                            implements IPulseDao {
     
     private static final Logger _LOGGER = LoggerFactory.getLogger(RedisPulseDao.class);
+    
+    @Override
+    public Optional<Pulse> getPulse(PulseId pulseId) {
+        _LOGGER.debug("RedisPulseDao.getPulse: " + pulseId);
+        
+        return Optional.empty();
+    }
+
+    @Override
+    public Result<Pulse> createPulse(Pulse pulse) {
+        _LOGGER.debug("RedisPulseDao.createPulse: " + pulse);
+        
+        return new Result<>(FAILURE, "dummy");
+    }
     
 }

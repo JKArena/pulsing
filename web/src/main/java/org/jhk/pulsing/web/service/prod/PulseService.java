@@ -18,7 +18,9 @@
  */
 package org.jhk.pulsing.web.service.prod;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import javax.inject.Inject;
 
@@ -26,7 +28,8 @@ import org.jhk.pulsing.serialization.avro.records.Pulse;
 import org.jhk.pulsing.serialization.avro.records.PulseId;
 import org.jhk.pulsing.shared.util.CommonConstants;
 import org.jhk.pulsing.web.common.Result;
-import org.jhk.pulsing.web.dao.IPulseDao;
+import static org.jhk.pulsing.web.common.Result.CODE.*;
+import org.jhk.pulsing.web.dao.prod.db.redis.RedisPulseDao;
 import org.jhk.pulsing.web.service.IPulseService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,18 +43,20 @@ public class PulseService extends AbstractStormPublisher
                             implements IPulseService {
     
     @Inject
-    private IPulseDao pulseDao;
+    private RedisPulseDao redisPulseDao;
 
     @Override
     public Result<Pulse> getPulse(PulseId pulseId) {
-        return pulseDao.getPulse(pulseId);
+        Optional<Pulse> optPulse = redisPulseDao.getPulse(pulseId);
+        
+        return optPulse.isPresent() ? new Result<>(SUCCESS, optPulse.get()) : new Result<>(FAILURE, "Unabled to find " + pulseId);
     }
 
     @Override
     public Result<Pulse> createPulse(Pulse pulse) {
-        Result<Pulse> cPulse = pulseDao.createPulse(pulse);
+        Result<Pulse> cPulse = redisPulseDao.createPulse(pulse);
         
-        if(cPulse.getCode() == Result.CODE.SUCCESS) {
+        if(cPulse.getCode() == SUCCESS) {
             getStormPublisher().produce(CommonConstants.TOPICS.USER_CREATE.toString(), cPulse.getData());
         }
         
@@ -60,12 +65,14 @@ public class PulseService extends AbstractStormPublisher
 
     @Override
     public Result<PulseId> subscribePulse(Pulse pulse) {
-        return pulseDao.subscribePulse(pulse);
+        
+        getStormPublisher().produce(CommonConstants.TOPICS.PULSE_SUBSCRIBE.toString(), pulse);
+        return new Result<>(SUCCESS, pulse.getId());
     }
 
     @Override
     public List<Pulse> getTrendingPulse() {
-        return pulseDao.getTrendingPulse();
+        return Collections.EMPTY_LIST;
     }
     
 }

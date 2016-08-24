@@ -18,7 +18,7 @@
  */
 package org.jhk.pulsing.web.dao;
 
-import java.util.List;
+import java.util.Optional;
 
 import org.jhk.pulsing.serialization.avro.records.Pulse;
 import org.jhk.pulsing.serialization.avro.records.PulseId;
@@ -29,12 +29,8 @@ import org.jhk.pulsing.web.common.Result;
  */
 public interface IPulseDao {
     
-    Result<Pulse> getPulse(PulseId pulseId);
+    Optional<Pulse> getPulse(PulseId pulseId);
     
     Result<Pulse> createPulse(Pulse pulse);
-    
-    Result<PulseId> subscribePulse(Pulse pulse);
-    
-    List<Pulse> getTrendingPulse();
     
 }

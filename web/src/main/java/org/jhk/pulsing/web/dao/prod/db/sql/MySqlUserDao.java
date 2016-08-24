@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.web.dao.prod.db;
+package org.jhk.pulsing.web.dao.prod.db.sql;
 
 import java.util.List;
 import java.util.Optional;
@@ -29,6 +29,9 @@ import org.jhk.pulsing.db.mysql.model.MUser;
 import org.jhk.pulsing.serialization.avro.records.User;
 import org.jhk.pulsing.serialization.avro.records.UserId;
 import org.jhk.pulsing.web.common.AvroMySqlMappers;
+import org.jhk.pulsing.web.common.Result;
+import static org.jhk.pulsing.web.common.Result.CODE.*;
+import org.jhk.pulsing.web.dao.IUserDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
@@ -39,13 +42,14 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Repository
 @Transactional
-public class MySqlUserDao {
+public class MySqlUserDao implements IUserDao {
     
     private static final Logger _LOGGER = LoggerFactory.getLogger(MySqlUserDao.class);
     
     @Inject
     private SessionFactory sessionFactory;
     
+    @Override
     public Optional<User> getUser(UserId userId) {
         _LOGGER.debug("MySqlUserDao.getUser" + userId);
         
@@ -58,8 +62,9 @@ public class MySqlUserDao {
             return Optional.empty();
         }
     }
-
-    public Optional<User> createUser(User user) {
+    
+    @Override
+    public Result<User> createUser(User user) {
         _LOGGER.debug("MySqlUserDao.createUser" + user);
         
         MUser mUser = AvroMySqlMappers.avroToMysql(user);
@@ -70,7 +75,7 @@ public class MySqlUserDao {
         userId.setId(mUser.getId()); //use the generated id
         user.setId(userId);
         
-        return Optional.of(user);
+        return new Result<>(SUCCESS, user);
     }
 
     public Optional<User> validateUser(String email, String password) {

@@ -48,13 +48,11 @@ public class DevServiceConfig implements IServiceConfig {
     }
     
     @Bean
-    @Override
     public IUserDao getUserDao() {
         return new UserDao();
     }
     
     @Bean
-    @Override
     public IPulseDao getPulseDao() {
         return new PulseDao();
     }

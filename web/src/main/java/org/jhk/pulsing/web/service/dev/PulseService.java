@@ -19,13 +19,16 @@
 package org.jhk.pulsing.web.service.dev;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.inject.Inject;
 
 import org.jhk.pulsing.serialization.avro.records.Pulse;
 import org.jhk.pulsing.serialization.avro.records.PulseId;
 import org.jhk.pulsing.web.common.Result;
+import static org.jhk.pulsing.web.common.Result.CODE.*;
 import org.jhk.pulsing.web.dao.IPulseDao;
+import org.jhk.pulsing.web.dao.dev.PulseDao;
 import org.jhk.pulsing.web.service.IPulseService;
 
 /**
@@ -38,7 +41,10 @@ public class PulseService implements IPulseService {
 
     @Override
     public Result<Pulse> getPulse(PulseId pulseId) {
-        return pulseDao.getPulse(pulseId);
+        Optional<Pulse> pulse = pulseDao.getPulse(pulseId);
+        
+        return !pulse.isPresent() ? new Result<>(FAILURE, "Failed to get pulse " + pulseId) 
+                : new Result<>(SUCCESS, pulse.get()); 
     }
 
     @Override
@@ -48,12 +54,13 @@ public class PulseService implements IPulseService {
 
     @Override
     public Result<PulseId> subscribePulse(Pulse pulse) {
-        return pulseDao.subscribePulse(pulse);
+        Result<PulseId> sResult = new Result<>(SUCCESS, pulse.getId());
+        return sResult;
     }
 
     @Override
     public List<Pulse> getTrendingPulse() {
-        return pulseDao.getTrendingPulse();
+        return PulseDao.MOCK_TRENDING_PULSES;
     }
     
 }
