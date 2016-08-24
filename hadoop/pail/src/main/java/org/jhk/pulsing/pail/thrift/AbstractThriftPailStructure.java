@@ -35,14 +35,14 @@ public abstract class AbstractThriftPailStructure<T extends Comparable<T>>
     
     private static final long serialVersionUID = 8824535385349855885L;
     
-    private static final Logger _LOG = LoggerFactory.getLogger(AbstractThriftPailStructure.class);
+    private static final Logger _LOGGER = LoggerFactory.getLogger(AbstractThriftPailStructure.class);
     
     private transient TSerializer serializer;
     private transient TDeserializer deserializer;
     
     private synchronized TSerializer getSerializer() {
         if(serializer == null) {
-            _LOG.info("AbstractThriftPailStructure.getSerializer");
+            _LOGGER.debug("AbstractThriftPailStructure.getSerializer");
             serializer = new TSerializer();
         }
         return serializer;
@@ -50,7 +50,7 @@ public abstract class AbstractThriftPailStructure<T extends Comparable<T>>
     
     private synchronized TDeserializer getDeserializer() {
         if(deserializer == null) {
-            _LOG.info("AbstractThriftPailStructure.getDeserializer");
+            _LOGGER.debug("AbstractThriftPailStructure.getDeserializer");
             deserializer = new TDeserializer();
         }
         return deserializer;
@@ -58,7 +58,7 @@ public abstract class AbstractThriftPailStructure<T extends Comparable<T>>
     
     @Override
     public T deserialize(byte[] serialized) {
-        _LOG.debug("ThriftPailStructure.deserialize " + serialized.length);
+        _LOGGER.debug("ThriftPailStructure.deserialize " + serialized.length);
         
         T thriftObject = createThriftObject();
         
@@ -73,7 +73,7 @@ public abstract class AbstractThriftPailStructure<T extends Comparable<T>>
 
     @Override
     public byte[] serialize(T object) {
-        _LOG.debug("ThriftPailStructure.serialize " + object);
+        _LOGGER.debug("ThriftPailStructure.serialize " + object);
         
         try {
             return getSerializer().serialize((TBase<?, ?>) object);

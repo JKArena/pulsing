@@ -45,10 +45,10 @@ import org.slf4j.LoggerFactory;
  */
 public final class PulseSubscribeTopologyBuilder {
     
-    private static final Logger _LOG = LoggerFactory.getLogger(PulseSubscribeTopologyBuilder.class);
+    private static final Logger _LOGGER = LoggerFactory.getLogger(PulseSubscribeTopologyBuilder.class);
     
     public static StormTopology build() {
-        _LOG.info("PulseSubscribeTopologyBuilder.build");
+        _LOGGER.debug("PulseSubscribeTopologyBuilder.build");
         
         TopologyBuilder builder = new TopologyBuilder();
         builder.setSpout("pulse-subscribe-spout", buildSpout());

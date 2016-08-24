@@ -39,10 +39,10 @@ import com.backtype.hadoop.pail.Pail;
  */
 public final class PailNewDataIngestorJob {
     
-    private static final Logger _LOG = LoggerFactory.getLogger(PailNewDataIngestorJob.class);
+    private static final Logger _LOGGER = LoggerFactory.getLogger(PailNewDataIngestorJob.class);
     
     public static void main(String[] args) {
-        _LOG.info("PailNewDataIngestorJob " + Arrays.toString(args));
+        _LOGGER.debug("PailNewDataIngestorJob " + Arrays.toString(args));
         
         try {
             Configuration config = new Configuration();
@@ -62,7 +62,7 @@ public final class PailNewDataIngestorJob {
             }
             
         } catch (Exception exception) {
-            _LOG.error("Crud something went wrong!!!!!!!!!!");
+            _LOGGER.error("Crud something went wrong!!!!!!!!!!");
             exception.printStackTrace();
         }
         

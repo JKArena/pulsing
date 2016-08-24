@@ -41,15 +41,15 @@ import org.slf4j.LoggerFactory;
 public final class PailDataPersistorBolt extends BaseBasicBolt {
     
     private static final long serialVersionUID = -6734265634986696958L;
-    private static final Logger _LOG = LoggerFactory.getLogger(PailDataPersistorBolt.class);
+    private static final Logger _LOGGER = LoggerFactory.getLogger(PailDataPersistorBolt.class);
     
     private static final String HADOOP_PAIL_NEW_DATA_PATH = HadoopConstants.HDFS_URL_PORT + HadoopConstants.PAIL_NEW_DATA_WORKSPACE;
     
     private PAIL_NEW_DATA_PATH _newDataPath;
     
+    @SuppressWarnings("unused")
     private PailDataPersistorBolt() {
         super();
-        
     }
     
     public PailDataPersistorBolt(PAIL_NEW_DATA_PATH newDataPath) {
@@ -67,12 +67,12 @@ public final class PailDataPersistorBolt extends BaseBasicBolt {
         datas.add(data);
         
         String path = HADOOP_PAIL_NEW_DATA_PATH + _newDataPath.toString();
-        _LOG.info("PailDataPersistorBolt.execute: writing to " + path + ", " + datas.size());
+        _LOGGER.debug("PailDataPersistorBolt.execute: writing to " + path + ", " + datas.size());
         
         try {
             PailUtil.writePailStructures(path, new DataPailStructure(), datas);
         } catch (IOException pioException) {
-            _LOG.error("RIP me ToT!!!!!!!!!!!!!!!!!!!", pioException);
+            _LOGGER.error("RIP me ToT!!!!!!!!!!!!!!!!!!!", pioException);
             pioException.printStackTrace();
         } 
     }

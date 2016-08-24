@@ -49,10 +49,10 @@ import org.slf4j.LoggerFactory;
  */
 public final class ConverterCommon {
     
-    private static final Logger _LOG = LoggerFactory.getLogger(ConverterCommon.class);
+    private static final Logger _LOGGER = LoggerFactory.getLogger(ConverterCommon.class);
     
     public static Data convertPulseAvroToThrift(ITuple tuple) {
-        _LOG.info("ConverterCommon.convertPulseAvroToThrift " + tuple);
+        _LOGGER.debug("ConverterCommon.convertPulseAvroToThrift " + tuple);
         
         Pulse pulse = (Pulse) tuple.getValueByField(AVRO_PULSE);
         
@@ -96,7 +96,7 @@ public final class ConverterCommon {
     }
     
     public static Data convertUserAvroToThrift(ITuple tuple) {
-        _LOG.info("ConverterCommon.convertUserAvroToThrift " + tuple);
+        _LOGGER.debug("ConverterCommon.convertUserAvroToThrift " + tuple);
         
         User user = (User) tuple.getValueByField(AVRO_USER);
         

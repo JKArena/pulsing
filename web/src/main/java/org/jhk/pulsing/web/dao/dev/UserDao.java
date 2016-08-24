@@ -29,15 +29,11 @@ import org.jhk.pulsing.serialization.avro.records.UserId;
 import org.jhk.pulsing.web.common.Result;
 import static org.jhk.pulsing.web.common.Result.CODE.*;
 import org.jhk.pulsing.web.dao.IUserDao;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * @author Ji Kim
  */
 public class UserDao implements IUserDao {
-    
-    private static final Logger _LOGGER = LoggerFactory.getLogger(UserDao.class);
     
     private static final ConcurrentMap<UserId, User> _MOCKED_USERS = new ConcurrentHashMap<>();
     
@@ -72,8 +68,6 @@ public class UserDao implements IUserDao {
 
     @Override
     public Result<User> getUser(UserId userId) {
-        _LOGGER.info("UserDao.getUser: " + userId);
-        
         User user = _MOCKED_USERS.get(userId);
         Result<User> gResult = user == null ? new Result<User>(FAILURE, "Failed to get user " + userId) :
             new Result<User>(SUCCESS, user);
@@ -83,8 +77,6 @@ public class UserDao implements IUserDao {
 
     @Override
     public Result<User> createUser(User userSubmitted) {
-        _LOGGER.info("UserDao.createUser: " + userSubmitted);
-        
         Optional<User> findUser = _MOCKED_USERS.values().stream()
                 .filter(user -> user.getEmail().equals(userSubmitted.getEmail()))
                 .findAny();
@@ -104,8 +96,6 @@ public class UserDao implements IUserDao {
     
     @Override
     public Result<User> validateUser(String email, String password) {
-        _LOGGER.info("UserDao.validateUser: " + email + ", " + password);
-        
         Optional<User> filteredUser = _MOCKED_USERS.values().stream()
             .filter(user -> { return user.getEmail().toString().equals(email) && user.getPassword().toString().equals(password);})
             .findAny();

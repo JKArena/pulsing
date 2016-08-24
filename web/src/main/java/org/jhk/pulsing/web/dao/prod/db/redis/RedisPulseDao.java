@@ -16,39 +16,19 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.storm.common;
+package org.jhk.pulsing.web.dao.prod.db.redis;
 
-import org.apache.thrift.TException;
-import org.apache.thrift.TSerializer;
-import org.apache.thrift.protocol.TBinaryProtocol;
-import org.jhk.pulsing.serialization.thrift.data.Data;
+import org.jhk.pulsing.web.dao.prod.db.AbstractRedisDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Repository;
 
 /**
  * @author Ji Kim
  */
-public final class Util {
+@Repository
+public class RedisPulseDao extends AbstractRedisDao {
     
-    private static final Logger _LOGGER = LoggerFactory.getLogger(Util.class);
-    
-    public static byte[] serializeThriftData(Data tData) {
-        _LOGGER.debug("Util.serializeThriftData: " + tData);
-        
-        TSerializer serializer = new TSerializer(new TBinaryProtocol.Factory());
-        byte[] bytes = new byte[0];
-        
-        try {
-            bytes = serializer.serialize(tData);
-        } catch (TException tException) {
-            tException.printStackTrace();
-        }
-        
-        return bytes;
-    }
-    
-    private Util() {
-        super();
-    }
+    private static final Logger _LOGGER = LoggerFactory.getLogger(RedisPulseDao.class);
     
 }

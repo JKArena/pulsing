@@ -24,6 +24,7 @@ import javax.inject.Inject;
 
 import org.jhk.pulsing.serialization.avro.records.Pulse;
 import org.jhk.pulsing.serialization.avro.records.PulseId;
+import org.jhk.pulsing.shared.util.CommonConstants;
 import org.jhk.pulsing.web.common.Result;
 import org.jhk.pulsing.web.dao.IPulseDao;
 import org.jhk.pulsing.web.service.IPulseService;
@@ -35,7 +36,8 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Transactional
 @Service
-public class PulseService implements IPulseService {
+public class PulseService extends AbstractStormPublisher 
+                            implements IPulseService {
     
     @Inject
     private IPulseDao pulseDao;
@@ -46,8 +48,14 @@ public class PulseService implements IPulseService {
     }
 
     @Override
-    public Result<PulseId> createPulse(Pulse pulse) {
-        return pulseDao.createPulse(pulse);
+    public Result<Pulse> createPulse(Pulse pulse) {
+        Result<Pulse> cPulse = pulseDao.createPulse(pulse);
+        
+        if(cPulse.getCode() == Result.CODE.SUCCESS) {
+            getStormPublisher().produce(CommonConstants.TOPICS.USER_CREATE.toString(), cPulse.getData());
+        }
+        
+        return cPulse;
     }
 
     @Override

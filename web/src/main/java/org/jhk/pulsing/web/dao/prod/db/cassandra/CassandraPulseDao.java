@@ -16,39 +16,37 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.storm.common;
+package org.jhk.pulsing.web.dao.prod.db.cassandra;
 
-import org.apache.thrift.TException;
-import org.apache.thrift.TSerializer;
-import org.apache.thrift.protocol.TBinaryProtocol;
-import org.jhk.pulsing.serialization.thrift.data.Data;
+import org.jhk.pulsing.web.dao.prod.db.AbstractCassandraDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Repository;
+
+import com.datastax.driver.core.schemabuilder.SchemaBuilder;
 
 /**
+ * Various tables created from Hadoop batch views and queried from here
+ * 
  * @author Ji Kim
  */
-public final class Util {
+@Repository
+public class CassandraPulseDao extends AbstractCassandraDao {
     
-    private static final Logger _LOGGER = LoggerFactory.getLogger(Util.class);
+    private static final Logger _LOGGER = LoggerFactory.getLogger(CassandraPulseDao.class);
+    private static final String _PULSE_TBD_TABLE = "PULSE_TBD_TABLE";
     
-    public static byte[] serializeThriftData(Data tData) {
-        _LOGGER.debug("Util.serializeThriftData: " + tData);
+    @Override
+    public void destroy() {
         
-        TSerializer serializer = new TSerializer(new TBinaryProtocol.Factory());
-        byte[] bytes = new byte[0];
+        getSession().execute(SchemaBuilder.dropTable(_PULSE_TBD_TABLE));
         
-        try {
-            bytes = serializer.serialize(tData);
-        } catch (TException tException) {
-            tException.printStackTrace();
-        }
-        
-        return bytes;
+        super.destroy();
     }
     
-    private Util() {
-        super();
+    @Override
+    protected String getKeySpace() {
+        return "pulse";
     }
-    
+
 }

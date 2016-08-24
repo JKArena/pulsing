@@ -38,7 +38,7 @@ public final class SplitDataPailStructure extends DataPailStructure {
     
     private static final long serialVersionUID = 2970071032803343849L;
     
-    private static final Logger _LOG = LoggerFactory.getLogger(SplitDataPailStructure.class);
+    private static final Logger _LOGGER = LoggerFactory.getLogger(SplitDataPailStructure.class);
     
     private static Map<Short, IFieldStructure> validFieldMap = new HashMap<>();
     
@@ -61,7 +61,7 @@ public final class SplitDataPailStructure extends DataPailStructure {
     
     @Override
     public List<String> getTarget(Data object) {
-        _LOG.debug("SplitDataPailStructure.getTarget " + object);
+        _LOGGER.debug("SplitDataPailStructure.getTarget " + object);
         
         List<String> target = new ArrayList<>();
         DataUnit dUnit = object.getDataunit();
@@ -69,13 +69,12 @@ public final class SplitDataPailStructure extends DataPailStructure {
         target.add(""+id);
         validFieldMap.get(id).fillTarget(target,  dUnit.getFieldValue());
         
-        _LOG.debug("SplitDataPailStructure.getTarget returning " + target);
         return target;
     }
     
     @Override
     public boolean isValidTarget(String... dirs) {
-        _LOG.debug("SplitDataPailStructure.isValidTarget " + dirs);
+        _LOGGER.debug("SplitDataPailStructure.isValidTarget " + dirs);
         
         if(dirs.length == 0) {
             return false;

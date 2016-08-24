@@ -10,7 +10,7 @@ import java.io.*;
 
 public final class EnumSerializer implements Serializer<TEnum> {
     
-    private static final Logger _LOG = LoggerFactory.getLogger(EnumSerializer.class);
+    private static final Logger _LOGGER = LoggerFactory.getLogger(EnumSerializer.class);
     
     private DataOutputStream dOStream;
 
@@ -19,7 +19,7 @@ public final class EnumSerializer implements Serializer<TEnum> {
     }
 
     public void serialize(TEnum obj) throws IOException {
-        _LOG.info("EnumSerializer.serialize " + obj);
+        _LOGGER.debug("EnumSerializer.serialize " + obj);
         
         WritableUtils.writeVInt(dOStream, obj.getValue());
     }

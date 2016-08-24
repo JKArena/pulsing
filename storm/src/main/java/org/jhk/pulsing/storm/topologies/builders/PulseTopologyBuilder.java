@@ -51,10 +51,10 @@ import org.slf4j.LoggerFactory;
  */
 public final class PulseTopologyBuilder {
     
-    private static final Logger _LOG = LoggerFactory.getLogger(PulseTopologyBuilder.class);
+    private static final Logger _LOGGER = LoggerFactory.getLogger(PulseTopologyBuilder.class);
     
     public static StormTopology build() {
-        _LOG.info("PulseTopologyBuilder.build");
+        _LOGGER.debug("PulseTopologyBuilder.build");
         
         TridentTopology topology = new TridentTopology();
         Stream stream = topology.newStream("pulse-create-spout", buildSpout())
@@ -70,7 +70,7 @@ public final class PulseTopologyBuilder {
     }
     
     private static void hdfsStatePersist(Stream stream) {
-        _LOG.info("PulseTopologyBuilder.hdfsPersistBolt");
+        _LOGGER.debug("PulseTopologyBuilder.hdfsPersistBolt");
         
         FileNameFormat fnFormat = new DefaultFileNameFormat()
                 .withPath(HadoopConstants.PAIL_NEW_DATA_WORKSPACE)

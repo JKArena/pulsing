@@ -17,7 +17,7 @@ import java.io.OutputStream;
 
 public final class ThriftSerializer implements Serializer<TBase<?, ?>> {
     
-    private static final Logger _LOG = LoggerFactory.getLogger(ThriftSerializer.class);
+    private static final Logger _LOGGER = LoggerFactory.getLogger(ThriftSerializer.class);
     
     private TIOStreamTransport sTransport;
     private TProtocol protocol;
@@ -36,7 +36,7 @@ public final class ThriftSerializer implements Serializer<TBase<?, ?>> {
     }
 
     public void serialize(TBase<?, ?> tObject) throws IOException {
-        _LOG.info("ThriftSerializer.serialize " + tObject);
+        _LOGGER.debug("ThriftSerializer.serialize " + tObject);
         
         try {
             buffer.reset();

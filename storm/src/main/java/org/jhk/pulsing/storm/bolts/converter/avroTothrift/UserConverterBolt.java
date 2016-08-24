@@ -35,15 +35,15 @@ import org.slf4j.LoggerFactory;
 public final class UserConverterBolt extends BaseBasicBolt {
     
     private static final long serialVersionUID = 5216255208403673287L;
-    private static final Logger _LOG = LoggerFactory.getLogger(UserConverterBolt.class);
+    private static final Logger _LOGGER = LoggerFactory.getLogger(UserConverterBolt.class);
     
     @Override
     public void execute(Tuple tuple, BasicOutputCollector outputCollector) {
-        _LOG.info("UserConverterBolt.execute " + tuple);
+        _LOGGER.debug("UserConverterBolt.execute " + tuple);
         
         Data uData = ConverterCommon.convertUserAvroToThrift(tuple);
         
-        _LOG.info("Converted to thrift " + uData);
+        _LOGGER.debug("Converted to thrift " + uData);
         outputCollector.emit(new Values(uData));
     }
 

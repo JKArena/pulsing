@@ -31,7 +31,7 @@ import com.backtype.support.Utils;
  * Thought about forking the github, but not sure how much I'll stick with Pail  
  */
 public class Pail<T> extends AbstractPail implements Iterable<T>{
-    public static Logger LOG = LoggerFactory.getLogger(Pail.class);
+    public static Logger _LOGGER = LoggerFactory.getLogger(Pail.class);
 
     public static final String META = "pail.meta";
 
@@ -502,7 +502,7 @@ public class Pail<T> extends AbstractPail implements Iterable<T>{
             try {
                 _fs.getFileStatus(p);
             } catch(FileNotFoundException e) {
-                LOG.info("Fixing file: " + p);
+                _LOGGER.debug("Fixing file: " + p);
                 _fs.create(p, true).close();
             }
         }
@@ -606,7 +606,7 @@ public class Pail<T> extends AbstractPail implements Iterable<T>{
             full.remove(0);
         }*/
         full = clusterCleanUp(full);
-        LOG.info("Pail.checkValidStructure " + full);
+        _LOGGER.debug("Pail.checkValidStructure " + full);
         if(!getSpec().getStructure().isValidTarget(full.toArray(new String[full.size()]))) {
             throw new IllegalArgumentException(
                     userfilename + " is not valid with the pail structure " + getSpec().toString() +
@@ -615,7 +615,7 @@ public class Pail<T> extends AbstractPail implements Iterable<T>{
     }
     
     public static List<String> clusterCleanUp(List<String> components) {
-        LOG.info("Pail.clusterCleanUp " + components.size());
+        _LOGGER.debug("Pail.clusterCleanUp " + components.size());
         
         if(components.size() <= 1) {
             return components;

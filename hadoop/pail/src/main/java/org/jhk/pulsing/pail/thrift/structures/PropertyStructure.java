@@ -39,7 +39,7 @@ import org.slf4j.LoggerFactory;
  */
 public final class PropertyStructure implements IFieldStructure {
     
-    private static final Logger _LOG = LoggerFactory.getLogger(PropertyStructure.class);
+    private static final Logger _LOGGER = LoggerFactory.getLogger(PropertyStructure.class);
     
     private TFieldIdEnum valueId;
     private Set<Short> validIds;
@@ -68,8 +68,8 @@ public final class PropertyStructure implements IFieldStructure {
     
     @Override
     public boolean isValidTarget(String[] dirs) {
-        if(_LOG.isDebugEnabled()) {
-            _LOG.debug("PropertyStructure.isValidTarget " + Arrays.asList(dirs));
+        if(_LOGGER.isDebugEnabled()) {
+            _LOGGER.debug("PropertyStructure.isValidTarget " + Arrays.asList(dirs));
         }
         
         if(dirs.length < 2) {

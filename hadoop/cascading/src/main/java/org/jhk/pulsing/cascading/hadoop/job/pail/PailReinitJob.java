@@ -38,10 +38,10 @@ import com.backtype.hadoop.pail.Pail;
  */
 public final class PailReinitJob {
     
-    private static final Logger _LOG = LoggerFactory.getLogger(PailReinitJob.class);
+    private static final Logger _LOGGER = LoggerFactory.getLogger(PailReinitJob.class);
     
     public static void main(String[] args) {
-        _LOG.info("PailReinitJob " + Arrays.toString(args));
+        _LOGGER.debug("PailReinitJob " + Arrays.toString(args));
         
         try {
             Configuration config = new Configuration();
@@ -54,7 +54,7 @@ public final class PailReinitJob {
             Pail.create(fsDefault + HadoopConstants.PAIL_MASTER_WORKSPACE, new SplitDataPailStructure());
             
         } catch (Exception exception) {
-            _LOG.error("Crud something went wrong!!!!!!!!!!");
+            _LOGGER.error("Crud something went wrong!!!!!!!!!!");
             exception.printStackTrace();
         }
         

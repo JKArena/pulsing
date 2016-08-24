@@ -37,11 +37,11 @@ import org.slf4j.LoggerFactory;
 public final class PulseDeserializerBolt extends BaseBasicBolt {
     
     private static final long serialVersionUID = 9003236874311323612L;
-    private static final Logger _LOG = LoggerFactory.getLogger(PulseDeserializerBolt.class);
+    private static final Logger _LOGGER = LoggerFactory.getLogger(PulseDeserializerBolt.class);
     
     @Override
     public void execute(Tuple tuple, BasicOutputCollector outputCollector) {
-        _LOG.debug("PulseDeserializerBolt.execute: " + tuple);
+        _LOGGER.debug("PulseDeserializerBolt.execute: " + tuple);
         
         String pulseString = tuple.getString(0);
         

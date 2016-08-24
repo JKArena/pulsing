@@ -26,9 +26,12 @@ import javax.sql.DataSource;
 
 import org.jhk.pulsing.web.dao.IPulseDao;
 import org.jhk.pulsing.web.dao.IUserDao;
+import org.jhk.pulsing.web.dao.prod.PulseDao;
 import org.jhk.pulsing.web.dao.prod.UserDao;
 import org.jhk.pulsing.web.dao.prod.db.MySqlUserDao;
-import org.jhk.pulsing.web.dao.prod.db.RedisUserDao;
+import org.jhk.pulsing.web.dao.prod.db.redis.RedisPulseDao;
+import org.jhk.pulsing.web.dao.prod.db.redis.RedisUserDao;
+import org.jhk.pulsing.web.service.prod.PulseService;
 import org.jhk.pulsing.web.service.prod.UserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -67,7 +70,7 @@ public class ProdServiceConfig implements IServiceConfig {
     @Bean
     @Override
     public IPulseService getPulseService() {
-        return new org.jhk.pulsing.web.service.dev.PulseService();
+        return new PulseService();
     }
     
     @Bean
@@ -82,6 +85,11 @@ public class ProdServiceConfig implements IServiceConfig {
     }
     
     @Bean
+    public RedisPulseDao getRedisPulseDao() {
+        return new RedisPulseDao();
+    }
+    
+    @Bean
     public MySqlUserDao getMySqlUserDao() {
         return new MySqlUserDao();
     }
@@ -89,7 +97,7 @@ public class ProdServiceConfig implements IServiceConfig {
     @Bean
     @Override
     public IPulseDao getPulseDao() {
-        return new org.jhk.pulsing.web.dao.dev.PulseDao();
+        return new PulseDao();
     }
     
     @Bean

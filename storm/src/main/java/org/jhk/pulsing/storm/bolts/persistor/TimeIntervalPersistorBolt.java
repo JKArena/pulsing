@@ -39,7 +39,7 @@ import redis.clients.jedis.Jedis;
 public final class TimeIntervalPersistorBolt extends BaseBasicBolt {
     
     private static final long serialVersionUID = -884268616402022174L;
-    private static final Logger _LOG = LoggerFactory.getLogger(TimeIntervalPersistorBolt.class);
+    private static final Logger _LOGGER = LoggerFactory.getLogger(TimeIntervalPersistorBolt.class);
     
     private Jedis _jedis;
     private ObjectMapper _objectMapper;
@@ -49,7 +49,7 @@ public final class TimeIntervalPersistorBolt extends BaseBasicBolt {
     }
     
     @Override
-    public void prepare(Map stormConf, TopologyContext context) {
+    public void prepare(@SuppressWarnings("rawtypes") Map stormConf, TopologyContext context) {
         _jedis = new Jedis(RedisConstants.REDIS_HOST, RedisConstants.REDIS_PORT);
         _jedis.auth(RedisConstants.REDIS_PASSWORD);
         _objectMapper = new ObjectMapper();
@@ -57,9 +57,11 @@ public final class TimeIntervalPersistorBolt extends BaseBasicBolt {
     
     @Override
     public void execute(Tuple tuple, BasicOutputCollector outputCollector) {
-        _LOG.debug("TimeIntervalPersistorBolt.execute: " + tuple);
+        _LOGGER.debug("TimeIntervalPersistorBolt.execute: " + tuple);
         
         long timeInterval = tuple.getLongByField(TIME_INTERVAL);
+        
+        @SuppressWarnings("unchecked")
         Map<Long, Integer> idToCounter = (Map<Long, Integer>) tuple.getValueByField(ID_COUNTER_MAP);
         
         //When displaying query from whenever-to-whenever time interval range, union and return

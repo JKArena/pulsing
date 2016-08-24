@@ -33,7 +33,7 @@ public class TextWSocketHandler extends TextWebSocketHandler {
     
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
-        _LOGGER.info("TextWSocketHandler.handleTextMessage " + message);
+        _LOGGER.debug("TextWSocketHandler.handleTextMessage " + message);
         
     }
     
