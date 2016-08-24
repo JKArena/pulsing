@@ -42,7 +42,7 @@ public class PulseService implements IPulseService {
     }
 
     @Override
-    public Result<PulseId> createPulse(Pulse pulse) {
+    public Result<Pulse> createPulse(Pulse pulse) {
         return pulseDao.createPulse(pulse);
     }
 

@@ -42,7 +42,7 @@ import org.slf4j.LoggerFactory;
 public final class TimeIntervalBuilderBolt extends BaseBasicBolt {
     
     private static final long serialVersionUID = -94783556828622026L;
-    private static final Logger _LOG = LoggerFactory.getLogger(TimeIntervalBuilderBolt.class);
+    private static final Logger _LOGGER = LoggerFactory.getLogger(TimeIntervalBuilderBolt.class);
     
     private Map<Long, Map<Long, Integer>> _timeInterval;
     private int _secondsInterval;
@@ -65,13 +65,13 @@ public final class TimeIntervalBuilderBolt extends BaseBasicBolt {
     }
     
     @Override
-    public void prepare(Map stormConf, TopologyContext context) {
+    public void prepare(@SuppressWarnings("rawtypes") Map stormConf, TopologyContext context) {
         _timeInterval = new HashMap<>();
     }
 
     @Override
     public void execute(Tuple tuple, BasicOutputCollector outputCollector) {
-        _LOG.debug("TimeIntervalBuilderBolt.execute: " + tuple);
+        _LOGGER.debug("TimeIntervalBuilderBolt.execute: " + tuple);
         
         if(isTickTuple(tuple)) {
             processTickTuple(outputCollector);

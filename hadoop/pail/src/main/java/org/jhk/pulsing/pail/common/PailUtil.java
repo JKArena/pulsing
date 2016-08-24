@@ -42,7 +42,7 @@ import org.jhk.pulsing.pail.thrift.AbstractThriftPailStructure;
  */
 public final class PailUtil {
     
-    private static final Logger _LOG = LoggerFactory.getLogger(PailUtil.class);
+    private static final Logger _LOGGER = LoggerFactory.getLogger(PailUtil.class);
     
     /**
      * Move new data to the master data
@@ -52,7 +52,7 @@ public final class PailUtil {
      * @throws IOException
      */
     public static void ingest(Pail<?> masterPail, Pail<?> newDataPail) throws IOException {
-        _LOG.info("PailUtil.ingest " + masterPail.getInstanceRoot() + " - " + newDataPail.getInstanceRoot());
+        _LOGGER.debug("PailUtil.ingest " + masterPail.getInstanceRoot() + " - " + newDataPail.getInstanceRoot());
         
         FileSystem fSystem = FileSystem.get(new Configuration());
         
@@ -91,7 +91,7 @@ public final class PailUtil {
     
     public static <T extends Comparable<T>> void writePailStructures(String path, AbstractThriftPailStructure<T> tpStructure,
                                                                         List<T> content) throws IOException {
-        _LOG.info("PailUtil.writePailStructures " + path);
+        _LOGGER.debug("PailUtil.writePailStructures " + path);
         
         Pail<T> pail = (Pail<T>) Pail.create(path, tpStructure);
         TypedRecordOutputStream out = pail.openWrite();
@@ -101,11 +101,10 @@ public final class PailUtil {
         }
         
         out.close();
-        _LOG.info("PailUtil.writePailStructures: successfully wrote " + content.size());
     }
     
     public static <T extends Comparable<T>> List<T> readPailStructures(String path, T struct) throws IOException {
-        _LOG.info("PailUtil.readPailStructures " + path + " : " + struct);
+        _LOGGER.debug("PailUtil.readPailStructures " + path + " : " + struct);
         
         List<T> entries = new LinkedList<>();
         Pail<T> pails = new Pail<T>(path);

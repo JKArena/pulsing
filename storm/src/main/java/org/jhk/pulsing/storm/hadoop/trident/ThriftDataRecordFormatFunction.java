@@ -32,16 +32,16 @@ import org.slf4j.LoggerFactory;
 public final class ThriftDataRecordFormatFunction implements RecordFormat {
     
     private static final long serialVersionUID = -4520608157589524283L;
-    private static final Logger _LOG = LoggerFactory.getLogger(ThriftDataRecordFormatFunction.class);
+    private static final Logger _LOGGER = LoggerFactory.getLogger(ThriftDataRecordFormatFunction.class);
     
     @Override
     public byte[] format(TridentTuple tuple) {
-        _LOG.info("ThriftDataRecordFormatFunction.format: " + tuple);
+        _LOGGER.debug("ThriftDataRecordFormatFunction.format: " + tuple);
         
         Data tData = (Data) tuple.getValueByField(FieldConstants.THRIFT_DATA);
         byte[] bytes = Util.serializeThriftData(tData);
         
-        _LOG.info("ThriftDataRecordFormatFunction.format serialized to bytes: " + bytes.length);
+        _LOGGER.debug("ThriftDataRecordFormatFunction.format serialized to bytes: " + bytes.length);
         return bytes;
     }
 

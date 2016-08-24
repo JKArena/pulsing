@@ -33,15 +33,15 @@ import org.slf4j.LoggerFactory;
  */
 public final class UserTopologyRunner {
     
-    private static final Logger _LOG = LoggerFactory.getLogger(UserTopologyRunner.class);
+    private static final Logger _LOGGER = LoggerFactory.getLogger(UserTopologyRunner.class);
     
     public static void main(String[] args) throws AlreadyAliveException, InvalidTopologyException, AuthorizationException {
         
         if(args == null || args.length == 0) {
-            _LOG.debug("UserTopologyRunner: running local");
+            _LOGGER.debug("UserTopologyRunner: running local");
             runLocalCluster();
         }else {
-            _LOG.debug("UserTopologyRunner: running remote");
+            _LOGGER.debug("UserTopologyRunner: running remote");
             runRemoteCluster();
         }
         

@@ -40,12 +40,14 @@ import org.slf4j.LoggerFactory;
 public final class PulseAvroFieldExtractorBolt extends BaseBasicBolt {
 
     private static final long serialVersionUID = -8825186311978632181L;
-    private static final Logger _LOG = LoggerFactory.getLogger(PulseAvroFieldExtractorBolt.class);
+    private static final Logger _LOGGER = LoggerFactory.getLogger(PulseAvroFieldExtractorBolt.class);
     
     private EnumSet<EXTRACT_FIELD> _extractFields;
     
-    private PulseAvroFieldExtractorBolt() {
+    public PulseAvroFieldExtractorBolt() {
         super();
+        
+        _extractFields = EnumSet.noneOf(EXTRACT_FIELD.class);
     }
     
     public PulseAvroFieldExtractorBolt(EnumSet<EXTRACT_FIELD> extractFields) {

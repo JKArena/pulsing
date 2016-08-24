@@ -18,12 +18,16 @@
  */
 package org.jhk.pulsing.web.dao.prod;
 
+import java.util.Collections;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import org.jhk.pulsing.serialization.avro.records.Pulse;
 import org.jhk.pulsing.serialization.avro.records.PulseId;
 import org.jhk.pulsing.web.common.Result;
 import org.jhk.pulsing.web.dao.IPulseDao;
+import org.jhk.pulsing.web.dao.prod.db.redis.RedisPulseDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
@@ -38,24 +42,27 @@ public class PulseDao implements IPulseDao {
     
     private static final Logger _LOGGER = LoggerFactory.getLogger(PulseDao.class);
     
+    @Inject
+    private RedisPulseDao redisPulseDao;
+    
     @Override
     public Result<Pulse> getPulse(PulseId pulseId) {
-        return null;
+        return new Result<Pulse>(Result.CODE.FAILURE, "dummy for now");
     }
 
     @Override
-    public Result<PulseId> createPulse(Pulse pulse) {
-        return null;
+    public Result<Pulse> createPulse(Pulse pulse) {
+        return new Result<Pulse>(Result.CODE.FAILURE, "dummy for now");
     }
 
     @Override
     public Result<PulseId> subscribePulse(Pulse pulse) {
-        return null;
+        return new Result<PulseId>(Result.CODE.FAILURE, "dummy for now");
     }
 
     @Override
     public List<Pulse> getTrendingPulse() {
-        return null;
+        return Collections.EMPTY_LIST;
     }
 
 }

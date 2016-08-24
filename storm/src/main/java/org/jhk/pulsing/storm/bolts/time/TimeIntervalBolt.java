@@ -36,7 +36,7 @@ import org.slf4j.LoggerFactory;
 public final class TimeIntervalBolt extends BaseBasicBolt {
     
     private static final long serialVersionUID = 3963343874691297355L;
-    private static final Logger _LOG = LoggerFactory.getLogger(TimeIntervalBolt.class);
+    private static final Logger _LOGGER = LoggerFactory.getLogger(TimeIntervalBolt.class);
     
     private int _secondsInterval;
     
@@ -52,7 +52,7 @@ public final class TimeIntervalBolt extends BaseBasicBolt {
 
     @Override
     public void execute(Tuple tuple, BasicOutputCollector outputCollector) {
-        _LOG.debug("TimeIntervalBolt.execute: " + tuple);
+        _LOGGER.debug("TimeIntervalBolt.execute: " + tuple);
         
         Long timeStamp = tuple.getLongByField(TIMESTAMP);
         Long id = tuple.getLongByField(ID);

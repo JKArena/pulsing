@@ -28,6 +28,8 @@ import com.datastax.driver.core.schemabuilder.SchemaBuilder;
 import com.datastax.driver.core.schemabuilder.SchemaStatement;
 
 /**
+ * Various tables created from Hadoop batch views and queried from here
+ * 
  * @author Ji Kim
  */
 @Repository
@@ -36,6 +38,7 @@ public class CassandraUserDao extends AbstractCassandraDao {
     private static final Logger _LOGGER = LoggerFactory.getLogger(CassandraUserDao.class);
     private static final String _USER_TBD_TABLE = "USER_TBD_TABLE";
     
+    /*
     @Override
     public void init() {
         super.init();
@@ -45,7 +48,7 @@ public class CassandraUserDao extends AbstractCassandraDao {
                 .addPartitionKey("id", DataType.text());
         
         getSession().execute(userSchemaStatement);
-    }
+    }*/
     
     @Override
     public void destroy() {

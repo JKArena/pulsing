@@ -13,7 +13,7 @@ import java.lang.reflect.Method;
 
 public final class EnumDeserializer implements Deserializer<TEnum> {
     
-    private static final Logger _LOG = LoggerFactory.getLogger(EnumDeserializer.class);
+    private static final Logger _LOGGER = LoggerFactory.getLogger(EnumDeserializer.class);
     
     private DataInputStream dIStream;
     private final Method findByValue;
@@ -36,7 +36,7 @@ public final class EnumDeserializer implements Deserializer<TEnum> {
     }
 
     public TEnum deserialize(TEnum obj) throws IOException {
-        _LOG.info("EnumDeserializer.deserialize " + obj);
+        _LOGGER.debug("EnumDeserializer.deserialize " + obj);
         
         try {
             int val = WritableUtils.readVInt(dIStream);

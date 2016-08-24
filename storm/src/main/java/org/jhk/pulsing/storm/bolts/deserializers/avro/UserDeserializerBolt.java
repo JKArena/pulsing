@@ -37,11 +37,11 @@ import org.slf4j.LoggerFactory;
 public final class UserDeserializerBolt extends BaseBasicBolt {
     
     private static final long serialVersionUID = 204666646818722549L;
-    private static final Logger _LOG = LoggerFactory.getLogger(UserDeserializerBolt.class);
+    private static final Logger _LOGGER = LoggerFactory.getLogger(UserDeserializerBolt.class);
     
     @Override
     public void execute(Tuple tuple, BasicOutputCollector outputCollector) {
-        _LOG.debug("UserDeserializerBolt.execute: " + tuple);
+        _LOGGER.debug("UserDeserializerBolt.execute: " + tuple);
         
         String userString = tuple.getString(0);
         

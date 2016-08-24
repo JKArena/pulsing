@@ -28,16 +28,12 @@ import org.jhk.pulsing.web.common.Result;
 import static org.jhk.pulsing.web.common.Result.CODE.*;
 import org.jhk.pulsing.web.dao.IUserDao;
 import org.jhk.pulsing.web.dao.prod.db.MySqlUserDao;
-import org.jhk.pulsing.web.dao.prod.db.RedisUserDao;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.jhk.pulsing.web.dao.prod.db.redis.RedisUserDao;
 
 /**
  * @author Ji Kim
  */
 public class UserDao implements IUserDao {
-    
-    private static final Logger _LOGGER = LoggerFactory.getLogger(UserDao.class);
     
     @Inject
     private MySqlUserDao mySqlUserDao;
@@ -47,9 +43,9 @@ public class UserDao implements IUserDao {
     
     @Override
     public Result<User> getUser(UserId userId) {
-        _LOGGER.debug("UserDao.getUser " + userId);
-        
         Result<User> result = new Result<>(FAILURE, "Unable to find " + userId);
+        //TODO: remove later as holding this data in redis useless, but for docing 
+        //for other data
         Optional<User> user = redisUserDao.getUser(userId);
         
         if(!user.isPresent()) {
@@ -65,8 +61,6 @@ public class UserDao implements IUserDao {
 
     @Override
     public Result<User> createUser(User user) {
-        _LOGGER.debug("UserDao.createUser " + user);
-        
         Result<User> result = new Result<User>(FAILURE, "Failed in creating " + user); 
         Optional<User> createdUser = mySqlUserDao.createUser(user);
         
@@ -80,8 +74,6 @@ public class UserDao implements IUserDao {
 
     @Override
     public Result<User> validateUser(String email, String password) {
-        _LOGGER.debug("UserDao.validateUser " + email + " : " + password);
-        
         Optional<User> user = mySqlUserDao.validateUser(email, password);
         
         return user.isPresent() ? new Result<User>(SUCCESS, user.get()) : new Result<User>(FAILURE, "Failed in validating " + email + " : " + password);

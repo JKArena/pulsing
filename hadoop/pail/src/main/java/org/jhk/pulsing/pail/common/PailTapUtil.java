@@ -45,7 +45,7 @@ import org.jhk.pulsing.serialization.thrift.data.DataUnit;
  */
 public final class PailTapUtil {
     
-    private static final Logger _LOG = LoggerFactory.getLogger(PailTapUtil.class);
+    private static final Logger _LOGGER = LoggerFactory.getLogger(PailTapUtil.class);
     
     /**
      * Returns reading a subset of the data within the pail
@@ -56,7 +56,7 @@ public final class PailTapUtil {
      */
     @SuppressWarnings("unchecked")
     public static PailTap attributetap(String path, final DataUnit._Fields... fields) {
-        _LOG.info("PailTapUtil.attributetap " + path + " : " + fields);
+        _LOGGER.debug("PailTapUtil.attributetap " + path + " : " + fields);
         
         PailTapOptions options = new PailTapOptions();
         
@@ -80,12 +80,12 @@ public final class PailTapUtil {
      * @throws IOException
      */
     public static Pail shred(String sourcePath, String shredPath) throws IOException {
-        _LOG.info("PailTapUtil.shred " + sourcePath + ", " + shredPath);
+        _LOGGER.debug("PailTapUtil.shred " + sourcePath + ", " + shredPath);
         
         PailTap source = new PailTap(sourcePath);
         PailTap sink = splitDataTap(shredPath);
         
-        _LOG.info("PailTapUtil.shred " + source.getPath() + " - " + sink.getPath());
+        _LOGGER.debug("PailTapUtil.shred " + source.getPath() + " - " + sink.getPath());
         Subquery reduced = new Subquery("?rand", "?data")
                 .predicate(source, "_", "?data-in")
                 .predicate(new RandLong())
@@ -108,7 +108,7 @@ public final class PailTapUtil {
      * @return
      */
     public static PailTap splitDataTap(String path) {
-        _LOG.info("PailTapUtil.splitDataTap " + path);
+        _LOGGER.debug("PailTapUtil.splitDataTap " + path);
         
         PailTapOptions options = new PailTapOptions();
         

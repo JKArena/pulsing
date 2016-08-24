@@ -33,15 +33,14 @@ import org.jhk.pulsing.storm.common.ConverterCommon;
 public final class UserConverterFunction extends BaseFunction {
     
     private static final long serialVersionUID = 2492968329072034376L;
-    private static final Logger _LOG = LoggerFactory.getLogger(UserConverterFunction.class);
+    private static final Logger _LOGGER = LoggerFactory.getLogger(UserConverterFunction.class);
     
     @Override
     public void execute(TridentTuple tuple, TridentCollector collector) {
-        _LOG.info("UserConverter.execute " + tuple);
+        _LOGGER.debug("UserConverter.execute " + tuple);
         
         Data uData = ConverterCommon.convertUserAvroToThrift(tuple);
         
-        _LOG.info("Serialized to thrift " + uData);
         collector.emit(new Values(uData));
     }
     

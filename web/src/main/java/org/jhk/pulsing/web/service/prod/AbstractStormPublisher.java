@@ -16,39 +16,34 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.storm.common;
+package org.jhk.pulsing.web.service.prod;
 
-import org.apache.thrift.TException;
-import org.apache.thrift.TSerializer;
-import org.apache.thrift.protocol.TBinaryProtocol;
-import org.jhk.pulsing.serialization.thrift.data.Data;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+
+import org.jhk.pulsing.web.publisher.Publisher;
 
 /**
  * @author Ji Kim
  */
-public final class Util {
+abstract class AbstractStormPublisher {
     
-    private static final Logger _LOGGER = LoggerFactory.getLogger(Util.class);
+    private Publisher _stormPublisher;
     
-    public static byte[] serializeThriftData(Data tData) {
-        _LOGGER.debug("Util.serializeThriftData: " + tData);
-        
-        TSerializer serializer = new TSerializer(new TBinaryProtocol.Factory());
-        byte[] bytes = new byte[0];
-        
-        try {
-            bytes = serializer.serialize(tData);
-        } catch (TException tException) {
-            tException.printStackTrace();
-        }
-        
-        return bytes;
+    protected Publisher getStormPublisher() {
+        return _stormPublisher;
     }
     
-    private Util() {
-        super();
+    @PostConstruct
+    public void init() {
+        _stormPublisher = new Publisher();
+    }
+    
+    @PreDestroy
+    public void destroy() {
+        if(_stormPublisher != null) {
+            _stormPublisher.close();
+        }
     }
     
 }

@@ -36,11 +36,11 @@ import com.esotericsoftware.kryo.io.Output;
  */
 public final class ThriftDataSerializer extends Serializer<Data> {
     
-    private static final Logger _LOG = LoggerFactory.getLogger(ThriftDataSerializer.class);
+    private static final Logger _LOGGER = LoggerFactory.getLogger(ThriftDataSerializer.class);
 
     @Override
     public Data read(Kryo kryo, Input input, Class<Data> type) {
-        _LOG.info("ThriftDataSerializer.read " + type.getName() + " - " + input.getBuffer().length);
+        _LOGGER.debug("ThriftDataSerializer.read " + type.getName() + " - " + input.getBuffer().length);
         
         TDeserializer dSerializer = new TDeserializer(new TBinaryProtocol.Factory());
         Data data = new Data();
@@ -58,7 +58,7 @@ public final class ThriftDataSerializer extends Serializer<Data> {
 
     @Override
     public void write(Kryo kryo, Output output, Data tData) {
-        _LOG.info("ThriftDataSerializer.write " + tData);
+        _LOGGER.debug("ThriftDataSerializer.write " + tData);
         
         output.write(Util.serializeThriftData(tData));
         output.flush();

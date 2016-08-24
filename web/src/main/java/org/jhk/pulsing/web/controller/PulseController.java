@@ -47,15 +47,15 @@ public class PulseController extends AbstractController {
     private IPulseService pulseService;
     
     @RequestMapping(value="/createPulse", method=RequestMethod.POST)
-    public @ResponseBody Result<PulseId> createPulse(@RequestBody Pulse pulse) {
-        _LOGGER.info("PulseController.createPulse: " + pulse);
+    public @ResponseBody Result<Pulse> createPulse(@RequestBody Pulse pulse) {
+        _LOGGER.debug("PulseController.createPulse: " + pulse);
         
         return pulseService.createPulse(pulse);
     }
     
     @RequestMapping(value="/getTrendingPulse", method=RequestMethod.GET)
     public @ResponseBody List<Pulse> getTrendingPulse() {
-        _LOGGER.info("PulseController.getTrendingPulse");
+        _LOGGER.debug("PulseController.getTrendingPulse");
         
         return pulseService.getTrendingPulse();
     }

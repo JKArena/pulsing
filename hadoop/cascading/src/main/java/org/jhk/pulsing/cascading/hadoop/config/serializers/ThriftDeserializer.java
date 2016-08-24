@@ -16,7 +16,7 @@ import java.io.InputStream;
 
 public final class ThriftDeserializer implements Deserializer<TBase<?, ?>> {
     
-    private static final Logger _LOG = LoggerFactory.getLogger(ThriftDeserializer.class);
+    private static final Logger _LOGGER = LoggerFactory.getLogger(ThriftDeserializer.class);
 
     private TBase<?, ?> prototype;
     private TIOStreamTransport sTransport;
@@ -40,7 +40,7 @@ public final class ThriftDeserializer implements Deserializer<TBase<?, ?>> {
     }
 
     public TBase<?, ?> deserialize(TBase<?, ?> tObject) throws IOException {
-        _LOG.info("ThriftDeserializer.deserialize " + tObject);
+        _LOGGER.debug("ThriftDeserializer.deserialize " + tObject);
         
         WritableUtils.readVInt(dIStream);
         TBase<?, ?> object = prototype.deepCopy();

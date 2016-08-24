@@ -31,7 +31,7 @@ public interface IPulseDao {
     
     Result<Pulse> getPulse(PulseId pulseId);
     
-    Result<PulseId> createPulse(Pulse pulse);
+    Result<Pulse> createPulse(Pulse pulse);
     
     Result<PulseId> subscribePulse(Pulse pulse);
     

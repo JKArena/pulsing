@@ -33,15 +33,15 @@ import org.slf4j.LoggerFactory;
  */
 public final class PulseTopologyRunner {
     
-    private static final Logger _LOG = LoggerFactory.getLogger(PulseTopologyRunner.class);
+    private static final Logger _LOGGER = LoggerFactory.getLogger(PulseTopologyRunner.class);
     
     public static void main(String[] args) throws AlreadyAliveException, InvalidTopologyException, AuthorizationException {
         
         if(args == null || args.length == 0) {
-            _LOG.debug("PulseTopologyRunner: running local");
+            _LOGGER.debug("PulseTopologyRunner: running local");
             runLocalCluster();
         }else {
-            _LOG.debug("PulseTopologyRunner: running remote");
+            _LOGGER.debug("PulseTopologyRunner: running remote");
             runRemoteCluster();
         }
         

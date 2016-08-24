@@ -16,39 +16,38 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.storm.common;
+package org.jhk.pulsing.web.dao.prod.db;
 
-import org.apache.thrift.TException;
-import org.apache.thrift.TSerializer;
-import org.apache.thrift.protocol.TBinaryProtocol;
-import org.jhk.pulsing.serialization.thrift.data.Data;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
+
+import org.jhk.pulsing.shared.util.RedisConstants;
+
+import redis.clients.jedis.Jedis;
 
 /**
  * @author Ji Kim
  */
-public final class Util {
+public abstract class AbstractRedisDao {
     
-    private static final Logger _LOGGER = LoggerFactory.getLogger(Util.class);
+    private Jedis _jedis;
     
-    public static byte[] serializeThriftData(Data tData) {
-        _LOGGER.debug("Util.serializeThriftData: " + tData);
-        
-        TSerializer serializer = new TSerializer(new TBinaryProtocol.Factory());
-        byte[] bytes = new byte[0];
-        
-        try {
-            bytes = serializer.serialize(tData);
-        } catch (TException tException) {
-            tException.printStackTrace();
+    protected Jedis getJedis() {
+        return _jedis;
+    }
+    
+    @PostConstruct
+    public void init() {
+        _jedis = new Jedis(RedisConstants.REDIS_HOST, RedisConstants.REDIS_PORT);
+        _jedis.auth(RedisConstants.REDIS_PASSWORD);
+    }
+    
+    @PreDestroy
+    public void destroy() {
+        if(_jedis != null && _jedis.isConnected()) {
+            _jedis.flushAll();
+            _jedis.quit();
         }
-        
-        return bytes;
     }
-    
-    private Util() {
-        super();
-    }
-    
+
 }

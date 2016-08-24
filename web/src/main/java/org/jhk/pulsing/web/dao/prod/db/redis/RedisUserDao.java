@@ -16,40 +16,34 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.web.dao.prod.db;
+package org.jhk.pulsing.web.dao.prod.db.redis;
 
 import java.io.IOException;
 import java.util.Optional;
-
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 
 import org.jhk.pulsing.serialization.avro.records.User;
 import org.jhk.pulsing.serialization.avro.records.UserId;
 import org.jhk.pulsing.serialization.avro.serializers.SerializationHelper;
 import org.jhk.pulsing.shared.util.RedisConstants;
+import org.jhk.pulsing.web.dao.prod.db.AbstractRedisDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import static org.jhk.pulsing.shared.util.RedisConstants.REDIS_KEY.*;
 import org.springframework.stereotype.Repository;
 
-import redis.clients.jedis.Jedis;
-
 /**
  * @author Ji Kim
  */
 @Repository
-public class RedisUserDao {
+public class RedisUserDao extends AbstractRedisDao {
     
     private static final Logger _LOGGER = LoggerFactory.getLogger(RedisUserDao.class);
-    
-    private Jedis _jedis;
     
     public Optional<User> getUser(UserId userId) {
         _LOGGER.debug("RedisUserDao.getUser " + userId);
         
-        String userJson = _jedis.get(USER_.toString() + userId.getId());
+        String userJson = getJedis().get(USER_.toString() + userId.getId());
         Optional<User> user = Optional.empty();
         
         if(userJson != null) {
@@ -70,27 +64,13 @@ public class RedisUserDao {
         
         try {
             String userJson = SerializationHelper.serializeAvroTypeToJSONString(user);
-            _jedis.setex(USER_.toString() + user.getId().getId(), RedisConstants.CACHE_EXPIRE_DAY, userJson);            
+            getJedis().setex(USER_.toString() + user.getId().getId(), RedisConstants.CACHE_EXPIRE_DAY, userJson);            
             oUser = Optional.of(user);
         } catch (IOException sException) {
             sException.printStackTrace();
         }
         
-        return Optional.empty();
-    }
-    
-    @PostConstruct
-    public void init() {
-        _jedis = new Jedis(RedisConstants.REDIS_HOST, RedisConstants.REDIS_PORT);
-        _jedis.auth(RedisConstants.REDIS_PASSWORD);
-    }
-    
-    @PreDestroy
-    public void destroy() {
-        if(_jedis != null && _jedis.isConnected()) {
-            _jedis.flushAll();
-            _jedis.quit();
-        }
+        return oUser;
     }
     
 }

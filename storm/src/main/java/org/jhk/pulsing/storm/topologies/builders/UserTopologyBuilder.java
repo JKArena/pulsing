@@ -49,10 +49,10 @@ import org.slf4j.LoggerFactory;
  */
 public final class UserTopologyBuilder {
     
-    private static final Logger _LOG = LoggerFactory.getLogger(UserTopologyBuilder.class);
+    private static final Logger _LOGGER = LoggerFactory.getLogger(UserTopologyBuilder.class);
     
     public static StormTopology build() {
-        _LOG.info("UserTopologyBuilder.build");
+        _LOGGER.debug("UserTopologyBuilder.build");
         
         TopologyBuilder builder = new TopologyBuilder();
         builder.setSpout("user-create-spout", buildSpout());
@@ -61,18 +61,18 @@ public final class UserTopologyBuilder {
                 .setNumTasks(2) //num tasks is number of instances of this bolt
                 .shuffleGrouping("user-create-spout");
         
-        builder.setBolt("user-avor-thrift-converter", new UserConverterBolt(), 2)
+        builder.setBolt("user-avro-thrift-converter", new UserConverterBolt(), 2)
                 .setNumTasks(2)
                 .shuffleGrouping("user-avro-deserialize");
         
         builder.setBolt("user-pail-data-persistor", new PailDataPersistorBolt(HadoopConstants.PAIL_NEW_DATA_PATH.USER), 2)
                 .setNumTasks(2)
-                .shuffleGrouping("user-avor-thrift-converter");
+                .shuffleGrouping("user-avro-thrift-converter");
         
         /*
         builder.setBolt("user-hdfs", hdfsBolt(), 2)
                 .setNumTasks(2)
-                .shuffleGrouping("user-avor-thrift-converter");
+                .shuffleGrouping("user-avro-thrift-converter");
         */
         
         return builder.createTopology();

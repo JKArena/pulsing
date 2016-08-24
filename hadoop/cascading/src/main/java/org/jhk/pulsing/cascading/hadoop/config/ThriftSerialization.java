@@ -19,7 +19,7 @@ import cascading.tuple.Comparison;
 
 public final class ThriftSerialization implements Serialization, Comparison {
     
-    private static final Logger _LOG = LoggerFactory.getLogger(ThriftSerialization.class);
+    private static final Logger _LOGGER = LoggerFactory.getLogger(ThriftSerialization.class);
     
     @Override
     public boolean accept(Class clazz) {
@@ -30,7 +30,7 @@ public final class ThriftSerialization implements Serialization, Comparison {
     public Deserializer getDeserializer(Class clazz) {
         boolean iTBase = isTBase(clazz);
         
-        _LOG.info("ThriftSerialization.getDeserializer : " + clazz.getName() + " : " + iTBase);
+        _LOGGER.debug("ThriftSerialization.getDeserializer : " + clazz.getName() + " : " + iTBase);
         return iTBase ? new ThriftDeserializer(clazz) : new EnumDeserializer(clazz);
     }
 
@@ -38,13 +38,13 @@ public final class ThriftSerialization implements Serialization, Comparison {
     public Serializer getSerializer(Class clazz) {
         boolean iTBase = isTBase(clazz);
         
-        _LOG.info("ThriftSerialization.getSerializer : " + clazz.getName() + " : " + iTBase);
+        _LOGGER.debug("ThriftSerialization.getSerializer : " + clazz.getName() + " : " + iTBase);
         return iTBase ? new ThriftSerializer() : new EnumSerializer();
     }
 
     @Override
     public Comparator getComparator(Class type) {
-        _LOG.info("ThriftSerialization.getComparator " + type.getName());
+        _LOGGER.debug("ThriftSerialization.getComparator " + type.getName());
         return new ThriftComparator(type);
     }
     
