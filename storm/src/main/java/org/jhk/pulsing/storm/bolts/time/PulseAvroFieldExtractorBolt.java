@@ -121,7 +121,7 @@ public final class PulseAvroFieldExtractorBolt extends BaseBasicBolt {
     
     @Override
     public void execute(Tuple tuple, BasicOutputCollector outputCollector) {
-        _LOG.info("PulseAvroFieldExtractorBolt.execute: " + tuple);
+        _LOGGER.info("PulseAvroFieldExtractorBolt.execute: " + tuple);
         
         Pulse pulse = (Pulse) tuple.getValueByField(FieldConstants.AVRO_PULSE);
         
@@ -143,7 +143,7 @@ public final class PulseAvroFieldExtractorBolt extends BaseBasicBolt {
            fields.add(field.getField()); 
         });
         
-        _LOG.info("PulseAvroFieldExtractorBolt.declareOutputFields: " + fields);
+        _LOGGER.info("PulseAvroFieldExtractorBolt.declareOutputFields: " + fields);
         
         fieldsDeclarer.declare(new Fields(fields));
     }

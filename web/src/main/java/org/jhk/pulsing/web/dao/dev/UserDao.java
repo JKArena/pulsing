@@ -67,12 +67,10 @@ public class UserDao implements IUserDao {
     }
 
     @Override
-    public Result<User> getUser(UserId userId) {
+    public Optional<User> getUser(UserId userId) {
         User user = _MOCKED_USERS.get(userId);
-        Result<User> gResult = user == null ? new Result<User>(FAILURE, "Failed to get user " + userId) :
-            new Result<User>(SUCCESS, user);
         
-        return gResult;
+        return Optional.ofNullable(user);
     }
 
     @Override
@@ -82,7 +80,7 @@ public class UserDao implements IUserDao {
                 .findAny();
         
         if(findUser.isPresent()) {
-            return new Result<User>(FAILURE, "User with the email already exists " + userSubmitted.getName());
+            return new Result<>(FAILURE, "User with the email already exists " + userSubmitted.getName());
         }
         
         UserId userId = UserId.newBuilder().build();
@@ -91,17 +89,16 @@ public class UserDao implements IUserDao {
         userSubmitted.setId(userId);
         _MOCKED_USERS.put(userId, userSubmitted);
         
-        return new Result<User>(SUCCESS, userSubmitted);
+        return new Result<>(SUCCESS, userSubmitted);
     }
     
-    @Override
-    public Result<User> validateUser(String email, String password) {
+    public static Result<User> validateUser(String email, String password) {
         Optional<User> filteredUser = _MOCKED_USERS.values().stream()
             .filter(user -> { return user.getEmail().toString().equals(email) && user.getPassword().toString().equals(password);})
             .findAny();
         
-        return filteredUser.isPresent() ? new Result<User>(SUCCESS, filteredUser.get()) : 
-                new Result<User>(FAILURE, "Failed to validate with " + email + ":" + password);
+        return filteredUser.isPresent() ? new Result<>(SUCCESS, filteredUser.get()) : 
+                new Result<>(FAILURE, "Failed to validate with " + email + ":" + password);
     }
     
 }

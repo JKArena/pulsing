@@ -18,15 +18,17 @@
  */
 package org.jhk.pulsing.web.dao.dev;
 
+import static org.jhk.pulsing.web.common.Result.CODE.SUCCESS;
+
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import org.jhk.pulsing.serialization.avro.records.Pulse;
 import org.jhk.pulsing.serialization.avro.records.PulseId;
 import org.jhk.pulsing.web.common.Result;
-import static org.jhk.pulsing.web.common.Result.CODE.*;
 import org.jhk.pulsing.web.dao.IPulseDao;
 
 /**
@@ -34,7 +36,8 @@ import org.jhk.pulsing.web.dao.IPulseDao;
  */
 public class PulseDao implements IPulseDao {
     
-    private static final List<Pulse> MOCK_TRENDING_PULSES = new LinkedList<>();
+    public static final List<Pulse> MOCK_TRENDING_PULSES = new LinkedList<>();
+    
     private static final ConcurrentMap<PulseId, Pulse> MOCK_PULSE_MAPPER = new ConcurrentHashMap<>();
     
     static {
@@ -61,31 +64,17 @@ public class PulseDao implements IPulseDao {
     }
 
     @Override
-    public Result<Pulse> getPulse(PulseId pulseId) {
+    public Optional<Pulse> getPulse(PulseId pulseId) {
         Pulse pulse = MOCK_PULSE_MAPPER.get(pulseId);
-        Result<Pulse> gResult = pulse == null ? new Result<>(FAILURE, "Failed to get pulse " + pulseId) 
-                : new Result<Pulse>(SUCCESS, pulse);
         
-        return gResult;
+        return Optional.ofNullable(pulse);
     }
 
     @Override
     public Result<Pulse> createPulse(Pulse pulse) {
         MOCK_PULSE_MAPPER.put(pulse.getId(), pulse);
         
-        Result<Pulse> cResult = new Result<>(SUCCESS, pulse);
-        return cResult;
-    }
-
-    @Override
-    public Result<PulseId> subscribePulse(Pulse pulse) {
-        Result<PulseId> sResult = new Result<>(SUCCESS, pulse.getId());
-        return sResult;
-    }
-    
-    @Override
-    public List<Pulse> getTrendingPulse() {
-        return MOCK_TRENDING_PULSES;
+        return new Result<>(SUCCESS, (pulse));
     }
     
 }

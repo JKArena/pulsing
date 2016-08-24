@@ -94,10 +94,10 @@ public abstract class AbstractCassandraDao {
         if(!_INIT_LOGGER.contains(cName)) {
             _INIT_LOGGER.add(cName);
             
-            _LOGGER.info(getClass().getName() + " - Connected to " + cName);
+            _LOGGER.debug(getClass().getName() + " - Connected to " + cName);
             
             for(Host host : mData.getAllHosts()) {
-                _LOGGER.info("Data Center : " + host.getDatacenter() + ", Rack: " + host.getRack() + ", Host: " + host.getAddress());
+                _LOGGER.debug("Data Center : " + host.getDatacenter() + ", Rack: " + host.getRack() + ", Host: " + host.getAddress());
             }
         }
     }
