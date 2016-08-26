@@ -18,7 +18,8 @@
  */
 package org.jhk.pulsing.web.service.dev;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.inject.Inject;
@@ -59,8 +60,15 @@ public class PulseService implements IPulseService {
     }
 
     @Override
-    public List<Pulse> getTrendingPulse() {
-        return PulseDao.MOCK_TRENDING_PULSES;
+    public Map<Long, String> getTrendingPulseSubscriptions(int numMinutes) {
+        Map<Long, String> entries = new HashMap<>();
+        
+        PulseDao.MOCK_TRENDING_PULSE_SUBSCRIPTIONS.stream()
+            .forEach(pulse -> {
+                entries.put(pulse.getId().getId(), pulse.getValue().toString());
+            });
+        
+        return entries;
     }
     
 }

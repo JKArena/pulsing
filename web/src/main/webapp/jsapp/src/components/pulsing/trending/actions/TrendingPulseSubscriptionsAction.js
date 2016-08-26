@@ -24,25 +24,23 @@
 
 import Fetch from '../../../../common/Fetch';
 
-const GET_TRENDING_PULSE_PATH = 'pulse/getTrendingPulse';
+const GET_TRENDING_PULSE_SUBSCRIPTIONS_PATH = 'pulse/getTrendingPulseSubscriptions';
 
-const TrendingPulseAction = Object.freeze(Object.create(null, {
+const TrendingPulseSubscriptionsAction = Object.freeze(Object.create(null, {
 
-  'getTrendingPulse': {
+  'getTrendingPulseSubscriptions': {
     get: function() {
 
       return new Promise(function(resolve, reject) {
 
-        Fetch.GET_JSON(GET_TRENDING_PULSE_PATH)
+        Fetch.GET_JSON(GET_TRENDING_PULSE_SUBSCRIPTIONS_PATH)
           .then(function(json) {
-            console.debug('gotTrendingPulse', json);
+            console.debug('gotTrendingPulseSubscriptions', json);
             //when making subsequent rest calls for Pulse, create PulseId from the long values
             let trending = new Map();
 
-            json.forEach(pulseStr => {
-              let pulse = JSON.parse(pulseStr);
-
-              trending.set(pulse.id.id.long, pulse.value.string);
+            Object.keys(json).forEach(id => {
+              trending.set(id, json[id]);
             });
 
             resolve(trending);
@@ -61,4 +59,4 @@ const TrendingPulseAction = Object.freeze(Object.create(null, {
 
 }));
 
-export default TrendingPulseAction;
+export default TrendingPulseSubscriptionsAction;

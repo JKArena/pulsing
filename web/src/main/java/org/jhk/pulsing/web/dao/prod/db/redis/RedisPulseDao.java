@@ -19,9 +19,11 @@
 package org.jhk.pulsing.web.dao.prod.db.redis;
 
 import java.util.Optional;
+import java.util.Set;
 
 import org.jhk.pulsing.serialization.avro.records.Pulse;
 import org.jhk.pulsing.serialization.avro.records.PulseId;
+import org.jhk.pulsing.shared.util.RedisConstants;
 import org.jhk.pulsing.web.common.Result;
 import static org.jhk.pulsing.web.common.Result.CODE.*;
 import org.jhk.pulsing.web.dao.IPulseDao;
@@ -38,6 +40,7 @@ public class RedisPulseDao extends AbstractRedisDao
                             implements IPulseDao {
     
     private static final Logger _LOGGER = LoggerFactory.getLogger(RedisPulseDao.class);
+    private static final int _LIMIT = 100;
     
     @Override
     public Optional<Pulse> getPulse(PulseId pulseId) {
@@ -51,6 +54,14 @@ public class RedisPulseDao extends AbstractRedisDao
         _LOGGER.debug("RedisPulseDao.createPulse: " + pulse);
         
         return new Result<>(FAILURE, "dummy");
+    }
+    
+    public Optional<Set<String>> getTrendingPulse(long brEpoch, long cEpoch) {
+        _LOGGER.debug("RedisPulseDao.getTrendingPulse: " + brEpoch + " - " + cEpoch);
+        
+        Set<String> result = getJedis().zrangeByScore(RedisConstants.REDIS_KEY.SUBSCRIBE_PULSE_.toString(), brEpoch, cEpoch, 0, _LIMIT);
+        _LOGGER.debug("RedisPulseDao.getTrendingPulse.queryResult: " + result.size());
+        return Optional.ofNullable(result);
     }
     
 }

@@ -43,9 +43,12 @@ public final class TimeIntervalPersistorBolt extends BaseBasicBolt {
     
     private Jedis _jedis;
     private ObjectMapper _objectMapper;
+    private String _redisZKey;
     
-    public TimeIntervalPersistorBolt() {
+    public TimeIntervalPersistorBolt(String redisZKey) {
         super();
+        
+        _redisZKey = redisZKey;
     }
     
     @Override
@@ -60,14 +63,12 @@ public final class TimeIntervalPersistorBolt extends BaseBasicBolt {
         _LOGGER.debug("TimeIntervalPersistorBolt.execute: " + tuple);
         
         long timeInterval = tuple.getLongByField(TIME_INTERVAL);
-        
-        @SuppressWarnings("unchecked")
-        Map<Long, Integer> idToCounter = (Map<Long, Integer>) tuple.getValueByField(ID_COUNTER_MAP);
+        Object obj = tuple.getValueByField(TIME_INTERVAL_VALUE_COUNTER_MAP);
         
         //When displaying query from whenever-to-whenever time interval range, union and return
         try {
-            String timeIntervalSubscription = _objectMapper.writeValueAsString(idToCounter);
-            _jedis.zadd(RedisConstants.REDIS_KEY.SUBSCRIBE_PULSE_.toString(), (double) timeInterval, timeIntervalSubscription);
+            String timeIntervalSubscription = _objectMapper.writeValueAsString(obj);
+            _jedis.zadd(_redisZKey, (double) timeInterval, timeIntervalSubscription);
         } catch (Exception writeException) {
             writeException.printStackTrace();
         }

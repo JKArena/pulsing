@@ -19,6 +19,8 @@
 package org.jhk.pulsing.storm.bolts.time;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.storm.Config;
@@ -44,7 +46,7 @@ public final class TimeIntervalBuilderBolt extends BaseBasicBolt {
     private static final long serialVersionUID = -94783556828622026L;
     private static final Logger _LOGGER = LoggerFactory.getLogger(TimeIntervalBuilderBolt.class);
     
-    private Map<Long, Map<Long, Integer>> _timeInterval;
+    private Map<Long, Map<String, Integer>> _timeInterval;
     private int _secondsInterval;
     
     public TimeIntervalBuilderBolt() {
@@ -96,32 +98,36 @@ public final class TimeIntervalBuilderBolt extends BaseBasicBolt {
     private void processTickTuple(BasicOutputCollector outputCollector) {
         
         long currTimeInterval = Util.getTimeInterval(System.nanoTime(), _secondsInterval);
+        List<Long> toRemoveTI = new LinkedList<>();
         
         _timeInterval.keySet().stream()
             .filter(entryTI -> (entryTI <= currTimeInterval))
             .forEach(filteredTI -> {
                 //the entry is past the current interval so emit them
-                Map<Long, Integer> idValueCounter = _timeInterval.remove(filteredTI);
-                outputCollector.emit(new Values(filteredTI, idValueCounter));
+                toRemoveTI.add(filteredTI);
+                Map<String, Integer> tIValueCounter = _timeInterval.get(filteredTI);
+                outputCollector.emit(new Values(filteredTI, tIValueCounter));
             });
         
+        toRemoveTI.stream()
+            .forEach(entry -> { _timeInterval.remove(entry); });
     }
     
     private void processTimeIntervalValue(Tuple tuple, Long timeInterval) {
-        Long id = tuple.getLongByField(ID);
+        String tIValue = tuple.getStringByField(TIME_INTERVAL_VALUE);
         
-        Map<Long, Integer> count = _timeInterval.get(timeInterval);
+        Map<String, Integer> count = _timeInterval.get(timeInterval);
         if(count == null) {
             count = new HashMap<>();
             _timeInterval.put(timeInterval, count);
         }
         
-        count.compute(id, (key, oldValue) -> oldValue == null ? 1 : oldValue + 1);
+        count.compute(tIValue, (key, oldValue) -> oldValue == null ? 1 : oldValue + 1);
     }
     
     @Override
     public void declareOutputFields(OutputFieldsDeclarer fieldsDeclarer) {
-        fieldsDeclarer.declare(new Fields(TIME_INTERVAL, ID_COUNTER_MAP));
+        fieldsDeclarer.declare(new Fields(TIME_INTERVAL, TIME_INTERVAL_VALUE_COUNTER_MAP));
     }
     
 }
