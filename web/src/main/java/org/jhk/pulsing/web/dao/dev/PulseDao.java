@@ -36,7 +36,7 @@ import org.jhk.pulsing.web.dao.IPulseDao;
  */
 public class PulseDao implements IPulseDao {
     
-    public static final List<Pulse> MOCK_TRENDING_PULSES = new LinkedList<>();
+    public static final List<Pulse> MOCK_TRENDING_PULSE_SUBSCRIPTIONS = new LinkedList<>();
     
     private static final ConcurrentMap<PulseId, Pulse> MOCK_PULSE_MAPPER = new ConcurrentHashMap<>();
     
@@ -50,7 +50,7 @@ public class PulseDao implements IPulseDao {
         pulse.setId(pulseId);
         
         MOCK_PULSE_MAPPER.put(pulseId, pulse);
-        MOCK_TRENDING_PULSES.add(pulse);
+        MOCK_TRENDING_PULSE_SUBSCRIPTIONS.add(pulse);
         
         pulseId = PulseId.newBuilder().build();
         pulseId.setId(5678L);
@@ -60,7 +60,7 @@ public class PulseDao implements IPulseDao {
         pulse.setId(pulseId);
         
         MOCK_PULSE_MAPPER.put(pulseId, pulse);
-        MOCK_TRENDING_PULSES.add(pulse);
+        MOCK_TRENDING_PULSE_SUBSCRIPTIONS.add(pulse);
     }
 
     @Override

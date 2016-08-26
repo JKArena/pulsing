@@ -56,14 +56,22 @@ public final class TimeIntervalBolt extends BaseBasicBolt {
         
         Long timeStamp = tuple.getLongByField(TIMESTAMP);
         Long id = tuple.getLongByField(ID);
+        Object value = tuple.getValueByField(VALUE);
+        
+        StringBuilder builder = new StringBuilder();
+        builder.append(id);
+        if(value != null) {
+            builder.append(TIME_INTERVAL_DELIM);
+            builder.append(value);
+        }
         
         outputCollector.emit(new Values(Util.getTimeInterval(timeStamp, _secondsInterval),
-                                        id));
+                                builder.toString()));
     }
 
     @Override
     public void declareOutputFields(OutputFieldsDeclarer fieldsDeclarer) {
-        fieldsDeclarer.declare(new Fields(TIME_INTERVAL, ID));
+        fieldsDeclarer.declare(new Fields(TIME_INTERVAL, TIME_INTERVAL_VALUE));
     }
     
 }

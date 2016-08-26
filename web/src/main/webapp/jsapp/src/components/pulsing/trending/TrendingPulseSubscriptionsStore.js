@@ -24,11 +24,11 @@
 
 import {EventEmitter} from 'events';
 
-import TrendingPulseAction from './actions/TrendingPulseAction';
+import TrendingPulseSubscriptionsAction from './actions/TrendingPulseSubscriptionsAction';
 
 const FETCHED_EVENT = 'fetched';
 
-class TrendingPulseStore extends EventEmitter {
+class TrendingPulseSubscriptionsStore extends EventEmitter {
   
   emitFetched(trending) {
     this.emit(FETCHED_EVENT, trending);
@@ -44,7 +44,7 @@ class TrendingPulseStore extends EventEmitter {
   
   fetchTrending() {
     
-    TrendingPulseAction.getTrendingPulse
+    TrendingPulseSubscriptionsAction.getTrendingPulseSubscriptions
       .then(function(trending) {
         
         this.emitFetched(trending);
@@ -54,4 +54,4 @@ class TrendingPulseStore extends EventEmitter {
   
 }
 
-export default TrendingPulseStore;
+export default TrendingPulseSubscriptionsStore;

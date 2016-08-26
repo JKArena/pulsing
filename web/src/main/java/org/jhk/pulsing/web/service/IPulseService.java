@@ -18,7 +18,7 @@
  */
 package org.jhk.pulsing.web.service;
 
-import java.util.List;
+import java.util.Map;
 
 import org.jhk.pulsing.serialization.avro.records.Pulse;
 import org.jhk.pulsing.serialization.avro.records.PulseId;
@@ -35,6 +35,6 @@ public interface IPulseService {
     
     Result<PulseId> subscribePulse(Pulse pulse);
     
-    List<Pulse> getTrendingPulse();
+    Map<Long, String> getTrendingPulseSubscriptions(int numMinutes);
     
 }

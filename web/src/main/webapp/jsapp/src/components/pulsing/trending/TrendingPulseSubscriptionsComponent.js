@@ -22,18 +22,18 @@
  */
 'use strict';
 
-require('./TrendingPulse.scss');
+require('./TrendingPulseSubscriptions.scss');
 
 import {Grid, Row, Col, Thumbnail, Button, Badge} from 'react-bootstrap';
 import React, {Component} from 'react';
-import TrendingPulseStore from './TrendingPulseStore';
+import TrendingPulseSubscriptionsStore from './TrendingPulseSubscriptionsStore';
 import WebSockets from '../../../common/WebSockets';
 import {TOPICS, API} from '../../../common/PubSub';
 import Storage from '../../../common/Storage';
 
 let _trending = new Map();
 
-class TrendingPulseComponent extends Component {
+class TrendingPulseSubscriptionsComponent extends Component {
   
   constructor(props) {
     super(props);
@@ -44,7 +44,7 @@ class TrendingPulseComponent extends Component {
   componentDidMount() {
     console.debug('mounted');
     
-    this.store = new TrendingPulseStore();
+    this.store = new TrendingPulseSubscriptionsStore();
     this.store.addFetchedListener(this._onFetched.bind(this));
     this.store.fetchTrending();
     
@@ -78,7 +78,8 @@ class TrendingPulseComponent extends Component {
     let user = Storage.user;
     
     console.debug('handleSubscribe', evt.target.id, user.id);
-    this.ws.send('/pulsingSocket/pulseSubscribeSocketJS', {}, JSON.stringify({pulseId: evt.target.id, userId: user.id.id}));
+    this.ws.send('/pulsingSocket/pulseSubscribeSocketJS', {}, 
+                  JSON.stringify({pulseId: evt.target.id, userId: user.id.id}));
   }
   
   _onAuth(auth) {
@@ -138,9 +139,9 @@ class TrendingPulseComponent extends Component {
   
 }
 
-TrendingPulseComponent.displayName = 'TrendingPulseComponent';
+TrendingPulseSubscriptionsComponent.displayName = 'TrendingPulseSubscriptionsComponent';
 
-TrendingPulseComponent.propTypes = {};
-TrendingPulseComponent.defaultProps = {};
+TrendingPulseSubscriptionsComponent.propTypes = {};
+TrendingPulseSubscriptionsComponent.defaultProps = {};
 
-export default TrendingPulseComponent;
+export default TrendingPulseSubscriptionsComponent;

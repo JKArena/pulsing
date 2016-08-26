@@ -18,12 +18,11 @@
  */
 package org.jhk.pulsing.web.controller;
 
-import java.util.List;
+import java.util.Map;
 
 import javax.inject.Inject;
 
 import org.jhk.pulsing.serialization.avro.records.Pulse;
-import org.jhk.pulsing.serialization.avro.records.PulseId;
 import org.jhk.pulsing.web.common.Result;
 import org.jhk.pulsing.web.service.IPulseService;
 import org.slf4j.Logger;
@@ -54,10 +53,10 @@ public class PulseController extends AbstractController {
     }
     
     @RequestMapping(value="/getTrendingPulse", method=RequestMethod.GET)
-    public @ResponseBody List<Pulse> getTrendingPulse() {
+    public @ResponseBody Map<Long, String> getTrendingPulse() {
         _LOGGER.debug("PulseController.getTrendingPulse");
         
-        return pulseService.getTrendingPulse();
+        return pulseService.getTrendingPulseSubscriptions(10);
     }
     
 }

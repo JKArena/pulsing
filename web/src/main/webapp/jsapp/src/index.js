@@ -28,7 +28,7 @@ import {render} from 'react-dom';
 import {Router, Route, IndexRoute, browserHistory} from 'react-router';
 
 import App from './components/App';
-import TrendingPulseComponent from './components/pulsing/trending/TrendingPulseComponent';
+import TrendingPulseSubscriptionsComponent from './components/pulsing/trending/TrendingPulseSubscriptionsComponent';
 
 import SignupComponent from './components/signup/SignupComponent';
 import LoginComponent from './components/login/LoginComponent';
@@ -37,7 +37,7 @@ import LoginComponent from './components/login/LoginComponent';
 render((
   <Router history={browserHistory}>
     <Route path='/' component={App}>
-      <IndexRoute component={TrendingPulseComponent} />
+      <IndexRoute component={TrendingPulseSubscriptionsComponent} />
       <Route path='signup' component={SignupComponent} />
       <Route path='login' component={LoginComponent} />
     </Route>

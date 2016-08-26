@@ -34,7 +34,9 @@ public final class FieldConstants {
     public static final String ACTION = "ACTION";
     
     public static final String TIME_INTERVAL = "TIME_INTERVAL";
-    public static final String ID_COUNTER_MAP = "ID_COUNTER_MAP";
+    public static final String TIME_INTERVAL_VALUE = "TIME_INTERVAL_VALUE";
+    public static final String TIME_INTERVAL_DELIM = ":";
+    public static final String TIME_INTERVAL_VALUE_COUNTER_MAP = "TIME_INTERVAL_VALUE_COUNTER_MAP";
     
     public static final String THRIFT_DATA = "THRIFT_DATA";
     

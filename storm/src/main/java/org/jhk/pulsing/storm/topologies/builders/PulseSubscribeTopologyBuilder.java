@@ -37,6 +37,7 @@ import org.jhk.pulsing.storm.bolts.time.TimeIntervalBolt;
 import org.jhk.pulsing.storm.bolts.time.TimeIntervalBuilderBolt;
 import org.jhk.pulsing.storm.common.FieldConstants;
 import org.jhk.pulsing.shared.util.CommonConstants;
+import org.jhk.pulsing.shared.util.RedisConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,7 +59,7 @@ public final class PulseSubscribeTopologyBuilder {
                 .shuffleGrouping("pulse-subscribe-spout");
         
         builder.setBolt("pulse-avro-id-timestamp-extractor", 
-                new PulseAvroFieldExtractorBolt(EnumSet.of(EXTRACT_FIELD.TIMESTAMP, EXTRACT_FIELD.ID)), 4)
+                new PulseAvroFieldExtractorBolt(EnumSet.of(EXTRACT_FIELD.TIMESTAMP, EXTRACT_FIELD.ID, EXTRACT_FIELD.VALUE)), 4)
                 .setNumTasks(2)
                 .shuffleGrouping("pulse-subscribe-spout");
         
@@ -71,7 +72,8 @@ public final class PulseSubscribeTopologyBuilder {
                 .fieldsGrouping("pulse-subscribe-interval-extractor", 
                                 new Fields(FieldConstants.TIME_INTERVAL));
         
-        builder.setBolt("pulse-subscribe-interval-persistor", new TimeIntervalPersistorBolt())
+        builder.setBolt("pulse-subscribe-interval-persistor", 
+                new TimeIntervalPersistorBolt(RedisConstants.REDIS_KEY.SUBSCRIBE_PULSE_.toString()))
                 .shuffleGrouping("pulse-subscribe-interval-builder");
         
         return builder.createTopology();

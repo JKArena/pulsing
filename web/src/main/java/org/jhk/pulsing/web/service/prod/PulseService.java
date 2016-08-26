@@ -18,9 +18,14 @@
  */
 package org.jhk.pulsing.web.service.prod;
 
-import java.util.Collections;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.Optional;
+import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -31,8 +36,13 @@ import org.jhk.pulsing.web.common.Result;
 import static org.jhk.pulsing.web.common.Result.CODE.*;
 import org.jhk.pulsing.web.dao.prod.db.redis.RedisPulseDao;
 import org.jhk.pulsing.web.service.IPulseService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * @author Ji Kim
@@ -42,8 +52,15 @@ import org.springframework.transaction.annotation.Transactional;
 public class PulseService extends AbstractStormPublisher 
                             implements IPulseService {
     
+    private static final Logger _LOGGER = LoggerFactory.getLogger(PulseService.class);
+    
+    private static final TypeReference<HashMap<String, Integer>> _TRENDING_PULSE_SUBSCRIPTION_TYPE_REF = 
+            new TypeReference<HashMap<String, Integer>>(){};
+    
     @Inject
     private RedisPulseDao redisPulseDao;
+    
+    private ObjectMapper _objectMapper = new ObjectMapper();
 
     @Override
     public Result<Pulse> getPulse(PulseId pulseId) {
@@ -71,8 +88,33 @@ public class PulseService extends AbstractStormPublisher
     }
 
     @Override
-    public List<Pulse> getTrendingPulse() {
-        return Collections.EMPTY_LIST;
+    public Map<Long, String> getTrendingPulseSubscriptions(int numMinutes) {
+        
+        Instant current = Instant.now();
+        Instant beforeRange = current.minus(numMinutes, ChronoUnit.MINUTES);
+        
+        Optional<Set<String>> entries = redisPulseDao.getTrendingPulse(beforeRange.toEpochMilli(), current.toEpochMilli());
+        
+        Map<Long, String> tpSubscriptions = new HashMap<>();
+        
+        entries.ifPresent(entry -> {
+            
+            entry.stream().forEach(tpsIdValueCounts -> {
+                
+                try {
+                    _LOGGER.debug("PulseService.getTrendingPulseSubscriptions: trying to convert " + tpsIdValueCounts);
+                    
+                    Map<String, Integer> converted = _objectMapper.readValue(tpsIdValueCounts, _TRENDING_PULSE_SUBSCRIPTION_TYPE_REF);
+                    
+                    _LOGGER.debug("PulseService.getTrendingPulseSubscriptions: sucessfully converted " + converted.size());
+                } catch (Exception cException) {
+                    cException.printStackTrace();
+                }
+            });
+            
+        });
+        
+        return tpSubscriptions;
     }
     
 }
