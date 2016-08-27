@@ -42,14 +42,13 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Repository
 @Transactional
-public class MySqlUserDao implements IUserDao {
+public class MySqlUserDao {
     
     private static final Logger _LOGGER = LoggerFactory.getLogger(MySqlUserDao.class);
     
     @Inject
     private SessionFactory sessionFactory;
     
-    @Override
     public Optional<User> getUser(UserId userId) {
         _LOGGER.debug("MySqlUserDao.getUser" + userId);
         
@@ -63,7 +62,6 @@ public class MySqlUserDao implements IUserDao {
         }
     }
     
-    @Override
     public Result<User> createUser(User user) {
         _LOGGER.debug("MySqlUserDao.createUser" + user);
         

@@ -21,6 +21,7 @@ package org.jhk.pulsing.web.service.prod;
 import java.util.Optional;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.jhk.pulsing.serialization.avro.records.User;
 import org.jhk.pulsing.serialization.avro.records.UserId;
@@ -35,8 +36,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Note that if transactional bean is implementing an interface, by default the proxy will be a Java Dynamic Proxy. 
- * This means that only external method calls that come in through the proxy will be intercepted � any self-invocation calls 
- * will not start any transaction � even if the method is annotated with @Transactional.
+ * This means that only external method calls that come in through the proxy will be intercepted any self-invocation calls 
+ * will not start any transaction even if the method is annotated with @Transactional.
  * 
  * Also rollback only occur during RuntimeException so paradigm is to throw a RuntimeException when you wish for a 
  * rollback
@@ -49,9 +50,11 @@ public class UserService extends AbstractStormPublisher
                             implements IUserService {
     
     @Inject
+    @Named("mySqlUserDao")
     private MySqlUserDao mySqlUserDao;
     
     @Inject
+    @Named("redisUserDao")
     private RedisUserDao redisUserDao;
     
     @Override

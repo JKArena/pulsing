@@ -29,13 +29,12 @@ public final class CommonConstants {
     public static final String DEFAULT_BOOTSTRAP_HOST;
     public static final int DEFAULT_BOOTSTRAP_PORT;
     public static final int DEFAULT_STORM_TICK_TUPLE_FREQ_SECONDS;
+    public static final int DEFAULT_STORM_INTERVAL_SECONDS;
     
     public static final String CASSANDRA_CONTACT_POINT;
     
     public static final int HASH_CODE_INIT_VALUE = 3;
     public static final int HASH_CODE_MULTIPLY_VALUE = 31;
-    
-    public static final int STORM_DEFAULT_INTERVAL_SECONDS = 15;
     
     public enum TOPICS {
 		PULSE_SUBSCRIBE, USER_CREATE, PULSE_CREATE;
@@ -51,6 +50,7 @@ public final class CommonConstants {
             DEFAULT_BOOTSTRAP_HOST = props.getProperty("bootstrap_host");
             DEFAULT_BOOTSTRAP_PORT = Integer.parseInt(props.getProperty("bootstrap_port"));
             DEFAULT_STORM_TICK_TUPLE_FREQ_SECONDS = Integer.parseInt(props.getProperty("default_storm_tick_tuple_freq_seconds"));
+            DEFAULT_STORM_INTERVAL_SECONDS = Integer.parseInt(props.getProperty("default_storm_interval_seconds"));
             
             CASSANDRA_CONTACT_POINT = props.getProperty("cassandra_contact_point");
         } catch (IOException ioExcept) {

@@ -68,6 +68,8 @@ public final class TimeIntervalPersistorBolt extends BaseBasicBolt {
         //When displaying query from whenever-to-whenever time interval range, union and return
         try {
             String timeIntervalSubscription = _objectMapper.writeValueAsString(obj);
+            
+            _LOGGER.debug("TimeIntervalPersistorBolt.execute: putting " + timeIntervalSubscription);
             _jedis.zadd(_redisZKey, (double) timeInterval, timeIntervalSubscription);
         } catch (Exception writeException) {
             writeException.printStackTrace();
