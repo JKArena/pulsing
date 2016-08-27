@@ -61,7 +61,7 @@ public final class PulseSubscribeTopologyBuilder {
         builder.setBolt("pulse-avro-id-timestamp-extractor", 
                 new PulseAvroFieldExtractorBolt(EnumSet.of(EXTRACT_FIELD.TIMESTAMP, EXTRACT_FIELD.ID, EXTRACT_FIELD.VALUE)), 4)
                 .setNumTasks(2)
-                .shuffleGrouping("pulse-subscribe-spout");
+                .shuffleGrouping("pulse-avro-deserialize");
         
         builder.setBolt("pulse-subscribe-interval-extractor", new TimeIntervalBolt(), 2)
                 .setNumTasks(2)

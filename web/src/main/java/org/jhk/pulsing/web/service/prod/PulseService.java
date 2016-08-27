@@ -20,14 +20,16 @@ package org.jhk.pulsing.web.service.prod;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.jhk.pulsing.serialization.avro.records.Pulse;
 import org.jhk.pulsing.serialization.avro.records.PulseId;
@@ -58,6 +60,7 @@ public class PulseService extends AbstractStormPublisher
             new TypeReference<HashMap<String, Integer>>(){};
     
     @Inject
+    @Named("redisPulseDao")
     private RedisPulseDao redisPulseDao;
     
     private ObjectMapper _objectMapper = new ObjectMapper();
@@ -93,13 +96,15 @@ public class PulseService extends AbstractStormPublisher
         Instant current = Instant.now();
         Instant beforeRange = current.minus(numMinutes, ChronoUnit.MINUTES);
         
-        Optional<Set<String>> entries = redisPulseDao.getTrendingPulse(beforeRange.toEpochMilli(), current.toEpochMilli());
+        Optional<Set<String>> optTps = redisPulseDao.getTrendingPulseSubscriptions(beforeRange.toEpochMilli(), current.toEpochMilli());
         
         Map<Long, String> tpSubscriptions = new HashMap<>();
         
-        entries.ifPresent(entry -> {
+        optTps.ifPresent(tps -> {
             
-            entry.stream().forEach(tpsIdValueCounts -> {
+            Map<String, Integer> counter = new HashMap<>();
+            
+            tps.stream().forEach(tpsIdValueCounts -> {
                 
                 try {
                     _LOGGER.debug("PulseService.getTrendingPulseSubscriptions: trying to convert " + tpsIdValueCounts);
@@ -107,6 +112,17 @@ public class PulseService extends AbstractStormPublisher
                     Map<String, Integer> converted = _objectMapper.readValue(tpsIdValueCounts, _TRENDING_PULSE_SUBSCRIPTION_TYPE_REF);
                     
                     _LOGGER.debug("PulseService.getTrendingPulseSubscriptions: sucessfully converted " + converted.size());
+                    
+                    converted.entrySet().stream()
+                        .forEach(entry -> {
+                            int val = entry.getValue();
+                            
+                            counter.compute(entry.getKey(), (key, value) -> {
+                                return value == null ? val : value+val;
+                            });
+                            
+                        });
+                    
                 } catch (Exception cException) {
                     cException.printStackTrace();
                 }
@@ -115,6 +131,39 @@ public class PulseService extends AbstractStormPublisher
         });
         
         return tpSubscriptions;
+    }
+    
+    private ExecutorService tempEService;
+    
+    @Override
+    public void init() {
+        super.init();
+        
+        _LOGGER.debug("Testing...");
+        
+        tempEService = Executors.newSingleThreadExecutor();
+        tempEService.submit(() -> {
+           
+            try {
+                TimeUnit.SECONDS.sleep(5);
+                Pulse pulse = org.jhk.pulsing.web.dao.dev.PulseDao.createMockedPulse();
+                subscribePulse(pulse);
+                
+                _LOGGER.debug("Submitted..." + pulse.getValue());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            
+        });
+    }
+    
+    @Override
+    public void destroy() {
+        super.destroy();
+        
+        if(tempEService != null) {
+            tempEService.shutdownNow();
+        }
     }
     
 }

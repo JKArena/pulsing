@@ -24,8 +24,6 @@ import java.util.Properties;
 import javax.inject.Inject;
 import javax.sql.DataSource;
 
-import org.jhk.pulsing.web.dao.IPulseDao;
-import org.jhk.pulsing.web.dao.IUserDao;
 import org.jhk.pulsing.web.dao.prod.db.redis.RedisPulseDao;
 import org.jhk.pulsing.web.dao.prod.db.redis.RedisUserDao;
 import org.jhk.pulsing.web.dao.prod.db.sql.MySqlUserDao;
@@ -71,17 +69,17 @@ public class ProdServiceConfig implements IServiceConfig {
         return new PulseService();
     }
     
-    @Bean
+    @Bean(name="redisUserDao")
     public RedisUserDao getRedisUserDao() {
         return new RedisUserDao();
     }
     
-    @Bean
+    @Bean(name="redisPulseDao")
     public RedisPulseDao getRedisPulseDao() {
         return new RedisPulseDao();
     }
     
-    @Bean
+    @Bean(name="mySqlUserDao")
     public MySqlUserDao getMySqlUserDao() {
         return new MySqlUserDao();
     }

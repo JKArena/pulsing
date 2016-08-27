@@ -50,7 +50,7 @@ public final class TimeIntervalBuilderBolt extends BaseBasicBolt {
     private int _secondsInterval;
     
     public TimeIntervalBuilderBolt() {
-        this(CommonConstants.STORM_DEFAULT_INTERVAL_SECONDS);
+        this(CommonConstants.DEFAULT_STORM_INTERVAL_SECONDS);
     }
     
     public TimeIntervalBuilderBolt(int secondsInterval) {

@@ -56,13 +56,6 @@ public final class PulseAvroFieldExtractorBolt extends BaseBasicBolt {
         _extractFields = extractFields;
     }
     
-    /*
-     * public static final String USER_ID = "USER_ID";
-    public static final String COORDINATES = "COORDINATES";
-    public static final String VALUE = "VALUE";
-    public static final String ACTION = "ACTION";
-     */
-    
     public enum EXTRACT_FIELD {
         TIMESTAMP(FieldConstants.TIMESTAMP) {
             @Override
@@ -95,7 +88,7 @@ public final class PulseAvroFieldExtractorBolt extends BaseBasicBolt {
         VALUE(FieldConstants.VALUE) {
             @Override
             Object getValue(Pulse pulse) {
-                return pulse.getValue();
+                return pulse.getValue().toString();
             }
         },
         
@@ -121,17 +114,18 @@ public final class PulseAvroFieldExtractorBolt extends BaseBasicBolt {
     
     @Override
     public void execute(Tuple tuple, BasicOutputCollector outputCollector) {
-        _LOGGER.info("PulseAvroFieldExtractorBolt.execute: " + tuple);
+        _LOGGER.debug("PulseAvroFieldExtractorBolt.execute: " + tuple);
         
         Pulse pulse = (Pulse) tuple.getValueByField(FieldConstants.AVRO_PULSE);
         
-        List<Object> values = new LinkedList<>();
+        Values values = new Values();
         
         _extractFields.forEach(field -> {
             values.add(field.getValue(pulse));
         });
         
-        outputCollector.emit(new Values(values));
+        _LOGGER.debug("PulseAvroFieldExtractorBolt.execute extracted values: " + values);
+        outputCollector.emit(values);
     }
 
     @Override
@@ -143,7 +137,7 @@ public final class PulseAvroFieldExtractorBolt extends BaseBasicBolt {
            fields.add(field.getField()); 
         });
         
-        _LOGGER.info("PulseAvroFieldExtractorBolt.declareOutputFields: " + fields);
+        _LOGGER.debug("PulseAvroFieldExtractorBolt.declareOutputFields: " + fields);
         
         fieldsDeclarer.declare(new Fields(fields));
     }

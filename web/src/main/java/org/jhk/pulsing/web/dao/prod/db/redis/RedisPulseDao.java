@@ -56,11 +56,11 @@ public class RedisPulseDao extends AbstractRedisDao
         return new Result<>(FAILURE, "dummy");
     }
     
-    public Optional<Set<String>> getTrendingPulse(long brEpoch, long cEpoch) {
-        _LOGGER.debug("RedisPulseDao.getTrendingPulse: " + brEpoch + " - " + cEpoch);
+    public Optional<Set<String>> getTrendingPulseSubscriptions(long brEpoch, long cEpoch) {
+        _LOGGER.debug("RedisPulseDao.getTrendingPulseSubscriptions: " + brEpoch + " - " + cEpoch);
         
         Set<String> result = getJedis().zrangeByScore(RedisConstants.REDIS_KEY.SUBSCRIBE_PULSE_.toString(), brEpoch, cEpoch, 0, _LIMIT);
-        _LOGGER.debug("RedisPulseDao.getTrendingPulse.queryResult: " + result.size());
+        _LOGGER.debug("RedisPulseDao.getTrendingPulseSubscriptions.queryResult: " + result.size());
         return Optional.ofNullable(result);
     }
     

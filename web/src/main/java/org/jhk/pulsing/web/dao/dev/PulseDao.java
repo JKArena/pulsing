@@ -20,6 +20,7 @@ package org.jhk.pulsing.web.dao.dev;
 
 import static org.jhk.pulsing.web.common.Result.CODE.SUCCESS;
 
+import java.time.Instant;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -28,6 +29,7 @@ import java.util.concurrent.ConcurrentMap;
 
 import org.jhk.pulsing.serialization.avro.records.Pulse;
 import org.jhk.pulsing.serialization.avro.records.PulseId;
+import org.jhk.pulsing.serialization.avro.records.UserId;
 import org.jhk.pulsing.web.common.Result;
 import org.jhk.pulsing.web.dao.IPulseDao;
 
@@ -38,29 +40,35 @@ public class PulseDao implements IPulseDao {
     
     public static final List<Pulse> MOCK_TRENDING_PULSE_SUBSCRIPTIONS = new LinkedList<>();
     
+    private static long _PULSE_ID_COUNTER = 1000L;
     private static final ConcurrentMap<PulseId, Pulse> MOCK_PULSE_MAPPER = new ConcurrentHashMap<>();
     
     static {
         
+        Pulse pulse = createMockedPulse();
+        
+        MOCK_PULSE_MAPPER.put(pulse.getId(), pulse);
+        MOCK_TRENDING_PULSE_SUBSCRIPTIONS.add(pulse);
+        
+        pulse = createMockedPulse();
+        
+        MOCK_PULSE_MAPPER.put(pulse.getId(), pulse);
+        MOCK_TRENDING_PULSE_SUBSCRIPTIONS.add(pulse);
+    }
+    
+    public static Pulse createMockedPulse() {
         PulseId pulseId = PulseId.newBuilder().build();
-        pulseId.setId(1234L);
+        pulseId.setId(_PULSE_ID_COUNTER);
         
         Pulse pulse = Pulse.newBuilder().build();
-        pulse.setValue("Mocked 1");
+        pulse.setValue("Mocked " + _PULSE_ID_COUNTER);
         pulse.setId(pulseId);
+        pulse.setTimeStamp(Instant.now().getEpochSecond());
         
-        MOCK_PULSE_MAPPER.put(pulseId, pulse);
-        MOCK_TRENDING_PULSE_SUBSCRIPTIONS.add(pulse);
+        UserId userId = UserId.newBuilder().build();
+        userId.setId((_PULSE_ID_COUNTER++) + 500);
         
-        pulseId = PulseId.newBuilder().build();
-        pulseId.setId(5678L);
-        
-        pulse = Pulse.newBuilder().build();
-        pulse.setValue("Mocked 2");
-        pulse.setId(pulseId);
-        
-        MOCK_PULSE_MAPPER.put(pulseId, pulse);
-        MOCK_TRENDING_PULSE_SUBSCRIPTIONS.add(pulse);
+        return pulse;
     }
 
     @Override
