@@ -18,6 +18,7 @@
  */
 package org.jhk.pulsing.storm.common;
 
+import java.time.Instant;
 import java.util.List;
 
 import static org.jhk.pulsing.serialization.thrift.edges.ACTION.*;
@@ -38,7 +39,6 @@ import org.jhk.pulsing.serialization.thrift.property.PulseProperty;
 import org.jhk.pulsing.serialization.thrift.property.PulsePropertyValue;
 import org.jhk.pulsing.serialization.thrift.property.UserProperty;
 import org.jhk.pulsing.serialization.thrift.property.UserPropertyValue;
-import org.jhk.pulsing.shared.util.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,7 +57,7 @@ public final class ConverterCommon {
         Pulse pulse = (Pulse) tuple.getValueByField(AVRO_PULSE);
         
         Data data = new Data();
-        data.setPedigree(new Pedigree((int) Util.convertNanoToSeconds(pulse.getTimeStamp())));
+        data.setPedigree(new Pedigree(pulse.getTimeStamp()));
         
         DataUnit dUnit = new DataUnit();
         data.setDataunit(dUnit);
@@ -101,7 +101,7 @@ public final class ConverterCommon {
         User user = (User) tuple.getValueByField(AVRO_USER);
         
         Data data = new Data();
-        data.setPedigree(new Pedigree((int) Util.convertNanoToSeconds(System.nanoTime())));
+        data.setPedigree(new Pedigree(Instant.now().getEpochSecond()));
         
         DataUnit dUnit = new DataUnit();
         data.setDataunit(dUnit);

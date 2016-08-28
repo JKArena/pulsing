@@ -18,6 +18,7 @@
  */
 package org.jhk.pulsing.storm.bolts.time;
 
+import java.time.Instant;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -97,7 +98,7 @@ public final class TimeIntervalBuilderBolt extends BaseBasicBolt {
     
     private void processTickTuple(BasicOutputCollector outputCollector) {
         
-        long currTimeInterval = Util.getTimeInterval(System.nanoTime(), _secondsInterval);
+        long currTimeInterval = Util.getTimeInterval(Instant.now().getEpochSecond(), _secondsInterval);
         List<Long> toRemoveTI = new LinkedList<>();
         
         _LOGGER.info("TimeIntervalBuilderBolt.processTickTuple: " + currTimeInterval + "/" + _timeInterval);
