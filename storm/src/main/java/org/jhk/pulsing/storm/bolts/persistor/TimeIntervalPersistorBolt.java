@@ -60,7 +60,7 @@ public final class TimeIntervalPersistorBolt extends BaseBasicBolt {
     
     @Override
     public void execute(Tuple tuple, BasicOutputCollector outputCollector) {
-        _LOGGER.debug("TimeIntervalPersistorBolt.execute: " + tuple);
+        _LOGGER.info("TimeIntervalPersistorBolt.execute: " + tuple);
         
         long timeInterval = tuple.getLongByField(TIME_INTERVAL);
         Object obj = tuple.getValueByField(TIME_INTERVAL_VALUE_COUNTER_MAP);
@@ -69,7 +69,7 @@ public final class TimeIntervalPersistorBolt extends BaseBasicBolt {
         try {
             String timeIntervalSubscription = _objectMapper.writeValueAsString(obj);
             
-            _LOGGER.debug("TimeIntervalPersistorBolt.execute: putting " + timeIntervalSubscription);
+            _LOGGER.info("TimeIntervalPersistorBolt.execute: putting " + timeIntervalSubscription);
             _jedis.zadd(_redisZKey, (double) timeInterval, timeIntervalSubscription);
         } catch (Exception writeException) {
             writeException.printStackTrace();

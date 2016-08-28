@@ -67,7 +67,7 @@ public final class PailDataPersistorBolt extends BaseBasicBolt {
         datas.add(data);
         
         String path = HADOOP_PAIL_NEW_DATA_PATH + _newDataPath.toString();
-        _LOGGER.debug("PailDataPersistorBolt.execute: writing to " + path + ", " + datas.size());
+        _LOGGER.info("PailDataPersistorBolt.execute: writing to " + path + ", " + datas.size());
         
         try {
             PailUtil.writePailStructures(path, new DataPailStructure(), datas);

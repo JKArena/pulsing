@@ -37,7 +37,7 @@ public final class PulseConverterFunction extends BaseFunction {
     
     @Override
     public void execute(TridentTuple tuple, TridentCollector collector) {
-        _LOGGER.debug("PulseConverter.execute " + tuple);
+        _LOGGER.info("PulseConverter.execute " + tuple);
         
         Data pData = ConverterCommon.convertPulseAvroToThrift(tuple);
         

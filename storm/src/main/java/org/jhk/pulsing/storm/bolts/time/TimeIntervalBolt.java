@@ -52,7 +52,7 @@ public final class TimeIntervalBolt extends BaseBasicBolt {
 
     @Override
     public void execute(Tuple tuple, BasicOutputCollector outputCollector) {
-        _LOGGER.debug("TimeIntervalBolt.execute: " + tuple);
+        _LOGGER.info("TimeIntervalBolt.execute: " + tuple);
         
         Long timeStamp = tuple.getLongByField(TIMESTAMP);
         Long id = tuple.getLongByField(ID);
