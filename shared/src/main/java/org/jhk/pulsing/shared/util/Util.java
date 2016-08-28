@@ -52,15 +52,14 @@ public final class Util {
     }
     
     /**
-     * Given a timestamp convert it to seconds and split it to the provided 
+     * Given a timestamp in seconds and split it to the provided 
      * timeInterval 
      * 
-     * @param timestampNano
+     * @param timestampSeconds
      * @param timeInterval
      * @return
      */
-    public static long getTimeInterval(Long timestampNano, int timeInterval) {
-        long timestampSeconds = convertNanoToSeconds(timestampNano);
+    public static long getTimeInterval(Long timestampSeconds, int timeInterval) {
         return timestampSeconds / timeInterval;
     }
     

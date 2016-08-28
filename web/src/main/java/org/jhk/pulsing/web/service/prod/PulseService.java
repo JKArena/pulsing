@@ -96,7 +96,7 @@ public class PulseService extends AbstractStormPublisher
         Instant current = Instant.now();
         Instant beforeRange = current.minus(numMinutes, ChronoUnit.MINUTES);
         
-        Optional<Set<String>> optTps = redisPulseDao.getTrendingPulseSubscriptions(beforeRange.toEpochMilli(), current.toEpochMilli());
+        Optional<Set<String>> optTps = redisPulseDao.getTrendingPulseSubscriptions(beforeRange.getEpochSecond(), current.getEpochSecond());
         
         Map<Long, String> tpSubscriptions = new HashMap<>();
         

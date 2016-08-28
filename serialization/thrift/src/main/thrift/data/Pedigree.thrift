@@ -25,5 +25,5 @@ namespace java org.jhk.pulsing.serialization.thrift.data
  * @author Ji Kim
  */
 struct Pedigree {
-  1: required i32 true_as_of_secs;
+  1: required i64 true_as_of_secs;
 }
