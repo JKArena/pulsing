@@ -41,7 +41,7 @@ public final class PulseDeserializerBolt extends BaseBasicBolt {
     
     @Override
     public void execute(Tuple tuple, BasicOutputCollector outputCollector) {
-        _LOGGER.debug("PulseDeserializerBolt.execute: " + tuple);
+        _LOGGER.info("PulseDeserializerBolt.execute: " + tuple);
         
         String pulseString = tuple.getString(0);
         

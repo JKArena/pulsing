@@ -52,9 +52,9 @@ public class PulseController extends AbstractController {
         return pulseService.createPulse(pulse);
     }
     
-    @RequestMapping(value="/getTrendingPulse", method=RequestMethod.GET)
+    @RequestMapping(value="/getTrendingPulseSubscriptions", method=RequestMethod.GET)
     public @ResponseBody Map<Long, String> getTrendingPulse() {
-        _LOGGER.debug("PulseController.getTrendingPulse");
+        _LOGGER.debug("PulseController.getTrendingPulseSubscriptions");
         
         return pulseService.getTrendingPulseSubscriptions(10);
     }

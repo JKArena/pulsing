@@ -69,7 +69,7 @@ public final class TimeIntervalPersistorBolt extends BaseBasicBolt {
         try {
             String timeIntervalSubscription = _objectMapper.writeValueAsString(obj);
             
-            _LOGGER.info("TimeIntervalPersistorBolt.execute: putting " + timeIntervalSubscription);
+            _LOGGER.info("TimeIntervalPersistorBolt.execute: putting " + timeInterval + "/" + timeIntervalSubscription);
             _jedis.zadd(_redisZKey, (double) timeInterval, timeIntervalSubscription);
         } catch (Exception writeException) {
             writeException.printStackTrace();
