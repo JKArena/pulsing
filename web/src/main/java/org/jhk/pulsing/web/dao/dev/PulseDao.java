@@ -20,7 +20,6 @@ package org.jhk.pulsing.web.dao.dev;
 
 import static org.jhk.pulsing.web.common.Result.CODE.SUCCESS;
 
-import java.time.Instant;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -63,7 +62,7 @@ public class PulseDao implements IPulseDao {
         Pulse pulse = Pulse.newBuilder().build();
         pulse.setValue("Mocked " + _PULSE_ID_COUNTER);
         pulse.setId(pulseId);
-        pulse.setTimeStamp(Instant.now().getEpochSecond());
+        pulse.setTimeStamp(System.nanoTime());
         
         UserId userId = UserId.newBuilder().build();
         userId.setId((_PULSE_ID_COUNTER++) + 500);

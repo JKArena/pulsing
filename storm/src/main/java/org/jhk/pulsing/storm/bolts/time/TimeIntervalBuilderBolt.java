@@ -100,12 +100,17 @@ public final class TimeIntervalBuilderBolt extends BaseBasicBolt {
         long currTimeInterval = Util.getTimeInterval(System.nanoTime(), _secondsInterval);
         List<Long> toRemoveTI = new LinkedList<>();
         
+        _LOGGER.info("TimeIntervalBuilderBolt.processTickTuple: " + currTimeInterval + "/" + _timeInterval);
+        
         _timeInterval.keySet().stream()
             .filter(entryTI -> (entryTI <= currTimeInterval))
             .forEach(filteredTI -> {
                 //the entry is past the current interval so emit them
                 toRemoveTI.add(filteredTI);
+                
                 Map<String, Integer> tIValueCounter = _timeInterval.get(filteredTI);
+                
+                _LOGGER.info("TimeIntervalBuilderBolt.processTickTuple EMIT: " + filteredTI + "/" + tIValueCounter);
                 outputCollector.emit(new Values(filteredTI, tIValueCounter));
             });
         
@@ -116,6 +121,8 @@ public final class TimeIntervalBuilderBolt extends BaseBasicBolt {
     private void processTimeIntervalValue(Tuple tuple, Long timeInterval) {
         String tIValue = tuple.getStringByField(TIME_INTERVAL_VALUE);
         
+        _LOGGER.info("TimeIntervalBuilderBolt.processTimeIntervalValue: " + tIValue + "-" + timeInterval + "/" + _timeInterval);
+        
         Map<String, Integer> count = _timeInterval.get(timeInterval);
         if(count == null) {
             count = new HashMap<>();
@@ -123,6 +130,7 @@ public final class TimeIntervalBuilderBolt extends BaseBasicBolt {
         }
         
         count.compute(tIValue, (key, oldValue) -> oldValue == null ? 1 : oldValue + 1);
+        _LOGGER.info("TimeIntervalBuilderBolt.processTimeIntervalValue after compute: " + _timeInterval);
     }
     
     @Override
