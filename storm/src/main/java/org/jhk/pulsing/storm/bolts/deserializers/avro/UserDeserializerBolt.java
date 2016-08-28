@@ -41,7 +41,7 @@ public final class UserDeserializerBolt extends BaseBasicBolt {
     
     @Override
     public void execute(Tuple tuple, BasicOutputCollector outputCollector) {
-        _LOGGER.debug("UserDeserializerBolt.execute: " + tuple);
+        _LOGGER.info("UserDeserializerBolt.execute: " + tuple);
         
         String userString = tuple.getString(0);
         

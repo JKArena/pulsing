@@ -36,12 +36,12 @@ public final class ThriftDataRecordFormatFunction implements RecordFormat {
     
     @Override
     public byte[] format(TridentTuple tuple) {
-        _LOGGER.debug("ThriftDataRecordFormatFunction.format: " + tuple);
+        _LOGGER.info("ThriftDataRecordFormatFunction.format: " + tuple);
         
         Data tData = (Data) tuple.getValueByField(FieldConstants.THRIFT_DATA);
         byte[] bytes = Util.serializeThriftData(tData);
         
-        _LOGGER.debug("ThriftDataRecordFormatFunction.format serialized to bytes: " + bytes.length);
+        _LOGGER.info("ThriftDataRecordFormatFunction.format serialized to bytes: " + bytes.length);
         return bytes;
     }
 

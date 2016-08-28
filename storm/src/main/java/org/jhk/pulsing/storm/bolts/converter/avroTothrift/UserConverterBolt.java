@@ -39,11 +39,11 @@ public final class UserConverterBolt extends BaseBasicBolt {
     
     @Override
     public void execute(Tuple tuple, BasicOutputCollector outputCollector) {
-        _LOGGER.debug("UserConverterBolt.execute " + tuple);
+        _LOGGER.info("UserConverterBolt.execute " + tuple);
         
         Data uData = ConverterCommon.convertUserAvroToThrift(tuple);
         
-        _LOGGER.debug("Converted to thrift " + uData);
+        _LOGGER.info("Converted to thrift " + uData);
         outputCollector.emit(new Values(uData));
     }
 

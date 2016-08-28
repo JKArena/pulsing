@@ -37,7 +37,7 @@ public final class UserConverterFunction extends BaseFunction {
     
     @Override
     public void execute(TridentTuple tuple, TridentCollector collector) {
-        _LOGGER.debug("UserConverter.execute " + tuple);
+        _LOGGER.info("UserConverter.execute " + tuple);
         
         Data uData = ConverterCommon.convertUserAvroToThrift(tuple);
         

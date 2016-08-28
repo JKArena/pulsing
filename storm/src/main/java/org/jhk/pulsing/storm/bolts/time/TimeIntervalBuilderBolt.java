@@ -73,7 +73,7 @@ public final class TimeIntervalBuilderBolt extends BaseBasicBolt {
 
     @Override
     public void execute(Tuple tuple, BasicOutputCollector outputCollector) {
-        _LOGGER.debug("TimeIntervalBuilderBolt.execute: " + tuple);
+        _LOGGER.info("TimeIntervalBuilderBolt.execute: " + tuple);
         
         if(isTickTuple(tuple)) {
             processTickTuple(outputCollector);
