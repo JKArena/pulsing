@@ -78,7 +78,7 @@ class TrendingPulseSubscriptionsComponent extends Component {
     let user = Storage.user;
     
     console.debug('handleSubscribe', evt.target.id, user.id);
-    this.ws.send('/pulsingSocket/pulseSubscribeSocketJS', {}, 
+    this.ws.send('/pulsingSocket/pulseSubscribeSocketJS', {},
                   JSON.stringify({pulseId: evt.target.id, userId: user.id.id}));
   }
   
