@@ -31,7 +31,6 @@ import org.jhk.pulsing.serialization.avro.records.UserId;
 import org.jhk.pulsing.web.common.AvroMySqlMappers;
 import org.jhk.pulsing.web.common.Result;
 import static org.jhk.pulsing.web.common.Result.CODE.*;
-import org.jhk.pulsing.web.dao.IUserDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;

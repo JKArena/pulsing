@@ -41,7 +41,6 @@ import org.jhk.pulsing.web.service.IPulseService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -49,7 +48,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 /**
  * @author Ji Kim
  */
-@Transactional
 @Service
 public class PulseService extends AbstractStormPublisher 
                             implements IPulseService {
@@ -101,8 +99,6 @@ public class PulseService extends AbstractStormPublisher
         Map<Long, String> tpSubscriptions = new HashMap<>();
         
         optTps.ifPresent(tps -> {
-            
-            Map<String, Integer> counter = new HashMap<>();
             
             tps.stream().forEach(tpsIdValueCounts -> {
                 

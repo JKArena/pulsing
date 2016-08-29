@@ -32,7 +32,6 @@ import org.jhk.pulsing.web.dao.prod.db.redis.RedisUserDao;
 import org.jhk.pulsing.web.dao.prod.db.sql.MySqlUserDao;
 import org.jhk.pulsing.web.service.IUserService;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Note that if transactional bean is implementing an interface, by default the proxy will be a Java Dynamic Proxy. 
@@ -44,7 +43,6 @@ import org.springframework.transaction.annotation.Transactional;
  * 
  * @author Ji Kim
  */
-@Transactional
 @Service
 public class UserService extends AbstractStormPublisher
                             implements IUserService {
@@ -78,6 +76,11 @@ public class UserService extends AbstractStormPublisher
     @Override
     public Result<User> createUser(User user) {
         Result<User> cUser = new Result<User>(FAILURE, "Failed in creating " + user); 
+        
+        try {
+            cUser = mySqlUserDao.createUser(user);
+        } catch(RuntimeException eException) {
+        }
         
         if(cUser.getCode() == SUCCESS) {
             redisUserDao.createUser(cUser.getData());
