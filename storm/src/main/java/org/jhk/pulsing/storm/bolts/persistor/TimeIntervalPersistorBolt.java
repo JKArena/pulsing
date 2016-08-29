@@ -18,6 +18,7 @@
  */
 package org.jhk.pulsing.storm.bolts.persistor;
 
+import java.time.Instant;
 import java.util.Map;
 
 import org.apache.storm.task.TopologyContext;
@@ -62,15 +63,15 @@ public final class TimeIntervalPersistorBolt extends BaseBasicBolt {
     public void execute(Tuple tuple, BasicOutputCollector outputCollector) {
         _LOGGER.info("TimeIntervalPersistorBolt.execute: " + tuple);
         
-        long timeInterval = tuple.getLongByField(TIME_INTERVAL);
+        long timeStamp = Instant.now().getEpochSecond();
         Object obj = tuple.getValueByField(TIME_INTERVAL_VALUE_COUNTER_MAP);
         
         //When displaying query from whenever-to-whenever time interval range, union and return
         try {
             String timeIntervalSubscription = _objectMapper.writeValueAsString(obj);
             
-            _LOGGER.info("TimeIntervalPersistorBolt.execute: putting " + timeInterval + "/" + timeIntervalSubscription);
-            _jedis.zadd(_redisZKey, (double) timeInterval, timeIntervalSubscription);
+            _LOGGER.info("TimeIntervalPersistorBolt.execute: putting " + timeStamp + "/" + timeIntervalSubscription);
+            _jedis.zadd(_redisZKey, (double) timeStamp, timeIntervalSubscription);
         } catch (Exception writeException) {
             writeException.printStackTrace();
         }

@@ -113,14 +113,17 @@ public class PulseService extends AbstractStormPublisher
                     
                     _LOGGER.debug("PulseService.getTrendingPulseSubscriptions: sucessfully converted " + converted.size());
                     
+                    //Ok for mocked data, but for real data processing tag the content with the timestamp
+                    //so to be able to consolidate i.e. {"1002:Mocked 1002/<timestamp>":1}
+                    //then need to split the String content, gather the count for the searched interval
+                    //and return the sorted using Java8 stream
+                    
                     converted.entrySet().stream()
                         .forEach(entry -> {
-                            int val = entry.getValue();
+                            String key = entry.getKey();
+                            String[] splitted = key.split(":");
                             
-                            counter.compute(entry.getKey(), (key, value) -> {
-                                return value == null ? val : value+val;
-                            });
-                            
+                            tpSubscriptions.put(Long.parseLong(splitted[0]), splitted[1]);
                         });
                     
                 } catch (Exception cException) {
