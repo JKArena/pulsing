@@ -63,10 +63,8 @@ public final class TimeIntervalBolt extends BaseBasicBolt {
         
         StringBuilder builder = new StringBuilder();
         builder.append(id);
-        if(value != null) {
-            builder.append(TIME_INTERVAL_DELIM);
-            builder.append(value);
-        }
+        builder.append(CommonConstants.TIME_INTERVAL_ID_VALUE_DELIM);
+        builder.append(value != null ? value : "");
         
         outputCollector.emit(new Values(timeInterval,
                                 builder.toString()));

@@ -33,6 +33,9 @@ public final class CommonConstants {
     
     public static final String CASSANDRA_CONTACT_POINT;
     
+    public static final String TIME_INTERVAL_ID_VALUE_DELIM = ":";
+    public static final String TIME_INTERVAL_PERSIST_TIMESTAMP_DELIM = "/";
+    
     public static final int HASH_CODE_INIT_VALUE = 3;
     public static final int HASH_CODE_MULTIPLY_VALUE = 31;
     
