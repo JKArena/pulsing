@@ -20,6 +20,7 @@ package org.jhk.pulsing.storm.bolts.persistor;
 
 import java.time.Instant;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.apache.storm.task.TopologyContext;
 import org.apache.storm.topology.BasicOutputCollector;
@@ -28,6 +29,7 @@ import org.apache.storm.topology.base.BaseBasicBolt;
 import org.apache.storm.tuple.Tuple;
 import org.codehaus.jackson.map.ObjectMapper;
 import static org.jhk.pulsing.storm.common.FieldConstants.*;
+import org.jhk.pulsing.shared.util.CommonConstants;
 import org.jhk.pulsing.shared.util.RedisConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,7 +66,14 @@ public final class TimeIntervalPersistorBolt extends BaseBasicBolt {
         _LOGGER.info("TimeIntervalPersistorBolt.execute: " + tuple);
         
         long timeStamp = Instant.now().getEpochSecond();
-        Object obj = tuple.getValueByField(TIME_INTERVAL_VALUE_COUNTER_MAP);
+        @SuppressWarnings("unchecked")
+        Map<String, Integer> obj = (Map<String, Integer>) tuple.getValueByField(TIME_INTERVAL_VALUE_COUNTER_MAP);
+        
+        obj = obj.entrySet().stream()
+                .collect(Collectors.toMap(
+                    entry -> entry.getKey() + CommonConstants.TIME_INTERVAL_PERSIST_TIMESTAMP_DELIM + timeStamp,
+                    entry -> entry.getValue()
+                    ));
         
         //When displaying query from whenever-to-whenever time interval range, union and return
         try {
