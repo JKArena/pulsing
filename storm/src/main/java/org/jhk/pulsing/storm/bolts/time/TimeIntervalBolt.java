@@ -61,6 +61,7 @@ public final class TimeIntervalBolt extends BaseBasicBolt {
         
         _LOGGER.info("TimeIntervalBolt.execute timeInterval: " + timeStamp + "-" + _secondsInterval + "/" + timeInterval);
         
+        //technically should escape or convert to hex string to avoid, but ok now
         StringBuilder builder = new StringBuilder();
         builder.append(id);
         builder.append(CommonConstants.TIME_INTERVAL_ID_VALUE_DELIM);

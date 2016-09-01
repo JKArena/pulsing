@@ -21,16 +21,12 @@ package org.jhk.pulsing.web.service.prod;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Map;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
+import java.util.Collections;
 import java.util.Optional;
 import java.util.Set;
-import java.util.Map.Entry;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -42,11 +38,11 @@ import org.jhk.pulsing.web.common.Result;
 import static org.jhk.pulsing.web.common.Result.CODE.*;
 import org.jhk.pulsing.web.dao.prod.db.redis.RedisPulseDao;
 import org.jhk.pulsing.web.service.IPulseService;
+import org.jhk.pulsing.web.service.prod.helper.PulseServiceUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
@@ -57,9 +53,6 @@ public class PulseService extends AbstractStormPublisher
                             implements IPulseService {
     
     private static final Logger _LOGGER = LoggerFactory.getLogger(PulseService.class);
-    
-    private static final TypeReference<HashMap<String, Integer>> _TRENDING_PULSE_SUBSCRIPTION_TYPE_REF = 
-            new TypeReference<HashMap<String, Integer>>(){};
     
     @Inject
     @Named("redisPulseDao")
@@ -100,60 +93,12 @@ public class PulseService extends AbstractStormPublisher
         
         Optional<Set<String>> optTps = redisPulseDao.getTrendingPulseSubscriptions(beforeRange.getEpochSecond(), current.getEpochSecond());
         
-        Map<Long, String> tpSubscriptions = new HashMap<>();
-        final Map<String, Integer> count = new HashMap<>();
+        @SuppressWarnings("unchecked")
+        Map<Long, String> tpSubscriptions = Collections.EMPTY_MAP;
         
-        optTps.ifPresent(tps -> {
-            
-            tps.stream().forEach(tpsIdValueCounts -> {
-                
-                try {
-                    _LOGGER.debug("PulseService.getTrendingPulseSubscriptions: trying to convert " + tpsIdValueCounts);
-                    
-                    Map<String, Integer> converted = _objectMapper.readValue(tpsIdValueCounts, _TRENDING_PULSE_SUBSCRIPTION_TYPE_REF);
-                    
-                    _LOGGER.debug("PulseService.getTrendingPulseSubscriptions: sucessfully converted " + converted.size());
-                    
-                    //Structure is <id>:<value>/<timestamp> i.e. {"1002:Mocked 1002/<timestamp>":1}
-                    //then need to split the String content, gather the count for the searched interval
-                    //and return the sorted using Java8 stream
-                    //TODO look into book for doing better
-                    
-                    count.putAll(converted.entrySet().stream()
-                            .reduce(
-                                    new HashMap<String, Integer>(),
-                                    (Map<String, Integer> mapped, Entry<String, Integer> entry) -> {
-                                        String[] split = entry.getKey().split(CommonConstants.TIME_INTERVAL_PERSIST_TIMESTAMP_DELIM);
-                                        Integer value = entry.getValue();
-                                        
-                                        mapped.compute(split[0], (key, val) -> {
-                                           return val == null ? value : val+value; 
-                                        });
-                                        
-                                        return mapped;
-                                    },
-                                    (Map<String, Integer> result, Map<String, Integer> aggregated) -> {
-                                        result.putAll(aggregated);
-                                        return result;
-                                    }));
-                    
-                } catch (Exception cException) {
-                    cException.printStackTrace();
-                }
-            });
-            
-        });
-        
-        if(count.size() > 0) {
-            tpSubscriptions = count.entrySet().stream()
-                                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
-                                .collect(Collectors.toMap(
-                                        entry -> Long.parseLong(entry.getKey().split(CommonConstants.TIME_INTERVAL_ID_VALUE_DELIM)[0]),
-                                        entry -> entry.getKey().split(CommonConstants.TIME_INTERVAL_ID_VALUE_DELIM)[1],
-                                        (x, y) -> {throw new AssertionError();},
-                                        LinkedHashMap::new
-                                        ));
-        }
+        if(optTps.isPresent()) {
+            tpSubscriptions = PulseServiceUtil.processTrendingPulseSubscribe(optTps.get(), _objectMapper);
+        };
         
         return tpSubscriptions;
     }
