@@ -66,16 +66,19 @@ public final class TimeIntervalPersistorBolt extends BaseBasicBolt {
         _LOGGER.info("TimeIntervalPersistorBolt.execute: " + tuple);
         
         long timeStamp = Instant.now().getEpochSecond();
+        //Structure is <id>:<value> -> count
         @SuppressWarnings("unchecked")
         Map<String, Integer> obj = (Map<String, Integer>) tuple.getValueByField(TIME_INTERVAL_VALUE_COUNTER_MAP);
         
+        //Transform to <id>0x07<value>0x13<timestamp> -> count
         obj = obj.entrySet().stream()
                 .collect(Collectors.toMap(
                     entry -> entry.getKey() + CommonConstants.TIME_INTERVAL_PERSIST_TIMESTAMP_DELIM + timeStamp,
                     entry -> entry.getValue()
                     ));
         
-        //When displaying query from whenever-to-whenever time interval range, union and return
+        //When displaying query from whenever-to-whenever time interval range, aggregate and return since using timestamp 
+        //for the z tree
         try {
             String timeIntervalSubscription = _objectMapper.writeValueAsString(obj);
             
