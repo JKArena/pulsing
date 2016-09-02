@@ -29,6 +29,7 @@ import {Router, Route, IndexRoute, browserHistory} from 'react-router';
 
 import App from './components/App';
 import TrendingPulseSubscriptionsComponent from './components/pulsing/trending/TrendingPulseSubscriptionsComponent';
+import MapComponent from './components/map/MapComponent';
 
 import SignupComponent from './components/signup/SignupComponent';
 import LoginComponent from './components/login/LoginComponent';
@@ -38,6 +39,7 @@ render((
   <Router history={browserHistory}>
     <Route path='/' component={App}>
       <IndexRoute component={TrendingPulseSubscriptionsComponent} />
+      <Route path='map' component={MapComponent} />
       <Route path='signup' component={SignupComponent} />
       <Route path='login' component={LoginComponent} />
     </Route>

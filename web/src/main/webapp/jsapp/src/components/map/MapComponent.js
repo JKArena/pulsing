@@ -22,22 +22,78 @@
  */
 'use strict';
 
-require('styles/map/Map.scss');
+require('./Map.scss');
 
-import React from 'react';
+import React, {Component} from 'react';
+import {Grid, Row, Col} from 'react-bootstrap';
+import Storage from '../../common/Storage';
 
-const API_KEY = 'AIzaSyAcUzIUuUTuOZndo3OGs2J4FV-8Ay963ug';
+const API_URL = 'http://maps.googleapis.com/maps/api/js?key=AIzaSyAcUzIUuUTuOZndo3OGs2J4FV-8Ay963ug';
 
-class MapComponent extends React.Component {
+class MapComponent extends Component {
+
+  constructor(props) {
+    super(props);
+
+    let lat = 52.809167;
+    let lng = -0.630556;
+    
+    let user = Storage.user;
+    if(user && user.coordinates) {
+      lat = user.coordinates[0];
+      lng = user.coordinates[1];
+    }
+
+    this._map = null;
+    this.state = {
+      lat: lat,
+      lng: lng,
+      zoom: 8
+    };
+  }
+
+  componentWillMount() {
+    console.debug('fetching map api');
+
+    let script = document.createElement('script');
+    script.src = API_URL;
+    script.onload = () => {
+      console.debug('_OnMapScriptLoaded');
+      this.setState(this.state);
+    };
+    document.body.appendChild(script);
+  }
+
+  componentDidUpdate() {
+    console.debug('componentDidUpdate');
+
+    if(global.google && !this._map) {
+      this._map = new global.google.maps.Map(document.getElementById('mapNode'), {
+        center: {lat: this.state.lat, lng: this.state.lng},
+        zoom: this.state.zoom
+      });
+    }
+  }
+
   render() {
     return (
-      <div className="map-component">
-        
+      <div className='map-component'>
+        <Grid>
+          <Row>
+            <Col sm={12}>
+              <div id='mapNode'>
+              </div>
+            </Col>
+          </Row>
+        </Grid>
       </div>
     );
   }
 }
 
 MapComponent.displayName = 'MapComponent';
+
+MapComponent.propTypes = {};
+MapComponent.defaultProps = {};
 
 export default MapComponent;

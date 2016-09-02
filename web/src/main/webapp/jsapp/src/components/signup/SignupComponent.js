@@ -39,12 +39,12 @@ class SignupComponent extends AbstractComponent {
     super(props);
     
     this.state = {
-        validity: {
-          email: 0, //-1 invalid, 0 initial, 1 valid
-          password: 0,
-          name: 0
-        },
-        errorMsg: ''
+      validity: {
+        email: 0, //-1 invalid, 0 initial, 1 valid
+        password: 0,
+        name: 0
+      },
+      errorMsg: ''
     };
   }
   

@@ -152,6 +152,24 @@ export default Object.freeze(
 
           set: function() {},
           enumerable: true
+        },
+
+        'GET_RAW' : {
+          get: function() {
+
+            return (path, options=Object.create(null)) => {
+              
+              const DEFAULT_OPTIONS = {method: 'GET',  mode: 'cors'};
+
+              let request = new Request(path);
+              let opts = Object.assign(DEFAULT_OPTIONS, options);
+
+              return fetchContent(request, opts, 'raw');
+            }
+          },
+
+          set: function() {},
+          enumerable: true
         }
       }
     )
