@@ -42,6 +42,7 @@ class NavBarComponent extends Component {
   
   loggedOut() {
     this.state.loggedIn = false;
+    Storage.user.clearGeoWatch();
     Storage.user = null;
     
     API.publish(TOPICS.AUTH, {loggedIn: false});
@@ -78,6 +79,7 @@ class NavBarComponent extends Component {
             
             <Navbar.Collapse>
               <Nav>
+                <LinkContainer to='/map'><NavItem>Map</NavItem></LinkContainer>
               </Nav>
               
               {(() => {

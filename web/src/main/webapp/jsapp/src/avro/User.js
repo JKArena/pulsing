@@ -25,6 +25,7 @@
 import AvroJson from './avrojson';
 import AbstractAvro from './AbstractAvro';
 import UserId from './UserId';
+import {TOPICS, API} from '../common/PubSub';
 
 const FORM_MAPPER = Symbol('FORM_MAPPER');
 const U_GEOLOCATION_OPTS = {'timeout': 30000, 'maximumAge': 30000};
@@ -36,7 +37,12 @@ class User extends AbstractAvro {
     
     this.json = json || AvroJson('User');
     this.formMapper = User[FORM_MAPPER];
-    global.navigator.geolocation.getCurrentPosition(this._onPosition.bind(this));
+    this._watchId = global.navigator.geolocation.watchPosition(this._onPosition.bind(this),
+                      (err) => {console.error('Error in geolocation', err);}, U_GEOLOCATION_OPTS);
+  }
+
+  clearGeoWatch() {
+    global.geolocation.clearWatch(this._watchId);
   }
   
   _onPosition(position) {
@@ -44,10 +50,15 @@ class User extends AbstractAvro {
     
     let coords = position.coords;
     this.coordinates = [coords.latitude, coords.longitude];
+    API.publish(TOPICS.USER_GEO_CHANGE, [coords.latitude, coords.longitude]); //so can't modify the value accidentally
   }
   
   get id() {
     return new UserId(this.json['id']);
+  }
+
+  get coordinates() {
+    return this.getProperty('coordinates', 'double');
   }
   
   set coordinates(coords) {

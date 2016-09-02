@@ -27,7 +27,8 @@ const PUB_SUB = new Map();
 const TOPICS = Object.freeze({
   __proto__: null,
   
-  AUTH: 'AUTH'
+  AUTH: 'AUTH',
+  USER_GEO_CHANGE: 'USER_GEO_CHANGE'
 });
 
 export { TOPICS };
