@@ -28,13 +28,22 @@ import React, {Component} from 'react';
 import {Grid, Row, Col} from 'react-bootstrap';
 import Storage from '../../common/Storage';
 
+import MapPulseStore from './store/MapPulseStore';
+
 const API_URL = 'http://maps.googleapis.com/maps/api/js?key=AIzaSyAcUzIUuUTuOZndo3OGs2J4FV-8Ay963ug';
+const KEY_STORE_MAPPER = Object.freeze(
+  {
+    __proto__: null,
+    'pulse': () => { return new MapPulseStore(); }
+  }
+);
 
 class MapComponent extends Component {
 
   constructor(props) {
     super(props);
-
+    
+    //will only be enabled when logged in + coordinates enabled; for now testing
     let lat = 52.809167;
     let lng = -0.630556;
     
@@ -44,7 +53,10 @@ class MapComponent extends Component {
       lng = user.coordinates[1];
     }
 
-    this._map = null;
+    this.store = KEY_STORE_MAPPER[props.params.store]();
+    this.mapId = props.location.query.mapId;
+
+    this.map = null;
     this.state = {
       lat: lat,
       lng: lng,
@@ -52,36 +64,56 @@ class MapComponent extends Component {
     };
   }
 
+  componentDidMount() {
+    this.store.addDataPointsListener(this._onDataPoints.bind(this));
+  }
+
+  componentWillUnmount() {
+    if(this.store) {
+      this.store.removeDataPointsListener(this._onFetched.bind(this));
+      this.store = null;
+    }
+  }
+
   componentWillMount() {
     console.debug('fetching map api');
 
-    let script = document.createElement('script');
-    script.src = API_URL;
-    script.onload = () => {
-      console.debug('_OnMapScriptLoaded');
-      this.setState(this.state);
-    };
-    document.body.appendChild(script);
+    if(!global.google) {
+      let script = document.createElement('script');
+      script.src = API_URL;
+      script.onload = () => {
+        this.setState(this.state);
+      };
+      document.body.appendChild(script);
+    }
   }
 
   componentDidUpdate() {
     console.debug('componentDidUpdate');
 
-    if(global.google && !this._map) {
-      this._map = new global.google.maps.Map(document.getElementById('mapNode'), {
+    if(global.google && !this.map) {
+      this.map = new global.google.maps.Map(document.getElementById(this.mapId), {
         center: {lat: this.state.lat, lng: this.state.lng},
         zoom: this.state.zoom
       });
+
+      this.store.fetchDataPoints(this.map, {lat: this.state.lat, lng: this.state.lng});
     }
   }
 
+  _onDataPoints(dataPoints) {
+    console.debug("fetched dataPoints ", dataPoints);
+
+  }
+
   render() {
+    
     return (
       <div className='map-component'>
         <Grid>
           <Row>
             <Col sm={12}>
-              <div id='mapNode'>
+              <div id={this.mapId} className='map-node'>
               </div>
             </Col>
           </Row>

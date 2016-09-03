@@ -79,7 +79,9 @@ class NavBarComponent extends Component {
             
             <Navbar.Collapse>
               <Nav>
-                <LinkContainer to='/map'><NavItem>Map</NavItem></LinkContainer>
+                <LinkContainer to={{ pathname: '/map/pulse', query: {mapId: 'pulseMap'} }}>
+                  <NavItem>Map</NavItem>
+                </LinkContainer>
               </Nav>
               
               {(() => {

@@ -65,6 +65,14 @@ public class PulseDao implements IPulseDao {
         pulse.setId(pulseId);
         pulse.setTimeStamp(Instant.now().getEpochSecond());
         
+        List<Double> coordinates = new LinkedList<>();
+        double lat = Math.random()*90*(Math.random() < 0.5 ? 1 : -1);
+        double lng = Math.random()*180*(Math.random() < 0.5 ? 1 : -1);
+        
+        coordinates.add(lat);
+        coordinates.add(lng);
+        
+        pulse.setCoordinates(coordinates);
         UserId userId = UserId.newBuilder().build();
         userId.setId((_PULSE_ID_COUNTER++) + 500);
         

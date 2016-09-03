@@ -45,13 +45,21 @@ class Pulse extends AbstractAvro {
   get userId() {
     return new UserId(this.json['userId']);
   }
-  
-  set coordinates(coords) {
-    this.json.coordinates = {'double': coords};
+
+  get timeStamp() {
+    return this.getProperty('timeStamp', 'long');
   }
   
-  set coordinates() {
-    return this.getProperty('coordinates', 'double');
+  set coordinates(coords) {
+    this.json.coordinates = {'array': coords};
+  }
+  
+  get coordinates() {
+    return this.getProperty('coordinates', 'array');
+  }
+
+  get tags() {
+    return this.getProperty('tags', 'array');
   }
   
   set value(val) {

@@ -22,6 +22,8 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Map;
 import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
@@ -101,6 +103,18 @@ public class PulseService extends AbstractStormPublisher
         };
         
         return tpSubscriptions;
+    }
+    
+    @Override
+    public List<Pulse> getMapPulseDataPoints(Double lat, Double lng) {
+        List<Pulse> mpDataPoints = new LinkedList<>();
+        //TEMP for now till process the data in storm+redis. Also return all data points
+        //but in redis store by geo location proximity
+        for(int loop=0; loop < 10; loop++) {
+            mpDataPoints.add(org.jhk.pulsing.web.dao.dev.PulseDao.createMockedPulse());
+        }
+        
+        return mpDataPoints;
     }
     
     private ExecutorService tempEService;

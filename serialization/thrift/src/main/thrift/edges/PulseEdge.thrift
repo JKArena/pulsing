@@ -32,4 +32,5 @@ union PulseEdge {
   1: required UserId.UserId userId;
   2: required PulseId.PulseId pulseId;
   3: ACTION.ACTION action;
+  4: string tag;
 }
