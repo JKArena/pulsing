@@ -19,6 +19,8 @@
 package org.jhk.pulsing.web.service.dev;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -69,6 +71,15 @@ public class PulseService implements IPulseService {
             });
         
         return entries;
+    }
+    
+    @Override
+    public List<Pulse> getMapPulseDataPoints(Double lat, Double lng) {
+        List<Pulse> dataPoints = new LinkedList<>();
+        for(int loop=0; loop < 10; loop++) {
+            dataPoints.add(PulseDao.createMockedPulse());
+        }
+        return dataPoints;
     }
     
 }

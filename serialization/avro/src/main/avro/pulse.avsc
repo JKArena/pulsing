@@ -25,6 +25,7 @@
     {"name": "id", "type": "PulseId", "default": null},
     {"name": "userId", "type": "UserId", "default": null},
     {"name": "coordinates", "type": ["null", {"type": "array", "items": "double"}], "default": null},
+    {"name": "tags", "type": ["null", {"type": "array", "items": "string"}], "default": null},
     {"name": "timeStamp", "type": ["null", "long"], "default": null},
     {"name": "value", "type": ["null", "string"], "default": null},
     {"name": "action", "type": ["null", {"type": "enum", "name": "ACTION",

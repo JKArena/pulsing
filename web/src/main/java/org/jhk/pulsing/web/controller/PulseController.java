@@ -18,6 +18,7 @@
  */
 package org.jhk.pulsing.web.controller;
 
+import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -53,10 +54,17 @@ public class PulseController extends AbstractController {
     }
     
     @RequestMapping(value="/getTrendingPulseSubscriptions", method=RequestMethod.GET)
-    public @ResponseBody Map<Long, String> getTrendingPulse() {
+    public @ResponseBody Map<Long, String> getTrendingPulseSubscriptions() {
         _LOGGER.debug("PulseController.getTrendingPulseSubscriptions");
         
         return pulseService.getTrendingPulseSubscriptions(10);
+    }
+    
+    @RequestMapping(value="/getMapPulseDataPoints", method=RequestMethod.GET)
+    public @ResponseBody List<Pulse> getMapPulseDataPoints(Double lat, Double lng) {
+        _LOGGER.debug("PulseController.getMapPulseDataPoints");
+        
+        return pulseService.getMapPulseDataPoints(lat, lng);
     }
     
 }

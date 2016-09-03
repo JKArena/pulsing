@@ -16,28 +16,43 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.web.service;
-
-import java.util.List;
-import java.util.Map;
-
-import org.jhk.pulsing.serialization.avro.records.Pulse;
-import org.jhk.pulsing.serialization.avro.records.PulseId;
-import org.jhk.pulsing.web.common.Result;
 
 /**
  * @author Ji Kim
  */
-public interface IPulseService {
-    
-    Result<Pulse> getPulse(PulseId pulseId);
-    
-    Result<Pulse> createPulse(Pulse pulse);
-    
-    Result<PulseId> subscribePulse(Pulse pulse);
-    
-    Map<Long, String> getTrendingPulseSubscriptions(int numMinutes);
-    
-    List<Pulse> getMapPulseDataPoints(Double lat, Double lng);
-    
+'use strict';
+
+import {EventEmitter} from 'events';
+
+const DATA_POINTS_EVENT = 'dataPoints';
+
+class AbstractMapStore extends EventEmitter {
+  
+  emitDataPoints(dataPoints) {
+    this.emit(DATA_POINTS_EVENT, dataPoints);
+  }
+  
+  addDataPointsListener(callback) {
+    this.on(DATA_POINTS_EVENT, callback);
+  }
+  
+  removeDataPointsListener(callback) {
+    this.removeListener(DATA_POINTS_EVENT, callback);
+  }
+  
+  fetchDataPoints(map, latLng) {
+    throw new Error('AbstractMapStore should not be used standalone');
+  }
+
+  removeDataPoint(index) {
+    this.dataPoints[index].setMap(null);
+    this.dataPoints[index] = null; //just for now
+  }
+
+  clearDataPoints() {
+    this.dataPoints.length = 0;
+  }
+  
 }
+
+export default AbstractMapStore;

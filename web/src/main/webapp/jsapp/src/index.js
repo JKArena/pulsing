@@ -39,7 +39,7 @@ render((
   <Router history={browserHistory}>
     <Route path='/' component={App}>
       <IndexRoute component={TrendingPulseSubscriptionsComponent} />
-      <Route path='map' component={MapComponent} />
+      <Route path='map/:store' component={MapComponent} />
       <Route path='signup' component={SignupComponent} />
       <Route path='login' component={LoginComponent} />
     </Route>

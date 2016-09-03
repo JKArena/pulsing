@@ -39,12 +39,12 @@ class TrendingPulseSubscriptionsComponent extends Component {
     super(props);
     
     this.state = {loggedIn: !!Storage.user};
+    this.store = new TrendingPulseSubscriptionsStore();
   }
   
   componentDidMount() {
-    console.debug('mounted');
+    console.debug('mounted tpsComponent');
     
-    this.store = new TrendingPulseSubscriptionsStore();
     this.store.addFetchedListener(this._onFetched.bind(this));
     this.store.fetchTrending();
     
@@ -59,16 +59,22 @@ class TrendingPulseSubscriptionsComponent extends Component {
   }
   
   componentWillUnmount() {
-    console.debug('unmounted');
+    console.debug('unmounted tpsComponent');
     
-    this.store.removeFetchedListener(this._onFetched.bind(this));
-    this.store = null;
+    if(this.store) {
+      this.store.removeFetchedListener(this._onFetched.bind(this));
+      this.store = null;
+    }
+
+    if(this.ws) {
+      this.ws.destroy();
+      this.ws = null;
+    }
     
-    this.ws.destroy();
-    this.sub.unsubscribe();
-    
-    this.sub = null;
-    this.ws = null;
+    if(this.sub){
+      this.sub.unsubscribe();
+      this.sub = null;
+    }
     
     API.unsubscribe(TOPICS.AUTH, this._onAuth.bind(this));
   }
@@ -100,11 +106,10 @@ class TrendingPulseSubscriptionsComponent extends Component {
   }
   
   render() {
-    let trending = _trending;
     let cols = [];
     let loggedIn = this.state.loggedIn;
     
-    trending.forEach((value, key) => {
+    _trending.forEach((value, key) => {
       
       cols.push(<Col xs={12} sm={6} md={4} lg={3} key={key}>
         <Thumbnail>
