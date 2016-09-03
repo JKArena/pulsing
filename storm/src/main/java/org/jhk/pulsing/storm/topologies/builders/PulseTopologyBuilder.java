@@ -28,11 +28,14 @@ import org.apache.storm.hdfs.trident.format.RecordFormat;
 import org.apache.storm.hdfs.trident.rotation.FileRotationPolicy;
 import org.apache.storm.hdfs.trident.rotation.FileSizeRotationPolicy;
 import org.apache.storm.kafka.BrokerHosts;
+import org.apache.storm.kafka.KafkaSpout;
+import org.apache.storm.kafka.SpoutConfig;
 import org.apache.storm.kafka.StringScheme;
 import org.apache.storm.kafka.ZkHosts;
 import org.apache.storm.kafka.trident.TransactionalTridentKafkaSpout;
 import org.apache.storm.kafka.trident.TridentKafkaConfig;
 import org.apache.storm.spout.SchemeAsMultiScheme;
+import org.apache.storm.topology.TopologyBuilder;
 import org.apache.storm.trident.Stream;
 import org.apache.storm.trident.TridentState;
 import org.apache.storm.trident.TridentTopology;
@@ -40,6 +43,9 @@ import org.apache.storm.trident.state.StateFactory;
 import org.apache.storm.tuple.Fields;
 import org.jhk.pulsing.shared.util.CommonConstants;
 import org.jhk.pulsing.shared.util.HadoopConstants;
+import org.jhk.pulsing.storm.bolts.converter.avroTothrift.PulseConverterBolt;
+import org.jhk.pulsing.storm.bolts.deserializers.avro.PulseDeserializerBolt;
+import org.jhk.pulsing.storm.bolts.persistor.PailDataPersistorBolt;
 import org.jhk.pulsing.storm.common.FieldConstants;
 import org.jhk.pulsing.storm.hadoop.trident.ThriftDataRecordFormatFunction;
 import org.jhk.pulsing.storm.trident.deserializers.avro.PulseDeserializerFunction;
@@ -53,11 +59,51 @@ public final class PulseTopologyBuilder {
     
     private static final Logger _LOGGER = LoggerFactory.getLogger(PulseTopologyBuilder.class);
     
-    public static StormTopology build() {
+    public static StormTopology build(boolean isPailBuild) {
         _LOGGER.debug("PulseTopologyBuilder.build");
         
+        if(isPailBuild) {
+            return pailBuild();
+        }else {
+            return tridentBuild();
+        }
+
+    }
+    
+    private static StormTopology pailBuild() {
+        
+        TopologyBuilder builder = new TopologyBuilder();
+        builder.setSpout("pulse-create-spout", buildSpout());
+        
+        builder.setBolt("pulse-avro-deserialize", new PulseDeserializerBolt(), 4) //sets executors, namely threads
+                .setNumTasks(2) //num tasks is number of instances of this bolt
+                .shuffleGrouping("pulse-create-spout");
+        
+        builder.setBolt("pulse-avro-thrift-converter", new PulseConverterBolt(), 2)
+                .setNumTasks(2)
+                .shuffleGrouping("pulse-avro-deserialize");
+        
+        builder.setBolt("pulse-pail-data-persistor", new PailDataPersistorBolt(HadoopConstants.PAIL_NEW_DATA_PATH.PULSE), 2)
+                .setNumTasks(2)
+                .shuffleGrouping("pulse-avro-thrift-converter");
+        
+        return builder.createTopology();
+    }
+    
+    private static KafkaSpout buildSpout() {
+        BrokerHosts host = new ZkHosts("localhost");
+        
+        SpoutConfig spoutConfig = new SpoutConfig(host, CommonConstants.TOPICS.PULSE_CREATE.toString(), 
+                                                    "/kafkastorm", "pulse-create");
+        
+        spoutConfig.scheme = new SchemeAsMultiScheme(new StringScheme());
+        return new KafkaSpout(spoutConfig);
+    }
+    
+    private static StormTopology tridentBuild() {
+        
         TridentTopology topology = new TridentTopology();
-        Stream stream = topology.newStream("pulse-create-spout", buildSpout())
+        Stream stream = topology.newStream("pulse-create-spout", buildTridentSpout())
             .each(
                     new Fields("str"), 
                     new PulseDeserializerFunction(), 
@@ -91,7 +137,7 @@ public final class PulseTopologyBuilder {
         TridentState tState = stream.partitionPersist(sFactory, FieldConstants.THRIFT_DATA_FIELD, new HdfsUpdater(), new Fields());
     }
     
-    private static TransactionalTridentKafkaSpout buildSpout() {
+    private static TransactionalTridentKafkaSpout buildTridentSpout() {
         BrokerHosts host = new ZkHosts("localhost");
         TridentKafkaConfig spoutConfig = new TridentKafkaConfig(host, CommonConstants.TOPICS.PULSE_CREATE.toString());
         spoutConfig.scheme = new SchemeAsMultiScheme(new StringScheme());

@@ -51,7 +51,7 @@ public final class UserTopologyBuilder {
     
     private static final Logger _LOGGER = LoggerFactory.getLogger(UserTopologyBuilder.class);
     
-    public static StormTopology build() {
+    public static StormTopology build(boolean isPailBuild) {
         _LOGGER.debug("UserTopologyBuilder.build");
         
         TopologyBuilder builder = new TopologyBuilder();
@@ -65,15 +65,15 @@ public final class UserTopologyBuilder {
                 .setNumTasks(2)
                 .shuffleGrouping("user-avro-deserialize");
         
-        builder.setBolt("user-pail-data-persistor", new PailDataPersistorBolt(HadoopConstants.PAIL_NEW_DATA_PATH.USER), 2)
-                .setNumTasks(2)
-                .shuffleGrouping("user-avro-thrift-converter");
-        
-        /*
-        builder.setBolt("user-hdfs", hdfsBolt(), 2)
-                .setNumTasks(2)
-                .shuffleGrouping("user-avro-thrift-converter");
-        */
+        if(isPailBuild) {
+            builder.setBolt("user-pail-data-persistor", new PailDataPersistorBolt(HadoopConstants.PAIL_NEW_DATA_PATH.USER), 2)
+                    .setNumTasks(2)
+                    .shuffleGrouping("user-avro-thrift-converter");
+        }else {
+            builder.setBolt("user-hdfs", hdfsBolt(), 2)
+                    .setNumTasks(2)
+                    .shuffleGrouping("user-avro-thrift-converter");    
+        }
         
         return builder.createTopology();
     }

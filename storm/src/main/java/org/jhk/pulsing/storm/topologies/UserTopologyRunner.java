@@ -54,7 +54,7 @@ public final class UserTopologyRunner {
         
         LocalCluster cluster = new LocalCluster();
         
-        cluster.submitTopology("user-topology", config, UserTopologyBuilder.build());
+        cluster.submitTopology("user-topology", config, UserTopologyBuilder.build(false));
         
     }
     
@@ -63,7 +63,7 @@ public final class UserTopologyRunner {
         Config config = new Config();
         config.setNumWorkers(1);
         config.setMessageTimeoutSecs(300);
-        StormSubmitter.submitTopology("user-topology", config, UserTopologyBuilder.build());
+        StormSubmitter.submitTopology("user-topology", config, UserTopologyBuilder.build(true));
         
     }
     
