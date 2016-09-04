@@ -20,7 +20,6 @@ package org.jhk.pulsing.shared.util;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -28,27 +27,33 @@ import java.util.concurrent.TimeUnit;
  */
 public final class Util {
     
-    public static final String DELIM = "-";
+    public static long TIMESTAMP_MASK = ~0L << 24;
+    public static long HOST_MASK = ~0L >>> 54;
+    public static long COUNTER_MASK = ((long) Math.pow(2, 14) - 1L) << 10;
     
     private static int _COUNTER;
-    private static Optional<String> _LOCAL_HOST;
+    private static long _LOCAL_HOST_HASHED;
     
     static {
         try {
-            InetAddress lHost = InetAddress.getLocalHost();
-            _LOCAL_HOST = Optional.of(lHost.getHostName() + DELIM);
+            String lHost = InetAddress.getLocalHost().getHostName();
+            _LOCAL_HOST_HASHED = (long) lHost.hashCode();
         } catch (UnknownHostException uhException) {
         }
     }
     
-    public static String generateUniqueId(String prefix) {
-        StringBuilder builder = new StringBuilder(prefix);
-        builder.append(DELIM);
-        builder.append(_LOCAL_HOST.orElse(""));
-        builder.append(System.nanoTime());
-        builder.append(DELIM);
-        builder.append(_COUNTER++);
-        return builder.toString();
+    /**
+     * Simple uniqueId generator (i.e. for PulseId and etc)
+     * First 40 is time, next 14 is count, and the next 10 is the host name 
+     * 
+     * @param nanoTime
+     * @return
+     */
+    public static long uniqueId() {
+        long lHost = _LOCAL_HOST_HASHED & HOST_MASK;
+        long time = System.nanoTime() & TIMESTAMP_MASK;
+        long count = _COUNTER++ & COUNTER_MASK; 
+        return time | count | lHost;
     }
     
     /**
