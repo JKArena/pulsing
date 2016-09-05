@@ -32,6 +32,7 @@ public final class FieldConstants {
     public static final String COORDINATES = "COORDINATES";
     public static final String VALUE = "VALUE";
     public static final String ACTION = "ACTION";
+    public static final String DESCRIPTION = "DESCRIPTION";
     
     public static final String TIME_INTERVAL = "TIME_INTERVAL";
     public static final String TIME_INTERVAL_VALUE = "TIME_INTERVAL_VALUE";

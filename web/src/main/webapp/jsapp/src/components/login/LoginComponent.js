@@ -29,16 +29,13 @@ import {LinkContainer} from 'react-router-bootstrap';
 import React from 'react';
 
 import {TOPICS, API} from '../../common/PubSub';
-
 import AbstractComponent from '../AbstractComponent';
 import LoginAction from './actions/LoginAction';
 
 class LoginComponent extends AbstractComponent {
   
-  constructor(props) {
-    super(props);
-    
-    this.state = {
+  getInitialState() {
+    return {
       validity: {
         email: 0, //-1 invalid, 0 initial, 1 valid
         password: 0

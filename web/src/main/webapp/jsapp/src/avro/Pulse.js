@@ -49,6 +49,14 @@ class Pulse extends AbstractAvro {
   get timeStamp() {
     return this.getProperty('timeStamp', 'long');
   }
+
+  get description() {
+    return this.getProperty('description', 'string');
+  }
+
+  set description(description) {
+    this.description.value = {'string' : description};
+  }
   
   set coordinates(coords) {
     this.json.coordinates = {'array': coords};

@@ -81,7 +81,7 @@ public class UniqueIdTest {
         
         String cnt = "";
         
-        long mask = Long.parseUnsignedLong("1");
+        long mask = 1L;
         for(int loop=0; loop < Long.SIZE; loop++, mask <<= 1) {
             cnt = ((mask & val) == mask ? "1" : "0") + cnt;
         }

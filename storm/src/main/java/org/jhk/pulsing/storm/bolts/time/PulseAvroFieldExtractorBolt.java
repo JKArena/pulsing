@@ -92,6 +92,13 @@ public final class PulseAvroFieldExtractorBolt extends BaseBasicBolt {
             }
         },
         
+        DESCRIPTION(FieldConstants.DESCRIPTION) {
+            @Override
+            Object getValue(Pulse pulse) {
+                return pulse.getDescription().toString();
+            }
+        },
+        
         ACTION(FieldConstants.ACTION) {
             @Override
             Object getValue(Pulse pulse) {

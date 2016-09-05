@@ -26,15 +26,15 @@ require('./Map.scss');
 
 import React, {Component} from 'react';
 import {Grid, Row, Col} from 'react-bootstrap';
-import Storage from '../../common/Storage';
 
-import MapPulseStore from './store/MapPulseStore';
+import Storage from '../../common/Storage';
+import GMapPulseStore from './store/GMapPulseStore';
 
 const API_URL = 'http://maps.googleapis.com/maps/api/js?key=AIzaSyAcUzIUuUTuOZndo3OGs2J4FV-8Ay963ug';
 const KEY_STORE_MAPPER = Object.freeze(
   {
     __proto__: null,
-    'pulse': () => { return new MapPulseStore(); }
+    'pulse': () => { return new GMapPulseStore(); }
   }
 );
 
@@ -43,7 +43,7 @@ class MapComponent extends Component {
   constructor(props) {
     super(props);
     
-    //will only be enabled when logged in + coordinates enabled; for now testing
+    //will only be enabled when logged in + geolocation enabled; for now testing
     let lat = 52.809167;
     let lng = -0.630556;
     
@@ -57,10 +57,13 @@ class MapComponent extends Component {
     this.mapId = props.location.query.mapId;
 
     this.map = null;
-    this.state = {
+  }
+
+  getInitialState() {
+    return {
       lat: lat,
       lng: lng,
-      zoom: 8
+      zoom: 3
     };
   }
 

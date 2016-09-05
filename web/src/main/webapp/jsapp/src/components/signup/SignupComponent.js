@@ -29,16 +29,13 @@ import React from 'react';
 
 import AbstractComponent from '../AbstractComponent';
 import SignupAction from './actions/SignupAction';
-
 import {TOPICS, API} from '../../common/PubSub';
 import Common from '../../common/Common';
 
 class SignupComponent extends AbstractComponent {
   
-  constructor(props) {
-    super(props);
-    
-    this.state = {
+  getInitialState() {
+    return {
       validity: {
         email: 0, //-1 invalid, 0 initial, 1 valid
         password: 0,
