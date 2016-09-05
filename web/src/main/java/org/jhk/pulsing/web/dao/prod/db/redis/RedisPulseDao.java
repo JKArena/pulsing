@@ -32,6 +32,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 /**
  * @author Ji Kim
  */
@@ -41,6 +43,8 @@ public class RedisPulseDao extends AbstractRedisDao
     
     private static final Logger _LOGGER = LoggerFactory.getLogger(RedisPulseDao.class);
     private static final int _LIMIT = 100;
+    
+    private ObjectMapper _objectMapper = new ObjectMapper();
     
     @Override
     public Optional<Pulse> getPulse(PulseId pulseId) {

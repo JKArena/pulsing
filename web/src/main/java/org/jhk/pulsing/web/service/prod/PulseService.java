@@ -33,6 +33,7 @@ import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.jhk.pulsing.serialization.avro.records.ACTION;
 import org.jhk.pulsing.serialization.avro.records.Pulse;
 import org.jhk.pulsing.serialization.avro.records.PulseId;
 import org.jhk.pulsing.shared.util.CommonConstants;
@@ -131,6 +132,7 @@ public class PulseService extends AbstractStormPublisher
             try {
                 TimeUnit.SECONDS.sleep(5);
                 Pulse pulse = org.jhk.pulsing.web.dao.dev.PulseDao.createMockedPulse();
+                pulse.setAction(ACTION.SUBSCRIBE);
                 subscribePulse(pulse);
                 
                 _LOGGER.debug("Submitted..." + pulse.getValue());

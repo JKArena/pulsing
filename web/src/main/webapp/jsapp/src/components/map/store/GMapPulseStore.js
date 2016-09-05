@@ -25,7 +25,7 @@
 import AbstractMapStore from './AbstractMapStore';
 import MapPulseAction from '../actions/MapPulseAction';
 
-class MapPulseStore extends AbstractMapStore {
+class GMapPulseStore extends AbstractMapStore {
 
   constructor() {
     super();
@@ -34,7 +34,7 @@ class MapPulseStore extends AbstractMapStore {
   
   fetchDataPoints(map, latLng) {
 
-    MapPulseAction.getMapPulseDataPoints()
+    MapPulseAction.getMapPulseDataPoints(latLng)
       .then(function(mpDataPoints) {
         console.debug('MapPulseStore retrieved ', mpDataPoints);
         this.dataPoints = [];
@@ -42,7 +42,6 @@ class MapPulseStore extends AbstractMapStore {
         mpDataPoints.forEach(pulse => {
           let coordinates = pulse.coordinates;
 
-          console.info('check ', coordinates, pulse);
           if(coordinates && coordinates.length === 2) {
             let marker = new global.google.maps.Marker({
               position: {lat: coordinates[0], lng: coordinates[1]},
@@ -52,6 +51,7 @@ class MapPulseStore extends AbstractMapStore {
 
             let cnt = 'Prob display approximate sub count for ' + pulse.value;
             if(pulse.timeStamp) {
+              //multiply by 1000 since millisecond in client whereas seconds in server
               cnt += ' created: ' + (new Date(pulse.timeStamp*1000));
             }
             let iWindow = new global.google.maps.InfoWindow({
@@ -73,4 +73,4 @@ class MapPulseStore extends AbstractMapStore {
   
 }
 
-export default MapPulseStore;
+export default GMapPulseStore;

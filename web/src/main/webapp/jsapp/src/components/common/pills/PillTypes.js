@@ -17,15 +17,28 @@
  * under the License.
  */
 
-namespace java org.jhk.pulsing.serialization.thrift.property
-
 /**
- * Pulse property value
- *
  * @author Ji Kim
  */
-union PulsePropertyValue {
-  1: string value;
-  2: list<double> coordinates;
-  3: string description;
-}
+'use strict';
+
+import React, {PropTypes} from 'react';
+
+const TextPill = (props) => {
+  <span>{props.value}</span>
+};
+
+TextPill.defaultProps = {
+  value: ''
+};
+TextPill.propTypes = {
+  value: PropTypes.string
+};
+
+export default Object.freeze(
+    {
+      __proto__: null,
+      
+      Text: TextPill
+    }
+);

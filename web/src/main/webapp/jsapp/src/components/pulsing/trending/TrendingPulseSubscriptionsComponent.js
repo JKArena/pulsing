@@ -26,6 +26,7 @@ require('./TrendingPulseSubscriptions.scss');
 
 import {Grid, Row, Col, Thumbnail, Button, Badge} from 'react-bootstrap';
 import React, {Component} from 'react';
+
 import TrendingPulseSubscriptionsStore from './TrendingPulseSubscriptionsStore';
 import WebSockets from '../../../common/WebSockets';
 import {TOPICS, API} from '../../../common/PubSub';
@@ -38,8 +39,11 @@ class TrendingPulseSubscriptionsComponent extends Component {
   constructor(props) {
     super(props);
     
-    this.state = {loggedIn: !!Storage.user};
     this.store = new TrendingPulseSubscriptionsStore();
+  }
+
+  getInitialState() {
+    return {loggedIn: !!Storage.user};
   }
   
   componentDidMount() {
