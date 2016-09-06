@@ -35,20 +35,18 @@ class CreatePulseComponent extends AbstractComponent {
   constructor(props) {
     super(props);
 
-    this.props.data = [];
-  }
-
-  getInitialState() {
-    return {
+    this.state = {
       validity: {
-        value: 0
+        value: 0,
+        description: 0
       },
       errorMsg: ''
     };
   }
 
   handleSubmit(evt) {
-
+    console.debug('submitting pulse', evt);
+    console.debug('tags ', this.refs.tagsComp.getData());
   }
 
   render() {
@@ -57,7 +55,7 @@ class CreatePulseComponent extends AbstractComponent {
         <Grid>
             <Row>
               <Col sm={12}>
-                <h1>Login | Register</h1>
+                <h1>Create Pulse</h1>
               </Col>
               <Col sm={12}>
                 <form class='form' id='createPulseForm' action=''>
@@ -67,13 +65,13 @@ class CreatePulseComponent extends AbstractComponent {
                     <FormControl.Feedback />
                   </FormGroup>
 
-                  <FormGroup controlId='pulseTags'>
-                    <ControlLabel>Name</ControlLabel>
-                    <FormControl type='text' name='value' onBlur={this.handleChange.bind(this)} />
+                  <FormGroup controlId='pulseDescription' validationState={this.getValidState('description')}>
+                    <ControlLabel>Description</ControlLabel>
+                    <FormControl componentClass='textarea' name='description' onBlur={this.handleChange.bind(this)} />
                     <FormControl.Feedback />
                   </FormGroup>
 
-                  <PillsComponent type='Text' label='Tags' data={this.props.data} />
+                  <PillsComponent label='Tags' ref='tagsComp' />
                   
                   {(() => {
                     

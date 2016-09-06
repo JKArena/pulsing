@@ -33,9 +33,11 @@ import {TOPICS, API} from '../../common/PubSub';
 import Common from '../../common/Common';
 
 class SignupComponent extends AbstractComponent {
-  
-  getInitialState() {
-    return {
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
       validity: {
         email: 0, //-1 invalid, 0 initial, 1 valid
         password: 0,

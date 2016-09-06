@@ -26,16 +26,18 @@ require('./NavBar.scss');
 
 import React, {Component} from 'react';
 import {IndexLink, browserHistory} from 'react-router';
-import {Navbar, Nav, NavItem, NavDropdown, MenuItem} from 'react-bootstrap';
+import {Navbar, Nav, NavItem, NavDropdown} from 'react-bootstrap';
 import {LinkContainer} from 'react-router-bootstrap';
 
 import {TOPICS, API} from '../../common/PubSub';
 import Storage from '../../common/Storage';
 
 class NavBarComponent extends Component {
-  
-  getInitialState() {
-    return {loggedIn: !!Storage.user};
+
+  constructor(props) {
+    super(props);
+
+    this.state = {loggedIn: !!Storage.user};
   }
   
   loggedOut() {
@@ -80,7 +82,7 @@ class NavBarComponent extends Component {
                 <LinkContainer to={{ pathname: '/map/pulse', query: {mapId: 'pulseMap'} }}>
                   <NavItem>Map</NavItem>
                 </LinkContainer>
-                <NavDropdown title='Pulse Actions'>
+                <NavDropdown id='pulseActions' title='Pulse Actions'>
                   <LinkContainer to='/createPulse'><NavItem>Create</NavItem></LinkContainer>
                 </NavDropdown>
               </Nav>

@@ -43,6 +43,11 @@ class MapComponent extends Component {
   constructor(props) {
     super(props);
     
+    this.store = KEY_STORE_MAPPER[props.params.store]();
+    this.mapId = props.location.query.mapId;
+
+    this.map = null;
+
     //will only be enabled when logged in + geolocation enabled; for now testing
     let lat = 52.809167;
     let lng = -0.630556;
@@ -52,19 +57,13 @@ class MapComponent extends Component {
       lat = user.coordinates[0];
       lng = user.coordinates[1];
     }
-
-    this.store = KEY_STORE_MAPPER[props.params.store]();
-    this.mapId = props.location.query.mapId;
-
-    this.map = null;
-  }
-
-  getInitialState() {
-    return {
+    
+    this.state = {
       lat: lat,
       lng: lng,
       zoom: 3
     };
+
   }
 
   componentDidMount() {
@@ -105,7 +104,7 @@ class MapComponent extends Component {
   }
 
   _onDataPoints(dataPoints) {
-    console.debug("fetched dataPoints ", dataPoints);
+    console.debug('fetched dataPoints', dataPoints);
 
   }
 

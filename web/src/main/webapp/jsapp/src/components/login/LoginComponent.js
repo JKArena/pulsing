@@ -33,9 +33,11 @@ import AbstractComponent from '../AbstractComponent';
 import LoginAction from './actions/LoginAction';
 
 class LoginComponent extends AbstractComponent {
-  
-  getInitialState() {
-    return {
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
       validity: {
         email: 0, //-1 invalid, 0 initial, 1 valid
         password: 0
