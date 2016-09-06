@@ -24,8 +24,12 @@
 
 import React, {PropTypes} from 'react';
 
+const PillsWrapper = (props) => {
+  return <span className='pills-wrapper'>{props.children}</span>
+};
+
 const TextPill = (props) => {
-  <span>{props.value}</span>
+  return <span className='pills-value'>{props.value}</span>
 };
 
 TextPill.defaultProps = {
@@ -35,10 +39,8 @@ TextPill.propTypes = {
   value: PropTypes.string
 };
 
-export default Object.freeze(
-    {
-      __proto__: null,
-      
-      Text: TextPill
-    }
-);
+const PillsDelete = (props) => {
+  return <span className='pills-remove' onClick={props.clickHandler}>x</span>
+};
+
+export { PillsWrapper, PillsDelete, TextPill };

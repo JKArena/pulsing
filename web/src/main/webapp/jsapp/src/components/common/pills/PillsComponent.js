@@ -24,16 +24,65 @@
 
 require('./Pills.scss');
 
-import React, {Component, Children, PropTypes} from 'react';
-import {FormGroup, ControlLabel, FormControl, InputGroup, Button} from 'react-bootstrap';
+import React, {Component, PropTypes} from 'react';
+import {render, findDOMNode, unmountComponentAtNode} from 'react-dom';
+import {FormGroup, ControlLabel, FormControl, InputGroup, Button, Panel} from 'react-bootstrap';
 
-import PillTypes from './PillTypes';
+import {PillsWrapper, PillsDelete, TextPill} from './PillStateLess';
 
 class PillsComponent extends Component {
 
   constructor(props) {
     super(props);
+    
+    this.tagPanelNode = null;
+    this.tagInputNode = null;
+    this.nextDataIndex = 0;
+    this.data = new Set();
+    this.dataNodes = {};
+  }
 
+  componentDidMount() {
+    
+    this.tagPanelNode = findDOMNode(this.refs.tagPanel).querySelector(':scope .panel-body');
+    this.tagInputNode = findDOMNode(this.refs.tagInput);
+  }
+
+  getData() {
+    return this.data;
+  }
+
+  handleAdd() {
+    let val = this.tagInputNode.value;
+    if(val.length === 0 || this.data.has(val)) {
+      return;
+    }
+    this.data.add(val);
+    this._addTag(val);
+  }
+
+  removeTag(removeIndex, evt) {
+    console.debug('removeTag ', evt, removeIndex);
+    if(!(removeIndex in this.dataNodes)) {
+      return; //unlikely to happen but for sanity
+    }
+
+    this.data.delete(this.dataNodes[removeIndex].querySelector(':scope .pills-value'));
+    unmountComponentAtNode(this.dataNodes[removeIndex]);
+    delete this.dataNodes[removeIndex];
+  }
+
+  _addTag(val) {
+    let ele = document.createElement('span');
+    let removeIndex = this.nextDataIndex++;
+
+    this.tagPanelNode.appendChild(ele);
+    this.dataNodes[removeIndex] = ele;
+
+    render((<PillsWrapper>
+        <TextPill value={val} />
+        <PillsDelete clickHandler={this.removeTag.bind(this, removeIndex)} />
+      </PillsWrapper>), ele);
   }
 
   render() {
@@ -44,13 +93,14 @@ class PillsComponent extends Component {
         <FormGroup>
           <ControlLabel>{this.props.label}</ControlLabel>
           <InputGroup>
-            <FormControl type='text' />
+            <FormControl type='text' ref='tagInput' />
             <InputGroup.Button>
-              <Button>Add</Button>
+              <Button onClick={this.handleAdd.bind(this)}>Add</Button>
             </InputGroup.Button>
           </InputGroup>
-          <Panel>
-            Tag area
+
+          <Panel ref='tagPanel'>
+          &nbsp;
           </Panel>
         </FormGroup>
         
@@ -59,15 +109,10 @@ class PillsComponent extends Component {
   }
 }
 
-PillsComponent.displayName = 'CommonPillsPillsComponent';
+PillsComponent.displayName = 'PillsComponent';
 
 PillsComponent.propTypes = {
-  type: PropTypes.string,
-  label: PropTypes.string.isRequired,
-  data: PropTypes.array.isRequired
-};
-PillsComponent.defaultProps = {
-  type: 'Text'
+  label: PropTypes.string.isRequired
 };
 
 export default PillsComponent;

@@ -40,12 +40,9 @@ class TrendingPulseSubscriptionsComponent extends Component {
     super(props);
     
     this.store = new TrendingPulseSubscriptionsStore();
+    this.state = {loggedIn: !!Storage.user};
   }
 
-  getInitialState() {
-    return {loggedIn: !!Storage.user};
-  }
-  
   componentDidMount() {
     console.debug('mounted tpsComponent');
     
