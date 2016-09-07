@@ -29,6 +29,7 @@ import {FormGroup, ControlLabel, FormControl, Panel, Button, Grid, Row, Col} fro
 
 import PillsComponent from '../../common/pills/PillsComponent';
 import AbstractComponent from '../../AbstractComponent';
+import CreatePulseAction from './actions/CreatePulseAction';
 
 class CreatePulseComponent extends AbstractComponent {
   
@@ -46,7 +47,17 @@ class CreatePulseComponent extends AbstractComponent {
 
   handleSubmit(evt) {
     console.debug('submitting pulse', evt);
-    console.debug('tags ', this.refs.tagsComp.getData());
+
+    CreatePulseAction.createPulse('createPulseBtn', 'createPulseForm', this.refs.tagsComp.getData())
+      .then(() => {
+        //save the user and update the store
+        this.state.errorMsg = '';
+        
+      })
+      .catch(message => {
+        this.state.errorMsg = message;
+        this.setState(this.state);
+      });
   }
 
   render() {
@@ -59,13 +70,13 @@ class CreatePulseComponent extends AbstractComponent {
               </Col>
               <Col sm={12}>
                 <form class='form' id='createPulseForm' action=''>
-                  <FormGroup controlId='pulseValue' validationState={this.getValidState('value')}>
+                  <FormGroup controlId='value' validationState={this.getValidState('value')}>
                     <ControlLabel>Name</ControlLabel>
                     <FormControl type='text' name='value' onBlur={this.handleChange.bind(this)} />
                     <FormControl.Feedback />
                   </FormGroup>
 
-                  <FormGroup controlId='pulseDescription' validationState={this.getValidState('description')}>
+                  <FormGroup controlId='description' validationState={this.getValidState('description')}>
                     <ControlLabel>Description</ControlLabel>
                     <FormControl componentClass='textarea' name='description' onBlur={this.handleChange.bind(this)} />
                     <FormControl.Feedback />

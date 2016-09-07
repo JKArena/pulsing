@@ -119,10 +119,15 @@ export default Object.freeze(
         'GET_JSON' : {
           get: function() {
 
-            return (gPath, options=Object.create(null)) => {
+            return (gPath, options=Object.create(null), params=Object.create(null)) => {
               
               const DEFAULT_HEADERS = new Headers({'Accept': 'application/json'});
               const DEFAULT_OPTIONS = {method: 'GET',  mode: 'cors', headers: DEFAULT_HEADERS};
+              
+              let url = new URL(Url.controllerUrl() + gPath);
+              Object.keys(params).forEach(key => {
+                url.searchParams.append(key, params[key]);
+              });
 
               let request = new Request(Url.controllerUrl() + gPath);
               let gOptions = Object.assign(DEFAULT_OPTIONS, options);

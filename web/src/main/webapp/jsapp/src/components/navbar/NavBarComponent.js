@@ -78,18 +78,25 @@ class NavBarComponent extends Component {
             </Navbar.Header>
             
             <Navbar.Collapse>
-              <Nav>
-                <LinkContainer to={{ pathname: '/map/pulse', query: {mapId: 'pulseMap'} }}>
-                  <NavItem>Map</NavItem>
-                </LinkContainer>
-                <NavDropdown id='pulseActions' title='Pulse Actions'>
-                  <LinkContainer to='/createPulse'><NavItem>Create</NavItem></LinkContainer>
-                </NavDropdown>
-              </Nav>
               
               {(() => {
                 if(this.state.loggedIn) {
-                  return <Nav pullRight onSelect={this.loggedOut.bind(this)}><LinkContainer to='/'><NavItem>Logout</NavItem></LinkContainer></Nav>
+                  return <Nav>
+                      <LinkContainer to={{ pathname: '/map/pulse', query: {mapId: 'pulseMap'} }}>
+                        <NavItem>Map</NavItem>
+                      </LinkContainer>
+                      <NavDropdown id='pulseActions' title='Pulse Actions'>
+                        <LinkContainer to='/createPulse'><NavItem>Create</NavItem></LinkContainer>
+                      </NavDropdown>
+                    </Nav>;
+                }
+              })()}
+              
+              {(() => {
+                if(this.state.loggedIn) {
+                  return <Nav pullRight onSelect={this.loggedOut.bind(this)}>
+                      <LinkContainer to='/'><NavItem>Logout</NavItem></LinkContainer>
+                    </Nav>;
                 } else {
                   return <Nav pullRight>
                     <LinkContainer to='/signup'><NavItem>Signup</NavItem></LinkContainer>

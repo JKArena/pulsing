@@ -37,6 +37,7 @@ import org.jhk.pulsing.serialization.avro.records.ACTION;
 import org.jhk.pulsing.serialization.avro.records.Pulse;
 import org.jhk.pulsing.serialization.avro.records.PulseId;
 import org.jhk.pulsing.shared.util.CommonConstants;
+import org.jhk.pulsing.shared.util.Util;
 import org.jhk.pulsing.web.common.Result;
 import static org.jhk.pulsing.web.common.Result.CODE.*;
 import org.jhk.pulsing.web.dao.prod.db.redis.RedisPulseDao;
@@ -72,6 +73,13 @@ public class PulseService extends AbstractStormPublisher
 
     @Override
     public Result<Pulse> createPulse(Pulse pulse) {
+        
+        PulseId pId = PulseId.newBuilder().build();
+        pId.setId(Util.uniqueId());
+        pulse.setAction(ACTION.CREATE);
+        pulse.setId(pId);
+        pulse.setTimeStamp(Instant.now().getEpochSecond());
+        
         Result<Pulse> cPulse = redisPulseDao.createPulse(pulse);
         
         if(cPulse.getCode() == SUCCESS) {
@@ -118,6 +126,7 @@ public class PulseService extends AbstractStormPublisher
         return mpDataPoints;
     }
     
+    private static int TEMP_LIMIT = 10;
     private ExecutorService tempEService;
     
     @Override
@@ -128,16 +137,19 @@ public class PulseService extends AbstractStormPublisher
         
         tempEService = Executors.newSingleThreadExecutor();
         tempEService.submit(() -> {
-           
-            try {
-                TimeUnit.SECONDS.sleep(5);
-                Pulse pulse = org.jhk.pulsing.web.dao.dev.PulseDao.createMockedPulse();
-                pulse.setAction(ACTION.SUBSCRIBE);
-                subscribePulse(pulse);
-                
-                _LOGGER.debug("Submitted..." + pulse.getValue());
-            } catch (Exception e) {
-                e.printStackTrace();
+            
+            int loop = 0;
+            while(loop++ < TEMP_LIMIT) {
+                try {
+                    TimeUnit.SECONDS.sleep(10);
+                    Pulse pulse = org.jhk.pulsing.web.dao.dev.PulseDao.createMockedPulse();
+                    pulse.setAction(ACTION.SUBSCRIBE);
+                    subscribePulse(pulse);
+                    
+                    _LOGGER.debug("Submitted..." + pulse.getValue());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
             
         });

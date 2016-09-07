@@ -28,7 +28,8 @@ const TOPICS = Object.freeze({
   __proto__: null,
   
   AUTH: 'AUTH',
-  USER_GEO_CHANGE: 'USER_GEO_CHANGE'
+  USER_GEO_CHANGE: 'USER_GEO_CHANGE',
+  PULSE_CREATE: 'PULSE_CREATE'
 });
 
 export { TOPICS };

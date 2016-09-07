@@ -34,11 +34,7 @@ class UserId extends AbstractAvro {
   }
   
   get id() {
-    return this.getProperty('id', 'long', 0);
-  }
-  
-  set id(id) {
-    this.json.id = id;
+    return this.json;
   }
   
   get cookie() {

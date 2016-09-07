@@ -18,21 +18,23 @@
  */
 package org.jhk.pulsing.web.dao.prod.db.redis;
 
+import java.io.IOException;
 import java.util.Optional;
 import java.util.Set;
 
 import org.jhk.pulsing.serialization.avro.records.Pulse;
 import org.jhk.pulsing.serialization.avro.records.PulseId;
+import org.jhk.pulsing.serialization.avro.serializers.SerializationHelper;
 import org.jhk.pulsing.shared.util.RedisConstants;
 import org.jhk.pulsing.web.common.Result;
+
+import static org.jhk.pulsing.shared.util.RedisConstants.REDIS_KEY.*;
 import static org.jhk.pulsing.web.common.Result.CODE.*;
 import org.jhk.pulsing.web.dao.IPulseDao;
 import org.jhk.pulsing.web.dao.prod.db.AbstractRedisDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * @author Ji Kim
@@ -44,20 +46,40 @@ public class RedisPulseDao extends AbstractRedisDao
     private static final Logger _LOGGER = LoggerFactory.getLogger(RedisPulseDao.class);
     private static final int _LIMIT = 100;
     
-    private ObjectMapper _objectMapper = new ObjectMapper();
-    
     @Override
     public Optional<Pulse> getPulse(PulseId pulseId) {
         _LOGGER.debug("RedisPulseDao.getPulse: " + pulseId);
         
-        return Optional.empty();
+        String pulseJson = getJedis().get(PULSE_.toString() + pulseId.getId());
+        Optional<Pulse> pulse = Optional.empty();
+        
+        if(pulseJson != null) {
+            try {
+                pulse = Optional.of(SerializationHelper.deserializeFromJSONStringToAvro(Pulse.class, Pulse.getClassSchema(), pulseJson));
+            } catch (IOException dException) {
+                dException.printStackTrace();
+            }
+        }
+        
+        return pulse;
     }
 
     @Override
     public Result<Pulse> createPulse(Pulse pulse) {
         _LOGGER.debug("RedisPulseDao.createPulse: " + pulse);
         
-        return new Result<>(FAILURE, "dummy");
+        Result<Pulse> result;
+        
+        try {
+            String pulseJson = SerializationHelper.serializeAvroTypeToJSONString(pulse);
+            getJedis().setex(PULSE_.toString() + pulse.getId().getId(), RedisConstants.CACHE_EXPIRE_DAY, pulseJson);            
+            result = new Result<>(SUCCESS, pulse);
+        } catch (IOException sException) {
+            result = new Result<>(FAILURE, sException.getMessage());
+            sException.printStackTrace();
+        }
+        
+        return result;
     }
     
     public Optional<Set<String>> getTrendingPulseSubscriptions(long brEpoch, long cEpoch) {
