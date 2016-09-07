@@ -33,13 +33,12 @@ const MapPulseAction = Object.freeze(
 
     getMapPulseDataPoints(latLng) {
 
-      let fData = new FormData();
-      fData.append('lat', latLng.lat);
-      fData.append('lng', latLng.lng);
-
+      let params = {__proto__: null,
+                    'lat': latLng.lat,
+                    'lng': latLng.lng};
       return new Promise(function(resolve, reject) {
 
-        Fetch.GET_JSON(GET_MAP_PULSE_DATA_POINTS_PATH, {body: fData})
+        Fetch.GET_JSON(GET_MAP_PULSE_DATA_POINTS_PATH, {}, params)
           .then(function(json) {
             console.debug('getMapPulseDataPoints', json);
             

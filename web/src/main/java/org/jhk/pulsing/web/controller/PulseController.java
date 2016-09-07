@@ -28,10 +28,11 @@ import org.jhk.pulsing.web.common.Result;
 import org.jhk.pulsing.web.service.IPulseService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
@@ -46,8 +47,8 @@ public class PulseController extends AbstractController {
     @Inject
     private IPulseService pulseService;
     
-    @RequestMapping(value="/createPulse", method=RequestMethod.POST)
-    public @ResponseBody Result<Pulse> createPulse(@RequestBody Pulse pulse) {
+    @RequestMapping(value="/createPulse", method=RequestMethod.POST, consumes={MediaType.MULTIPART_FORM_DATA_VALUE})
+    public @ResponseBody Result<Pulse> createPulse(@RequestParam Pulse pulse) {
         _LOGGER.debug("PulseController.createPulse: " + pulse);
         
         return pulseService.createPulse(pulse);

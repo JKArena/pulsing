@@ -49,14 +49,9 @@ class MapComponent extends Component {
     this.map = null;
 
     //will only be enabled when logged in + geolocation enabled; for now testing
-    let lat = 52.809167;
-    let lng = -0.630556;
-    
     let user = Storage.user;
-    if(user && user.coordinates) {
-      lat = user.coordinates[0];
-      lng = user.coordinates[1];
-    }
+    let lat = user.coordinates[0];
+    let lng = user.coordinates[1];
     
     this.state = {
       lat: lat,
@@ -72,7 +67,7 @@ class MapComponent extends Component {
 
   componentWillUnmount() {
     if(this.store) {
-      this.store.removeDataPointsListener(this._onFetched.bind(this));
+      this.store.removeDataPointsListener(this._onDataPoints.bind(this));
       this.store = null;
     }
   }
