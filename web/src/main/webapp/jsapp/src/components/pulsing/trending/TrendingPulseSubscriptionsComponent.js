@@ -41,12 +41,14 @@ class TrendingPulseSubscriptionsComponent extends Component {
     
     this.store = new TrendingPulseSubscriptionsStore();
     this.state = {loggedIn: !!Storage.user};
+    this.authHandler = this._onAuth.bind(this);
+    this.fetchHandler = this._onFetched.bind(this);
   }
 
   componentDidMount() {
     console.debug('mounted tpsComponent');
     
-    this.store.addFetchedListener(this._onFetched.bind(this));
+    this.store.addFetchedListener(this.fetchHandler);
     this.store.fetchTrending();
     
     this.ws = new WebSockets('pulseSubscribeSocketJS');
@@ -56,14 +58,14 @@ class TrendingPulseSubscriptionsComponent extends Component {
         this.sub = this.ws.subscribe('/pulsingTopic/pulseSubscribe', this._onPulseSubscribe.bind(this));
       });
     
-    API.subscribe(TOPICS.AUTH, this._onAuth.bind(this));
+    API.subscribe(TOPICS.AUTH, this.authHandler);
   }
   
   componentWillUnmount() {
     console.debug('unmounted tpsComponent');
     
     if(this.store) {
-      this.store.removeFetchedListener(this._onFetched.bind(this));
+      this.store.removeFetchedListener(this.fetchHandler);
       this.store = null;
     }
 
@@ -77,7 +79,7 @@ class TrendingPulseSubscriptionsComponent extends Component {
       this.sub = null;
     }
     
-    API.unsubscribe(TOPICS.AUTH, this._onAuth.bind(this));
+    API.unsubscribe(TOPICS.AUTH, this.authHandler);
   }
   
   handleSubscribe(evt) {

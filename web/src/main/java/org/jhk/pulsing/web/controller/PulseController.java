@@ -62,8 +62,8 @@ public class PulseController extends AbstractController {
     }
     
     @RequestMapping(value="/getMapPulseDataPoints", method=RequestMethod.GET)
-    public @ResponseBody List<Pulse> getMapPulseDataPoints(Double lat, Double lng) {
-        _LOGGER.debug("PulseController.getMapPulseDataPoints");
+    public @ResponseBody List<Pulse> getMapPulseDataPoints(@RequestParam Double lat, @RequestParam Double lng) {
+        _LOGGER.debug("PulseController.getMapPulseDataPoints: " + lat + " - " + lng);
         
         return pulseService.getMapPulseDataPoints(lat, lng);
     }

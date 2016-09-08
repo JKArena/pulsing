@@ -41,7 +41,7 @@ class AbstractMapStore extends EventEmitter {
   }
   
   fetchDataPoints(map, latLng) {
-    throw new Error('AbstractMapStore should not be used standalone');
+    throw new Error('AbstractMapStore should not be used standalone ' + latLng);
   }
 
   removeDataPoint(index) {

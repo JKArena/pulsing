@@ -27,9 +27,11 @@ require('./Map.scss');
 import React, {Component} from 'react';
 import {Grid, Row, Col} from 'react-bootstrap';
 
+import {TOPICS, API} from '../../common/PubSub';
 import Storage from '../../common/Storage';
 import GMapPulseStore from './store/GMapPulseStore';
 
+const ZOOM_DEFAULT = 10;
 const API_URL = 'http://maps.googleapis.com/maps/api/js?key=AIzaSyAcUzIUuUTuOZndo3OGs2J4FV-8Ay963ug';
 const KEY_STORE_MAPPER = Object.freeze(
   {
@@ -45,8 +47,9 @@ class MapComponent extends Component {
     
     this.store = KEY_STORE_MAPPER[props.params.store]();
     this.mapId = props.location.query.mapId;
-
     this.map = null;
+    this.geoChangeHandler = this._onGeoChange.bind(this);
+    this.dataPointsHandler = this._onDataPoints.bind(this);
 
     //will only be enabled when logged in + geolocation enabled; for now testing
     let user = Storage.user;
@@ -56,20 +59,23 @@ class MapComponent extends Component {
     this.state = {
       lat: lat,
       lng: lng,
-      zoom: 3
+      zoom: ZOOM_DEFAULT
     };
 
   }
 
   componentDidMount() {
-    this.store.addDataPointsListener(this._onDataPoints.bind(this));
+    this.store.addDataPointsListener(this.dataPointsHandler);
+    API.subscribe(TOPICS.USER_GEO_CHANGE, this.geoChangeHandler);
+    this._initialFetchDataPoints();
   }
 
   componentWillUnmount() {
     if(this.store) {
-      this.store.removeDataPointsListener(this._onDataPoints.bind(this));
+      this.store.removeDataPointsListener(this.dataPointsHandler);
       this.store = null;
     }
+    API.unsubscribe(TOPICS.USER_GEO_CHANGE, this.geoChangeHandler);
   }
 
   componentWillMount() {
@@ -88,6 +94,10 @@ class MapComponent extends Component {
   componentDidUpdate() {
     console.debug('componentDidUpdate');
 
+    this._initialFetchDataPoints();
+  }
+
+  _initialFetchDataPoints() {
     if(global.google && !this.map) {
       this.map = new global.google.maps.Map(document.getElementById(this.mapId), {
         center: {lat: this.state.lat, lng: this.state.lng},
@@ -96,6 +106,19 @@ class MapComponent extends Component {
 
       this.store.fetchDataPoints(this.map, {lat: this.state.lat, lng: this.state.lng});
     }
+  }
+
+  _onGeoChange(coordinates) {
+    console.debug('geoChange');
+
+    this.map = null;
+    this.state = {
+      lat: coordinates[0],
+      lng: coordinates[1],
+      zoom: ZOOM_DEFAULT
+    };
+
+    this.setState(this.state);
   }
 
   _onDataPoints(dataPoints) {

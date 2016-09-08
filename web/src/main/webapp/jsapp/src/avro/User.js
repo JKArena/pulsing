@@ -29,6 +29,7 @@ import {TOPICS, API} from '../common/PubSub';
 
 const FORM_MAPPER = Symbol('FORM_MAPPER');
 const U_GEOLOCATION_OPTS = {'timeout': 30000, 'maximumAge': 30000};
+const GEOLOCATION_NOTIFICATION_CHANGE_THRESHOLD = 2;
 
 class User extends AbstractAvro {
   
@@ -37,20 +38,30 @@ class User extends AbstractAvro {
     
     this.json = json || AvroJson('User');
     this.formMapper = User[FORM_MAPPER];
-    this._watchId = global.navigator.geolocation.watchPosition(this._onPosition.bind(this),
+    this.watchId = global.navigator.geolocation.watchPosition(this._onPosition.bind(this),
                       (err) => {console.error('Error in geolocation', err);}, U_GEOLOCATION_OPTS);
   }
 
   clearGeoWatch() {
-    global.geolocation.clearWatch(this._watchId);
+    global.geolocation.clearWatch(this.watchId);
   }
   
   _onPosition(position) {
     console.debug('position ', position);
     
+    let distance = 0;
     let coords = position.coords;
+    if(this.coordinates) {
+      //compare to see if the threshold is met to notify the geolocation changes
+      distance = Math.sqrt(Math.pow(coords.latitude-this.coordinates[0], 2) +
+        Math.pow(coords.longitude-this.coordinates[1], 2));
+    }
+
+    if(!this.coordinates || distance >= GEOLOCATION_NOTIFICATION_CHANGE_THRESHOLD) {
+      API.publish(TOPICS.USER_GEO_CHANGE, [coords.latitude, coords.longitude]);
+    }
+
     this.coordinates = [coords.latitude, coords.longitude];
-    API.publish(TOPICS.USER_GEO_CHANGE, [coords.latitude, coords.longitude]); //so can't modify the value accidentally
   }
   
   get id() {

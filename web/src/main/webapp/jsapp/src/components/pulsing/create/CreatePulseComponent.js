@@ -28,6 +28,8 @@ import React from 'react';
 import {FormGroup, ControlLabel, FormControl, Panel, Button, Grid, Row, Col} from 'react-bootstrap';
 
 import PillsComponent from '../../common/pills/PillsComponent';
+import {TOPICS, API} from '../../../common/PubSub';
+import Common from '../../../common/Common';
 import AbstractComponent from '../../AbstractComponent';
 import CreatePulseAction from './actions/CreatePulseAction';
 
@@ -52,7 +54,8 @@ class CreatePulseComponent extends AbstractComponent {
       .then(() => {
         //save the user and update the store
         this.state.errorMsg = '';
-        
+
+        API.publish(TOPICS.NAVIGATION_CHANGE, Common.MAIN_NAV_PATH);
       })
       .catch(message => {
         this.state.errorMsg = message;
