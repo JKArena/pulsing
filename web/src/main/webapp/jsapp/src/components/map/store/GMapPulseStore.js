@@ -33,6 +33,7 @@ class GMapPulseStore extends AbstractMapStore {
   }
   
   fetchDataPoints(map, latLng) {
+    this.clearDataPoints();
 
     MapPulseAction.getMapPulseDataPoints(latLng)
       .then(function(mpDataPoints) {

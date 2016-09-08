@@ -70,6 +70,11 @@ public final class PulseTopologyBuilder {
 
     }
     
+    /**
+     * Need to create PulseEdge for the tags 
+     * 
+     * @return
+     */
     private static StormTopology pailBuild() {
         
         TopologyBuilder builder = new TopologyBuilder();

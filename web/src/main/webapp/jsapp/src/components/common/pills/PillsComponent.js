@@ -59,6 +59,7 @@ class PillsComponent extends Component {
     }
     this.data.add(val);
     this._addTag(val);
+    this.tagInputNode.value = '';
   }
 
   removeTag(removeIndex, evt) {

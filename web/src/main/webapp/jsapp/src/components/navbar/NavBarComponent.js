@@ -31,6 +31,7 @@ import {LinkContainer} from 'react-router-bootstrap';
 
 import {TOPICS, API} from '../../common/PubSub';
 import Storage from '../../common/Storage';
+import Common from '../../common/Common';
 
 class NavBarComponent extends Component {
 
@@ -38,6 +39,8 @@ class NavBarComponent extends Component {
     super(props);
 
     this.state = {loggedIn: !!Storage.user};
+    this.authHandler = this._onAuth.bind(this);
+    this.navigationChangeHandler = this._onNavigationChange.bind(this);
   }
   
   loggedOut() {
@@ -50,20 +53,28 @@ class NavBarComponent extends Component {
   }
   
   _onAuth(auth) {
-    const MAIN = '/';
     
     this.state.loggedIn = auth.loggedIn;
     this.setState(this.state);
     
-    browserHistory.push(MAIN);
+    browserHistory.push(Common.MAIN_NAV_PATH);
   }
   
   componentDidMount() {
-    API.subscribe(TOPICS.AUTH, this._onAuth.bind(this));
+    API.subscribe(TOPICS.AUTH, this.authHandler);
+    API.subscribe(TOPICS.NAVIGATION_CHANGE, this.navigationChangeHandler);
   }
   
   componentWillUnmount() {
-    API.unsubscribe(TOPICS.AUTH, this._onAuth.bind(this));
+    API.unsubscribe(TOPICS.AUTH, this.authHandler);
+    API.unsubscribe(TOPICS.NAVIGATION_CHANGE, this.navigationChangeHandler);
+  }
+
+  _onNavigationChange(newNav) {
+    console.debug('Nav geochange', newNav);
+    this.setState(this.state);
+
+    browserHistory.push(newNav);
   }
   
   render() {
@@ -78,13 +89,20 @@ class NavBarComponent extends Component {
             </Navbar.Header>
             
             <Navbar.Collapse>
-              
+
               {(() => {
-                if(this.state.loggedIn) {
+                if(this.state.loggedIn && Storage.user.coordinates) {
                   return <Nav>
                       <LinkContainer to={{ pathname: '/map/pulse', query: {mapId: 'pulseMap'} }}>
                         <NavItem>Map</NavItem>
                       </LinkContainer>
+                    </Nav>;
+                }
+              })()}
+              
+              {(() => {
+                if(this.state.loggedIn) {
+                  return <Nav>
                       <NavDropdown id='pulseActions' title='Pulse Actions'>
                         <LinkContainer to='/createPulse'><NavItem>Create</NavItem></LinkContainer>
                       </NavDropdown>

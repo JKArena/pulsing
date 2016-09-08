@@ -71,6 +71,7 @@ public final class ConverterCommon {
         pProperty.setProperty(ppValue);
         
         ppValue.setValue(pulse.getValue().toString());
+        ppValue.setDescription(pulse.getDescription().toString());
         
         List<Double> coordinates = pulse.getCoordinates();
         if(coordinates != null) {

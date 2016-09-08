@@ -32,7 +32,7 @@ const MapPulseAction = Object.freeze(
     __proto__: null,
 
     getMapPulseDataPoints(latLng) {
-
+      console.debug('getMapPulseDataPoints', latLng);
       let params = {__proto__: null,
                     'lat': latLng.lat,
                     'lng': latLng.lng};

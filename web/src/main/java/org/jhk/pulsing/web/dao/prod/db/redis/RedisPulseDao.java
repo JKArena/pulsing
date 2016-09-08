@@ -19,6 +19,8 @@
 package org.jhk.pulsing.web.dao.prod.db.redis;
 
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -36,6 +38,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
+import redis.clients.jedis.GeoRadiusResponse;
+import redis.clients.jedis.GeoUnit;
+
 /**
  * @author Ji Kim
  */
@@ -45,6 +50,7 @@ public class RedisPulseDao extends AbstractRedisDao
     
     private static final Logger _LOGGER = LoggerFactory.getLogger(RedisPulseDao.class);
     private static final int _LIMIT = 100;
+    private static final double _DEFAULT_PULSE_RADIUS = 5;  //just for now, push to client config later
     
     @Override
     public Optional<Pulse> getPulse(PulseId pulseId) {
@@ -63,7 +69,13 @@ public class RedisPulseDao extends AbstractRedisDao
         
         return pulse;
     }
-
+    
+    /**
+     * TODO: Do not push pulse if <value> and the <geolocation> area exists 
+     * 
+     * @param pulse
+     * @return
+     */
     @Override
     public Result<Pulse> createPulse(Pulse pulse) {
         _LOGGER.debug("RedisPulseDao.createPulse: " + pulse);
@@ -71,8 +83,15 @@ public class RedisPulseDao extends AbstractRedisDao
         Result<Pulse> result;
         
         try {
+            String pKey = PULSE_.toString();
+            List<Double> coordinates = pulse.getCoordinates();
+            double lat = coordinates.get(0);
+            double lng = coordinates.get(1);
+            
             String pulseJson = SerializationHelper.serializeAvroTypeToJSONString(pulse);
-            getJedis().setex(PULSE_.toString() + pulse.getId().getId(), RedisConstants.CACHE_EXPIRE_DAY, pulseJson);            
+            getJedis().setex(pKey + pulse.getId().getId(), RedisConstants.CACHE_EXPIRE_DAY, pulseJson);
+            getJedis().geoadd(pKey, lng, lat, pulseJson);
+            
             result = new Result<>(SUCCESS, pulse);
         } catch (IOException sException) {
             result = new Result<>(FAILURE, sException.getMessage());
@@ -80,6 +99,23 @@ public class RedisPulseDao extends AbstractRedisDao
         }
         
         return result;
+    }
+    
+    public List<Pulse> getMapPulseDataPoints(double lat, double lng) {
+        List<Pulse> pDataPoints = new LinkedList<>();
+        
+        List<GeoRadiusResponse> response = getJedis().georadius(PULSE_.toString(), lng, lat, _DEFAULT_PULSE_RADIUS, GeoUnit.M);
+        response.stream().forEach(grResponse -> {
+            
+            try {
+                pDataPoints.add(SerializationHelper.deserializeFromJSONStringToAvro(Pulse.class, Pulse.getClassSchema(), grResponse.getMemberByString()));
+            } catch (IOException ioException) {
+                _LOGGER.warn("Failure in parsing of georadiusresponse: " + grResponse);
+                ioException.printStackTrace();
+            }
+        });
+        
+        return pDataPoints;
     }
     
     public Optional<Set<String>> getTrendingPulseSubscriptions(long brEpoch, long cEpoch) {

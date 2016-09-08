@@ -62,6 +62,7 @@ public class PulseDao implements IPulseDao {
         
         Pulse pulse = Pulse.newBuilder().build();
         pulse.setValue("Mocked " + _PULSE_ID_COUNTER);
+        pulse.setDescription("Sample for " + _PULSE_ID_COUNTER);
         pulse.setId(pulseId);
         pulse.setTimeStamp(Instant.now().getEpochSecond());
         pulse.setAction(ACTION.CREATE);

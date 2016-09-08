@@ -29,6 +29,8 @@ export default Object.freeze(
       eventCanceller(evt) {
         evt.stopPropagation();
         evt.preventDefault();
-      }
+      },
+
+      MAIN_NAV_PATH: '/'
     }
 );

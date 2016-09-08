@@ -34,11 +34,11 @@ class WebSockets {
     this.socket = new SocketJs(Url.controllerUrl() + url);
     this.stomp = StompJs.over(this.socket);
     
-    this._connected = false;
+    this.connected = false;
   }
   
   connect(login='', passcode='') {
-    if(this._connected) {
+    if(this.connected) {
       return Promise.resolve({});
     }
     
@@ -46,7 +46,7 @@ class WebSockets {
       
       this.stomp.connect(login, passcode,
         frame => {
-          this._connected = true;
+          this.connected = true;
           resolve(frame);
         },
         error => {
@@ -66,7 +66,7 @@ class WebSockets {
   
   destroy() {
     this.disconnect();
-    this._connected = false;
+    this.connected = false;
     this.socket = null;
     this.stomp = null;
   }

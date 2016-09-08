@@ -70,7 +70,17 @@ public class PulseService extends AbstractStormPublisher
         
         return optPulse.isPresent() ? new Result<>(SUCCESS, optPulse.get()) : new Result<>(FAILURE, "Unabled to find " + pulseId);
     }
-
+    
+    
+    /**
+     * For creation of pulse there are couple of tasks that must be done
+     * 1) Add the pulse to Redis 
+     * 2) Send the message to storm of the creation (need couple of different writes to Hadoop for Data + Edges for processing)
+     * 3) Send the websocket topic to clients (namely MapComponent) that a new pulse has been created (to either map or not)
+     * 
+     * @param pulse
+     * @return
+     */
     @Override
     public Result<Pulse> createPulse(Pulse pulse) {
         
@@ -83,19 +93,25 @@ public class PulseService extends AbstractStormPublisher
         Result<Pulse> cPulse = redisPulseDao.createPulse(pulse);
         
         if(cPulse.getCode() == SUCCESS) {
-            getStormPublisher().produce(CommonConstants.TOPICS.USER_CREATE.toString(), cPulse.getData());
+            getStormPublisher().produce(CommonConstants.TOPICS.PULSE_CREATE.toString(), cPulse.getData());
         }
         
         return cPulse;
     }
-
+    
+    /**
+     * 1) Send the message to storm of the subscription (update to redis taken care of by it)
+     * 
+     * @param pulse
+     * @return
+     */
     @Override
     public Result<PulseId> subscribePulse(Pulse pulse) {
         
         getStormPublisher().produce(CommonConstants.TOPICS.PULSE_SUBSCRIBE.toString(), pulse);
         return new Result<>(SUCCESS, pulse.getId());
     }
-
+    
     @Override
     public Map<Long, String> getTrendingPulseSubscriptions(int numMinutes) {
         
@@ -116,34 +132,33 @@ public class PulseService extends AbstractStormPublisher
     
     @Override
     public List<Pulse> getMapPulseDataPoints(Double lat, Double lng) {
-        List<Pulse> mpDataPoints = new LinkedList<>();
-        //TEMP for now till process the data in storm+redis. Also return all data points
-        //but in redis store by geo location proximity
-        for(int loop=0; loop < 10; loop++) {
-            mpDataPoints.add(org.jhk.pulsing.web.dao.dev.PulseDao.createMockedPulse());
-        }
         
-        return mpDataPoints;
+        return redisPulseDao.getMapPulseDataPoints(lat, lng);
     }
     
-    private static int TEMP_LIMIT = 10;
     private ExecutorService tempEService;
     
     @Override
     public void init() {
         super.init();
         
-        _LOGGER.debug("Testing...");
+        final List<Pulse> entries = new LinkedList<>();
+        for(int createCount=0; createCount < 10; createCount++) {
+            Pulse pulse = org.jhk.pulsing.web.dao.dev.PulseDao.createMockedPulse();
+            pulse.setAction(ACTION.SUBSCRIBE);
+            entries.add(pulse);
+        }
         
         tempEService = Executors.newSingleThreadExecutor();
         tempEService.submit(() -> {
             
-            int loop = 0;
-            while(loop++ < TEMP_LIMIT) {
+            long userId = 1000L;
+            for(int loop=0; loop < 20; loop++) {
                 try {
                     TimeUnit.SECONDS.sleep(10);
-                    Pulse pulse = org.jhk.pulsing.web.dao.dev.PulseDao.createMockedPulse();
-                    pulse.setAction(ACTION.SUBSCRIBE);
+                    
+                    Pulse pulse = entries.get((int) Math.random()*entries.size());
+                    pulse.getUserId().setId(userId++);
                     subscribePulse(pulse);
                     
                     _LOGGER.debug("Submitted..." + pulse.getValue());
