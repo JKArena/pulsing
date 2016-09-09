@@ -18,7 +18,7 @@
  */
 package org.jhk.pulsing.web.controller;
 
-import org.jhk.pulsing.web.websocket.model.UserIdPulseId;
+import org.jhk.pulsing.serialization.avro.records.Pulse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -33,14 +33,12 @@ public class WebSocketController {
     
     private static final Logger _LOGGER = LoggerFactory.getLogger(WebSocketController.class);
     
-    @MessageMapping("/pulseSubscribeSocketJS")
-    @SendTo("/pulsingTopic/pulseSubscribe")
-    public long pulseSubscribe(UserIdPulseId userIdPulseid) {
-        _LOGGER.debug("WebSocketController.pulseSubscribe: " + userIdPulseid);
+    @MessageMapping("/pulseSocketJS")
+    @SendTo("/topics/pulseCreated")
+    public Pulse pulseCreated(Pulse pulse) {
+        _LOGGER.debug("WebSocketController.pulseCreated: " + pulse);
         
-        //notify new user subscribed to the pulse
-        //should have the subscription time out (as a config?)
-        return userIdPulseid.getUserId();
+        return pulse;
     }
     
 }

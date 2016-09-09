@@ -28,7 +28,6 @@ import {Grid, Row, Col, Thumbnail, Button, Badge} from 'react-bootstrap';
 import React, {Component} from 'react';
 
 import TrendingPulseSubscriptionsStore from './TrendingPulseSubscriptionsStore';
-import WebSockets from '../../../common/WebSockets';
 import {TOPICS, API} from '../../../common/PubSub';
 import Storage from '../../../common/Storage';
 
@@ -51,13 +50,6 @@ class TrendingPulseSubscriptionsComponent extends Component {
     this.store.addFetchedListener(this.fetchHandler);
     this.store.fetchTrending();
     
-    this.ws = new WebSockets('pulseSubscribeSocketJS');
-    this.ws.connect()
-      .then(frame => {
-        console.debug('frame', frame);
-        this.sub = this.ws.subscribe('/pulsingTopic/pulseSubscribe', this._onPulseSubscribe.bind(this));
-      });
-    
     API.subscribe(TOPICS.AUTH, this.authHandler);
   }
   
@@ -69,11 +61,6 @@ class TrendingPulseSubscriptionsComponent extends Component {
       this.store = null;
     }
 
-    if(this.ws) {
-      this.ws.destroy();
-      this.ws = null;
-    }
-    
     if(this.sub){
       this.sub.unsubscribe();
       this.sub = null;
@@ -85,20 +72,13 @@ class TrendingPulseSubscriptionsComponent extends Component {
   handleSubscribe(evt) {
     
     let user = Storage.user;
-    
     console.debug('handleSubscribe', evt.target.id, user.id);
-    this.ws.send('/pulsingSocket/pulseSubscribeSocketJS', {},
-                  JSON.stringify({pulseId: evt.target.id, userId: user.id.id}));
+    
   }
   
   _onAuth(auth) {
     this.state.loggedIn = auth.loggedIn;
     this.setState(this.state);
-  }
-  
-  _onPulseSubscribe(pulse) {
-    console.debug('_onPulseSubscribe', pulse);
-    
   }
   
   _onFetched(trending) {

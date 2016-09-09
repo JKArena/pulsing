@@ -26,6 +26,7 @@ import AvroJson from './avrojson';
 import AbstractAvro from './AbstractAvro';
 import UserId from './UserId';
 import {TOPICS, API} from '../common/PubSub';
+import Common from '../common/Common';
 
 const FORM_MAPPER = Symbol('FORM_MAPPER');
 const U_GEOLOCATION_OPTS = {'timeout': 30000, 'maximumAge': 30000};

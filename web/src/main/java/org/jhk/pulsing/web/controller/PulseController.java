@@ -24,11 +24,13 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import org.jhk.pulsing.serialization.avro.records.Pulse;
+import org.jhk.pulsing.serialization.avro.serializers.SerializationHelper;
 import org.jhk.pulsing.web.common.Result;
 import org.jhk.pulsing.web.service.IPulseService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -45,13 +47,27 @@ public class PulseController extends AbstractController {
     private static final Logger _LOGGER = LoggerFactory.getLogger(PulseController.class);
     
     @Inject
+    private SimpMessagingTemplate template;
+    
+    @Inject
     private IPulseService pulseService;
     
     @RequestMapping(value="/createPulse", method=RequestMethod.POST, consumes={MediaType.MULTIPART_FORM_DATA_VALUE})
     public @ResponseBody Result<Pulse> createPulse(@RequestParam Pulse pulse) {
         _LOGGER.debug("PulseController.createPulse: " + pulse);
         
-        return pulseService.createPulse(pulse);
+        Result<Pulse> result = pulseService.createPulse(pulse);
+        
+        if(result.getCode() == Result.CODE.SUCCESS) {
+            try {
+                template.convertAndSend("/topics/pulseCreated", SerializationHelper.serializeAvroTypeToJSONString(result.getData()));
+            } catch (Exception except) {
+                _LOGGER.error("Error while converting pulse ", except);
+                except.printStackTrace();
+            }
+        }
+        
+        return result;
     }
     
     @RequestMapping(value="/getTrendingPulseSubscriptions", method=RequestMethod.GET)
@@ -62,7 +78,7 @@ public class PulseController extends AbstractController {
     }
     
     @RequestMapping(value="/getMapPulseDataPoints", method=RequestMethod.GET)
-    public @ResponseBody List<Pulse> getMapPulseDataPoints(@RequestParam Double lat, @RequestParam Double lng) {
+    public @ResponseBody List<Pulse> getMapPulseDataPoints(double lat, double lng) {
         _LOGGER.debug("PulseController.getMapPulseDataPoints: " + lat + " - " + lng);
         
         return pulseService.getMapPulseDataPoints(lat, lng);

@@ -128,8 +128,7 @@ export default Object.freeze(
               Object.keys(params).forEach(key => {
                 url.searchParams.append(key, params[key]);
               });
-              console.debug('url path ', params, url);
-              let request = new Request(Url.controllerUrl() + gPath);
+              let request = new Request(url);
               let gOptions = Object.assign(DEFAULT_OPTIONS, options);
 
               return fetchContent(request, gOptions, 'json');

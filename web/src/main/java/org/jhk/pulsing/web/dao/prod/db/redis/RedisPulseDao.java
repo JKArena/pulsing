@@ -49,8 +49,6 @@ public class RedisPulseDao extends AbstractRedisDao
                             implements IPulseDao {
     
     private static final Logger _LOGGER = LoggerFactory.getLogger(RedisPulseDao.class);
-    private static final int _LIMIT = 100;
-    private static final double _DEFAULT_PULSE_RADIUS = 5;  //just for now, push to client config later
     
     @Override
     public Optional<Pulse> getPulse(PulseId pulseId) {
@@ -83,14 +81,22 @@ public class RedisPulseDao extends AbstractRedisDao
         Result<Pulse> result;
         
         try {
-            String pKey = PULSE_.toString();
             List<Double> coordinates = pulse.getCoordinates();
             double lat = coordinates.get(0);
             double lng = coordinates.get(1);
             
+            /*
+             * Hmmm...add denormalized content for easier fetch since the pulse itself can't be modified after creation 
+             * (other than tags) and don't want to perform so many queries or should just go for memory consumption?
+             * Decisions decisions o.O
+             */
             String pulseJson = SerializationHelper.serializeAvroTypeToJSONString(pulse);
-            getJedis().setex(pKey + pulse.getId().getId(), RedisConstants.CACHE_EXPIRE_DAY, pulseJson);
-            getJedis().geoadd(pKey, lng, lat, pulseJson);
+            getJedis().setex(PULSE_.toString() + pulse.getId().getId(), RedisConstants.CACHE_EXPIRE_DAY, pulseJson);
+            getJedis().geoadd(PULSE_GEO_.toString(), lng, lat, pulseJson);
+            
+            for(CharSequence tag : pulse.getTags()) {
+                getJedis().sadd(PULSE_TAGS_.toString() + tag, pulseJson);
+            }
             
             result = new Result<>(SUCCESS, pulse);
         } catch (IOException sException) {
@@ -102,9 +108,12 @@ public class RedisPulseDao extends AbstractRedisDao
     }
     
     public List<Pulse> getMapPulseDataPoints(double lat, double lng) {
+        
+        final double _DEFAULT_PULSE_RADIUS = 5;  //just for now, push to client config later
+        
         List<Pulse> pDataPoints = new LinkedList<>();
         
-        List<GeoRadiusResponse> response = getJedis().georadius(PULSE_.toString(), lng, lat, _DEFAULT_PULSE_RADIUS, GeoUnit.M);
+        List<GeoRadiusResponse> response = getJedis().georadius(PULSE_GEO_.toString(), lng, lat, _DEFAULT_PULSE_RADIUS, GeoUnit.M);
         response.stream().forEach(grResponse -> {
             
             try {
@@ -121,7 +130,9 @@ public class RedisPulseDao extends AbstractRedisDao
     public Optional<Set<String>> getTrendingPulseSubscriptions(long brEpoch, long cEpoch) {
         _LOGGER.debug("RedisPulseDao.getTrendingPulseSubscriptions: " + brEpoch + " - " + cEpoch);
         
-        Set<String> result = getJedis().zrangeByScore(RedisConstants.REDIS_KEY.SUBSCRIBE_PULSE_.toString(), brEpoch, cEpoch, 0, _LIMIT);
+        final int _LIMIT = 100;
+        
+        Set<String> result = getJedis().zrangeByScore(SUBSCRIBE_PULSE_.toString(), brEpoch, cEpoch, 0, _LIMIT);
         _LOGGER.debug("RedisPulseDao.getTrendingPulseSubscriptions.queryResult: " + result.size());
         return Optional.ofNullable(result);
     }
