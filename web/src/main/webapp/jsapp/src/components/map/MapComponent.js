@@ -27,8 +27,10 @@ require('./Map.scss');
 import React, {Component} from 'react';
 import {Grid, Row, Col} from 'react-bootstrap';
 
+import WebSockets from '../../common/WebSockets';
 import {TOPICS, API} from '../../common/PubSub';
 import Storage from '../../common/Storage';
+import Pulse from '../../avro/Pulse';
 import GMapPulseStore from './store/GMapPulseStore';
 
 const ZOOM_DEFAULT = 10;
@@ -50,6 +52,7 @@ class MapComponent extends Component {
     this.map = null;
     this.geoChangeHandler = this._onGeoChange.bind(this);
     this.dataPointsHandler = this._onDataPoints.bind(this);
+    this.pulseCreatedHandler = this._onPulseCreated.bind(this);
 
     //will only be enabled when logged in + geolocation enabled; for now testing
     let user = Storage.user;
@@ -66,6 +69,16 @@ class MapComponent extends Component {
 
   componentDidMount() {
     this.store.addDataPointsListener(this.dataPointsHandler);
+    this.ws = new WebSockets('pulseSocketJS');
+    this.ws.connect()
+      .then(frame => {
+        console.debug('frame', frame);
+        this.sub = this.ws.subscribe('/topics/pulseCreated', this.pulseCreatedHandler);
+      });
+    /* Just for note
+    this.ws.send('/pulsingSocket/pulseSocketJS', {},
+                  JSON.stringify({pulseId: evt.target.id, userId: user.id.id}));
+    */
     API.subscribe(TOPICS.USER_GEO_CHANGE, this.geoChangeHandler);
     this._initialFetchDataPoints();
   }
@@ -75,6 +88,12 @@ class MapComponent extends Component {
       this.store.removeDataPointsListener(this.dataPointsHandler);
       this.store = null;
     }
+
+    if(this.ws) {
+      this.ws.destroy();
+      this.ws = null;
+    }
+
     API.unsubscribe(TOPICS.USER_GEO_CHANGE, this.geoChangeHandler);
   }
 
@@ -105,6 +124,14 @@ class MapComponent extends Component {
       });
 
       this.store.fetchDataPoints(this.map, {lat: this.state.lat, lng: this.state.lng});
+    }
+  }
+
+  _onPulseCreated(pulse) {
+    console.debug('_onPulseCreated', pulse);
+    
+    if(pulse && pulse.body) {
+      this.store.addDataPoint(this.map, Pulse.deserialize(JSON.parse(pulse.body)));
     }
   }
 

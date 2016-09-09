@@ -39,13 +39,13 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer
     
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
-        registry.enableSimpleBroker("/pulsingTopic");
+        registry.enableSimpleBroker("/topics");
         registry.setApplicationDestinationPrefixes("/pulsingSocket");
     }
     
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/pulseSubscribeSocketJS").setAllowedOrigins("*").withSockJS();
+        registry.addEndpoint("/pulseSocketJS").setAllowedOrigins("*").withSockJS();
     }
     
     @Override

@@ -41,35 +41,42 @@ class GMapPulseStore extends AbstractMapStore {
         this.dataPoints = [];
 
         mpDataPoints.forEach(pulse => {
-          let coordinates = pulse.coordinates;
 
-          if(coordinates && coordinates.length === 2) {
-            let marker = new global.google.maps.Marker({
-              position: {lat: coordinates[0], lng: coordinates[1]},
-              map: map,
-              title: pulse.value
-            });
-
-            let cnt = 'Prob display approximate sub count for ' + pulse.value;
-            if(pulse.timeStamp) {
-              //multiply by 1000 since millisecond in client whereas seconds in server
-              cnt += ' created: ' + (new Date(pulse.timeStamp*1000));
-            }
-            let iWindow = new global.google.maps.InfoWindow({
-              content: cnt
-            });
-
-            marker.addListener('click', function() {
-              iWindow.open(map, marker);
-            });
-
-            this.dataPoints.push(marker);
-          }
+          this.addDataPoint(map, pulse);
           
         });
 
         this.emitDataPoints(this.dataPoints);
       }.bind(this));
+  }
+
+  addDataPoint(map, pulse) {
+
+    let coordinates = pulse.coordinates;
+
+    if(coordinates && coordinates.length === 2) {
+      let marker = new global.google.maps.Marker({
+        position: {lat: coordinates[0], lng: coordinates[1]},
+        map: map,
+        title: pulse.value
+      });
+
+      let cnt = 'Prob display approximate sub count for ' + pulse.value;
+      if(pulse.timeStamp) {
+        //multiply by 1000 since millisecond in client whereas seconds in server
+        cnt += ' created: ' + (new Date(pulse.timeStamp*1000));
+      }
+      let iWindow = new global.google.maps.InfoWindow({
+        content: cnt
+      });
+
+      marker.addListener('click', function() {
+        iWindow.open(map, marker);
+      });
+
+      this.dataPoints.push(marker);
+    }
+
   }
   
 }

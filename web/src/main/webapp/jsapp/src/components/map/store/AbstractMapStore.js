@@ -44,6 +44,10 @@ class AbstractMapStore extends EventEmitter {
     throw new Error('AbstractMapStore should not be used standalone ' + latLng);
   }
 
+  addDataPoint(map, data) {
+    throw new Error('AbstractMapStore should not be used standalone ' + data);
+  }
+
   removeDataPoint(index) {
     this.dataPoints[index].setMap(null);
     this.dataPoints[index] = null; //just for now
