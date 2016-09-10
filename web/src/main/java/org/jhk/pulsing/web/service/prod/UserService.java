@@ -28,7 +28,6 @@ import org.jhk.pulsing.serialization.avro.records.UserId;
 import org.jhk.pulsing.shared.util.CommonConstants;
 import org.jhk.pulsing.web.common.Result;
 import static org.jhk.pulsing.web.common.Result.CODE.*;
-import org.jhk.pulsing.web.dao.prod.db.redis.RedisUserDao;
 import org.jhk.pulsing.web.dao.prod.db.sql.MySqlUserDao;
 import org.jhk.pulsing.web.service.IUserService;
 import org.springframework.stereotype.Service;
@@ -51,21 +50,11 @@ public class UserService extends AbstractStormPublisher
     @Named("mySqlUserDao")
     private MySqlUserDao mySqlUserDao;
     
-    @Inject
-    @Named("redisUserDao")
-    private RedisUserDao redisUserDao;
-    
     @Override
     public Result<User> getUser(UserId userId) {
         Result<User> result = new Result<>(FAILURE, "Unable to find " + userId);
-        //TODO: remove later as holding this data in redis useless, but for docing 
-        //for other data
-        Optional<User> user = redisUserDao.getUser(userId);
         
-        if(!user.isPresent()) {
-            user = mySqlUserDao.getUser(userId);
-        }
-        
+        Optional<User> user = mySqlUserDao.getUser(userId);
         if(user.isPresent()) {
             result = new Result<>(SUCCESS, user.get());
         }
@@ -83,7 +72,6 @@ public class UserService extends AbstractStormPublisher
         }
         
         if(cUser.getCode() == SUCCESS) {
-            redisUserDao.createUser(cUser.getData());
             getStormPublisher().produce(CommonConstants.TOPICS.USER_CREATE.toString(), cUser.getData());
         }
         

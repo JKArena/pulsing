@@ -25,7 +25,6 @@ import javax.inject.Inject;
 import javax.sql.DataSource;
 
 import org.jhk.pulsing.web.dao.prod.db.redis.RedisPulseDao;
-import org.jhk.pulsing.web.dao.prod.db.redis.RedisUserDao;
 import org.jhk.pulsing.web.dao.prod.db.sql.MySqlUserDao;
 import org.jhk.pulsing.web.service.prod.PulseService;
 import org.jhk.pulsing.web.service.prod.UserService;
@@ -67,11 +66,6 @@ public class ProdServiceConfig implements IServiceConfig {
     @Override
     public IPulseService getPulseService() {
         return new PulseService();
-    }
-    
-    @Bean(name="redisUserDao")
-    public RedisUserDao getRedisUserDao() {
-        return new RedisUserDao();
     }
     
     @Bean(name="redisPulseDao")

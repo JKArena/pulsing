@@ -36,6 +36,7 @@ import javax.inject.Named;
 import org.jhk.pulsing.serialization.avro.records.ACTION;
 import org.jhk.pulsing.serialization.avro.records.Pulse;
 import org.jhk.pulsing.serialization.avro.records.PulseId;
+import org.jhk.pulsing.serialization.avro.serializers.SerializationHelper;
 import org.jhk.pulsing.shared.util.CommonConstants;
 import org.jhk.pulsing.shared.util.Util;
 import org.jhk.pulsing.web.common.Result;
@@ -45,6 +46,7 @@ import org.jhk.pulsing.web.service.IPulseService;
 import org.jhk.pulsing.web.service.prod.helper.PulseServiceUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -61,6 +63,9 @@ public class PulseService extends AbstractStormPublisher
     @Inject
     @Named("redisPulseDao")
     private RedisPulseDao redisPulseDao;
+    
+    @Inject
+    private SimpMessagingTemplate template;
     
     private ObjectMapper _objectMapper = new ObjectMapper();
 
@@ -94,13 +99,20 @@ public class PulseService extends AbstractStormPublisher
         
         if(cPulse.getCode() == SUCCESS) {
             getStormPublisher().produce(CommonConstants.TOPICS.PULSE_CREATE.toString(), cPulse.getData());
+            
+            try {
+                template.convertAndSend("/topics/pulseCreated", SerializationHelper.serializeAvroTypeToJSONString(cPulse.getData()));
+            } catch (Exception except) {
+                _LOGGER.error("Error while converting pulse ", except);
+                except.printStackTrace();
+            }
         }
         
         return cPulse;
     }
     
     /**
-     * 1) Send the message to storm of the subscription (update to redis taken care of by it)
+     * 1) Send the message to storm of the subscription (update to redis taken care of by storm)
      * 
      * @param pulse
      * @return
@@ -112,6 +124,13 @@ public class PulseService extends AbstractStormPublisher
         return new Result<>(SUCCESS, pulse.getId());
     }
     
+    /**
+     * Hmmm should work in DRPC from storm+trident to get notified of new batch and then send 
+     * the message to client component for new set? Look into it since familiar only w/ trident
+     * 
+     * @param numMinutes
+     * @return
+     */
     @Override
     public Map<Long, String> getTrendingPulseSubscriptions(int numMinutes) {
         

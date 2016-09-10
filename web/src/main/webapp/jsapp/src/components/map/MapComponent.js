@@ -33,7 +33,7 @@ import Storage from '../../common/Storage';
 import Pulse from '../../avro/Pulse';
 import GMapPulseStore from './store/GMapPulseStore';
 
-const ZOOM_DEFAULT = 10;
+const ZOOM_DEFAULT = 20;
 const API_URL = 'http://maps.googleapis.com/maps/api/js?key=AIzaSyAcUzIUuUTuOZndo3OGs2J4FV-8Ay963ug';
 const KEY_STORE_MAPPER = Object.freeze(
   {

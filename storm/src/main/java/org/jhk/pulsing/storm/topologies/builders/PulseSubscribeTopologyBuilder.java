@@ -73,7 +73,7 @@ public final class PulseSubscribeTopologyBuilder {
                                 new Fields(FieldConstants.TIME_INTERVAL));
         
         builder.setBolt("pulse-subscribe-interval-persistor", 
-                new TimeIntervalPersistorBolt(RedisConstants.REDIS_KEY.SUBSCRIBE_PULSE_.toString()))
+                new TimeIntervalPersistorBolt(RedisConstants.REDIS_KEY.PULSE_SUBSCRIBE_.toString()))
                 .shuffleGrouping("pulse-subscribe-interval-builder");
         
         return builder.createTopology();

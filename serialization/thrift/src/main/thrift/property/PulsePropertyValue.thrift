@@ -28,4 +28,5 @@ union PulsePropertyValue {
   1: string value;
   2: list<double> coordinates;
   3: string description;
+  4: list<string> tags;
 }
