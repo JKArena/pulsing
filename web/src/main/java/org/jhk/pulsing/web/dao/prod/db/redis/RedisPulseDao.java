@@ -69,7 +69,11 @@ public class RedisPulseDao extends AbstractRedisDao
     }
     
     /**
-     * TODO: Do not push pulse if <value> and the <geolocation> area exists 
+     * TODO: Do not push pulse if <value> and the <geolocation> area exists
+     * 
+     * 1) Put the pulse by id w/ default expire
+     * 2) Put the pulse relation to GEO by lng + lat
+     * 3) Put the pulse relation to tags values submitted
      * 
      * @param pulse
      * @return
@@ -87,7 +91,7 @@ public class RedisPulseDao extends AbstractRedisDao
             
             /*
              * Hmmm...add denormalized content for easier fetch since the pulse itself can't be modified after creation 
-             * (other than tags) and don't want to perform so many queries or should just go for memory consumption?
+             * (other than tags) and don't want to perform so many queries or should just go for memory optimization?
              * Decisions decisions o.O
              */
             String pulseJson = SerializationHelper.serializeAvroTypeToJSONString(pulse);
@@ -114,7 +118,7 @@ public class RedisPulseDao extends AbstractRedisDao
         List<Pulse> pDataPoints = new LinkedList<>();
         
         List<GeoRadiusResponse> response = getJedis().georadius(PULSE_GEO_.toString(), lng, lat, _DEFAULT_PULSE_RADIUS, GeoUnit.M);
-        response.stream().forEach(grResponse -> {
+        response.parallelStream().forEach(grResponse -> {
             
             try {
                 pDataPoints.add(SerializationHelper.deserializeFromJSONStringToAvro(Pulse.class, Pulse.getClassSchema(), grResponse.getMemberByString()));
@@ -127,12 +131,19 @@ public class RedisPulseDao extends AbstractRedisDao
         return pDataPoints;
     }
     
+    /**
+     * Entries are held by time ranges so query the range
+     * 
+     * @param brEpoch before/start time range
+     * @param cEpoch current/end time range
+     * @return
+     */
     public Optional<Set<String>> getTrendingPulseSubscriptions(long brEpoch, long cEpoch) {
         _LOGGER.debug("RedisPulseDao.getTrendingPulseSubscriptions: " + brEpoch + " - " + cEpoch);
         
         final int _LIMIT = 100;
         
-        Set<String> result = getJedis().zrangeByScore(SUBSCRIBE_PULSE_.toString(), brEpoch, cEpoch, 0, _LIMIT);
+        Set<String> result = getJedis().zrangeByScore(PULSE_SUBSCRIBE_.toString(), brEpoch, cEpoch, 0, _LIMIT);
         _LOGGER.debug("RedisPulseDao.getTrendingPulseSubscriptions.queryResult: " + result.size());
         return Optional.ofNullable(result);
     }

@@ -103,7 +103,7 @@ public final class TimeIntervalBuilderBolt extends BaseBasicBolt {
         
         _LOGGER.info("TimeIntervalBuilderBolt.processTickTuple: " + currTimeInterval + "/" + _timeInterval);
         
-        _timeInterval.keySet().stream()
+        _timeInterval.keySet().parallelStream()
             .filter(entryTI -> (entryTI <= currTimeInterval))
             .forEach(filteredTI -> {
                 //the entry is past the current interval so emit them

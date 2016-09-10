@@ -20,6 +20,7 @@ package org.jhk.pulsing.storm.common;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.jhk.pulsing.serialization.thrift.edges.ACTION.*;
 import static org.jhk.pulsing.storm.common.FieldConstants.*;
@@ -72,6 +73,11 @@ public final class ConverterCommon {
         
         ppValue.setValue(pulse.getValue().toString());
         ppValue.setDescription(pulse.getDescription().toString());
+        ppValue.setTags(
+                pulse.getTags().stream()
+                    .map(cs -> { return cs.toString(); })
+                    .collect(Collectors.toList())
+                );
         
         List<Double> coordinates = pulse.getCoordinates();
         if(coordinates != null) {

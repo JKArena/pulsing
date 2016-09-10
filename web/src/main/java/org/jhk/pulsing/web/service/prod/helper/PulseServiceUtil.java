@@ -50,7 +50,7 @@ public class PulseServiceUtil {
         Map<Long, String> tpSubscriptions = Collections.EMPTY_MAP;
         final Map<String, Integer> count = new HashMap<>();
         
-        tps.stream().forEach(tpsIdValueCounts -> {
+        tps.parallelStream().forEach(tpsIdValueCounts -> {
             
             try {
                 _LOGGER.debug("PulseServiceUtil.processTrendingPulseSubscribe: trying to convert " + tpsIdValueCounts);
@@ -64,23 +64,33 @@ public class PulseServiceUtil {
                 //and return the sorted using Java8 stream
                 //TODO impl better
                 
-                count.putAll(converted.entrySet().stream()
-                        .reduce(
-                                new HashMap<String, Integer>(),
-                                (Map<String, Integer> mapped, Entry<String, Integer> entry) -> {
-                                    String[] split = entry.getKey().split(CommonConstants.TIME_INTERVAL_PERSIST_TIMESTAMP_DELIM);
-                                    Integer value = entry.getValue();
-                                    
-                                    mapped.compute(split[0], (key, val) -> {
-                                       return val == null ? value : val+value; 
-                                    });
-                                    
-                                    return mapped;
-                                },
-                                (Map<String, Integer> result, Map<String, Integer> aggregated) -> {
-                                    result.putAll(aggregated);
-                                    return result;
-                                }));
+                Map<String, Integer> computed = converted.entrySet().stream()
+                    .reduce(
+                            new HashMap<String, Integer>(),
+                            (Map<String, Integer> mapped, Entry<String, Integer> entry) -> {
+                                String[] split = entry.getKey().split(CommonConstants.TIME_INTERVAL_PERSIST_TIMESTAMP_DELIM);
+                                Integer value = entry.getValue();
+
+                                mapped.compute(split[0], (key, val) -> {
+                                    return val == null ? value : val+value; 
+                                });
+
+                                return mapped;
+                            },
+                            (Map<String, Integer> result, Map<String, Integer> aggregated) -> {
+                                result.putAll(aggregated);
+                                return result;
+                            }
+                            );
+                
+                computed.entrySet().parallelStream()
+                    .forEach(entry -> {
+                        Integer value = entry.getValue();
+                        
+                        count.compute(entry.getKey(), (key, val) -> {
+                            return val == null ? value : val+value;
+                        });
+                    });
                 
             } catch (Exception cException) {
                 cException.printStackTrace();
