@@ -22,7 +22,6 @@ import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.jhk.pulsing.serialization.thrift.edges.ACTION.*;
 import static org.jhk.pulsing.storm.common.FieldConstants.*;
 
 import org.apache.storm.tuple.ITuple;
@@ -32,12 +31,12 @@ import org.jhk.pulsing.serialization.avro.records.User;
 import org.jhk.pulsing.serialization.thrift.data.Data;
 import org.jhk.pulsing.serialization.thrift.data.DataUnit;
 import org.jhk.pulsing.serialization.thrift.data.Pedigree;
-import org.jhk.pulsing.serialization.thrift.edges.PulseEdge;
-import org.jhk.pulsing.serialization.thrift.id.PulseId;
+import org.jhk.pulsing.serialization.thrift.edges.TagEdge;
+import org.jhk.pulsing.serialization.thrift.id.TagId;
 import org.jhk.pulsing.serialization.thrift.id.UserId;
 import org.jhk.pulsing.serialization.thrift.property.PicturePropertyValue;
-import org.jhk.pulsing.serialization.thrift.property.PulseProperty;
-import org.jhk.pulsing.serialization.thrift.property.PulsePropertyValue;
+import org.jhk.pulsing.serialization.thrift.property.TagProperty;
+import org.jhk.pulsing.serialization.thrift.property.TagPropertyValue;
 import org.jhk.pulsing.serialization.thrift.property.UserProperty;
 import org.jhk.pulsing.serialization.thrift.property.UserPropertyValue;
 import org.slf4j.Logger;
@@ -52,58 +51,63 @@ public final class ConverterCommon {
     
     private static final Logger _LOGGER = LoggerFactory.getLogger(ConverterCommon.class);
     
-    public static Data convertPulseAvroToThrift(ITuple tuple) {
-        _LOGGER.debug("ConverterCommon.convertPulseAvroToThrift " + tuple);
+    /**
+     * Create multiple Data objects for the tags as well as the pulse name to create 
+     * edges between the tag + userId nodes.
+     * 
+     * Possibly consider splitting the tag+pulse name by space and adding them as well.
+     * 
+     * @param tuple
+     * @return
+     */
+    public static List<Data> convertPulseAvroToThriftDataList(ITuple tuple) {
+        _LOGGER.debug("ConverterCommon.convertPulseAvroToThriftDataList " + tuple);
         
         Pulse pulse = (Pulse) tuple.getValueByField(AVRO_PULSE);
         
-        Data data = new Data();
-        data.setPedigree(new Pedigree(pulse.getTimeStamp()));
-        
-        DataUnit dUnit = new DataUnit();
-        data.setDataunit(dUnit);
-        
-        PulseProperty pProperty = new PulseProperty();
-        dUnit.setPulse_property(pProperty);
-        
-        PulseId pId = PulseId.id(pulse.getId().getId());
-        PulsePropertyValue ppValue = new PulsePropertyValue();
-        pProperty.setId(pId);
-        pProperty.setProperty(ppValue);
-        
-        ppValue.setValue(pulse.getValue().toString());
-        ppValue.setDescription(pulse.getDescription().toString());
-        ppValue.setTags(
-                pulse.getTags().stream()
-                    .map(cs -> { return cs.toString(); })
-                    .collect(Collectors.toList())
-                );
-        
+        UserId uId = UserId.id(pulse.getUserId().getId());
         List<Double> coordinates = pulse.getCoordinates();
-        if(coordinates != null) {
-            ppValue.setCoordinates(coordinates);
-        }
+        long tStamp = pulse.getTimeStamp();
         
-        PulseEdge pEdge = new PulseEdge();
-        dUnit.setPulse(pEdge);
+        List<String> tags = pulse.getTags().parallelStream()
+                .map(cSequence -> {
+                   return cSequence.toString(); 
+                })
+                .collect(Collectors.toList());
+        tags.add(pulse.getValue().toString());
         
-        pEdge.setUserId(UserId.id(pulse.getUserId().getId()));
-        pEdge.setPulseId(pId);
+        List<Data> tDatas = tags.parallelStream()
+            .map(tag -> {
+                Data data = new Data();
+                data.setPedigree(new Pedigree(tStamp));
+                
+                DataUnit dUnit = new DataUnit();
+                data.setDataunit(dUnit);
+                
+                TagId tId = TagId.tag(tag);
+                
+                TagProperty tProperty = new TagProperty();
+                dUnit.setTag_property(tProperty);
+                
+                TagPropertyValue tpValue = new TagPropertyValue();
+                tpValue.setCoordinates(coordinates);
+                tProperty.setProperty(tpValue);
+                tProperty.setId(tId);
+                
+                TagEdge tEdge = new TagEdge();
+                dUnit.setTag(tEdge);
+                tEdge.setTagId(tId);
+                tEdge.setUserId(uId);
+                
+                return data;
+            })
+            .collect(Collectors.toList());
         
-        String action = pulse.getAction().toString();
-        
-        switch(action) {
-        case "CREATE": pEdge.setAction(CREATE); break;
-        case "SUBSCRIBE": pEdge.setAction(SUBSCRIBE); break;
-        case "UNSUBSCRIBE": pEdge.setAction(UNSUBSCRIBE); break;
-        case "DELETE": pEdge.setAction(DELETE); break;
-        }
-        
-        return data;
+        return tDatas;
     }
     
-    public static Data convertUserAvroToThrift(ITuple tuple) {
-        _LOGGER.debug("ConverterCommon.convertUserAvroToThrift " + tuple);
+    public static Data convertUserAvroToThriftData(ITuple tuple) {
+        _LOGGER.debug("ConverterCommon.convertUserAvroToThriftData " + tuple);
         
         User user = (User) tuple.getValueByField(AVRO_USER);
         

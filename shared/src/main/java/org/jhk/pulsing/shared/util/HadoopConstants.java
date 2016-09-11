@@ -46,7 +46,7 @@ public final class HadoopConstants {
     private static final String TEMP_DATA_WORKSPACE;
     
     public enum PAIL_NEW_DATA_PATH {
-        USER, PULSE;
+        USER, TAG;
     }
     
     public enum DIRECTORIES {

@@ -18,6 +18,9 @@
  */
 package org.jhk.pulsing.storm.common;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import org.apache.thrift.TException;
 import org.apache.thrift.TSerializer;
 import org.apache.thrift.protocol.TBinaryProtocol;
@@ -41,7 +44,39 @@ public final class Util {
         try {
             bytes = serializer.serialize(tData);
         } catch (TException tException) {
+            _LOGGER.error("Util.serializeThriftData error during serialization!!!!!!", tException);
             tException.printStackTrace();
+        }
+        
+        return bytes;
+    }
+    
+    public static byte[] serializeThriftDataList(List<Data> tDatas) {
+        _LOGGER.debug("Util.serializeThriftDatas: " + tDatas);
+        
+        TSerializer serializer = new TSerializer(new TBinaryProtocol.Factory());
+        
+        int length = 0;
+        List<byte[]> datas = new LinkedList<>();
+        for(Data data : tDatas) {
+            byte[] bData = new byte[0];
+            
+            try {
+                bData = serializer.serialize(data);
+                length += bData.length;
+                datas.add(bData);
+            } catch (TException tException) {
+                _LOGGER.error("Util.serializeThriftDatas error during serialization!!!!!!", tException);
+                tException.printStackTrace();
+            }
+        };
+        
+        int destPos = 0;
+        byte[] bytes = new byte[length];
+        for(byte[] byt : datas) {
+            int cLength = byt.length;
+            System.arraycopy(byt, 0, bytes, destPos, cLength);
+            destPos += cLength;
         }
         
         return bytes;

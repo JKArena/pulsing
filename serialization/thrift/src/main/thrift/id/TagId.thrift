@@ -24,6 +24,6 @@ namespace java org.jhk.pulsing.serialization.thrift.id
  *
  * @author Ji Kim
  */
-union PulseId {
-  1: i64 id;
+union TagId {
+  1: string tag;
 }

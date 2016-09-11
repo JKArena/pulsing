@@ -17,18 +17,13 @@
  * under the License.
  */
 
-namespace java org.jhk.pulsing.serialization.thrift.edges
+namespace java org.jhk.pulsing.serialization.thrift.property
 
 /**
- * Edge for user and pulse
+ * Pulse property value
  *
  * @author Ji Kim
  */
-enum ACTION {
-  CREATE = 1;
-  SUBSCRIBE = 2;
-  UNSUBSCRIBE = 3;
-  DELETE = 4;
-  FRIENDED = 5;
-  UNFRIENDED = 6;
+union TagPropertyValue {
+  1: list<double> coordinates;
 }

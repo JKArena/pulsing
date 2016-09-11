@@ -16,42 +16,35 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.storm.bolts.converter.avroTothrift;
+package org.jhk.pulsing.storm.hadoop.bolt;
 
 import java.util.List;
 
-import org.apache.storm.topology.BasicOutputCollector;
-import org.apache.storm.topology.OutputFieldsDeclarer;
-import org.apache.storm.topology.base.BaseBasicBolt;
+import org.apache.storm.hdfs.bolt.format.RecordFormat;
 import org.apache.storm.tuple.Tuple;
-import org.apache.storm.tuple.Values;
 import org.jhk.pulsing.serialization.thrift.data.Data;
-import org.jhk.pulsing.storm.common.ConverterCommon;
 import org.jhk.pulsing.storm.common.FieldConstants;
+import org.jhk.pulsing.storm.common.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * @author Ji Kim
  */
-public final class PulseConverterBolt extends BaseBasicBolt {
-
-    private static final long serialVersionUID = 5216255208403673287L;
-    private static final Logger _LOGGER = LoggerFactory.getLogger(PulseConverterBolt.class);
+public class ThriftDataListRecordFormatBolt implements RecordFormat {
+    
+    private static final long serialVersionUID = 1289711103039255339L;
+    private static final Logger _LOGGER = LoggerFactory.getLogger(ThriftDataListRecordFormatBolt.class);
     
     @Override
-    public void execute(Tuple tuple, BasicOutputCollector outputCollector) {
-        _LOGGER.info("PulseConverterBolt.execute " + tuple);
+    public byte[] format(Tuple tuple) {
+        _LOGGER.info("ThriftDataListRecordFormatBolt.format: " + tuple);
         
-        List<Data> pDatas = ConverterCommon.convertPulseAvroToThriftDataList(tuple);
+        List<Data> tDatas = (List<Data>) tuple.getValueByField(FieldConstants.THRIFT_DATA_LIST);
+        byte[] bytes = Util.serializeThriftDataList(tDatas);
         
-        _LOGGER.info("Converted to thrift " + pDatas);
-        outputCollector.emit(new Values(pDatas));
-    }
-
-    @Override
-    public void declareOutputFields(OutputFieldsDeclarer fieldsDeclarer) {
-        fieldsDeclarer.declare(FieldConstants.THRIFT_DATA_LIST_FIELD);
+        _LOGGER.info("ThriftDataListRecordFormatBolt.format serialized to bytes: " + bytes.length);
+        return bytes;
     }
 
 }

@@ -38,6 +38,7 @@ public final class FieldConstants {
     public static final String TIME_INTERVAL_VALUE = "TIME_INTERVAL_VALUE";
     public static final String TIME_INTERVAL_VALUE_COUNTER_MAP = "TIME_INTERVAL_VALUE_COUNTER_MAP";
     
+    public static final String THRIFT_DATA_LIST = "THRIFT_DATA_LIST";
     public static final String THRIFT_DATA = "THRIFT_DATA";
     
     public static final String AVRO_USER = "AVRO_USER";
@@ -46,6 +47,7 @@ public final class FieldConstants {
     public static final Fields AVRO_USER_DESERIALIZE_FIELD = new Fields(AVRO_USER);
     public static final Fields AVRO_PULSE_DESERIALIZE_FIELD = new Fields(AVRO_PULSE);
     
+    public static final Fields THRIFT_DATA_LIST_FIELD = new Fields(THRIFT_DATA_LIST);
     public static final Fields THRIFT_DATA_FIELD = new Fields(THRIFT_DATA);
     
     private FieldConstants() {

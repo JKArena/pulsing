@@ -17,18 +17,17 @@
  * under the License.
  */
 
-namespace java org.jhk.pulsing.serialization.thrift.edges
+namespace java org.jhk.pulsing.serialization.thrift.property
 
-include "../id/UserId.thrift"
-include "./ACTION.thrift"
+include "../id/TagId.thrift"
+include "./TagPropertyValue.thrift"
 
 /**
- * Edge for connecting userIds with friends
+ * Pulse property
  *
  * @author Ji Kim
  */
-union FriendEdge {
-  1: required UserId.UserId firstId;
-  2: required UserId.UserId secondId;
-  3: ACTION.ACTION action;
+struct TagProperty {
+  1: TagId.TagId id;
+  2: TagPropertyValue.TagPropertyValue property;
 }
