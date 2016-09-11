@@ -45,9 +45,9 @@ import org.jhk.pulsing.shared.util.CommonConstants;
 import org.jhk.pulsing.shared.util.HadoopConstants;
 import org.jhk.pulsing.storm.bolts.converter.avroTothrift.PulseConverterBolt;
 import org.jhk.pulsing.storm.bolts.deserializers.avro.PulseDeserializerBolt;
-import org.jhk.pulsing.storm.bolts.persistor.PailDataPersistorBolt;
+import org.jhk.pulsing.storm.bolts.persistor.PailDataListPersistorBolt;
 import org.jhk.pulsing.storm.common.FieldConstants;
-import org.jhk.pulsing.storm.hadoop.trident.ThriftDataRecordFormatFunction;
+import org.jhk.pulsing.storm.hadoop.trident.ThriftDataListRecordFormatFunction;
 import org.jhk.pulsing.storm.trident.deserializers.avro.PulseDeserializerFunction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -88,7 +88,7 @@ public final class PulseTopologyBuilder {
                 .setNumTasks(2)
                 .shuffleGrouping("pulse-avro-deserialize");
         
-        builder.setBolt("pulse-pail-data-persistor", new PailDataPersistorBolt(HadoopConstants.PAIL_NEW_DATA_PATH.PULSE), 2)
+        builder.setBolt("pulse-pail-data-persistor", new PailDataListPersistorBolt(HadoopConstants.PAIL_NEW_DATA_PATH.TAG), 2)
                 .setNumTasks(2)
                 .shuffleGrouping("pulse-avro-thrift-converter");
         
@@ -127,7 +127,7 @@ public final class PulseTopologyBuilder {
                 .withPath(HadoopConstants.PAIL_NEW_DATA_WORKSPACE)
                 .withPrefix("PulseCreate");
         
-        RecordFormat rFormat = new ThriftDataRecordFormatFunction();
+        RecordFormat rFormat = new ThriftDataListRecordFormatFunction();
         
         FileRotationPolicy rPolicy = new FileSizeRotationPolicy(10.0f, FileSizeRotationPolicy.Units.MB);
         
@@ -139,7 +139,7 @@ public final class PulseTopologyBuilder {
         
         StateFactory sFactory = new HdfsStateFactory().withOptions(opts);
         
-        TridentState tState = stream.partitionPersist(sFactory, FieldConstants.THRIFT_DATA_FIELD, new HdfsUpdater(), new Fields());
+        TridentState tState = stream.partitionPersist(sFactory, FieldConstants.THRIFT_DATA_LIST_FIELD, new HdfsUpdater(), new Fields());
     }
     
     private static TransactionalTridentKafkaSpout buildTridentSpout() {

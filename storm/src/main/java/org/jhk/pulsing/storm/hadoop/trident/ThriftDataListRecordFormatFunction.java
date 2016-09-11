@@ -16,32 +16,35 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.storm.trident.converter.avroTothrift;
+package org.jhk.pulsing.storm.hadoop.trident;
 
-import org.apache.storm.trident.operation.BaseFunction;
-import org.apache.storm.trident.operation.TridentCollector;
+import java.util.List;
+
+import org.apache.storm.hdfs.trident.format.RecordFormat;
 import org.apache.storm.trident.tuple.TridentTuple;
-import org.apache.storm.tuple.Values;
+import org.jhk.pulsing.serialization.thrift.data.Data;
+import org.jhk.pulsing.storm.common.FieldConstants;
+import org.jhk.pulsing.storm.common.Util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.jhk.pulsing.serialization.thrift.data.Data;
-import org.jhk.pulsing.storm.common.ConverterCommon;
 
 /**
  * @author Ji Kim
  */
-public final class UserConverterFunction extends BaseFunction {
+public final class ThriftDataListRecordFormatFunction implements RecordFormat {
     
-    private static final long serialVersionUID = 2492968329072034376L;
-    private static final Logger _LOGGER = LoggerFactory.getLogger(UserConverterFunction.class);
+    private static final long serialVersionUID = -534242708156807592L;
+    private static final Logger _LOGGER = LoggerFactory.getLogger(ThriftDataListRecordFormatFunction.class);
     
     @Override
-    public void execute(TridentTuple tuple, TridentCollector collector) {
-        _LOGGER.info("UserConverter.execute " + tuple);
+    public byte[] format(TridentTuple tuple) {
+        _LOGGER.info("ThriftDataListRecordFormatFunction.format: " + tuple);
         
-        Data uData = ConverterCommon.convertUserAvroToThriftData(tuple);
+        List<Data> tDataList = (List<Data>) tuple.getValueByField(FieldConstants.THRIFT_DATA_LIST);
+        byte[] bytes = Util.serializeThriftDataList(tDataList);
         
-        collector.emit(new Values(uData));
+        _LOGGER.info("ThriftDataListRecordFormatFunction.format serialized to bytes: " + bytes.length);
+        return bytes;
     }
-    
+
 }

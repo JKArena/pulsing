@@ -17,17 +17,17 @@
  * under the License.
  */
 
-namespace java org.jhk.pulsing.serialization.thrift.property
+namespace java org.jhk.pulsing.serialization.thrift.edges
 
-include "../id/PulseId.thrift"
-include "./PulsePropertyValue.thrift"
+include "../id/TagId.thrift"
+include "../id/UserId.thrift"
 
 /**
- * Pulse property
+ * Edge for user and pulse
  *
  * @author Ji Kim
  */
-struct PulseProperty {
-  1: PulseId.PulseId id;
-  2: PulsePropertyValue.PulsePropertyValue property;
+union TagEdge {
+  1: required UserId.UserId userId;
+  2: required TagId.TagId tagId;
 }

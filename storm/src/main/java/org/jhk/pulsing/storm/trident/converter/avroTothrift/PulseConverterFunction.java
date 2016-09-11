@@ -18,6 +18,8 @@
  */
 package org.jhk.pulsing.storm.trident.converter.avroTothrift;
 
+import java.util.List;
+
 import org.apache.storm.trident.operation.BaseFunction;
 import org.apache.storm.trident.operation.TridentCollector;
 import org.apache.storm.trident.tuple.TridentTuple;
@@ -39,9 +41,9 @@ public final class PulseConverterFunction extends BaseFunction {
     public void execute(TridentTuple tuple, TridentCollector collector) {
         _LOGGER.info("PulseConverter.execute " + tuple);
         
-        Data pData = ConverterCommon.convertPulseAvroToThrift(tuple);
+        List<Data> pDatas = ConverterCommon.convertPulseAvroToThriftDataList(tuple);
         
-        collector.emit(new Values(pData));
+        collector.emit(new Values(pDatas));
     }
     
 }
