@@ -40,8 +40,7 @@ import org.jhk.pulsing.pail.thrift.structures.SplitDataPailStructure;
 import org.jhk.pulsing.serialization.thrift.data.DataUnit;
 
 /**
- * Some of the things from Nathan Marz, since not distributed in repo with  
- * changes for cascade 2.5.x and hadoop
+ * @author Ji Kim
  */
 public final class PailTapUtil {
     

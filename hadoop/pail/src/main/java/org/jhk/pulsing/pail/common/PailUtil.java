@@ -37,8 +37,7 @@ import static org.jhk.pulsing.shared.util.HadoopConstants.DIRECTORIES.*;
 import org.jhk.pulsing.pail.thrift.AbstractThriftPailStructure;
 
 /**
- * Some of the things from Nathan Marz, since not distributed in repo with  
- * changes for cascade 2.5.x and hadoop
+ * @author Ji Kim
  */
 public final class PailUtil {
     

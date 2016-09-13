@@ -48,19 +48,6 @@ public final class TagJob {
             String fsDefault = config.get(HadoopConstants.CONFIG_FS_DEFAULT_KEY);
             PailTap master = PailTapUtil.splitDataTap(fsDefault + HadoopConstants.PAIL_MASTER_WORKSPACE);
             
-            /*
-             * Fields whose names start with a question mark (?) are non-nullable. If JCascalog encounters
-             * a tuple with a null value for a non-nullable field, it's immediately filtered from the working 
-             * dataset. Conversely, field names beginning with an exclamation mark (!) may contain null values.
-             * 
-             * Additionally field names starting with a double exclamation mark (!!) are also nullable and 
-             * are needed to perform outer joins between datasets. For joins involving these kinds of field names, 
-             * records that do not satisfy the join condition between datasets are still included in the result set, 
-             * but with null values for these fields where data is not present.
-             * 
-             * The underscore informs JCascalog to ignore this field =>
-             * predicate(SOMETHING, "?stuff", "_")
-             */
             Api.execute(new StdoutTap(), 
                         new Subquery("?count")
                         .predicate(master, "_", "?raw")
