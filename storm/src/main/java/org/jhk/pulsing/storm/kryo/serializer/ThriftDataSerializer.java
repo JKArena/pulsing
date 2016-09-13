@@ -22,7 +22,7 @@ import org.apache.thrift.TDeserializer;
 import org.apache.thrift.TException;
 import org.apache.thrift.protocol.TBinaryProtocol;
 import org.jhk.pulsing.serialization.thrift.data.Data;
-import org.jhk.pulsing.storm.common.Util;
+import org.jhk.pulsing.storm.common.StormUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,7 +60,7 @@ public final class ThriftDataSerializer extends Serializer<Data> {
     public void write(Kryo kryo, Output output, Data tData) {
         _LOGGER.info("ThriftDataSerializer.write " + tData);
         
-        output.write(Util.serializeThriftData(tData));
+        output.write(StormUtil.serializeThriftData(tData));
         output.flush();
         output.close();
     }

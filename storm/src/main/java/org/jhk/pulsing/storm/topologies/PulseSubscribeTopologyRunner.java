@@ -61,7 +61,7 @@ public class PulseSubscribeTopologyRunner {
     private static void runRemoteCluster() throws AlreadyAliveException, InvalidTopologyException, AuthorizationException {
         
         Config config = new Config();
-        config.setNumWorkers(4);
+        config.setNumWorkers(1);
         config.setMessageTimeoutSecs(60);
         
         StormSubmitter.submitTopology("pulse-subscribe-topology", config, PulseSubscribeTopologyBuilder.build());

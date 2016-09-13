@@ -22,7 +22,7 @@ import org.apache.storm.hdfs.trident.format.RecordFormat;
 import org.apache.storm.trident.tuple.TridentTuple;
 import org.jhk.pulsing.serialization.thrift.data.Data;
 import org.jhk.pulsing.storm.common.FieldConstants;
-import org.jhk.pulsing.storm.common.Util;
+import org.jhk.pulsing.storm.common.StormUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,7 +39,7 @@ public final class ThriftDataRecordFormatFunction implements RecordFormat {
         _LOGGER.info("ThriftDataRecordFormatFunction.format: " + tuple);
         
         Data tData = (Data) tuple.getValueByField(FieldConstants.THRIFT_DATA);
-        byte[] bytes = Util.serializeThriftData(tData);
+        byte[] bytes = StormUtil.serializeThriftData(tData);
         
         _LOGGER.info("ThriftDataRecordFormatFunction.format serialized to bytes: " + bytes.length);
         return bytes;

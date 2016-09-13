@@ -18,6 +18,8 @@
  */
 package org.jhk.pulsing.cascading.hadoop.job.pail;
 
+import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 import java.util.Arrays;
 
@@ -42,23 +44,26 @@ public final class PailNewDataIngestorJob {
     private static final Logger _LOGGER = LoggerFactory.getLogger(PailNewDataIngestorJob.class);
     
     public static void main(String[] args) {
-        _LOGGER.debug("PailNewDataIngestorJob " + Arrays.toString(args));
+        _LOGGER.info("PailNewDataIngestorJob " + Arrays.toString(args));
         
         try {
             Configuration config = new Configuration();
             String fsDefault = config.get(HadoopConstants.CONFIG_FS_DEFAULT_KEY);
-            URI pNewDataUri = URI.create(fsDefault + HadoopConstants.PAIL_NEW_DATA_WORKSPACE);
-            
-            FileSystem fs = FileSystem.get(pNewDataUri, config);
-            Path pNewDataPath = new Path(pNewDataUri);
-            
             Pail<SplitDataPailStructure> pMasterData = new Pail<>(fsDefault + HadoopConstants.PAIL_MASTER_WORKSPACE);
             
-            //listing it out separately for now, but should go to same pail
-            FileStatus[] fStatus = fs.listStatus(pNewDataPath);
-            for(FileStatus status : fStatus) {
-                Pail<DataPailStructure> pp = new Pail<>(status.getPath().toString());
-                PailUtil.ingest(pMasterData, pp);
+            URI pNewDataUri = URI.create(fsDefault + HadoopConstants.PAIL_NEW_DATA_WORKSPACE);
+            FileSystem fs = FileSystem.get(pNewDataUri, config);
+            
+            for(HadoopConstants.PAIL_NEW_DATA_PATH curr : HadoopConstants.PAIL_NEW_DATA_PATH.values()) {
+                
+                Path pNewDataPath = new Path(URI.create(fsDefault + HadoopConstants.PAIL_NEW_DATA_WORKSPACE + File.separator + curr.toString()));
+                FileStatus[] fStatus = fs.listStatus(pNewDataPath);
+                
+                for(FileStatus status : fStatus) {
+                    _LOGGER.info("PailNewDataIngestorJob ingesting " + status.getPath().toString());
+                    Pail<DataPailStructure> pp = new Pail<>(status.getPath().toString());
+                    PailUtil.ingest(pMasterData, pp);
+                }
             }
             
         } catch (Exception exception) {

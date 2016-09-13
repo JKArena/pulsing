@@ -28,7 +28,7 @@
     
     <property>
       <name>url.port</name>
-      <value>hdfs://localhost</value>
+      <value>hdfs://pulsing.jhk.org</value>
     </property>
   </hadoop>
 </configuration>

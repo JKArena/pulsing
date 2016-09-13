@@ -48,6 +48,59 @@ public final class PailTapUtil {
     private static final Logger _LOGGER = LoggerFactory.getLogger(PailTapUtil.class);
     
     /**
+     * Given the source Path
+     * 
+     * @param sourcePath - i.e. new data snapshot
+     * @param shredPath
+     * @return
+     * @throws IOException
+     */
+    public static Pail shred(String sourcePath, String shredPath) throws IOException {
+        _LOGGER.debug("PailTapUtil.shred " + sourcePath + ", " + shredPath);
+        
+        PailTap source = dataTap(sourcePath);
+        PailTap sink = splitDataTap(shredPath);
+        
+        _LOGGER.debug("PailTapUtil.shred " + source.getPath() + " - " + sink.getPath());
+        Subquery reduced = new Subquery("?rand", "?data")
+                .predicate(source, "_", "?data-in")
+                .predicate(new RandLong())
+                    .out("?rand")
+                .predicate(new IdentityBuffer(), "?data-in")
+                    .out("?data");
+        
+        Api.execute(sink,  new Subquery("?data").predicate(reduced, "_", "?data"));
+        
+        Pail shreddedPail = new Pail(shredPath);
+        shreddedPail.consolidate();
+        
+        return shreddedPail;
+    }
+    
+    public static PailTap dataTap(String path) {
+        _LOGGER.debug("PailTapUtil.dataTap " + path);
+        PailTapOptions options = new PailTapOptions();
+        
+        options.spec = new PailSpec(new DataPailStructure());
+        return new PailTap(path, options);
+    }
+    
+    /**
+     * when sinking data from queries to brand new pails, need to declare the type of records writing to PailTap
+     * 
+     * @param path
+     * @return
+     */
+    public static PailTap splitDataTap(String path) {
+        _LOGGER.debug("PailTapUtil.splitDataTap " + path);
+        
+        PailTapOptions options = new PailTapOptions();
+        
+        options.spec = new PailSpec(new SplitDataPailStructure());
+        return new PailTap(path, options);
+    }
+    
+    /**
      * Returns reading a subset of the data within the pail
      * 
      * @param path
@@ -67,51 +120,6 @@ public final class PailTapUtil {
                     }
                 }}
         };
-        options.spec = new PailSpec(new DataPailStructure());
-        return new PailTap(path, options);
-    }
-    
-    /**
-     * Given the source Path
-     * 
-     * @param sourcePath - i.e. new data snapshot
-     * @param shredPath
-     * @return
-     * @throws IOException
-     */
-    public static Pail shred(String sourcePath, String shredPath) throws IOException {
-        _LOGGER.debug("PailTapUtil.shred " + sourcePath + ", " + shredPath);
-        
-        PailTap source = new PailTap(sourcePath);
-        PailTap sink = splitDataTap(shredPath);
-        
-        _LOGGER.debug("PailTapUtil.shred " + source.getPath() + " - " + sink.getPath());
-        Subquery reduced = new Subquery("?rand", "?data")
-                .predicate(source, "_", "?data-in")
-                .predicate(new RandLong())
-                    .out("?rand")
-                .predicate(new IdentityBuffer(), "?data-in")
-                    .out("?data");
-        
-        Api.execute(sink,  new Subquery("?data").predicate(reduced, "_", "?data"));
-        
-        Pail shreddedPail = new Pail(shredPath);
-        shreddedPail.consolidate();
-        
-        return shreddedPail;
-    }
-    
-    /**
-     * when sinking data from queries to brand new pails, need to declare the type of records writing to PailTap
-     * 
-     * @param path
-     * @return
-     */
-    public static PailTap splitDataTap(String path) {
-        _LOGGER.debug("PailTapUtil.splitDataTap " + path);
-        
-        PailTapOptions options = new PailTapOptions();
-        
         options.spec = new PailSpec(new SplitDataPailStructure());
         return new PailTap(path, options);
     }

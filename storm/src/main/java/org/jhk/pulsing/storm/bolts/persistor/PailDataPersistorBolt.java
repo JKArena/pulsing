@@ -29,9 +29,9 @@ import org.apache.storm.tuple.Tuple;
 import org.jhk.pulsing.pail.common.PailUtil;
 import org.jhk.pulsing.pail.thrift.structures.DataPailStructure;
 import org.jhk.pulsing.serialization.thrift.data.Data;
-import org.jhk.pulsing.shared.util.HadoopConstants;
 import org.jhk.pulsing.shared.util.HadoopConstants.PAIL_NEW_DATA_PATH;
 import org.jhk.pulsing.storm.common.FieldConstants;
+import org.jhk.pulsing.storm.common.StormUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,8 +42,6 @@ public final class PailDataPersistorBolt extends BaseBasicBolt {
     
     private static final long serialVersionUID = -6734265634986696958L;
     private static final Logger _LOGGER = LoggerFactory.getLogger(PailDataPersistorBolt.class);
-    
-    private static final String HADOOP_PAIL_NEW_DATA_PATH = HadoopConstants.HDFS_URL_PORT + HadoopConstants.PAIL_NEW_DATA_WORKSPACE;
     
     private PAIL_NEW_DATA_PATH _newDataPath;
     
@@ -66,7 +64,7 @@ public final class PailDataPersistorBolt extends BaseBasicBolt {
         List<Data> datas = new LinkedList<>();
         datas.add(data);
         
-        String path = HADOOP_PAIL_NEW_DATA_PATH + _newDataPath.toString();
+        String path = StormUtil.generateNewPailPath(_newDataPath);
         _LOGGER.info("PailDataPersistorBolt.execute: writing to " + path + ", " + datas.size());
         
         try {
