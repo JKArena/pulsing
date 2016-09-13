@@ -21,10 +21,8 @@ package org.jhk.pulsing.cascading.hadoop.job.pail;
 import java.util.Arrays;
 
 import org.apache.hadoop.conf.Configuration;
-import org.jhk.pulsing.pail.thrift.structures.DataPailStructure;
 import org.jhk.pulsing.pail.thrift.structures.SplitDataPailStructure;
 import org.jhk.pulsing.shared.util.HadoopConstants;
-import org.jhk.pulsing.shared.util.HadoopConstants.PAIL_NEW_DATA_PATH;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -46,10 +44,6 @@ public final class PailReinitJob {
         try {
             Configuration config = new Configuration();
             String fsDefault = config.get(HadoopConstants.CONFIG_FS_DEFAULT_KEY);
-            
-            for(PAIL_NEW_DATA_PATH pNewDataPath : HadoopConstants.PAIL_NEW_DATA_PATH.values()) {
-                Pail.create(fsDefault + HadoopConstants.PAIL_NEW_DATA_WORKSPACE + pNewDataPath.toString(), new DataPailStructure());
-            }
             
             Pail.create(fsDefault + HadoopConstants.PAIL_MASTER_WORKSPACE, new SplitDataPailStructure());
             

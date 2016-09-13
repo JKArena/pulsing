@@ -22,7 +22,7 @@ import org.apache.storm.hdfs.bolt.format.RecordFormat;
 import org.apache.storm.tuple.Tuple;
 import org.jhk.pulsing.serialization.thrift.data.Data;
 import org.jhk.pulsing.storm.common.FieldConstants;
-import org.jhk.pulsing.storm.common.Util;
+import org.jhk.pulsing.storm.common.StormUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,7 +39,7 @@ public class ThriftDataRecordFormatBolt implements RecordFormat {
         _LOGGER.info("ThriftDataRecordFormatBolt.format: " + tuple);
         
         Data tData = (Data) tuple.getValueByField(FieldConstants.THRIFT_DATA);
-        byte[] bytes = Util.serializeThriftData(tData);
+        byte[] bytes = StormUtil.serializeThriftData(tData);
         
         _LOGGER.info("ThriftDataRecordFormatBolt.format serialized to bytes: " + bytes.length);
         return bytes;
