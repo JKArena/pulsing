@@ -29,6 +29,15 @@
  * 
  * The underscore informs JCascalog to ignore this field =>
  * predicate(SOMETHING, "?stuff", "_")
+ * 
+ * There is no explicit GROUP BY command in JCascalog to indicate how to partition tuples for aggregation.
+ * Instead, as with joins, the grouping is implicit based on the desired query output.
+ * 
+ * new Subquery("?person", "?count")        => the output field names define all potentional groupings
+ *  .predicate(FOLLOWS, "?person", "_")
+ *  .predicate(new Count(), "?count")       => when executing the aggregator, the output fields imply tuples should 
+ *                                              be grouped by ?person
+ * 
  * @author Ji Kim
  */
 package org.jhk.pulsing.pail.common;

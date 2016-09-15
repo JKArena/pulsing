@@ -31,22 +31,22 @@ import com.datastax.driver.core.schemabuilder.SchemaBuilder;
  * @author Ji Kim
  */
 @Repository
-public class CassandraPulseDao extends AbstractCassandraDao {
+public class CassandraTagDao extends AbstractCassandraDao {
     
-    private static final Logger _LOGGER = LoggerFactory.getLogger(CassandraPulseDao.class);
-    private static final String _PULSE_TBD_TABLE = "PULSE_TBD_TABLE";
+    private static final Logger _LOGGER = LoggerFactory.getLogger(CassandraTagDao.class);
+    private static final String _TAG_TBD_TABLE = "TAG_TBD_TABLE";
     
     @Override
     public void destroy() {
         
-        getSession().execute(SchemaBuilder.dropTable(_PULSE_TBD_TABLE));
+        getSession().execute(SchemaBuilder.dropTable(_TAG_TBD_TABLE));
         
         super.destroy();
     }
     
     @Override
     protected String getKeySpace() {
-        return "pulse";
+        return "tag";
     }
 
 }
