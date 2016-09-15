@@ -20,7 +20,7 @@
 namespace java org.jhk.pulsing.serialization.thrift.property
 
 /**
- * Pulse property value
+ * Tag property value
  *
  * @author Ji Kim
  */

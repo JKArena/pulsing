@@ -275,6 +275,12 @@
         <artifactId>cassandra-driver-core</artifactId>
         <version>${cassandra.driver}</version>
       </dependency>
+
+      <dependency>
+        <groupId>cascading-cassandra</groupId>
+        <artifactId>cascading-cassandra</artifactId>
+        <version>${cascading.cassandra}</version>
+      </dependency>
 <!--
 Maybe in the future but for now better control and practice (esp since mappings usually end up in 
 descent loss of performance)
@@ -364,6 +370,7 @@ descent loss of performance)
     <mysql.connector.java>5.1.9</mysql.connector.java>
     <cassandra.driver>3.1.0</cassandra.driver>
     <cassandra>3.7</cassandra>
+    <cascading.cassandra>2.0.6</cascading.cassandra>
     <hibernate>5.2.1.Final</hibernate>
     <junit>4.12</junit>
     <freemarker>2.3.23</freemarker>

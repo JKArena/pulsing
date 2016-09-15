@@ -23,7 +23,7 @@ include "../id/TagId.thrift"
 include "./TagPropertyValue.thrift"
 
 /**
- * Pulse property
+ * Tag property
  *
  * @author Ji Kim
  */

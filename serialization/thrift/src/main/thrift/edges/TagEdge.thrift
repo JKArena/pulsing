@@ -23,11 +23,11 @@ include "../id/TagId.thrift"
 include "../id/UserId.thrift"
 
 /**
- * Edge for user and pulse
+ * Edge for user and tag
  *
  * @author Ji Kim
  */
-union TagEdge {
+struct TagEdge {
   1: required UserId.UserId userId;
   2: required TagId.TagId tagId;
 }

@@ -26,7 +26,7 @@ include "../id/UserId.thrift"
  *
  * @author Ji Kim
  */
-union EquivEdge {
+struct EquivEdge {
   1: required UserId.UserId firstId;
   2: required UserId.UserId secondId;
 }

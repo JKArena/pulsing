@@ -19,19 +19,26 @@
 package org.jhk.pulsing.cascading.hadoop.job.pail;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.hadoop.conf.Configuration;
+import org.jhk.pulsing.cascading.cascalog.function.TagPropertyFunction;
+import org.jhk.pulsing.cascading.cascalog.function.TagUserIdFunction;
 import org.jhk.pulsing.pail.common.PailTapUtil;
+import org.jhk.pulsing.serialization.thrift.data.DataUnit;
+import org.jhk.pulsing.shared.util.CommonConstants;
 import org.jhk.pulsing.shared.util.HadoopConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.backtype.cascading.tap.PailTap;
+import com.ifesdjeen.cascading.cassandra.CassandraTap;
+import com.ifesdjeen.cascading.cassandra.cql3.CassandraCQL3Scheme;
 import com.twitter.maple.tap.StdoutTap;
 
 import jcascalog.Api;
 import jcascalog.Subquery;
-import jcascalog.op.Count;
 
 /**
  * @author Ji Kim
@@ -46,12 +53,35 @@ public final class TagJob {
         try {
             Configuration config = new Configuration();
             String fsDefault = config.get(HadoopConstants.CONFIG_FS_DEFAULT_KEY);
-            PailTap master = PailTapUtil.splitDataTap(fsDefault + HadoopConstants.PAIL_MASTER_WORKSPACE);
+            
+            PailTap masterTagEdges = PailTapUtil.attributetap(fsDefault + HadoopConstants.PAIL_MASTER_WORKSPACE, 
+                    DataUnit._Fields.TAG);
+            
+            PailTap masterTagProperty = PailTapUtil.attributetap(fsDefault + HadoopConstants.PAIL_MASTER_WORKSPACE, 
+                    DataUnit._Fields.TAG_PROPERTY);
+            
+            Map<String, Object> settings = new HashMap<>();
+            settings.put("db.port", "9042");
+            settings.put("db.keyspace", "tag");
+            settings.put("db.columnFamily", "tags");
+            settings.put("db.host", CommonConstants.CASSANDRA_CONTACT_POINT);
+            
+            Map<String, String> types = new HashMap<>();
+            types.put("userId", "LongType");
+            types.put("tags", "UTF8Type");
+            
+            settings.put("types", types);
+            settings.put("mappings.source", Arrays.asList("userId", "tags"));
+            
+            CassandraCQL3Scheme scheme = new CassandraCQL3Scheme(settings);
+            CassandraTap tap = new CassandraTap(scheme);
             
             Api.execute(new StdoutTap(), 
-                        new Subquery("?count")
-                        .predicate(master, "_", "?raw")
-                        .predicate(new Count(), "?count")
+                        new Subquery("?tag", "?userId", "?coordinates")
+                        .predicate(masterTagEdges, "_", "?tagEdges")
+                        .predicate(new TagUserIdFunction(), "?tagEdges").out("?tag", "?userId")
+                        .predicate(masterTagProperty, "?tagProperties")
+                        .predicate(new TagPropertyFunction(), "?tagProperties").out("?tag", "?coordinates")
                         );
             
         } catch (Exception exception) {

@@ -61,10 +61,10 @@
       <groupId>cascading</groupId>
       <artifactId>cascading-hadoop</artifactId>
     </dependency>
-    
+    <!-- 
     <dependency>
       <groupId>org.apache.cassandra</groupId>
-      <artifactId>cassandra-clientutil</artifactId>
+      <artifactId>cassandra-all</artifactId>
     </dependency>
     
     <dependency>
@@ -75,6 +75,12 @@
     <dependency>
       <groupId>com.datastax.cassandra</groupId>
       <artifactId>cassandra-driver-extras</artifactId>
+    </dependency>
+    -->
+    
+    <dependency>
+      <groupId>cascading-cassandra</groupId>
+      <artifactId>cascading-cassandra</artifactId>
     </dependency>
     
     <dependency>
