@@ -18,6 +18,7 @@
  */
 package org.jhk.pulsing.web.dao.prod.db.cassandra;
 
+import org.jhk.pulsing.shared.util.CommonConstants;
 import org.jhk.pulsing.web.dao.prod.db.AbstractCassandraDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,7 +61,7 @@ public class CassandraUserDao extends AbstractCassandraDao {
     
     @Override
     protected String getKeySpace() {
-        return "user";
+        return CommonConstants.CASSANDRA_KEYSPACE.USER.toString();
     }
     
 }

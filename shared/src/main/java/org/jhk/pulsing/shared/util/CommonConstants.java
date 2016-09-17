@@ -43,6 +43,10 @@ public final class CommonConstants {
 		PULSE_SUBSCRIBE, USER_CREATE, PULSE_CREATE;
 	};
 	
+	public enum CASSANDRA_KEYSPACE {
+	    TAG, USER;
+	};
+	
 	static {
         
         Properties props = new Properties();
