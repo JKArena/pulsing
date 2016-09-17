@@ -23,8 +23,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.hadoop.conf.Configuration;
-import org.jhk.pulsing.cascading.cascalog.function.TagPropertyFunction;
-import org.jhk.pulsing.cascading.cascalog.function.TagUserIdFunction;
+import org.jhk.pulsing.cascading.cascalog.function.EmitDataUnitFieldFunction;
+import org.jhk.pulsing.cascading.cascalog.function.EmitDataUnitFieldFunction.EMIT_DATA_UNIT_FIELD;
 import org.jhk.pulsing.pail.common.PailTapUtil;
 import org.jhk.pulsing.serialization.thrift.data.DataUnit;
 import org.jhk.pulsing.shared.util.CommonConstants;
@@ -62,7 +62,7 @@ public final class TagJob {
             
             Map<String, Object> settings = new HashMap<>();
             settings.put("db.port", "9042");
-            settings.put("db.keyspace", "tag");
+            settings.put("db.keyspace", CommonConstants.CASSANDRA_KEYSPACE.TAG.toString());
             settings.put("db.columnFamily", "tags");
             settings.put("db.host", CommonConstants.CASSANDRA_CONTACT_POINT);
             
@@ -79,9 +79,9 @@ public final class TagJob {
             Api.execute(new StdoutTap(), 
                         new Subquery("?tag", "?userId", "?coordinates")
                         .predicate(masterTagEdges, "_", "?tagEdges")
-                        .predicate(new TagUserIdFunction(), "?tagEdges").out("?tag", "?userId")
+                        .predicate(new EmitDataUnitFieldFunction(EMIT_DATA_UNIT_FIELD.TAG_EDGE), "?tagEdges").out("?tag", "?userId")
                         .predicate(masterTagProperty, "?tagProperties")
-                        .predicate(new TagPropertyFunction(), "?tagProperties").out("?tag", "?coordinates")
+                        .predicate(new EmitDataUnitFieldFunction(EMIT_DATA_UNIT_FIELD.TAG_PROPERTY), "?tagProperties").out("?tag", "?coordinates")
                         );
             
         } catch (Exception exception) {
