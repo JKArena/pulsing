@@ -19,12 +19,15 @@
 
 namespace java org.jhk.pulsing.serialization.thrift.property
 
+include "../id/TagGroupId.thrift"
+include "./TagGroupPropertyValue.thrift"
+
 /**
- * Picture property value
+ * Tag property
  *
  * @author Ji Kim
  */
-union PicturePropertyValue {
-  1: binary content;
-  2: string originalFilename;
+struct TagGroupProperty {
+  1: TagGroupId.TagGroupId id;
+  2: TagGroupPropertyValue.TagGroupPropertyValue property;
 }

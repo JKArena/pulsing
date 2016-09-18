@@ -88,7 +88,7 @@ public final class PulseTopologyBuilder {
                 .setNumTasks(2)
                 .shuffleGrouping("pulse-avro-deserialize");
         
-        builder.setBolt("pulse-pail-data-persistor", new PailDataListPersistorBolt(HadoopConstants.PAIL_NEW_DATA_PATH.TAG), 2)
+        builder.setBolt("pulse-pail-data-persistor", new PailDataListPersistorBolt(HadoopConstants.PAIL_NEW_DATA_PATH.TAG_GROUP), 2)
                 .setNumTasks(2)
                 .shuffleGrouping("pulse-avro-thrift-converter");
         

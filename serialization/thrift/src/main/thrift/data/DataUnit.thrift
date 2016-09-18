@@ -20,10 +20,10 @@
 namespace java org.jhk.pulsing.serialization.thrift.data
 
 include "../property/UserProperty.thrift"
-include "../property/TagProperty.thrift"
+include "../property/TagGroupProperty.thrift"
 
 include "../edges/EquivEdge.thrift"
-include "../edges/TagEdge.thrift"
+include "../edges/TagGroupUserEdge.thrift"
 
 /**
  * DataUnit
@@ -32,7 +32,7 @@ include "../edges/TagEdge.thrift"
  */
 union DataUnit {
   1: UserProperty.UserProperty user_property;
-  2: TagProperty.TagProperty tag_property;
-  3: EquivEdge.EquivEdge equiv;
-  4: TagEdge.TagEdge tag;
+  2: EquivEdge.EquivEdge equiv_edge;
+  3: TagGroupProperty.TagGroupProperty taggroup_property;
+  4: TagGroupUserEdge.TagGroupUserEdge taggroupuser_edge;
 }

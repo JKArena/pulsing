@@ -19,15 +19,11 @@
 
 namespace java org.jhk.pulsing.serialization.thrift.property
 
-include "./PicturePropertyValue.thrift"
-
 /**
  * @author Ji Kim
  */
 union UserPropertyValue {
-  1: PicturePropertyValue.PicturePropertyValue picture;
-  2: list<double> coordinates;
-  3: string email;
-  5: string name;
-  6: string password;
+  1: list<double> coordinates;
+  2: string email;
+  3: string name;
 }

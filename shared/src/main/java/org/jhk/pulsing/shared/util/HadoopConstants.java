@@ -46,11 +46,11 @@ public final class HadoopConstants {
     private static final String TEMP_DATA_WORKSPACE;
     
     public enum PAIL_NEW_DATA_PATH {
-        USER, TAG;
+        USER, TAG_GROUP;
     }
     
     public enum DIRECTORIES {
-        TEMP, SNAPSHOT, SHREDDED, EQUIVS_ITERATE;
+        TEMP, SNAPSHOT, SHREDDED, TAG_GROUP_MAPPING, EQUIVS_ITERATE;
     };
     
     private static final String HADOOP_CONFIG_XML = "hadoop_config.xml";

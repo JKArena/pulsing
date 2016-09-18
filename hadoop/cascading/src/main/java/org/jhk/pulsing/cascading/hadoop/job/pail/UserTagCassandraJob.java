@@ -23,47 +23,32 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.hadoop.conf.Configuration;
-import org.jhk.pulsing.cascading.cascalog.function.EmitDataUnitFieldFunction;
-import org.jhk.pulsing.cascading.cascalog.function.EmitDataUnitFieldFunction.EMIT_DATA_UNIT_FIELD;
-import org.jhk.pulsing.pail.common.PailTapUtil;
-import org.jhk.pulsing.serialization.thrift.data.DataUnit;
 import org.jhk.pulsing.shared.util.CommonConstants;
 import org.jhk.pulsing.shared.util.HadoopConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.backtype.cascading.tap.PailTap;
 import com.ifesdjeen.cascading.cassandra.CassandraTap;
 import com.ifesdjeen.cascading.cassandra.cql3.CassandraCQL3Scheme;
-import com.twitter.maple.tap.StdoutTap;
-
-import jcascalog.Api;
-import jcascalog.Subquery;
 
 /**
  * @author Ji Kim
  */
-public final class TagJob {
+public final class UserTagCassandraJob {
     
-    private static final Logger _LOGGER = LoggerFactory.getLogger(TagJob.class);
+    private static final Logger _LOGGER = LoggerFactory.getLogger(UserTagCassandraJob.class);
     
     public static void main(String[] args) {
-        _LOGGER.info("TagJob " + Arrays.toString(args));
+        _LOGGER.info("UserTagCassandraJob " + Arrays.toString(args));
         
         try {
             Configuration config = new Configuration();
             String fsDefault = config.get(HadoopConstants.CONFIG_FS_DEFAULT_KEY);
             
-            PailTap masterTagEdges = PailTapUtil.attributetap(fsDefault + HadoopConstants.PAIL_MASTER_WORKSPACE, 
-                    DataUnit._Fields.TAG);
-            
-            PailTap masterTagProperty = PailTapUtil.attributetap(fsDefault + HadoopConstants.PAIL_MASTER_WORKSPACE, 
-                    DataUnit._Fields.TAG_PROPERTY);
-            
             Map<String, Object> settings = new HashMap<>();
             settings.put("db.port", "9042");
-            settings.put("db.keyspace", CommonConstants.CASSANDRA_KEYSPACE.TAG.toString());
-            settings.put("db.columnFamily", "tags");
+            settings.put("db.keyspace", CommonConstants.CASSANDRA_KEYSPACE.USER.toString());
+            settings.put("db.columnFamily", "userTags");
             settings.put("db.host", CommonConstants.CASSANDRA_CONTACT_POINT);
             
             Map<String, String> types = new HashMap<>();
@@ -75,14 +60,6 @@ public final class TagJob {
             
             CassandraCQL3Scheme scheme = new CassandraCQL3Scheme(settings);
             CassandraTap tap = new CassandraTap(scheme);
-            
-            Api.execute(new StdoutTap(), 
-                        new Subquery("?tag", "?userId", "?coordinates")
-                        .predicate(masterTagEdges, "_", "?tagEdges")
-                        .predicate(new EmitDataUnitFieldFunction(EMIT_DATA_UNIT_FIELD.TAG_EDGE), "?tagEdges").out("?tag", "?userId")
-                        .predicate(masterTagProperty, "?tagProperties")
-                        .predicate(new EmitDataUnitFieldFunction(EMIT_DATA_UNIT_FIELD.TAG_PROPERTY), "?tagProperties").out("?tag", "?coordinates")
-                        );
             
         } catch (Exception exception) {
             _LOGGER.error("Crud something went wrong!!!!!!!!!!");

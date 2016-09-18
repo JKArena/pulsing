@@ -19,15 +19,11 @@
 
 namespace java org.jhk.pulsing.serialization.thrift.property
 
-include "../id/TagId.thrift"
-include "./TagPropertyValue.thrift"
-
 /**
- * Tag property
+ * Tag property value
  *
  * @author Ji Kim
  */
-struct TagProperty {
-  1: TagId.TagId id;
-  2: TagPropertyValue.TagPropertyValue property;
+struct TagGroupPropertyValue {
+  1: string tag;
 }

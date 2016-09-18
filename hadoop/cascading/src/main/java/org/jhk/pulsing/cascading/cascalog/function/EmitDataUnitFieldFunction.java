@@ -20,9 +20,10 @@ package org.jhk.pulsing.cascading.cascalog.function;
 
 import org.jhk.pulsing.serialization.thrift.data.Data;
 import org.jhk.pulsing.serialization.thrift.data.DataUnit;
-import org.jhk.pulsing.serialization.thrift.edges.TagEdge;
-import org.jhk.pulsing.serialization.thrift.property.TagProperty;
-import org.jhk.pulsing.serialization.thrift.property.TagPropertyValue;
+import org.jhk.pulsing.serialization.thrift.edges.TagGroupUserEdge;
+import org.jhk.pulsing.serialization.thrift.id.TagGroupId;
+import org.jhk.pulsing.serialization.thrift.property.TagGroupProperty;
+import org.jhk.pulsing.serialization.thrift.property.TagGroupPropertyValue;
 import org.jhk.pulsing.serialization.thrift.property.UserProperty;
 import org.jhk.pulsing.serialization.thrift.property.UserPropertyValue;
 import org.slf4j.Logger;
@@ -54,22 +55,23 @@ public final class EmitDataUnitFieldFunction extends CascalogFunction {
             }
         },
         
-        TAG_EDGE {
+        TAG_GROUP_USER_EDGE {
             @Override
             Tuple emitDataField(DataUnit dUnit) {
-                TagEdge tEdge = dUnit.getTag();
+                TagGroupUserEdge tguEdge = dUnit.getTaggroupuser_edge();
                 
-                return new Tuple(tEdge.getTagId().getTag(), tEdge.getUserId().getId());
+                return new Tuple(tguEdge.getTagGroupId().getId(), tguEdge.getTagGroupId().getCoordinates(), tguEdge.getUserId().getId());
             }
         },
         
-        TAG_PROPERTY {
+        TAG_GROUP_PROPERTY {
             @Override
             Tuple emitDataField(DataUnit dUnit) {
-                TagProperty tProperty = dUnit.getTag_property();
-                TagPropertyValue tpValue = tProperty.getProperty();
+                TagGroupProperty tgProperty = dUnit.getTaggroup_property();
+                TagGroupPropertyValue tgpValue = tgProperty.getProperty();
+                TagGroupId tgId = tgProperty.getId();
                 
-                return new Tuple(tProperty.getId().getTag(), tpValue.getCoordinates());
+                return new Tuple(tgId.getId(), tgId.getCoordinates(), tgpValue.getTag());
             }
         };
         

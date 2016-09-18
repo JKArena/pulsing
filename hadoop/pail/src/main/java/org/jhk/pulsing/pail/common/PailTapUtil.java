@@ -29,6 +29,7 @@ import com.backtype.cascading.tap.PailTap;
 import com.backtype.cascading.tap.PailTap.PailTapOptions;
 import com.backtype.hadoop.pail.Pail;
 import com.backtype.hadoop.pail.PailSpec;
+import com.backtype.hadoop.pail.PailStructure;
 
 import cascalog.ops.IdentityBuffer;
 import cascalog.ops.RandLong;
@@ -107,7 +108,7 @@ public final class PailTapUtil {
      * @return
      */
     @SuppressWarnings("unchecked")
-    public static PailTap attributetap(String path, final DataUnit._Fields... fields) {
+    public static PailTap attributetap(String path, PailStructure struct, final DataUnit._Fields... fields) {
         _LOGGER.debug("PailTapUtil.attributetap " + path + " : " + fields);
         
         PailTapOptions options = new PailTapOptions();
@@ -119,7 +120,7 @@ public final class PailTapUtil {
                     }
                 }}
         };
-        options.spec = new PailSpec(new SplitDataPailStructure());
+        options.spec = new PailSpec(struct);
         return new PailTap(path, options);
     }
     

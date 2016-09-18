@@ -26,6 +26,7 @@ import java.util.Arrays;
 import static org.jhk.pulsing.cascading.cascalog.flow.useridnorm.FunctionBuffer.*;
 
 import org.jhk.pulsing.pail.common.PailTapUtil;
+import org.jhk.pulsing.pail.thrift.structures.SplitDataPailStructure;
 import org.jhk.pulsing.serialization.thrift.data.DataUnit;
 import org.jhk.pulsing.shared.util.HadoopConstants;
 
@@ -59,7 +60,8 @@ public final class UserIdNormalizationFlow {
     private static void initializeUserIdNormalization() {
         
         Tap equivs = PailTapUtil.attributetap(HadoopConstants.PAIL_MASTER_WORKSPACE, 
-                                                DataUnit._Fields.EQUIV);
+                                                new SplitDataPailStructure(),
+                                                DataUnit._Fields.EQUIV_EDGE);
         
         Api.execute(Api.hfsSeqfile(_TEMP_EQUIVS_ITERATE_DIR + "0"), 
                     new Subquery("?node1", "?node2")
