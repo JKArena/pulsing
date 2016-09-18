@@ -17,13 +17,17 @@
  * under the License.
  */
 
-namespace java org.jhk.pulsing.serialization.thrift.property
+namespace java org.jhk.pulsing.serialization.thrift.edges
+
+include "../id/TagGroupId.thrift"
+include "../id/UserId.thrift"
 
 /**
- * Tag property value
+ * Edge for user and tagGroup
  *
  * @author Ji Kim
  */
-union TagPropertyValue {
-  1: list<double> coordinates;
+struct TagGroupUserEdge {
+  1: required UserId.UserId userId;
+  2: required TagGroupId.TagGroupId tagGroupId;
 }

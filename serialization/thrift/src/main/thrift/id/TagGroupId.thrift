@@ -17,17 +17,14 @@
  * under the License.
  */
 
-namespace java org.jhk.pulsing.serialization.thrift.edges
-
-include "../id/TagId.thrift"
-include "../id/UserId.thrift"
+namespace java org.jhk.pulsing.serialization.thrift.id
 
 /**
- * Edge for user and tag
+ * Pulse id node
  *
  * @author Ji Kim
  */
-struct TagEdge {
-  1: required UserId.UserId userId;
-  2: required TagId.TagId tagId;
+struct TagGroupId {
+  1: i64 id;
+  2: list<double> coordinates;
 }

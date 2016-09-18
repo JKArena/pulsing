@@ -20,23 +20,22 @@ package org.jhk.pulsing.storm.common;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.jhk.pulsing.storm.common.FieldConstants.*;
 
 import org.apache.storm.tuple.ITuple;
-import org.jhk.pulsing.serialization.avro.records.Picture;
 import org.jhk.pulsing.serialization.avro.records.Pulse;
 import org.jhk.pulsing.serialization.avro.records.User;
 import org.jhk.pulsing.serialization.thrift.data.Data;
 import org.jhk.pulsing.serialization.thrift.data.DataUnit;
 import org.jhk.pulsing.serialization.thrift.data.Pedigree;
-import org.jhk.pulsing.serialization.thrift.edges.TagEdge;
-import org.jhk.pulsing.serialization.thrift.id.TagId;
+import org.jhk.pulsing.serialization.thrift.edges.TagGroupUserEdge;
+import org.jhk.pulsing.serialization.thrift.id.TagGroupId;
 import org.jhk.pulsing.serialization.thrift.id.UserId;
-import org.jhk.pulsing.serialization.thrift.property.PicturePropertyValue;
-import org.jhk.pulsing.serialization.thrift.property.TagProperty;
-import org.jhk.pulsing.serialization.thrift.property.TagPropertyValue;
+import org.jhk.pulsing.serialization.thrift.property.TagGroupProperty;
+import org.jhk.pulsing.serialization.thrift.property.TagGroupPropertyValue;
 import org.jhk.pulsing.serialization.thrift.property.UserProperty;
 import org.jhk.pulsing.serialization.thrift.property.UserPropertyValue;
 import org.slf4j.Logger;
@@ -69,12 +68,25 @@ public final class ConverterCommon {
         List<Double> coordinates = pulse.getCoordinates();
         long tStamp = pulse.getTimeStamp();
         
-        List<String> tags = pulse.getTags().parallelStream()
+        Set<String> tags = pulse.getTags().parallelStream()
                 .map(cSequence -> {
                    return cSequence.toString(); 
                 })
-                .collect(Collectors.toList());
-        tags.add(pulse.getValue().toString());
+                .collect(Collectors.toSet());
+        tags.add(pulse.getValue().toString()); //add the pulse value as a tag as well
+        
+        //1) create a TagGroup for these tags to group them using pulseId and coordinates
+        //   (so to group additional tags if user modifies the pulse)
+        //2) create an edge between user and tagGroup by creating a TagGroupUserEdge
+        //3) create multiple TagGroupProperty linking the tag name with the TagGroupId
+        //
+        //in hadoop 
+        //1) create a relation graph of the associated TagGroups by grouping by tag name including 
+        //   tagGroupId + coordinates
+        //2) then take the result and gather tagGroupIds together using geohash w/ coordinates
+        //3) create a cassandra entry of the userId -> set(tagGroupIds -> {tag})
+        
+        TagGroupId tgId = new TagGroupId(pulse.getId().getId(), coordinates);
         
         List<Data> tDatas = tags.parallelStream()
             .map(tag -> {
@@ -84,24 +96,31 @@ public final class ConverterCommon {
                 DataUnit dUnit = new DataUnit();
                 data.setDataunit(dUnit);
                 
-                TagId tId = TagId.tag(tag);
+                TagGroupProperty tgProperty = new TagGroupProperty();
+                dUnit.setTaggroup_property(tgProperty);
                 
-                TagProperty tProperty = new TagProperty();
-                dUnit.setTag_property(tProperty);
+                TagGroupPropertyValue tgpValue = new TagGroupPropertyValue();
+                tgpValue.setTag(tag);
                 
-                TagPropertyValue tpValue = new TagPropertyValue();
-                tpValue.setCoordinates(coordinates);
-                tProperty.setProperty(tpValue);
-                tProperty.setId(tId);
-                
-                TagEdge tEdge = new TagEdge();
-                dUnit.setTag(tEdge);
-                tEdge.setTagId(tId);
-                tEdge.setUserId(uId);
+                tgProperty.setProperty(tgpValue);
+                tgProperty.setId(tgId);
                 
                 return data;
             })
             .collect(Collectors.toList());
+        
+        Data data = new Data();
+        data.setPedigree(new Pedigree(tStamp));
+        
+        DataUnit dUnit = new DataUnit();
+        data.setDataunit(dUnit);
+        
+        TagGroupUserEdge tguEdge = new TagGroupUserEdge();
+        tguEdge.setUserId(uId);
+        tguEdge.setTagGroupId(tgId);
+        dUnit.setTaggroupuser_edge(tguEdge);
+        
+        tDatas.add(data);
         
         return tDatas;
     }
@@ -125,19 +144,11 @@ public final class ConverterCommon {
         uProperty.setProperty(upValue);
         
         upValue.setEmail(user.getEmail().toString());
-        upValue.setPassword(user.getPassword().toString());
         upValue.setName(user.getName().toString());
         
         List<Double> coordinates = user.getCoordinates();
         if(coordinates != null) {
             upValue.setCoordinates(coordinates);
-        }
-        
-        Picture avroPicture = user.getPicture();
-        if(avroPicture != null && avroPicture.getName() != null) {
-            //research how others are passing byte data over messaging. The easiest solution 
-            //is to encode the byte into base 64 string, but the size increase is 2-3 times original
-            upValue.setPicture(PicturePropertyValue.originalFilename(avroPicture.getName().toString()));
         }
         
         return data;

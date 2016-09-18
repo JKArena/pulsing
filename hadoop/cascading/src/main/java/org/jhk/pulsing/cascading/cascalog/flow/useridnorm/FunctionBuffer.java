@@ -49,7 +49,7 @@ final class FunctionBuffer {
         @Override
         public void operate(FlowProcess process, FunctionCall call) {
             Data data = (Data) call.getArguments().getObject(0);
-            EquivEdge equiv = data.getDataunit().getEquiv();
+            EquivEdge equiv = data.getDataunit().getEquiv_edge();
             call.getOutputCollector().add(new Tuple(equiv.getFirstId(), equiv.getSecondId()));
         }
 
