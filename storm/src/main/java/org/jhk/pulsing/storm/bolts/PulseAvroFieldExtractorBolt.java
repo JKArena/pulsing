@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.storm.bolts.time;
+package org.jhk.pulsing.storm.bolts;
 
 import org.jhk.pulsing.storm.common.FieldConstants;
 
@@ -78,10 +78,17 @@ public final class PulseAvroFieldExtractorBolt extends BaseBasicBolt {
             }
         },
         
-        COORDINATES(FieldConstants.COORDINATES) {
+        LAT(FieldConstants.LAT) {
             @Override
             Object getValue(Pulse pulse) {
-                return pulse.getCoordinates();
+                return pulse.getLat();
+            }
+        },
+        
+        LNG(FieldConstants.LNG) {
+            @Override
+            Object getValue(Pulse pulse) {
+                return pulse.getLng();
             }
         },
         

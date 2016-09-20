@@ -23,7 +23,8 @@ namespace java org.jhk.pulsing.serialization.thrift.property
  * @author Ji Kim
  */
 union UserPropertyValue {
-  1: list<double> coordinates;
-  2: string email;
-  3: string name;
+  1: double lat;
+  2: double lng;
+  3: string email;
+  4: string name;
 }

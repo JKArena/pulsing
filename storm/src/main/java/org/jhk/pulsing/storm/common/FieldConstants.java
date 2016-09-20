@@ -29,7 +29,8 @@ public final class FieldConstants {
     public static final String TIMESTAMP = "TIMESTAMP";
     
     public static final String USER_ID = "USER_ID";
-    public static final String COORDINATES = "COORDINATES";
+    public static final String LAT = "LAT";
+    public static final String LNG = "LNG";
     public static final String VALUE = "VALUE";
     public static final String ACTION = "ACTION";
     public static final String DESCRIPTION = "DESCRIPTION";

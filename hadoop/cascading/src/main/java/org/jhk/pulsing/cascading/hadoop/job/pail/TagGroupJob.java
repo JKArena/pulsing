@@ -16,16 +16,33 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.jhk.pulsing.cascading.hadoop.job.pail;
 
-namespace java org.jhk.pulsing.serialization.thrift.id
+import java.util.Arrays;
+
+import org.jhk.pulsing.cascading.cascalog.flow.tags.TagMappingFlow;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- * Pulse id node
- *
  * @author Ji Kim
  */
-struct TagGroupId {
-  1: i64 id;
-  2: double lat;
-  3: double lng;
+public final class TagGroupJob {
+    
+    private static final Logger _LOGGER = LoggerFactory.getLogger(TagGroupJob.class);
+    
+    public static void main(String[] args) {
+        _LOGGER.info("TagGroupJob " + Arrays.toString(args));
+        
+        try {
+            
+            TagMappingFlow.mapTagGroups();
+            
+        } catch (Exception exception) {
+            _LOGGER.error("Crud something went wrong!!!!!!!!!!");
+            exception.printStackTrace();
+        }
+        
+    }
+
 }

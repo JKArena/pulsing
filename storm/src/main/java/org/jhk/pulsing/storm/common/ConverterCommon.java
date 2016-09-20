@@ -60,12 +60,13 @@ public final class ConverterCommon {
      * @return
      */
     public static List<Data> convertPulseAvroToThriftDataList(ITuple tuple) {
-        _LOGGER.debug("ConverterCommon.convertPulseAvroToThriftDataList " + tuple);
+        _LOGGER.info("ConverterCommon.convertPulseAvroToThriftDataList " + tuple);
         
         Pulse pulse = (Pulse) tuple.getValueByField(AVRO_PULSE);
         
         UserId uId = UserId.id(pulse.getUserId().getId());
-        List<Double> coordinates = pulse.getCoordinates();
+        double lat = pulse.getLat();
+        double lng = pulse.getLng();
         long tStamp = pulse.getTimeStamp();
         
         Set<String> tags = pulse.getTags().parallelStream()
@@ -86,7 +87,7 @@ public final class ConverterCommon {
         //2) then take the result and gather tagGroupIds together using geohash w/ coordinates
         //3) create a cassandra entry of the userId -> set(tagGroupIds -> {tag})
         
-        TagGroupId tgId = new TagGroupId(pulse.getId().getId(), coordinates);
+        TagGroupId tgId = new TagGroupId(pulse.getId().getId(), lat, lng);
         
         List<Data> tDatas = tags.parallelStream()
             .map(tag -> {
@@ -126,7 +127,7 @@ public final class ConverterCommon {
     }
     
     public static Data convertUserAvroToThriftData(ITuple tuple) {
-        _LOGGER.debug("ConverterCommon.convertUserAvroToThriftData " + tuple);
+        _LOGGER.info("ConverterCommon.convertUserAvroToThriftData " + tuple);
         
         User user = (User) tuple.getValueByField(AVRO_USER);
         
@@ -146,9 +147,11 @@ public final class ConverterCommon {
         upValue.setEmail(user.getEmail().toString());
         upValue.setName(user.getName().toString());
         
-        List<Double> coordinates = user.getCoordinates();
-        if(coordinates != null) {
-            upValue.setCoordinates(coordinates);
+        Double lat = user.getLat();
+        Double lng = user.getLng();
+        if(lat != null && lng != null) {
+            upValue.setLat(lat);
+            upValue.setLng(lng);
         }
         
         return data;

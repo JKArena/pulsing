@@ -65,7 +65,7 @@ public final class PailDataPersistorBolt extends BaseBasicBolt {
         datas.add(data);
         
         String path = StormUtil.generateNewPailPath(_newDataPath);
-        _LOGGER.info("PailDataPersistorBolt.execute: writing to " + path + ", " + datas.size());
+        _LOGGER.info("PailDataPersistorBolt.execute: writing to " + path + ", " + datas.size() + " - " + datas);
         
         try {
             PailUtil.writePailStructures(path, new DataPailStructure(), datas);

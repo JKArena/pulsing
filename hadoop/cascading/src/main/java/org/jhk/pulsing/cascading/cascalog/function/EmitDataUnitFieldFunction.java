@@ -51,7 +51,7 @@ public final class EmitDataUnitFieldFunction extends CascalogFunction {
                 UserPropertyValue upValue = uProperty.getProperty();
                 
                 return new Tuple(uProperty.getId().getId(), upValue.getName(), upValue.getEmail(),
-                        upValue.getCoordinates());
+                        upValue.getLat(), upValue.getLng());
             }
         },
         
@@ -59,8 +59,9 @@ public final class EmitDataUnitFieldFunction extends CascalogFunction {
             @Override
             Tuple emitDataField(DataUnit dUnit) {
                 TagGroupUserEdge tguEdge = dUnit.getTaggroupuser_edge();
+                TagGroupId tgId = tguEdge.getTagGroupId();
                 
-                return new Tuple(tguEdge.getTagGroupId().getId(), tguEdge.getTagGroupId().getCoordinates(), tguEdge.getUserId().getId());
+                return new Tuple(tgId.getId(), tgId.getLat(), tgId.getLng(), tguEdge.getUserId().getId());
             }
         },
         
@@ -71,7 +72,7 @@ public final class EmitDataUnitFieldFunction extends CascalogFunction {
                 TagGroupPropertyValue tgpValue = tgProperty.getProperty();
                 TagGroupId tgId = tgProperty.getId();
                 
-                return new Tuple(tgId.getId(), tgId.getCoordinates(), tgpValue.getTag());
+                return new Tuple(tgId.getId(), tgId.getLat(), tgId.getLng(), tgpValue.getTag());
             }
         };
         

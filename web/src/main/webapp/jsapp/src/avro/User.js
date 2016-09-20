@@ -58,23 +58,32 @@ class User extends AbstractAvro {
         Math.pow(coords.longitude-this.coordinates[1], 2));
     }
 
-    if(!this.coordinates || distance >= GEOLOCATION_NOTIFICATION_CHANGE_THRESHOLD) {
-      API.publish(TOPICS.USER_GEO_CHANGE, [coords.latitude, coords.longitude]);
+    if(!this.lat || distance >= GEOLOCATION_NOTIFICATION_CHANGE_THRESHOLD) {
+      API.publish(TOPICS.USER_GEO_CHANGE, {lat: coords.latitude, lng: coords.longitude});
     }
 
-    this.coordinates = [coords.latitude, coords.longitude];
+    this.lat = coords.latitude;
+    this.lng = coords.longitude;
   }
   
   get id() {
     return new UserId(this.json['id']);
   }
 
-  get coordinates() {
-    return this.getProperty('coordinates', 'double');
+  get lat() {
+    return this.getProperty('lat', 'double');
   }
   
-  set coordinates(coords) {
-    this.json.coordinates = {'double': coords};
+  set lat(lat) {
+    this.json.lat = {'double': lat};
+  }
+
+  get lng() {
+    return this.getProperty('lng', 'double');
+  }
+  
+  set lng(lng) {
+    this.json.lng = {'double': lng};
   }
   
   get email() {
