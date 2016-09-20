@@ -85,9 +85,8 @@ public class RedisPulseDao extends AbstractRedisDao
         Result<Pulse> result;
         
         try {
-            List<Double> coordinates = pulse.getCoordinates();
-            double lat = coordinates.get(0);
-            double lng = coordinates.get(1);
+            double lat = pulse.getLat();
+            double lng = pulse.getLng();
             
             /*
              * Hmmm...add denormalized content for easier fetch since the pulse itself can't be modified after creation 

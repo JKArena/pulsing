@@ -52,11 +52,12 @@ class GMapPulseStore extends AbstractMapStore {
 
   addDataPoint(map, pulse) {
 
-    let coordinates = pulse.coordinates;
+    let lat = pulse.lat;
+    let lng = pulse.lng;
 
-    if(coordinates && coordinates.length === 2) {
+    if(lat && lng) {
       let marker = new global.google.maps.Marker({
-        position: {lat: coordinates[0], lng: coordinates[1]},
+        position: {lat: lat, lng: lng},
         map: map,
         title: pulse.value
       });

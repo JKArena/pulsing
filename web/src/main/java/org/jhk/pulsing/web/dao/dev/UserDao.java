@@ -49,7 +49,8 @@ public class UserDao implements IUserDao {
         user.setEmail("mathXphysics@truth.com");
         user.setName("Isaac Newton");
         user.setPassword("genius");
-        user.setCoordinates(Stream.of(52.809863D, -0.62877D).collect(Collectors.toList()));
+        user.setLat(52.809863D);
+        user.setLng(-0.62877D);
         
         _MOCKED_USERS.put(userId, user);
         
@@ -61,7 +62,8 @@ public class UserDao implements IUserDao {
         user.setEmail("philosophy@truth.com");
         user.setName("Socrates");
         user.setPassword("genius");
-        user.setCoordinates(Stream.of(37.9667D, 23.7167D).collect(Collectors.toList()));
+        user.setLat(37.9667D);
+        user.setLng(23.7167D);
         
         _MOCKED_USERS.put(userId, user);
     }

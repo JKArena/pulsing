@@ -54,14 +54,11 @@ class MapComponent extends Component {
     this.dataPointsHandler = this._onDataPoints.bind(this);
     this.pulseCreatedHandler = this._onPulseCreated.bind(this);
 
-    //will only be enabled when logged in + geolocation enabled; for now testing
     let user = Storage.user;
-    let lat = user.coordinates[0];
-    let lng = user.coordinates[1];
-    
+
     this.state = {
-      lat: lat,
-      lng: lng,
+      lat: user.lat,
+      lng: user.lng,
       zoom: ZOOM_DEFAULT
     };
 
@@ -140,8 +137,8 @@ class MapComponent extends Component {
 
     this.map = null;
     this.state = {
-      lat: coordinates[0],
-      lng: coordinates[1],
+      lat: coordinates.lat,
+      lng: coordinates.lng,
       zoom: ZOOM_DEFAULT
     };
 

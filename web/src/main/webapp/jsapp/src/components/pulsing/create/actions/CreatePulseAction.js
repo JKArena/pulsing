@@ -48,7 +48,8 @@ const CreatePulseAction = Object.freeze(
       pulse.formMap(document.getElementById(formId));
       pulse.userId = user.id.id;
       pulse.tags = tagsArray;
-      pulse.coordinates = user.coordinates;
+      pulse.lat = user.lat;
+      pulse.lng = user.lng;
       
       fData.append('pulse', pulse.serialize());
 

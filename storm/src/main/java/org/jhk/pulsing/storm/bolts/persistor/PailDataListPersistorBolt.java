@@ -62,7 +62,7 @@ public final class PailDataListPersistorBolt extends BaseBasicBolt {
         List<Data> datas = (List<Data>) tuple.getValueByField(FieldConstants.THRIFT_DATA_LIST);
         
         String path = StormUtil.generateNewPailPath(_newDataPath);
-        _LOGGER.info("PailDataListPersistorBolt.execute: writing to " + path + ", " + datas.size());
+        _LOGGER.info("PailDataListPersistorBolt.execute: writing to " + path + ", " + datas.size() + " - " + datas);
         
         try {
             PailUtil.writePailStructures(path, new DataPailStructure(), datas);

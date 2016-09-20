@@ -62,12 +62,20 @@ class Pulse extends AbstractAvro {
     this.json.description = {'string' : description};
   }
   
-  set coordinates(coords) {
-    this.json.coordinates = {'array': coords};
+  get lat() {
+    return this.getProperty('lat', 'double');
   }
-  
-  get coordinates() {
-    return this.getProperty('coordinates', 'array');
+
+  set lat(lat) {
+    this.json.lat = {'double': lat};
+  }
+
+  get lng() {
+    return this.getProperty('lng', 'double');
+  }
+
+  set lng(lng) {
+    this.json.lng = {'double': lng};
   }
 
   get tags() {

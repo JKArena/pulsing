@@ -25,6 +25,7 @@
 require('./CreatePulse.scss');
 
 import React from 'react';
+import {findDOMNode} from 'react-dom';
 import {FormGroup, ControlLabel, FormControl, Panel, Button, Grid, Row, Col} from 'react-bootstrap';
 
 import PillsComponent from '../../common/pills/PillsComponent';
@@ -47,6 +48,12 @@ class CreatePulseComponent extends AbstractComponent {
     };
   }
 
+  componentDidMount() {
+    
+    this.valueInputNode = findDOMNode(this.refs.valueInput);
+    this.descInputNode = findDOMNode(this.refs.descInput);
+  }
+
   handleSubmit(evt) {
     console.debug('submitting pulse', evt);
 
@@ -55,7 +62,9 @@ class CreatePulseComponent extends AbstractComponent {
         //save the user and update the store
         this.state.errorMsg = '';
 
-        API.publish(TOPICS.NAVIGATION_CHANGE, Common.MAIN_NAV_PATH);
+        this.valueInputNode.value = '';
+        this.descInputNode.value = '';
+        //API.publish(TOPICS.NAVIGATION_CHANGE, Common.MAIN_NAV_PATH);
       })
       .catch(message => {
         this.state.errorMsg = message;
@@ -75,13 +84,13 @@ class CreatePulseComponent extends AbstractComponent {
                 <form class='form' id='createPulseForm' action=''>
                   <FormGroup controlId='value' validationState={this.getValidState('value')}>
                     <ControlLabel>Name</ControlLabel>
-                    <FormControl type='text' name='value' onBlur={this.handleChange.bind(this)} />
+                    <FormControl type='text' ref='valueInput' name='value' onBlur={this.handleChange.bind(this)} />
                     <FormControl.Feedback />
                   </FormGroup>
 
                   <FormGroup controlId='description' validationState={this.getValidState('description')}>
                     <ControlLabel>Description</ControlLabel>
-                    <FormControl componentClass='textarea' name='description' onBlur={this.handleChange.bind(this)} />
+                    <FormControl componentClass='textarea' ref='descInput' name='description' onBlur={this.handleChange.bind(this)} />
                     <FormControl.Feedback />
                   </FormGroup>
 

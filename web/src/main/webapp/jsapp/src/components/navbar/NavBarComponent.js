@@ -78,6 +78,8 @@ class NavBarComponent extends Component {
   }
   
   render() {
+    let user = Storage.user;
+
     return (
         <div class='navbar-component'>
           <Navbar inverse>
@@ -91,7 +93,7 @@ class NavBarComponent extends Component {
             <Navbar.Collapse>
 
               {(() => {
-                if(this.state.loggedIn && Storage.user.coordinates) {
+                if(this.state.loggedIn && user.lat && user.lng) {
                   return <Nav>
                       <LinkContainer to={{ pathname: '/map/pulse', query: {mapId: 'pulseMap'} }}>
                         <NavItem>Map</NavItem>

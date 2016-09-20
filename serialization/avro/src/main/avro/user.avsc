@@ -23,7 +23,9 @@
   "name": "User",
   "fields": [
   	{"name": "picture", "type": "Picture", "default": null},
-  	{"name": "coordinates", "type": ["null", {"type": "array", "items": "double"}], "default": null},
+  	{"name": "lat", "type": "double", "default": 0.0},
+  	{"name": "lng", "type": "double", "default": 0.0},
+  	//{"name": "coordinates", "type": ["null", {"type": "array", "items": "double"}], "default": null},
   	{"name": "email", "type": ["null", "string"], "default": null},
   	{"name": "id", "type": "UserId", "default": null},
   	{"name": "name", "type": ["null", "string"], "default": null},
