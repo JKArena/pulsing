@@ -27,6 +27,7 @@ import java.util.Set;
 import org.jhk.pulsing.serialization.avro.records.Pulse;
 import org.jhk.pulsing.serialization.avro.records.PulseId;
 import org.jhk.pulsing.serialization.avro.serializers.SerializationHelper;
+import org.jhk.pulsing.shared.util.CommonConstants;
 import org.jhk.pulsing.shared.util.RedisConstants;
 import org.jhk.pulsing.web.common.Result;
 
@@ -112,11 +113,9 @@ public class RedisPulseDao extends AbstractRedisDao
     
     public List<Pulse> getMapPulseDataPoints(double lat, double lng) {
         
-        final double _DEFAULT_PULSE_RADIUS = 5;  //just for now, push to client config later
-        
         List<Pulse> pDataPoints = new LinkedList<>();
         
-        List<GeoRadiusResponse> response = getJedis().georadius(PULSE_GEO_.toString(), lng, lat, _DEFAULT_PULSE_RADIUS, GeoUnit.M);
+        List<GeoRadiusResponse> response = getJedis().georadius(PULSE_GEO_.toString(), lng, lat, CommonConstants.DEFAULT_PULSE_RADIUS, GeoUnit.M);
         response.parallelStream().forEach(grResponse -> {
             
             try {

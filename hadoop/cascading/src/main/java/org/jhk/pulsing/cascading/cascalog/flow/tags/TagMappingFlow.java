@@ -30,11 +30,13 @@ import org.jhk.pulsing.cascading.cascalog.function.EmitDataUnitFieldFunction.EMI
 import org.jhk.pulsing.pail.common.PailTapUtil;
 import org.jhk.pulsing.pail.thrift.structures.SplitDataPailStructure;
 import org.jhk.pulsing.serialization.thrift.data.DataUnit;
+import org.jhk.pulsing.shared.util.CommonConstants;
 import org.jhk.pulsing.shared.util.HadoopConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.backtype.cascading.tap.PailTap;
+import com.twitter.maple.tap.StdoutTap;
 
 import cascading.flow.FlowProcess;
 import cascading.operation.FunctionCall;
@@ -73,7 +75,8 @@ public final class TagMappingFlow {
                 new SplitDataPailStructure(),
                 DataUnit._Fields.TAGGROUP_PROPERTY);
         
-        Api.execute(Api.hfsSeqfile(_TEMP_TAG_GROUP_MAPPING_DIR + "First"), 
+        Api.execute(//Api.hfsSeqfile(_TEMP_TAG_GROUP_MAPPING_DIR + "First"), 
+                new StdoutTap(),
                 new Subquery("?tagGrouped", "?tagGroupIdGroup", "?tagGroupId2Group")
                 .predicate(tagProperties, "_", "?data")
                 .predicate(tagProperties, "_", "?data2")
@@ -94,21 +97,25 @@ public final class TagMappingFlow {
         public void operate(FlowProcess fProcess, FunctionCall fCall) {
             _LOGGER.info("EqualTagProcessor.operate");
             
-            String tag = fCall.getArguments().getString("tag");
+            String tag = fCall.getArguments().getString("?tag");
             
             _LOGGER.info("EqualTagProcessor.operate " + tag);
             
-            long tagGroupId = fCall.getArguments().getLong("tagGroupId");
-            long tagGroupId2 = fCall.getArguments().getLong("tagGroupId2");
+            long tagGroupId = fCall.getArguments().getLong("?tagGroupId");
+            long tagGroupId2 = fCall.getArguments().getLong("?tagGroupId2");
             
             _LOGGER.info("EqualTagProcessor.operate " + tagGroupId + "/" + tagGroupId2);
             
-            double lat = fCall.getArguments().getDouble("lat");
-            double lng = fCall.getArguments().getDouble("lng");
-            double lat2 = fCall.getArguments().getDouble("lat2");
-            double lng2 = fCall.getArguments().getDouble("lng2");
+            double lat = fCall.getArguments().getDouble("?lat");
+            double lng = fCall.getArguments().getDouble("?lng");
+            double lat2 = fCall.getArguments().getDouble("?lat2");
+            double lng2 = fCall.getArguments().getDouble("?lng2");
             
-            if(tagGroupId != tagGroupId2 || lat != lat2 || lng != lng2) {
+            double latR = lat-lat2;
+            double lngR = lng-lng2;
+            double distance = Math.sqrt((latR*latR) + (lngR*lngR));
+            
+            if(tagGroupId != tagGroupId2 && distance < CommonConstants.DEFAULT_PULSE_RADIUS) {
                 _LOGGER.info("EqualTagProcessor.operate emitting - " + tag + ":" + tagGroupId + "/" + tagGroupId2);
                 fCall.getOutputCollector().add(new Tuple(tag, tagGroupId, tagGroupId2));
             }

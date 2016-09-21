@@ -39,6 +39,8 @@ public final class CommonConstants {
     public static final int HASH_CODE_INIT_VALUE = 3;
     public static final int HASH_CODE_MULTIPLY_VALUE = 31;
     
+    public static final double DEFAULT_PULSE_RADIUS = 5.0d;
+    
     public enum TOPICS {
 		PULSE_SUBSCRIBE, USER_CREATE, PULSE_CREATE;
 	};

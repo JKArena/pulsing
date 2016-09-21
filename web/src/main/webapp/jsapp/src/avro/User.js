@@ -26,7 +26,6 @@ import AvroJson from './avrojson';
 import AbstractAvro from './AbstractAvro';
 import UserId from './UserId';
 import {TOPICS, API} from '../common/PubSub';
-import Common from '../common/Common';
 
 const FORM_MAPPER = Symbol('FORM_MAPPER');
 const U_GEOLOCATION_OPTS = {'timeout': 30000, 'maximumAge': 30000};
@@ -71,19 +70,19 @@ class User extends AbstractAvro {
   }
 
   get lat() {
-    return this.getProperty('lat', 'double');
+    return this.json.lat;
   }
   
   set lat(lat) {
-    this.json.lat = {'double': lat};
+    this.json.lat = lat;
   }
 
   get lng() {
-    return this.getProperty('lng', 'double');
+    return this.json.lng;
   }
   
   set lng(lng) {
-    this.json.lng = {'double': lng};
+    this.json.lng = lng;
   }
   
   get email() {

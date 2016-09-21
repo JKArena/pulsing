@@ -62,13 +62,21 @@ class PillsComponent extends Component {
     this.tagInputNode.value = '';
   }
 
-  removeTag(removeIndex, evt) {
-    console.debug('removeTag ', evt, removeIndex);
+  clearData() {
+    Object.keys(this.dataNodes).forEach(removeIndex => {
+      this.removeTag(removeIndex, null);
+    });
+    this.dataNodes = {};
+    this.data = new Set();
+  }
+
+  removeTag(removeIndex) {
+    console.debug('removeTag ', removeIndex);
     if(!(removeIndex in this.dataNodes)) {
       return; //unlikely to happen but for sanity
     }
-
-    this.data.delete(this.dataNodes[removeIndex].querySelector(':scope .pills-value'));
+    
+    this.data.delete(this.dataNodes[removeIndex].querySelector(':scope .pills-value').innerHTML);
     unmountComponentAtNode(this.dataNodes[removeIndex]);
     delete this.dataNodes[removeIndex];
   }
