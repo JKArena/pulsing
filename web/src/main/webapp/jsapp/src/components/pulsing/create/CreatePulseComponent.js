@@ -29,8 +29,6 @@ import {findDOMNode} from 'react-dom';
 import {FormGroup, ControlLabel, FormControl, Panel, Button, Grid, Row, Col} from 'react-bootstrap';
 
 import PillsComponent from '../../common/pills/PillsComponent';
-import {TOPICS, API} from '../../../common/PubSub';
-import Common from '../../../common/Common';
 import AbstractComponent from '../../AbstractComponent';
 import CreatePulseAction from './actions/CreatePulseAction';
 
@@ -64,6 +62,7 @@ class CreatePulseComponent extends AbstractComponent {
 
         this.valueInputNode.value = '';
         this.descInputNode.value = '';
+        this.refs.tagsComp.clearData();
         //API.publish(TOPICS.NAVIGATION_CHANGE, Common.MAIN_NAV_PATH);
       })
       .catch(message => {

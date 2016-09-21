@@ -24,6 +24,6 @@ namespace java org.jhk.pulsing.serialization.thrift.property
  *
  * @author Ji Kim
  */
-struct TagGroupPropertyValue {
+union TagGroupPropertyValue {
   1: string tag;
 }
