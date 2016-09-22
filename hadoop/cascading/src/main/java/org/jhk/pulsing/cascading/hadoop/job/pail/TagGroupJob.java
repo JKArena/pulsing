@@ -36,7 +36,9 @@ public final class TagGroupJob {
         
         try {
             
-            TagMappingFlow.mapTagGroups();
+            TagMappingFlow.mapTagToTagGroupSet();
+            TagMappingFlow.mapUserToTagGroupSet();
+            TagMappingFlow.mapUserToTagSet();
             
         } catch (Exception exception) {
             _LOGGER.error("Crud something went wrong!!!!!!!!!!");
