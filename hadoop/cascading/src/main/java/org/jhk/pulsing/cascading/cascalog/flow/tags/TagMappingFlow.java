@@ -21,6 +21,7 @@ package org.jhk.pulsing.cascading.cascalog.flow.tags;
 import static org.jhk.pulsing.shared.util.HadoopConstants.DIRECTORIES.*;
 
 import java.io.IOException;
+import java.util.Map;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
@@ -70,13 +71,16 @@ public final class TagMappingFlow {
         Configuration config = new Configuration();
         String fsDefault = config.get(HadoopConstants.CONFIG_FS_DEFAULT_KEY);
         
-        Tap userIdToTaggroup = (Tap) Api.hfsSeqfile(_TEMP_TAG_GROUP_MAPPING_DIR + _USERID_TO_TAG_GROUP);
-        Tap tagToTaggroup = (Tap) Api.hfsSeqfile(_TEMP_TAG_GROUP_MAPPING_DIR + _TAG_TO_TAG_GROUP);
+        Map userIdToTaggroupMap = (Map) Api.hfsSeqfile(_TEMP_TAG_GROUP_MAPPING_DIR + _USERID_TO_TAG_GROUP);
+        Map tagToTaggroupMap = (Map) Api.hfsSeqfile(_TEMP_TAG_GROUP_MAPPING_DIR + _TAG_TO_TAG_GROUP);
+        
+        Tap userIdToTaggroup = (Tap) userIdToTaggroupMap.get(HadoopConstants.CASCALOG_HFS_SEQFILE_SOURCE_KEY);
+        Tap tagToTaggroup = (Tap) tagToTaggroupMap.get(HadoopConstants.CASCALOG_HFS_SEQFILE_SINK_KEY);
         
         Api.execute(Api.hfsSeqfile(_TEMP_TAG_GROUP_MAPPING_DIR + _USERID_TO_TAG), 
                     new Subquery("?userId", "?tags")
-                    .predicate(userIdToTaggroup, "_", "?userId", "?uTagGroupIdGroups")
-                    .predicate(tagToTaggroup, "_", "?tag", "?tTagGroupIdGroups")
+                    .predicate(userIdToTaggroup, "?userId", "?uTagGroupIdGroups")
+                    .predicate(tagToTaggroup, "?tag", "?tTagGroupIdGroups")
                     .predicate(new UserIdToTagAggregator(), "?userId", "?uTagGroupIdGroups", "?tag", "?tTagGroupIdGroups")
                         .out("?tags"));
     }
