@@ -48,8 +48,8 @@ public final class UserIdToTagAggregator extends CascalogAggregator {
     
     @Override
     public void aggregate(FlowProcess fProcess, AggregatorCall aCall) {
+        _LOGGER.info("UserIdToTagAggregator.aggregate");
         
-        //"?userId", "?uTagGroupIdGroups", "?tag", "?tTagGroupIdGroups"
         String tag = aCall.getArguments().getString("?tag");
         long userId = aCall.getArguments().getLong("?userId");
         

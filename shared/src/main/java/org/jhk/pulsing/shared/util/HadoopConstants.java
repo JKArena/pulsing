@@ -45,6 +45,9 @@ public final class HadoopConstants {
     public static final String HIVE_NEW_DATA_WORKSPACE;
     private static final String TEMP_DATA_WORKSPACE;
     
+    public static final String CASCALOG_HFS_SEQFILE_SOURCE_KEY = ":source";
+    public static final String CASCALOG_HFS_SEQFILE_SINK_KEY = ":sink";
+    
     public enum PAIL_NEW_DATA_PATH {
         USER, TAG_GROUP;
     }
