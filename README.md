@@ -2,8 +2,9 @@ Project for playing around with :
 
 1. Lamba architecture
    * Storm+Trident+Kafka+Zookeeper
-   * Hadoop+Cassandra
-     * Cascading+JCascade+Pail OR
+   * Hadoop+Cassandra and playing around with
+     * Cascading+JCascade+Pail
+     * Spark
      * Hive
 2. MySQL/Hibernate+Redis
 3. Avro+Thrift for serializations

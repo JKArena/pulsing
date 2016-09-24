@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>org.jhk.pulsing.hadoop</groupId>
+    <artifactId>pulsing-hadoop</artifactId>
+    <version>${pulsing.version}</version>
+  </parent>
+  
+  <groupId>org.jhk.pulsing.hadoop.spark</groupId>
+  <artifactId>pulsing-hadoop-spark</artifactId>
+  <name>pulsing-hadoop-spark</name>
+  <url>https://github.com/JHKTruth/pulsing/hadoop/spark</url>
+  
+  <dependencies>
+    
+    <dependency>
+      <groupId>org.jhk.pulsing.serialization.thrift</groupId>
+      <artifactId>pulsing-thrift</artifactId>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.jhk.pulsing.shared</groupId>
+      <artifactId>pulsing-shared</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.spark</groupId>
+      <artifactId>spark-core_2.10</artifactId>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.apache.cassandra</groupId>
+      <artifactId>cassandra-clientutil</artifactId>
+    </dependency>
+    
+    <dependency>
+      <groupId>com.datastax.cassandra</groupId>
+      <artifactId>cassandra-driver-core</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.datastax.cassandra</groupId>
+      <artifactId>cassandra-driver-extras</artifactId>
+    </dependency>
+    
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
+    
+  </dependencies>
+  
+</project>
