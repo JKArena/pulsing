@@ -17,6 +17,7 @@
     <module>cascading</module>
     <module>hive</module>
     <module>pail</module>
+    <module>spark</module>
   </modules>
   
 </project>
