@@ -28,6 +28,7 @@ import javax.inject.Inject;
 
 import org.jhk.pulsing.serialization.avro.records.Pulse;
 import org.jhk.pulsing.serialization.avro.records.PulseId;
+import org.jhk.pulsing.serialization.avro.records.UserId;
 import org.jhk.pulsing.web.common.Result;
 import static org.jhk.pulsing.web.common.Result.CODE.*;
 import org.jhk.pulsing.web.dao.IPulseDao;
@@ -46,7 +47,7 @@ public class PulseService implements IPulseService {
     public Result<Pulse> getPulse(PulseId pulseId) {
         Optional<Pulse> pulse = pulseDao.getPulse(pulseId);
         
-        return !pulse.isPresent() ? new Result<>(FAILURE, "Failed to get pulse " + pulseId) 
+        return !pulse.isPresent() ? new Result<>(FAILURE, null, "Failed to get pulse " + pulseId) 
                 : new Result<>(SUCCESS, pulse.get()); 
     }
 
@@ -56,8 +57,8 @@ public class PulseService implements IPulseService {
     }
 
     @Override
-    public Result<PulseId> subscribePulse(Pulse pulse) {
-        Result<PulseId> sResult = new Result<>(SUCCESS, pulse.getId());
+    public Result<String> subscribePulse(Pulse pulse, UserId userId) {
+        Result<String> sResult = new Result<>(SUCCESS, "Success");
         return sResult;
     }
 

@@ -22,8 +22,20 @@
  */
 'use strict';
 
+import React from 'react';
 import AbstractMapStore from './AbstractMapStore';
+import Storage from '../../../common/Storage';
+import Url from '../../../common/Url';
+import {render} from 'react-dom';
 import MapPulseAction from '../actions/MapPulseAction';
+
+const InfoNode = (props) => {
+  return (<div className='map-info-node'>
+    <h1>{props.header}</h1>
+    <p>{props.desc}</p>
+    <a href='#' onClick={props.clickHandler}>Subscribe</a>
+  </div>);
+};
 
 class GMapPulseStore extends AbstractMapStore {
 
@@ -43,11 +55,29 @@ class GMapPulseStore extends AbstractMapStore {
         mpDataPoints.forEach(pulse => {
 
           this.addDataPoint(map, pulse);
-          
         });
 
         this.emitDataPoints(this.dataPoints);
       }.bind(this));
+  }
+
+  _subscribePulse(url) {
+    console.debug('subscribePulse ', url);
+  }
+
+  getInfoNode(pulse, userId) {
+    let iNode = document.createElement('div');
+    let header = pulse.value;
+    let desc = 'Created: ' + (new Date(pulse.timeStamp*1000));
+
+    let url = new URL(Url.SUBSCRIBE_PULSE_PATH);
+    url.searchParams.append('pulseId', pulse.id.serialize());
+    url.searchParams.append('userId', userId.serialize());
+
+    render((<InfoNode header={header} desc={desc} 
+      clickHandler={this._subscribePulse.bind(this, url)} />), iNode);
+
+    return iNode;
   }
 
   addDataPoint(map, pulse) {
@@ -56,19 +86,15 @@ class GMapPulseStore extends AbstractMapStore {
     let lng = pulse.lng;
 
     if(lat && lng) {
+      let user = Storage.user;
       let marker = new global.google.maps.Marker({
         position: {lat: lat, lng: lng},
         map: map,
         title: pulse.value
       });
-
-      let cnt = 'Prob display approximate sub count for ' + pulse.value;
-      if(pulse.timeStamp) {
-        //multiply by 1000 since millisecond in client whereas seconds in server
-        cnt += ' created: ' + (new Date(pulse.timeStamp*1000));
-      }
+      
       let iWindow = new global.google.maps.InfoWindow({
-        content: cnt
+        content: this.getInfoNode(pulse, user.id)
       });
 
       marker.addListener('click', function() {

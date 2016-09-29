@@ -36,6 +36,7 @@ import javax.inject.Named;
 import org.jhk.pulsing.serialization.avro.records.ACTION;
 import org.jhk.pulsing.serialization.avro.records.Pulse;
 import org.jhk.pulsing.serialization.avro.records.PulseId;
+import org.jhk.pulsing.serialization.avro.records.UserId;
 import org.jhk.pulsing.serialization.avro.serializers.SerializationHelper;
 import org.jhk.pulsing.shared.util.CommonConstants;
 import org.jhk.pulsing.shared.util.Util;
@@ -73,7 +74,7 @@ public class PulseService extends AbstractStormPublisher
     public Result<Pulse> getPulse(PulseId pulseId) {
         Optional<Pulse> optPulse = redisPulseDao.getPulse(pulseId);
         
-        return optPulse.isPresent() ? new Result<>(SUCCESS, optPulse.get()) : new Result<>(FAILURE, "Unabled to find " + pulseId);
+        return optPulse.isPresent() ? new Result<>(SUCCESS, optPulse.get()) : new Result<>(FAILURE, null, "Unabled to find " + pulseId);
     }
     
     
@@ -118,10 +119,13 @@ public class PulseService extends AbstractStormPublisher
      * @return
      */
     @Override
-    public Result<PulseId> subscribePulse(Pulse pulse) {
+    public Result<String> subscribePulse(Pulse pulse, UserId userId) {
+        pulse.setUserId(userId);
+        pulse.setAction(ACTION.SUBSCRIBE);
+        pulse.setTimeStamp(Instant.now().getEpochSecond());
         
         getStormPublisher().produce(CommonConstants.TOPICS.PULSE_SUBSCRIBE.toString(), pulse);
-        return new Result<>(SUCCESS, pulse.getId());
+        return new Result<>(SUCCESS, "Subscribed");
     }
     
     /**
@@ -177,8 +181,7 @@ public class PulseService extends AbstractStormPublisher
                     TimeUnit.SECONDS.sleep(10);
                     
                     Pulse pulse = entries.get((int) Math.random()*entries.size());
-                    pulse.getUserId().setId(userId++);
-                    subscribePulse(pulse);
+                    subscribePulse(pulse, UserId.newBuilder().setId(userId++).build());
                     
                     _LOGGER.debug("Submitted..." + pulse.getValue());
                 } catch (Exception e) {

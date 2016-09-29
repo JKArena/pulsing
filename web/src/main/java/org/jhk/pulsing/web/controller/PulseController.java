@@ -24,6 +24,8 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import org.jhk.pulsing.serialization.avro.records.Pulse;
+import org.jhk.pulsing.serialization.avro.records.PulseId;
+import org.jhk.pulsing.serialization.avro.records.UserId;
 import org.jhk.pulsing.web.common.Result;
 import org.jhk.pulsing.web.service.IPulseService;
 import org.slf4j.Logger;
@@ -66,6 +68,18 @@ public class PulseController extends AbstractController {
         _LOGGER.debug("PulseController.getMapPulseDataPoints: " + lat + " / " + lng);
         
         return pulseService.getMapPulseDataPoints(lat, lng);
+    }
+    
+    @RequestMapping(value="/subscribePulse", method=RequestMethod.GET)
+    public @ResponseBody Result<String> subscribePulse(PulseId pulseId, UserId userId) {
+        _LOGGER.debug("PulseController.subscribePulse: " + pulseId + " - " + userId);
+        
+        Result<Pulse> result = pulseService.getPulse(pulseId);
+        if(result.getCode() == Result.CODE.FAILURE) {
+            return new Result<String>(Result.CODE.FAILURE, null, result.getMessage());
+        }
+        
+        return pulseService.subscribePulse(result.getData(), userId);
     }
     
 }

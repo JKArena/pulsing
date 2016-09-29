@@ -42,7 +42,7 @@ public class UserService implements IUserService {
     public Result<User> getUser(UserId userId) {
         Optional<User> user = userDao.getUser(userId);
         
-        return !user.isPresent() ? new Result<>(FAILURE, "Failed to get user " + userId) :
+        return !user.isPresent() ? new Result<>(FAILURE, null, "Failed to get user " + userId) :
             new Result<>(SUCCESS, user.get());
     }
 
