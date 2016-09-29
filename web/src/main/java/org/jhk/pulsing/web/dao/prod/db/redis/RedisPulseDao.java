@@ -26,6 +26,7 @@ import java.util.Set;
 
 import org.jhk.pulsing.serialization.avro.records.Pulse;
 import org.jhk.pulsing.serialization.avro.records.PulseId;
+import org.jhk.pulsing.serialization.avro.records.UserId;
 import org.jhk.pulsing.serialization.avro.serializers.SerializationHelper;
 import org.jhk.pulsing.shared.util.CommonConstants;
 import org.jhk.pulsing.shared.util.RedisConstants;
@@ -97,18 +98,24 @@ public class RedisPulseDao extends AbstractRedisDao
             String pulseJson = SerializationHelper.serializeAvroTypeToJSONString(pulse);
             getJedis().setex(PULSE_.toString() + pulse.getId().getId(), RedisConstants.CACHE_EXPIRE_DAY, pulseJson);
             getJedis().geoadd(PULSE_GEO_.toString(), lng, lat, pulseJson);
-            
-            for(CharSequence tag : pulse.getTags()) {
-                getJedis().sadd(PULSE_TAGS_.toString() + tag, pulseJson);
-            }
+            getJedis().sadd(PULSE_SUBSCRIBE_USERID_SET_.toString() + pulse.getId().getId(), pulse.getUserId().getId() + "");
             
             result = new Result<>(SUCCESS, pulse);
         } catch (IOException sException) {
-            result = new Result<>(FAILURE, sException.getMessage());
+            result = new Result<>(FAILURE, null, sException.getMessage());
             sException.printStackTrace();
         }
         
         return result;
+    }
+    
+    @Override
+    public Result<String> subscribePulse(Pulse pulse, UserId userId) {
+        _LOGGER.debug("RedisPulseDao.subscribePulse: " + pulse + " - " + userId);
+        
+        getJedis().sadd(PULSE_SUBSCRIBE_USERID_SET_.toString() + pulse.getId().getId(), userId.getId() + "");
+        
+        return new Result<>(SUCCESS, "Success");
     }
     
     public List<Pulse> getMapPulseDataPoints(double lat, double lng) {
@@ -141,7 +148,7 @@ public class RedisPulseDao extends AbstractRedisDao
         
         final int _LIMIT = 100;
         
-        Set<String> result = getJedis().zrangeByScore(PULSE_SUBSCRIBE_.toString(), brEpoch, cEpoch, 0, _LIMIT);
+        Set<String> result = getJedis().zrangeByScore(PULSE_TRENDING_SUBSCRIBE_.toString(), brEpoch, cEpoch, 0, _LIMIT);
         _LOGGER.debug("RedisPulseDao.getTrendingPulseSubscriptions.queryResult: " + result.size());
         return Optional.ofNullable(result);
     }

@@ -21,8 +21,6 @@ package org.jhk.pulsing.web.dao.dev;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.jhk.pulsing.serialization.avro.records.User;
 import org.jhk.pulsing.serialization.avro.records.UserId;
@@ -82,7 +80,7 @@ public class UserDao implements IUserDao {
                 .findAny();
         
         if(findUser.isPresent()) {
-            return new Result<>(FAILURE, "User with the email already exists " + userSubmitted.getName());
+            return new Result<>(FAILURE, null, "User with the email already exists " + userSubmitted.getName());
         }
         
         UserId userId = UserId.newBuilder().build();
@@ -100,7 +98,7 @@ public class UserDao implements IUserDao {
             .findAny();
         
         return filteredUser.isPresent() ? new Result<>(SUCCESS, filteredUser.get()) : 
-                new Result<>(FAILURE, "Failed to validate with " + email + ":" + password);
+                new Result<>(FAILURE, null, "Failed to validate with " + email + ":" + password);
     }
     
 }

@@ -19,10 +19,18 @@
 package org.jhk.pulsing.cascading.hadoop.job.pail;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
+import org.apache.hadoop.conf.Configuration;
 import org.jhk.pulsing.cascading.cascalog.flow.tags.TagMappingFlow;
+import org.jhk.pulsing.shared.util.CommonConstants;
+import org.jhk.pulsing.shared.util.HadoopConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.ifesdjeen.cascading.cassandra.CassandraTap;
+import com.ifesdjeen.cascading.cassandra.cql3.CassandraCQL3Scheme;
 
 /**
  * @author Ji Kim
@@ -40,11 +48,39 @@ public final class TagGroupJob {
             TagMappingFlow.mapUserToTagGroupSet();
             TagMappingFlow.mapUserToTagSet();
             
+            pushToCassandraDB();
         } catch (Exception exception) {
             _LOGGER.error("Crud something went wrong!!!!!!!!!!");
             exception.printStackTrace();
         }
         
+    }
+    
+    private static void pushToCassandraDB() {
+        try {
+            Configuration config = new Configuration();
+            String fsDefault = config.get(HadoopConstants.CONFIG_FS_DEFAULT_KEY);
+            
+            Map<String, Object> settings = new HashMap<>();
+            settings.put("db.port", "9042");
+            settings.put("db.keyspace", CommonConstants.CASSANDRA_KEYSPACE.USER.toString());
+            settings.put("db.columnFamily", "userTags");
+            settings.put("db.host", CommonConstants.CASSANDRA_CONTACT_POINT);
+            
+            Map<String, String> types = new HashMap<>();
+            types.put("userId", "LongType");
+            types.put("tags", "UTF8Type");
+            
+            settings.put("types", types);
+            settings.put("mappings.source", Arrays.asList("userId", "tags"));
+            
+            CassandraCQL3Scheme scheme = new CassandraCQL3Scheme(settings);
+            CassandraTap tap = new CassandraTap(scheme);
+            
+        } catch (Exception exception) {
+            _LOGGER.error("Crud something went wrong!!!!!!!!!!");
+            exception.printStackTrace();
+        }
     }
 
 }

@@ -77,6 +77,11 @@ public class PulseDao implements IPulseDao {
         
         return pulse;
     }
+    
+    @Override
+    public Result<String> subscribePulse(Pulse pulse, UserId userId) {
+        return new Result<>(SUCCESS, "Success");
+    }
 
     @Override
     public Optional<Pulse> getPulse(PulseId pulseId) {

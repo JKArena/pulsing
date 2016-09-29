@@ -31,16 +31,10 @@ public final class Result<T> {
     private String _message;
     private T _data;
     
-    public Result(CODE code, String message) {
+    public Result(CODE code, T data) { 
         super();
         
         _code = code;
-        _message = message;
-    }
-    
-    public Result(CODE code, T data) { 
-        this(code, "");
-        
         _data = data;
     }
     

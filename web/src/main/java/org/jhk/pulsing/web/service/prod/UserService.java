@@ -52,7 +52,7 @@ public class UserService extends AbstractStormPublisher
     
     @Override
     public Result<User> getUser(UserId userId) {
-        Result<User> result = new Result<>(FAILURE, "Unable to find " + userId);
+        Result<User> result = new Result<>(FAILURE, null, "Unable to find " + userId);
         
         Optional<User> user = mySqlUserDao.getUser(userId);
         if(user.isPresent()) {
@@ -64,7 +64,7 @@ public class UserService extends AbstractStormPublisher
 
     @Override
     public Result<User> createUser(User user) {
-        Result<User> cUser = new Result<User>(FAILURE, "Failed in creating " + user); 
+        Result<User> cUser = new Result<User>(FAILURE, null, "Failed in creating " + user); 
         
         try {
             cUser = mySqlUserDao.createUser(user);
@@ -82,7 +82,7 @@ public class UserService extends AbstractStormPublisher
     public Result<User> validateUser(String email, String password) {
         Optional<User> user = mySqlUserDao.validateUser(email, password);
         
-        return user.isPresent() ? new Result<>(SUCCESS, user.get()) : new Result<>(FAILURE, "Failed in validating " + email + " : " + password);
+        return user.isPresent() ? new Result<>(SUCCESS, user.get()) : new Result<>(FAILURE, null, "Failed in validating " + email + " : " + password);
     }
     
 }

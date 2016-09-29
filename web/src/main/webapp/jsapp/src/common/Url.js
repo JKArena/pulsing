@@ -38,6 +38,8 @@ function _url(suffix) {
 export default Object.freeze(
     {
       __proto__: null,
+
+      SUBSCRIBE_PULSE_PATH: _url(SPRING_CONTROLLER_SUFFIX) + 'pulse/subscribePulse',
       
       rootUrl() {
         return _url(SPRING_ROOT_SUFFIX);

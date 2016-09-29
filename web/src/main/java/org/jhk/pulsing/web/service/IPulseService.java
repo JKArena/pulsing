@@ -23,6 +23,7 @@ import java.util.Map;
 
 import org.jhk.pulsing.serialization.avro.records.Pulse;
 import org.jhk.pulsing.serialization.avro.records.PulseId;
+import org.jhk.pulsing.serialization.avro.records.UserId;
 import org.jhk.pulsing.web.common.Result;
 
 /**
@@ -34,7 +35,7 @@ public interface IPulseService {
     
     Result<Pulse> createPulse(Pulse pulse);
     
-    Result<PulseId> subscribePulse(Pulse pulse);
+    Result<String> subscribePulse(Pulse pulse, UserId userId);
     
     Map<Long, String> getTrendingPulseSubscriptions(int numMinutes);
     
