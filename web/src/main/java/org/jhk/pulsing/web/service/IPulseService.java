@@ -18,8 +18,8 @@
  */
 package org.jhk.pulsing.web.service;
 
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.jhk.pulsing.serialization.avro.records.Pulse;
 import org.jhk.pulsing.serialization.avro.records.PulseId;
@@ -39,6 +39,6 @@ public interface IPulseService {
     
     Map<Long, String> getTrendingPulseSubscriptions(int numMinutes);
     
-    List<Pulse> getMapPulseDataPoints(Double lat, Double lng);
+    Map<Pulse, Set<Long>> getMapPulseDataPoints(Double lat, Double lng);
     
 }

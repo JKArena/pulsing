@@ -25,6 +25,7 @@ import java.nio.ByteBuffer;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
+import java.util.Optional;
 
 import javax.inject.Inject;
 
@@ -33,7 +34,10 @@ import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.jhk.pulsing.serialization.avro.records.Picture;
 import org.jhk.pulsing.serialization.avro.records.User;
+import org.jhk.pulsing.serialization.avro.records.UserId;
 import org.jhk.pulsing.web.common.Result;
+import org.jhk.pulsing.web.service.IUserService;
+
 import static org.jhk.pulsing.web.common.Result.CODE.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,6 +57,9 @@ public class UserDaoAspect {
     @Inject
     private WebApplicationContext applicationContext;
     
+    @Inject
+    private IUserService userService;
+    
     @AfterReturning(pointcut="execution(org.jhk.pulsing.web.common.Result+ org.jhk.pulsing.web.dao.*.UserDao.*(..))", returning= "result")
     public void patchUser(JoinPoint joinPoint, Result<User> result) {
         if(result.getCode() != SUCCESS) {
@@ -60,6 +67,7 @@ public class UserDaoAspect {
         }
         
         User user = result.getData();
+        UserId userId = user.getId();
         user.setPassword(""); //blank out password
         Picture picture = user.getPicture();
         
@@ -67,28 +75,41 @@ public class UserDaoAspect {
         
         if(picture != null && picture.getName() != null) {
             
-            ByteBuffer pBuffer = picture.getContent();
-            String path = applicationContext.getServletContext().getRealPath("/resources/img");
-            File parent = Paths.get(path).toFile();
-            if(!parent.exists()) {
-                parent.mkdirs();
-            }
+            Optional<String> uPicturePath = userService.getUserPicturePath(userId);
             
-            String pFileName = user.getId().getId() + "_" + pBuffer.hashCode() + "_" + picture.getName();
-            File pFile = Paths.get(path, pFileName).toFile();
+            if(!uPicturePath.isPresent()) {
             
-            if(!pFile.exists()) {
-                try(OutputStream fStream = Files.newOutputStream(pFile.toPath(), StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE)) {
-                    fStream.write(pBuffer.array());
-                }catch(IOException iException) {
-                    iException.printStackTrace();
-                    pFile = null;
+                ByteBuffer pBuffer = picture.getContent();
+                String path = applicationContext.getServletContext().getRealPath("/resources/img");
+                File parent = Paths.get(path).toFile();
+                if(!parent.exists()) {
+                    parent.mkdirs();
+                }
+                
+                String pFileName = user.getId().getId() + "_" + picture.getName();
+                File pFile = Paths.get(path, pFileName).toFile();
+                
+                if(!pFile.exists()) {
+                    try(OutputStream fStream = Files.newOutputStream(pFile.toPath(), StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE)) {
+                        fStream.write(pBuffer.array());
+                    }catch(IOException iException) {
+                        iException.printStackTrace();
+                        pFile = null;
+                    }
+                }
+                
+                if(pFile != null) {
+                    String pPath = _RESOURCE_PREFIX + pFile.getName();
+                    
+                    picture.setUrl(pPath);
+                    userService.storeUserPicturePath(userId, pPath);
+                    uPicturePath = Optional.of(pPath);
                 }
             }
             
-            if(pFile != null) {
-                _LOGGER.debug("UserDaoAspect Setting picture url - " + _RESOURCE_PREFIX + pFile.getName());
-                picture.setUrl(_RESOURCE_PREFIX + pFile.getName());
+            if(uPicturePath.isPresent()) {
+                _LOGGER.debug("UserDaoAspect Setting picture url - " + uPicturePath.get());
+                picture.setUrl(uPicturePath.get());
             }
         }
         

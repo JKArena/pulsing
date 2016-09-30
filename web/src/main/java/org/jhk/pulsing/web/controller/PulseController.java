@@ -20,6 +20,7 @@ package org.jhk.pulsing.web.controller;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -64,7 +65,7 @@ public class PulseController extends AbstractController {
     }
     
     @RequestMapping(value="/getMapPulseDataPoints", method=RequestMethod.GET)
-    public @ResponseBody List<Pulse> getMapPulseDataPoints(double lat, double lng) {
+    public @ResponseBody Map<Pulse, Set<Long>> getMapPulseDataPoints(double lat, double lng) {
         _LOGGER.debug("PulseController.getMapPulseDataPoints: " + lat + " / " + lng);
         
         return pulseService.getMapPulseDataPoints(lat, lng);

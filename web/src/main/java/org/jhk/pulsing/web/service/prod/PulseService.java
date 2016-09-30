@@ -22,13 +22,9 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Map;
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -154,51 +150,11 @@ public class PulseService extends AbstractStormPublisher
     }
     
     @Override
-    public List<Pulse> getMapPulseDataPoints(Double lat, Double lng) {
+    public Map<Pulse, Set<Long>> getMapPulseDataPoints(Double lat, Double lng) {
+        
+        Map<Pulse, Set<Long>> mPulseDataPoints = redisPulseDao.getMapPulseDataPoints(lat, lng);
         
         return redisPulseDao.getMapPulseDataPoints(lat, lng);
-    }
-    
-    private ExecutorService tempEService;
-    
-    @Override
-    public void init() {
-        super.init();
-        
-        final List<Pulse> entries = new LinkedList<>();
-        for(int createCount=0; createCount < 10; createCount++) {
-            Pulse pulse = org.jhk.pulsing.web.dao.dev.PulseDao.createMockedPulse();
-            pulse.setAction(ACTION.SUBSCRIBE);
-            entries.add(pulse);
-        }
-        
-        tempEService = Executors.newSingleThreadExecutor();
-        tempEService.submit(() -> {
-            
-            long userId = 1000L;
-            for(int loop=0; loop < 20; loop++) {
-                try {
-                    TimeUnit.SECONDS.sleep(10);
-                    
-                    Pulse pulse = entries.get((int) Math.random()*entries.size());
-                    subscribePulse(pulse, UserId.newBuilder().setId(userId++).build());
-                    
-                    _LOGGER.debug("Submitted..." + pulse.getValue());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-            
-        });
-    }
-    
-    @Override
-    public void destroy() {
-        super.destroy();
-        
-        if(tempEService != null) {
-            tempEService.shutdownNow();
-        }
     }
     
 }
