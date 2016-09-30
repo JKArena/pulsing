@@ -20,7 +20,6 @@ package org.jhk.pulsing.web.dao.prod.db.redis;
 
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -29,7 +28,6 @@ import java.util.stream.Collectors;
 
 import org.jhk.pulsing.serialization.avro.records.Pulse;
 import org.jhk.pulsing.serialization.avro.records.PulseId;
-import org.jhk.pulsing.serialization.avro.records.UserId;
 import org.jhk.pulsing.serialization.avro.serializers.SerializationHelper;
 import org.jhk.pulsing.shared.util.CommonConstants;
 import org.jhk.pulsing.shared.util.RedisConstants;
@@ -39,9 +37,12 @@ import static org.jhk.pulsing.shared.util.RedisConstants.REDIS_KEY.*;
 import static org.jhk.pulsing.web.common.Result.CODE.*;
 import org.jhk.pulsing.web.dao.IPulseDao;
 import org.jhk.pulsing.web.dao.prod.db.AbstractRedisDao;
+import org.jhk.pulsing.web.pojo.light.UserLight;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 import redis.clients.jedis.GeoRadiusResponse;
 import redis.clients.jedis.GeoUnit;
@@ -101,7 +102,6 @@ public class RedisPulseDao extends AbstractRedisDao
             String pulseJson = SerializationHelper.serializeAvroTypeToJSONString(pulse);
             getJedis().setex(PULSE_.toString() + pulse.getId().getId(), RedisConstants.CACHE_EXPIRE_DAY, pulseJson);
             getJedis().geoadd(PULSE_GEO_.toString(), lng, lat, pulseJson);
-            getJedis().sadd(PULSE_SUBSCRIBE_USERID_SET_.toString() + pulse.getId().getId(), pulse.getUserId().getId() + "");
             
             result = new Result<>(SUCCESS, pulse);
         } catch (IOException sException) {
@@ -113,26 +113,45 @@ public class RedisPulseDao extends AbstractRedisDao
     }
     
     @Override
-    public Result<String> subscribePulse(Pulse pulse, UserId userId) {
-        _LOGGER.debug("RedisPulseDao.subscribePulse: " + pulse + " - " + userId);
+    public Result<String> subscribePulse(Pulse pulse, UserLight uLight) {
+        _LOGGER.debug("RedisPulseDao.subscribePulse: " + pulse + " - " + uLight);
         
-        getJedis().sadd(PULSE_SUBSCRIBE_USERID_SET_.toString() + pulse.getId().getId(), userId.getId() + "");
+        Result<String> result = new Result<>(SUCCESS, "Success");
         
-        return new Result<>(SUCCESS, "Success");
+        try {
+            getJedis().sadd(PULSE_SUBSCRIBE_USERID_SET_.toString() + pulse.getId().getId(), 
+                            getObjectMapper().writeValueAsString(uLight));
+        } catch (JsonProcessingException jProcessingException) {
+            jProcessingException.printStackTrace();
+            result = new Result<>(FAILURE, "Failed subscription");
+        }
+        
+        return result;
     }
     
-    public Map<Pulse, Set<Long>> getMapPulseDataPoints(double lat, double lng) {
+    public Map<Pulse, Set<UserLight>> getMapPulseDataPoints(double lat, double lng) {
+        _LOGGER.debug("RedisPulseDao.getMapPulseDataPoints: " + lat + " / " + lng);
         
-        Map<Pulse, Set<Long>> mPulseDataPoints = new HashMap<>();
+        Map<Pulse, Set<UserLight>> mPulseDataPoints = new HashMap<>();
         
         List<GeoRadiusResponse> response = getJedis().georadius(PULSE_GEO_.toString(), lng, lat, CommonConstants.DEFAULT_PULSE_RADIUS, GeoUnit.M);
         response.stream().forEach(grResponse -> {
             
             try {
                 Pulse pulse = SerializationHelper.deserializeFromJSONStringToAvro(Pulse.class, Pulse.getClassSchema(), grResponse.getMemberByString());
-                Set<Long> userIds = getJedis().smembers(PULSE_SUBSCRIBE_USERID_SET_.toString() + pulse.getId().getId()).stream()
+                Set<UserLight> userIds = getJedis().smembers(PULSE_SUBSCRIBE_USERID_SET_.toString() + pulse.getId().getId()).stream()
                         .map(val -> {
-                            return Long.parseLong(val.toString());
+                            
+                            UserLight uLight = null;
+                            
+                            try {
+                                uLight = getObjectMapper().readValue(val, UserLight.class);
+                            } catch (Exception exception) {
+                                _LOGGER.error("RedisPulseDao.getMapPulseDataPoints erro reading UserLight", exception);
+                                exception.printStackTrace();
+                            }
+                            
+                            return uLight;
                         })
                         .collect(Collectors.toSet());
                 

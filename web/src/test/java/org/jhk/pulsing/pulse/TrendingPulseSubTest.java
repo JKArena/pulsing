@@ -65,7 +65,7 @@ public class TrendingPulseSubTest {
             
             testData.add(_objectMapper.writeValueAsString(createTempMap()));
             
-            Map<Long, String> tpSubscriptions = PulseServiceUtil.processTrendingPulseSubscribe(testData, _objectMapper);
+            Map<Long, String> tpSubscriptions = PulseServiceUtil.processTrendingPulseSubscribe(testData);
             
             assertTrue("Size equal?", tpSubscriptions.size() == _validResult.size());
             

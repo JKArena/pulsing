@@ -10,3 +10,68 @@
 .map-info-node {
   
 }
+
+.map-info-header {
+  color: #111;
+  font: 700 16px 'Lobster', cursive;
+  line-height: 16px;
+  margin: 0 0 0;
+  padding: 10px 20px;
+  text-align: center;
+  text-transform: uppercase;
+}
+
+.map-info-date {
+  color: #111;
+  font: 12px 'Open Sans', sans-serif;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.map-info-date-text {
+  background: #fdfdfd;
+  padding: 0 5px;
+  text-transform: uppercase;
+}
+
+.map-info-date:before {
+  border-top: 1px solid #111;
+  content: "";
+  position: absolute;
+  top: 6px;
+  left: 0;
+  width: 100%;
+  z-index: -1;
+}
+
+.map-subscriptions {
+  list-style: none;
+  padding: 0;
+  width: 200px;
+}
+
+.map-subscribed-entry {
+  border: solid grey 2px;
+  border-radius: 10px;
+  padding: 10px;
+  overflow: auto;
+}
+
+.map-subscribed-img {
+  float: left;
+  margin: 0 15px 0 0;
+  height: 100px;
+  width: 100px;
+}
+
+.map-subscribed-name {
+  color: #b48608;
+  font: 16px 'Trocchi', serif;
+  margin: 5px 0;
+}
+
+.map-subscribed-detail {
+  font: 200 1em Georgia, Times New Roman, serif;
+  margin: 0;
+}

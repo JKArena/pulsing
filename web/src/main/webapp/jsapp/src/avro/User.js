@@ -26,6 +26,7 @@ import AvroJson from './avrojson';
 import AbstractAvro from './AbstractAvro';
 import UserId from './UserId';
 import {TOPICS, API} from '../common/PubSub';
+import Common from '../common/Common';
 
 const FORM_MAPPER = Symbol('FORM_MAPPER');
 const U_GEOLOCATION_OPTS = {'timeout': 30000, 'maximumAge': 30000};
@@ -51,14 +52,18 @@ class User extends AbstractAvro {
     
     let distance = 0;
     let coords = position.coords;
-    if(this.coordinates) {
+    if(this.lat) {
       //compare to see if the threshold is met to notify the geolocation changes
-      distance = Math.sqrt(Math.pow(coords.latitude-this.coordinates[0], 2) +
-        Math.pow(coords.longitude-this.coordinates[1], 2));
+      distance = Math.sqrt(Math.pow(coords.latitude-this.lat, 2) +
+        Math.pow(coords.longitude-this.lng, 2));
     }
 
     if(!this.lat || distance >= GEOLOCATION_NOTIFICATION_CHANGE_THRESHOLD) {
       API.publish(TOPICS.USER_GEO_CHANGE, {lat: coords.latitude, lng: coords.longitude});
+
+      if(!this.lat) {
+        API.publish(TOPICS.NAVIGATION_CHANGE, Common.MAIN_NAV_PATH);
+      }
     }
 
     this.lat = coords.latitude;

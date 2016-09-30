@@ -18,7 +18,6 @@
  */
 package org.jhk.pulsing.web.controller;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -28,6 +27,7 @@ import org.jhk.pulsing.serialization.avro.records.Pulse;
 import org.jhk.pulsing.serialization.avro.records.PulseId;
 import org.jhk.pulsing.serialization.avro.records.UserId;
 import org.jhk.pulsing.web.common.Result;
+import org.jhk.pulsing.web.pojo.light.UserLight;
 import org.jhk.pulsing.web.service.IPulseService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -65,7 +65,7 @@ public class PulseController extends AbstractController {
     }
     
     @RequestMapping(value="/getMapPulseDataPoints", method=RequestMethod.GET)
-    public @ResponseBody Map<Pulse, Set<Long>> getMapPulseDataPoints(double lat, double lng) {
+    public @ResponseBody Map<Pulse, Set<UserLight>> getMapPulseDataPoints(double lat, double lng) {
         _LOGGER.debug("PulseController.getMapPulseDataPoints: " + lat + " / " + lng);
         
         return pulseService.getMapPulseDataPoints(lat, lng);

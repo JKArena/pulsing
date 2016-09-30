@@ -31,6 +31,7 @@ import static org.jhk.pulsing.web.common.Result.CODE.*;
 
 import org.jhk.pulsing.web.dao.prod.db.redis.RedisUserDao;
 import org.jhk.pulsing.web.dao.prod.db.sql.MySqlUserDao;
+import org.jhk.pulsing.web.pojo.light.UserLight;
 import org.jhk.pulsing.web.service.IUserService;
 import org.springframework.stereotype.Service;
 
@@ -92,13 +93,13 @@ public class UserService extends AbstractStormPublisher
     }
     
     @Override
-    public void storeUserPicturePath(UserId userId, String path) {
-        redisUserDao.storeUserPicturePath(userId, path);
+    public void storeUserLight(UserLight user) {
+        redisUserDao.storeUserLight(user);
     }
     
     @Override
-    public Optional<String> getUserPicturePath(UserId userId) {
-        return redisUserDao.getUserPicturePath(userId);
+    public Optional<UserLight> getUserLight(long userId) {
+        return redisUserDao.getUserLight(userId);
     }
     
 }

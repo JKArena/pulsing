@@ -26,14 +26,42 @@ import React from 'react';
 import AbstractMapStore from './AbstractMapStore';
 import Storage from '../../../common/Storage';
 import Url from '../../../common/Url';
+import Pulse from '../../../avro/Pulse';
 import {render} from 'react-dom';
 import MapPulseAction from '../actions/MapPulseAction';
 
+const _ROOT_URL = Url.rootUrl();
+
 const InfoNode = (props) => {
+  let pulse = props.pulse;
+  let userLights = props.userLights;
+console.debug('val ', pulse.value);
+  let desc = new Date(pulse.timeStamp*1000).toLocaleString(); //since held as seconds on server
+  let subscribed = [];
+
+  userLights.forEach(uLight => {
+    let pPath = _ROOT_URL + uLight.picturePath;
+
+    subscribed.push(<li className='map-subscribed-entry' key={uLight.id}>
+        <img src={pPath} className='map-subscribed-img' />
+        <h3 className='map-subscribed-name'>{uLight.name}</h3>
+        <p className='map-subscribed-detail'>Foobar</p>
+      </li>);
+  });
+
   return (<div className='map-info-node'>
-    <h1>{props.header}</h1>
-    <p>{props.desc}</p>
-    <a href='#' onClick={props.clickHandler}>Subscribe</a>
+    <h2 className='map-info-header'>{pulse.value}</h2>
+    <div className='map-info-date'>
+      <span className='map-info-date-text'>{desc}</span>
+    </div>
+    <ul className='map-subscriptions'>
+      {subscribed}
+    </ul>
+    {(() => {
+      if(props.clickHandler) {
+        return <a href='#' onClick={props.clickHandler}>Subscribe</a>;
+      }
+    })()}
   </div>);
 };
 
@@ -49,12 +77,12 @@ class GMapPulseStore extends AbstractMapStore {
 
     MapPulseAction.getMapPulseDataPoints(latLng)
       .then(function(mpDataPoints) {
-        console.debug('MapPulseStore retrieved ', mpDataPoints);
+        console.debug('GMapPulseStore retrieved ', mpDataPoints);
         this.dataPoints = [];
 
-        mpDataPoints.forEach(pulse => {
+        Object.keys(mpDataPoints).forEach(pulse => {
 
-          this.addDataPoint(map, pulse);
+          this.addDataPoint(map, Pulse.deserialize(JSON.parse(pulse)), mpDataPoints[pulse]);
         });
 
         this.emitDataPoints(this.dataPoints);
@@ -65,44 +93,49 @@ class GMapPulseStore extends AbstractMapStore {
     console.debug('subscribePulse ', url);
   }
 
-  getInfoNode(pulse, userId) {
+  _getInfoNode(pulse, userId, userLights) {
     let iNode = document.createElement('div');
-    let header = pulse.value;
-    let desc = 'Created: ' + (new Date(pulse.timeStamp*1000));
+    let isSubscribed = userLights.filter(uLight => {
+      return uLight.id === userId.id.id.long;
+    });
 
-    let url = new URL(Url.SUBSCRIBE_PULSE_PATH);
-    url.searchParams.append('pulseId', pulse.id.serialize());
-    url.searchParams.append('userId', userId.serialize());
+    if(isSubscribed.length > 0) {
+      //no need for subscribe
+      render((<InfoNode pulse={pulse} userLights={userLights} />), iNode);
+    }else {
+      let url = new URL(Url.SUBSCRIBE_PULSE_PATH);
+      url.searchParams.append('pulseId', pulse.id.serialize());
+      url.searchParams.append('userId', userId.serialize());
 
-    render((<InfoNode header={header} desc={desc} 
-      clickHandler={this._subscribePulse.bind(this, url)} />), iNode);
+      render((<InfoNode pulse={pulse} userLights={userLights}
+        clickHandler={this._subscribePulse.bind(this, url)} />), iNode);
+    }
 
     return iNode;
   }
 
-  addDataPoint(map, pulse) {
+  addDataPoint(map, pulse, userLights) {
+    console.debug('addDataPoint', pulse, userLights);
 
     let lat = pulse.lat;
     let lng = pulse.lng;
 
-    if(lat && lng) {
-      let user = Storage.user;
-      let marker = new global.google.maps.Marker({
-        position: {lat: lat, lng: lng},
-        map: map,
-        title: pulse.value
-      });
-      
-      let iWindow = new global.google.maps.InfoWindow({
-        content: this.getInfoNode(pulse, user.id)
-      });
+    let user = Storage.user;
+    let marker = new global.google.maps.Marker({
+      position: {lat: lat, lng: lng},
+      map: map,
+      title: pulse.value
+    });
 
-      marker.addListener('click', function() {
-        iWindow.open(map, marker);
-      });
+    let iWindow = new global.google.maps.InfoWindow({
+      content: this._getInfoNode(pulse, user.id, userLights)
+    });
 
-      this.dataPoints.push(marker);
-    }
+    marker.addListener('click', function() {
+      iWindow.open(map, marker);
+    });
+
+    this.dataPoints.push(marker);
 
   }
   

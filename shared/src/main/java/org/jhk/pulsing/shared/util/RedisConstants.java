@@ -36,7 +36,7 @@ public final class RedisConstants {
     
     public enum REDIS_KEY {
         PULSE_TRENDING_SUBSCRIBE_, PULSE_, PULSE_GEO_, PULSE_SUBSCRIBE_USERID_SET_,
-        USER_PICTURE_PATH_;
+        USER_LIGHT_;
     }
     
     static {
