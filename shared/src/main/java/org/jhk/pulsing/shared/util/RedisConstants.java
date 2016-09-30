@@ -35,7 +35,8 @@ public final class RedisConstants {
     public static final int CACHE_EXPIRE_DAY;
     
     public enum REDIS_KEY {
-        PULSE_TRENDING_SUBSCRIBE_, PULSE_, PULSE_GEO_, PULSE_SUBSCRIBE_USERID_SET_;
+        PULSE_TRENDING_SUBSCRIBE_, PULSE_, PULSE_GEO_, PULSE_SUBSCRIBE_USERID_SET_,
+        USER_PICTURE_PATH_;
     }
     
     static {

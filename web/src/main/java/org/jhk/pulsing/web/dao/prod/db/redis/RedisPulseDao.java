@@ -19,10 +19,13 @@
 package org.jhk.pulsing.web.dao.prod.db.redis;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.jhk.pulsing.serialization.avro.records.Pulse;
 import org.jhk.pulsing.serialization.avro.records.PulseId;
@@ -118,22 +121,29 @@ public class RedisPulseDao extends AbstractRedisDao
         return new Result<>(SUCCESS, "Success");
     }
     
-    public List<Pulse> getMapPulseDataPoints(double lat, double lng) {
+    public Map<Pulse, Set<Long>> getMapPulseDataPoints(double lat, double lng) {
         
-        List<Pulse> pDataPoints = new LinkedList<>();
+        Map<Pulse, Set<Long>> mPulseDataPoints = new HashMap<>();
         
         List<GeoRadiusResponse> response = getJedis().georadius(PULSE_GEO_.toString(), lng, lat, CommonConstants.DEFAULT_PULSE_RADIUS, GeoUnit.M);
-        response.parallelStream().forEach(grResponse -> {
+        response.stream().forEach(grResponse -> {
             
             try {
-                pDataPoints.add(SerializationHelper.deserializeFromJSONStringToAvro(Pulse.class, Pulse.getClassSchema(), grResponse.getMemberByString()));
+                Pulse pulse = SerializationHelper.deserializeFromJSONStringToAvro(Pulse.class, Pulse.getClassSchema(), grResponse.getMemberByString());
+                Set<Long> userIds = getJedis().smembers(PULSE_SUBSCRIBE_USERID_SET_.toString() + pulse.getId().getId()).stream()
+                        .map(val -> {
+                            return Long.parseLong(val.toString());
+                        })
+                        .collect(Collectors.toSet());
+                
+                mPulseDataPoints.put(pulse, userIds);
             } catch (IOException ioException) {
                 _LOGGER.warn("Failure in parsing of georadiusresponse: " + grResponse);
                 ioException.printStackTrace();
             }
         });
         
-        return pDataPoints;
+        return mPulseDataPoints;
     }
     
     /**

@@ -18,6 +18,8 @@
  */
 package org.jhk.pulsing.web.service.dev;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.inject.Inject;
@@ -34,6 +36,8 @@ import org.jhk.pulsing.web.service.IUserService;
  * @author Ji Kim
  */
 public class UserService implements IUserService {
+    
+    private static Map<UserId, String> _USER_PICTURE_PATH = new HashMap<>();
     
     @Inject
     private IUserDao userDao;
@@ -55,6 +59,16 @@ public class UserService implements IUserService {
     @Override
     public Result<User> validateUser(String email, String password) {
         return UserDao.validateUser(email, password);
+    }
+    
+    @Override
+    public void storeUserPicturePath(UserId userId, String path) {
+        _USER_PICTURE_PATH.put(userId, path);
+    }
+    
+    @Override
+    public Optional<String> getUserPicturePath(UserId userId) {
+        return Optional.of(_USER_PICTURE_PATH.get(userId));
     }
     
 }

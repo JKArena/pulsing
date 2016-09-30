@@ -18,6 +18,8 @@
  */
 package org.jhk.pulsing.web.service;
 
+import java.util.Optional;
+
 import org.jhk.pulsing.serialization.avro.records.User;
 import org.jhk.pulsing.serialization.avro.records.UserId;
 import org.jhk.pulsing.web.common.Result;
@@ -32,5 +34,9 @@ public interface IUserService {
     Result<User> createUser(User user);
     
     Result<User> validateUser(String email, String password);
+    
+    void storeUserPicturePath(UserId userId, String path);
+    
+    Optional<String> getUserPicturePath(UserId userId);
     
 }
