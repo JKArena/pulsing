@@ -36,6 +36,7 @@ import org.jhk.pulsing.serialization.avro.records.Picture;
 import org.jhk.pulsing.serialization.avro.records.User;
 import org.jhk.pulsing.serialization.avro.records.UserId;
 import org.jhk.pulsing.web.common.Result;
+import org.jhk.pulsing.web.pojo.light.UserLight;
 import org.jhk.pulsing.web.service.IUserService;
 
 import static org.jhk.pulsing.web.common.Result.CODE.*;
@@ -60,7 +61,7 @@ public class UserDaoAspect {
     @Inject
     private IUserService userService;
     
-    @AfterReturning(pointcut="execution(org.jhk.pulsing.web.common.Result+ org.jhk.pulsing.web.dao.*.UserDao.*(..))", returning= "result")
+    @AfterReturning(pointcut="execution(org.jhk.pulsing.web.common.Result+ org.jhk.pulsing.web.service.prod.UserService.*(..))", returning= "result")
     public void patchUser(JoinPoint joinPoint, Result<User> result) {
         if(result.getCode() != SUCCESS) {
             return;
@@ -73,11 +74,13 @@ public class UserDaoAspect {
         
         _LOGGER.debug("UserDaoAspect.setPictureUrl" + user);
         
+        Optional<UserLight> uLight = Optional.empty();
+        
         if(picture != null && picture.getName() != null) {
             
-            Optional<String> uPicturePath = userService.getUserPicturePath(userId);
+            uLight = userService.getUserLight(userId.getId());
             
-            if(!uPicturePath.isPresent()) {
+            if(!uLight.isPresent()) {
             
                 ByteBuffer pBuffer = picture.getContent();
                 String path = applicationContext.getServletContext().getRealPath("/resources/img");
@@ -101,16 +104,17 @@ public class UserDaoAspect {
                 if(pFile != null) {
                     String pPath = _RESOURCE_PREFIX + pFile.getName();
                     
+                    _LOGGER.debug("UserDaoAspect Setting picture url - " + pPath);
                     picture.setUrl(pPath);
-                    userService.storeUserPicturePath(userId, pPath);
-                    uPicturePath = Optional.of(pPath);
                 }
+            }else {
+                picture.setUrl(uLight.get().getPicturePath());
             }
             
-            if(uPicturePath.isPresent()) {
-                _LOGGER.debug("UserDaoAspect Setting picture url - " + uPicturePath.get());
-                picture.setUrl(uPicturePath.get());
-            }
+        }
+        
+        if(!uLight.isPresent()) {
+            userService.storeUserLight(new UserLight(user));
         }
         
     }

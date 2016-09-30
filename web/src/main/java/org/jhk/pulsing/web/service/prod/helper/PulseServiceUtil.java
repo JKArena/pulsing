@@ -41,10 +41,12 @@ public class PulseServiceUtil {
     
     private static final Logger _LOGGER = LoggerFactory.getLogger(PulseServiceUtil.class);
     
+    private static ObjectMapper _OBJECT_MAPPER = new ObjectMapper();
+    
     private static final TypeReference<HashMap<String, Integer>> _TRENDING_PULSE_SUBSCRIPTION_TYPE_REF = 
             new TypeReference<HashMap<String, Integer>>(){};
     
-    public static Map<Long, String> processTrendingPulseSubscribe(Set<String> tps, ObjectMapper objMapper) {
+    public static Map<Long, String> processTrendingPulseSubscribe(Set<String> tps) {
         
         @SuppressWarnings("unchecked")
         Map<Long, String> tpSubscriptions = Collections.EMPTY_MAP;
@@ -55,7 +57,7 @@ public class PulseServiceUtil {
             try {
                 _LOGGER.debug("PulseServiceUtil.processTrendingPulseSubscribe: trying to convert " + tpsIdValueCounts);
                 
-                Map<String, Integer> converted = objMapper.readValue(tpsIdValueCounts, _TRENDING_PULSE_SUBSCRIPTION_TYPE_REF);
+                Map<String, Integer> converted = _OBJECT_MAPPER.readValue(tpsIdValueCounts, _TRENDING_PULSE_SUBSCRIPTION_TYPE_REF);
                 
                 _LOGGER.debug("PulseServiceUtil.processTrendingPulseSubscribe: sucessfully converted " + converted.size());
                 

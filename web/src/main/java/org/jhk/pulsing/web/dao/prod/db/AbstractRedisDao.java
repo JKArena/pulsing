@@ -23,6 +23,8 @@ import javax.annotation.PreDestroy;
 
 import org.jhk.pulsing.shared.util.RedisConstants;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import redis.clients.jedis.Jedis;
 
 /**
@@ -31,15 +33,21 @@ import redis.clients.jedis.Jedis;
 public abstract class AbstractRedisDao {
     
     private Jedis _jedis;
+    private ObjectMapper _objectMapper;
     
     protected Jedis getJedis() {
         return _jedis;
+    }
+    
+    protected ObjectMapper getObjectMapper() {
+        return _objectMapper;
     }
     
     @PostConstruct
     public void init() {
         _jedis = new Jedis(RedisConstants.REDIS_HOST, RedisConstants.REDIS_PORT);
         _jedis.auth(RedisConstants.REDIS_PASSWORD);
+        _objectMapper = new ObjectMapper();
     }
     
     @PreDestroy

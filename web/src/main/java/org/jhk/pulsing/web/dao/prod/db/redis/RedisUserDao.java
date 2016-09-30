@@ -22,12 +22,14 @@ import static org.jhk.pulsing.shared.util.RedisConstants.REDIS_KEY.*;
 
 import java.util.Optional;
 
-import org.jhk.pulsing.serialization.avro.records.UserId;
 import org.jhk.pulsing.shared.util.RedisConstants;
 import org.jhk.pulsing.web.dao.prod.db.AbstractRedisDao;
+import org.jhk.pulsing.web.pojo.light.UserLight;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 /**
  * @author Ji Kim
@@ -37,16 +39,37 @@ public class RedisUserDao extends AbstractRedisDao {
     
     private static final Logger _LOGGER = LoggerFactory.getLogger(RedisUserDao.class);
     
-    public void storeUserPicturePath(UserId userId, String path) {
-        _LOGGER.debug("RedisUserDao.storeUserPicturePath: " + userId + " - " + path);
+    public void storeUserLight(UserLight userLight) {
+        _LOGGER.debug("RedisUserDao.storeUserLight: " + userLight);
         
-        getJedis().setex(USER_PICTURE_PATH_.toString() + userId.getId(), RedisConstants.CACHE_EXPIRE_DAY, path);
+        try {
+            getJedis().setex(USER_LIGHT_.toString() + userLight.getId(), RedisConstants.CACHE_EXPIRE_DAY, 
+                                getObjectMapper().writeValueAsString(userLight));
+        } catch (JsonProcessingException jpException) {
+            _LOGGER.error("Error writing userLight", jpException);
+            jpException.printStackTrace();
+        }
     }
     
-    public Optional<String> getUserPicturePath(UserId userId) {
-        _LOGGER.debug("RedisUserDao.getUserPicturePath: " + userId);
+    public Optional<UserLight> getUserLight(long userId) {
+        _LOGGER.debug("RedisUserDao.getUserLight: " + userId);
         
-        return Optional.of(getJedis().get(USER_PICTURE_PATH_.toString() + userId.getId()));
+        Optional<UserLight> uLight = Optional.empty();
+        String uString = getJedis().get(USER_LIGHT_.toString() + userId);
+        
+        if(uString != null) {
+            _LOGGER.debug("RedisUserDao.getUserLight uString " + uString);
+            
+            try {
+                UserLight rUserLight = getObjectMapper().readValue(uString, UserLight.class);
+                uLight = Optional.of(rUserLight);
+            } catch (Exception exception) {
+                _LOGGER.error("Error reading userLight", exception);
+                exception.printStackTrace();
+            }
+        }
+        
+        return uLight;
     }
     
 }

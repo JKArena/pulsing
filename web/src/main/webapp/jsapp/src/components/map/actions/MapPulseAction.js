@@ -23,7 +23,6 @@
 'use strict';
 
 import Fetch from '../../../common/Fetch';
-import Pulse from '../../../avro/Pulse';
 
 const GET_MAP_PULSE_DATA_POINTS_PATH = 'pulse/getMapPulseDataPoints';
 
@@ -40,16 +39,9 @@ const MapPulseAction = Object.freeze(
 
         Fetch.GET_JSON(GET_MAP_PULSE_DATA_POINTS_PATH, {}, params)
           .then(function(json) {
-            console.debug('getMapPulseDataPoints', json);
+            console.debug('getMapPulseDataPoints result', json);
             
-            //the fetch's json response handler only takes care of array/root
-            //position, so need to parse each entry separately (odd)
-            let mpDataPoints = [];
-            json.forEach(entry => {
-              mpDataPoints.push(Pulse.deserialize(JSON.parse(entry)));
-            });
-
-            resolve(mpDataPoints);
+            resolve(json);
           })
           .catch(function(err) {
             console.error(err);

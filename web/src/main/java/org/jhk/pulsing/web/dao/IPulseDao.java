@@ -22,8 +22,8 @@ import java.util.Optional;
 
 import org.jhk.pulsing.serialization.avro.records.Pulse;
 import org.jhk.pulsing.serialization.avro.records.PulseId;
-import org.jhk.pulsing.serialization.avro.records.UserId;
 import org.jhk.pulsing.web.common.Result;
+import org.jhk.pulsing.web.pojo.light.UserLight;
 
 /**
  * @author Ji Kim
@@ -34,6 +34,6 @@ public interface IPulseDao {
     
     Result<Pulse> createPulse(Pulse pulse);
     
-    Result<String> subscribePulse(Pulse pulse, UserId userId);
+    Result<String> subscribePulse(Pulse pulse, UserLight uLight);
     
 }

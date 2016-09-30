@@ -38,7 +38,7 @@ class AbstractAvro {
   
   getProperty(jsonProperty, unionType, defaultEmpty='') {
     let property = this.json[jsonProperty];
-    return (property && property[unionType]) || defaultEmpty;
+    return (property && property[unionType]) || property || defaultEmpty;
   }
   
   serialize() {

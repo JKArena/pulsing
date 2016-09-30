@@ -22,6 +22,7 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Map;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Optional;
 import java.util.Set;
 
@@ -38,14 +39,14 @@ import org.jhk.pulsing.shared.util.Util;
 import org.jhk.pulsing.web.common.Result;
 import static org.jhk.pulsing.web.common.Result.CODE.*;
 import org.jhk.pulsing.web.dao.prod.db.redis.RedisPulseDao;
+import org.jhk.pulsing.web.dao.prod.db.redis.RedisUserDao;
+import org.jhk.pulsing.web.pojo.light.UserLight;
 import org.jhk.pulsing.web.service.IPulseService;
 import org.jhk.pulsing.web.service.prod.helper.PulseServiceUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * @author Ji Kim
@@ -61,10 +62,12 @@ public class PulseService extends AbstractStormPublisher
     private RedisPulseDao redisPulseDao;
     
     @Inject
+    @Named("redisUserDao")
+    private RedisUserDao redisUserDao;
+    
+    @Inject
     private SimpMessagingTemplate template;
     
-    private ObjectMapper _objectMapper = new ObjectMapper();
-
     @Override
     public Result<Pulse> getPulse(PulseId pulseId) {
         Optional<Pulse> optPulse = redisPulseDao.getPulse(pulseId);
@@ -95,12 +98,21 @@ public class PulseService extends AbstractStormPublisher
         
         if(cPulse.getCode() == SUCCESS) {
             getStormPublisher().produce(CommonConstants.TOPICS.PULSE_CREATE.toString(), cPulse.getData());
+            subscribePulse(pulse, pulse.getUserId());
             
-            try {
-                template.convertAndSend("/topics/pulseCreated", SerializationHelper.serializeAvroTypeToJSONString(cPulse.getData()));
-            } catch (Exception except) {
-                _LOGGER.error("Error while converting pulse ", except);
-                except.printStackTrace();
+            Optional<UserLight> oUserLight = redisUserDao.getUserLight(pulse.getUserId().getId());
+            if(oUserLight.isPresent()) {
+                
+                try {
+                    Map<String, Object> pCreated = new HashMap<>();
+                    pCreated.put("userLight", oUserLight.get());
+                    pCreated.put("pulse", SerializationHelper.serializeAvroTypeToJSONString(cPulse.getData()));
+                    
+                    template.convertAndSend("/topics/pulseCreated", pCreated);
+                } catch (Exception except) {
+                    _LOGGER.error("Error while converting pulse ", except);
+                    except.printStackTrace();
+                }
             }
         }
         
@@ -119,8 +131,16 @@ public class PulseService extends AbstractStormPublisher
         pulse.setAction(ACTION.SUBSCRIBE);
         pulse.setTimeStamp(Instant.now().getEpochSecond());
         
-        getStormPublisher().produce(CommonConstants.TOPICS.PULSE_SUBSCRIBE.toString(), pulse);
-        return new Result<>(SUCCESS, "Subscribed");
+        Optional<UserLight> uLight = redisUserDao.getUserLight(userId.getId());
+        Result<String> result = new Result<>(FAILURE, "Failed in subscription");
+        
+        if(uLight.isPresent()) {
+            redisPulseDao.subscribePulse(pulse, uLight.get());
+            getStormPublisher().produce(CommonConstants.TOPICS.PULSE_SUBSCRIBE.toString(), pulse);
+            result = new Result<>(SUCCESS, "Subscribed");
+        }
+        
+        return result;
     }
     
     /**
@@ -142,16 +162,14 @@ public class PulseService extends AbstractStormPublisher
         Map<Long, String> tpSubscriptions = Collections.EMPTY_MAP;
         
         if(optTps.isPresent()) {
-            tpSubscriptions = PulseServiceUtil.processTrendingPulseSubscribe(optTps.get(), _objectMapper);
+            tpSubscriptions = PulseServiceUtil.processTrendingPulseSubscribe(optTps.get());
         };
         
         return tpSubscriptions;
     }
     
     @Override
-    public Map<Pulse, Set<Long>> getMapPulseDataPoints(Double lat, Double lng) {
-        
-        Map<Pulse, Set<Long>> mPulseDataPoints = redisPulseDao.getMapPulseDataPoints(lat, lng);
+    public Map<Pulse, Set<UserLight>> getMapPulseDataPoints(Double lat, Double lng) {
         
         return redisPulseDao.getMapPulseDataPoints(lat, lng);
     }

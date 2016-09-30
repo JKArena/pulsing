@@ -23,6 +23,7 @@ import java.util.Optional;
 import org.jhk.pulsing.serialization.avro.records.User;
 import org.jhk.pulsing.serialization.avro.records.UserId;
 import org.jhk.pulsing.web.common.Result;
+import org.jhk.pulsing.web.pojo.light.UserLight;
 
 /**
  * @author Ji Kim
@@ -35,8 +36,8 @@ public interface IUserService {
     
     Result<User> validateUser(String email, String password);
     
-    void storeUserPicturePath(UserId userId, String path);
+    void storeUserLight(UserLight user);
     
-    Optional<String> getUserPicturePath(UserId userId);
+    Optional<UserLight> getUserLight(long userId);
     
 }

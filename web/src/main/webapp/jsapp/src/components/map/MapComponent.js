@@ -124,11 +124,13 @@ class MapComponent extends Component {
     }
   }
 
-  _onPulseCreated(pulse) {
-    console.debug('_onPulseCreated', pulse);
+  _onPulseCreated(pCreated) {
+    console.debug('_onPulseCreated', pCreated);
     
-    if(pulse && pulse.body) {
-      this.store.addDataPoint(this.map, Pulse.deserialize(JSON.parse(pulse.body)));
+    if(pCreated && pCreated.body) {
+      let parsed = JSON.parse(pCreated.body);
+
+      this.store.addDataPoint(this.map, Pulse.deserialize(parsed.pulse), [parsed.userLight]);
     }
   }
 
