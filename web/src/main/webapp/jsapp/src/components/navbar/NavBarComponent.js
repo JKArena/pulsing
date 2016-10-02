@@ -38,7 +38,7 @@ class NavBarComponent extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {loggedIn: !!Storage.user};
+    this.state = {loggedIn: !!Storage.user, navChangeState: true};
     this.authHandler = this._onAuth.bind(this);
     this.navigationChangeHandler = this._onNavigationChange.bind(this);
   }
@@ -72,6 +72,7 @@ class NavBarComponent extends Component {
 
   _onNavigationChange(newNav) {
     console.debug('Nav geochange', newNav);
+    this.state.navChangeState = !this.state.navChangeState;
     this.setState(this.state);
 
     browserHistory.push(newNav);
