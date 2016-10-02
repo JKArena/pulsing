@@ -187,9 +187,9 @@
       </dependency>
 	  
       <dependency>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-websocket</artifactId>
-        <version>${spring.boot.websocket}</version>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-websocket</artifactId>
+        <version>${spring}</version>
       </dependency>
 	  
       <dependency>

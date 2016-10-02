@@ -21,7 +21,6 @@ package org.jhk.pulsing.web.config;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
-import org.springframework.context.annotation.Import;
 
 /**
  * @author Ji Kim
@@ -29,7 +28,6 @@ import org.springframework.context.annotation.Import;
 @Configuration
 @EnableAspectJAutoProxy
 @ComponentScan({"org.jhk.pulsing.web.service", "org.jhk.pulsing.web.aspect"})
-@Import({WebSocketConfig.class})
 public class Config {
     
 }

@@ -18,7 +18,7 @@
  */
 package org.jhk.pulsing.web.controller;
 
-import org.jhk.pulsing.serialization.avro.records.Pulse;
+import org.jhk.pulsing.web.websocket.model.MapPulseCreate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -35,10 +35,10 @@ public class WebSocketController {
     
     @MessageMapping("/pulseSocketJS")
     @SendTo("/topics/pulseCreated")
-    public Pulse pulseCreated(Pulse pulse) {
-        _LOGGER.debug("WebSocketController.pulseCreated: " + pulse);
+    public MapPulseCreate pulseCreated(MapPulseCreate mPulseCreate) {
+        _LOGGER.debug("WebSocketController.pulseCreated: " + mPulseCreate);
         
-        return pulse;
+        return mPulseCreate;
     }
     
 }

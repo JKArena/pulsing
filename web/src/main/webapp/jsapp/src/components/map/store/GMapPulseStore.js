@@ -35,7 +35,6 @@ const _ROOT_URL = Url.rootUrl();
 const InfoNode = (props) => {
   let pulse = props.pulse;
   let userLights = props.userLights;
-console.debug('val ', pulse.value);
   let desc = new Date(pulse.timeStamp*1000).toLocaleString(); //since held as seconds on server
   let subscribed = [];
 
