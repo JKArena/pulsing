@@ -22,7 +22,6 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Map;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Optional;
 import java.util.Set;
 
@@ -43,10 +42,13 @@ import org.jhk.pulsing.web.dao.prod.db.redis.RedisUserDao;
 import org.jhk.pulsing.web.pojo.light.UserLight;
 import org.jhk.pulsing.web.service.IPulseService;
 import org.jhk.pulsing.web.service.prod.helper.PulseServiceUtil;
+import org.jhk.pulsing.web.websocket.model.MapPulseCreate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * @author Ji Kim
@@ -56,6 +58,8 @@ public class PulseService extends AbstractStormPublisher
                             implements IPulseService {
     
     private static final Logger _LOGGER = LoggerFactory.getLogger(PulseService.class);
+    
+    private ObjectMapper _objectMapper = new ObjectMapper();
     
     @Inject
     @Named("redisPulseDao")
@@ -80,7 +84,8 @@ public class PulseService extends AbstractStormPublisher
      * For creation of pulse there are couple of tasks that must be done
      * 1) Add the pulse to Redis 
      * 2) Send the message to storm of the creation (need couple of different writes to Hadoop for Data + Edges for processing)
-     * 3) Send the websocket topic to clients (namely MapComponent) that a new pulse has been created (to either map or not)
+     * 3) Send the message to storm of the subscription (for trending of time interval)
+     * 4) Send the websocket topic to clients (namely MapComponent) that a new pulse has been created (to either map or not)
      * 
      * @param pulse
      * @return
@@ -102,13 +107,11 @@ public class PulseService extends AbstractStormPublisher
             
             Optional<UserLight> oUserLight = redisUserDao.getUserLight(pulse.getUserId().getId());
             if(oUserLight.isPresent()) {
-                
                 try {
-                    Map<String, Object> pCreated = new HashMap<>();
-                    pCreated.put("userLight", oUserLight.get());
-                    pCreated.put("pulse", SerializationHelper.serializeAvroTypeToJSONString(cPulse.getData()));
                     
-                    template.convertAndSend("/topics/pulseCreated", pCreated);
+                    template.convertAndSend("/topics/pulseCreated", 
+                                            _objectMapper.writeValueAsString(new MapPulseCreate(oUserLight.get(), 
+                                                                                SerializationHelper.serializeAvroTypeToJSONString(cPulse.getData()))));
                 } catch (Exception except) {
                     _LOGGER.error("Error while converting pulse ", except);
                     except.printStackTrace();
@@ -121,6 +124,7 @@ public class PulseService extends AbstractStormPublisher
     
     /**
      * 1) Send the message to storm of the subscription (update to redis taken care of by storm)
+     * 2) Add the userLight to the pulse subscription in redis
      * 
      * @param pulse
      * @return

@@ -97,7 +97,6 @@ class TrendingPulseSubscriptionsComponent extends Component {
       cols.push(<Col xs={12} sm={6} md={4} lg={3} key={key}>
         <Thumbnail>
           <h3>{value} <span><Badge>1</Badge></span></h3>
-          <p>Description</p>
           <p>
             {(() => {
               if(loggedIn) {

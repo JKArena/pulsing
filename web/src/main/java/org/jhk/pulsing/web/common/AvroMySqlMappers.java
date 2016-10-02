@@ -83,6 +83,7 @@ public final class AvroMySqlMappers {
         UserId userId = UserId.newBuilder().build();
         userId.setId(mUser.getId());
         
+        user.setName(mUser.getName());
         user.setId(userId);
         user.setEmail(mUser.getEmail());
         user.setPassword(mUser.getPassword());

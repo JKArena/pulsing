@@ -19,45 +19,57 @@
 package org.jhk.pulsing.web.websocket.model;
 
 import org.jhk.pulsing.shared.util.CommonConstants;
+import org.jhk.pulsing.web.pojo.light.UserLight;
 
 /**
  * @author Ji Kim
  */
-public class UserIdPulseId {
+public class MapPulseCreate {
     
-    private long _userId;
-    private long _pulseId;
+    private UserLight _userLight;
+    private String _pulse;
     
-    public long getUserId() {
-        return _userId;
-    }
-    public void setUserId(long userId) {
-        _userId = userId;
-    }
-    public long getPulseId() {
-        return _pulseId;
-    }
-    public void setPulseId(long pulseId) {
-        _pulseId = pulseId;
+    public MapPulseCreate() {
+        super();
     }
     
+    public MapPulseCreate(UserLight userLight, String pulse) {
+        super();
+        
+        _userLight = userLight;
+        _pulse = pulse;
+    }
+    
+    public UserLight getUserLight() {
+        return _userLight;
+    }
+    public void setUserLight(UserLight userLight) {
+        _userLight = userLight;
+    }
+
+    public String getPulse() {
+        return _pulse;
+    }
+    public void setPulse(String pulse) {
+        _pulse = pulse;
+    }
+
     @Override
     public int hashCode() {
         int hashCodeVal = CommonConstants.HASH_CODE_INIT_VALUE;
-        hashCodeVal = CommonConstants.HASH_CODE_MULTIPLY_VALUE * hashCodeVal + (int) _userId;
-        hashCodeVal = CommonConstants.HASH_CODE_MULTIPLY_VALUE * hashCodeVal + (int) _pulseId;
+        hashCodeVal = CommonConstants.HASH_CODE_MULTIPLY_VALUE * hashCodeVal + _userLight.hashCode();
+        hashCodeVal = CommonConstants.HASH_CODE_MULTIPLY_VALUE * hashCodeVal + _pulse.hashCode();
         return hashCodeVal;
     }
     
     @Override
-    public String toString() {
-        StringBuilder builder = new StringBuilder();
-        builder.append("{ userId => ");
-        builder.append(_userId);
-        builder.append(", pulseId => ");
-        builder.append(_pulseId);
-        builder.append(" }");
-        return builder.toString();
+    public boolean equals(Object obj) {
+        if(!(obj instanceof MapPulseCreate)) {
+            return false;
+        }
+        
+        MapPulseCreate casted = (MapPulseCreate) obj;
+        return casted._pulse.equals(_pulse) && casted._userLight.equals(_userLight);
     }
     
 }
