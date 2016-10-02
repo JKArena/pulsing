@@ -39,10 +39,10 @@ const InfoNode = (props) => {
   let subscribed = [];
 
   userLights.forEach(uLight => {
-    let pPath = _ROOT_URL + uLight.picturePath;
+    let pPath = uLight.picturePath ? (_ROOT_URL + uLight.picturePath) : Url.DEFAULT_PICTURE_PATH;
 
     subscribed.push(<li className='map-subscribed-entry' key={uLight.id}>
-        <img src={pPath} className='map-subscribed-img' />
+        <img src={pPath} className='map-subscribed-img'></img>
         <h3 className='map-subscribed-name'>{uLight.name}</h3>
         <p className='map-subscribed-detail'>Foobar</p>
       </li>);
@@ -101,7 +101,7 @@ class GMapPulseStore extends AbstractMapStore {
     if(isSubscribed.length > 0) {
       //no need for subscribe
       render((<InfoNode pulse={pulse} userLights={userLights} />), iNode);
-    }else {
+    } else {
       let url = new URL(Url.SUBSCRIBE_PULSE_PATH);
       url.searchParams.append('pulseId', pulse.id.serialize());
       url.searchParams.append('userId', userId.serialize());
@@ -116,12 +116,9 @@ class GMapPulseStore extends AbstractMapStore {
   addDataPoint(map, pulse, userLights) {
     console.debug('addDataPoint', pulse, userLights);
 
-    let lat = pulse.lat;
-    let lng = pulse.lng;
-
     let user = Storage.user;
     let marker = new global.google.maps.Marker({
-      position: {lat: lat, lng: lng},
+      position: {lat: pulse.lat, lng: pulse.lng},
       map: map,
       title: pulse.value
     });

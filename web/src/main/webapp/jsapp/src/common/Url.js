@@ -40,6 +40,8 @@ export default Object.freeze(
       __proto__: null,
 
       SUBSCRIBE_PULSE_PATH: _url(SPRING_CONTROLLER_SUFFIX) + 'pulse/subscribePulse',
+
+      DEFAULT_PICTURE_PATH: '/images/defaultPicture.png',
       
       rootUrl() {
         return _url(SPRING_ROOT_SUFFIX);
