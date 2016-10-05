@@ -36,6 +36,7 @@ public class UserLight implements Serializable {
     private String name;
     private long id;
     private String picturePath;
+    private long subscribedPulseId;
     
     public UserLight() {
         super();
@@ -59,7 +60,6 @@ public class UserLight implements Serializable {
     public String getName() {
         return name;
     }
-
     public void setName(String name) {
         this.name = name;
     }
@@ -67,19 +67,24 @@ public class UserLight implements Serializable {
     public long getId() {
         return id;
     }
-
-    public void setUserId(long id) {
+    public void setId(long id) {
         this.id = id;
     }
 
     public String getPicturePath() {
         return picturePath;
     }
-
     public void setPicturePath(String picturePath) {
         this.picturePath = picturePath;
     }
     
+    public long getSubscribedPulseId() {
+        return subscribedPulseId;
+    }
+    public void setSubscribedPulseId(long subscribedPulseId) {
+        this.subscribedPulseId = subscribedPulseId;
+    }
+
     @Override
     public int hashCode() {
         int hashCodeVal = CommonConstants.HASH_CODE_INIT_VALUE;
@@ -106,6 +111,7 @@ public class UserLight implements Serializable {
         builder.append("UserLight {");
         builder.append("id: " + id + ", ");
         builder.append("name: " + name + ", ");
+        builder.append("subscribedPulseId: " + subscribedPulseId + ", ");
         builder.append("picturePath: " + picturePath);
         builder.append("}");
         

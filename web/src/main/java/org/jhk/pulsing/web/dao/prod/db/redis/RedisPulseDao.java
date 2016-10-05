@@ -113,6 +113,23 @@ public class RedisPulseDao extends AbstractRedisDao
     }
     
     @Override
+    public Result<String> deletePulse(long pulseId) {
+        _LOGGER.debug("RedisPulseDao.deletePulse: " + pulseId);
+        
+        Result<String> result = new Result<>(SUCCESS, "Success");
+        
+        String pulseJson = getJedis().get(PULSE_.toString() + pulseId);
+        
+        if(pulseJson != null) {
+            getJedis().del(PULSE_.toString() + pulseId);
+            getJedis().del(PULSE_SUBSCRIBE_USERID_SET_.toString() + pulseId);
+            getJedis().zrem(PULSE_GEO_.toString(), pulseJson); // geo uses zset under the hood and since no corresponding remove API
+        }
+        
+        return result;
+    }
+    
+    @Override
     public Result<String> subscribePulse(Pulse pulse, UserLight uLight) {
         _LOGGER.debug("RedisPulseDao.subscribePulse: " + pulse + " - " + uLight);
         
@@ -121,6 +138,29 @@ public class RedisPulseDao extends AbstractRedisDao
         try {
             getJedis().sadd(PULSE_SUBSCRIBE_USERID_SET_.toString() + pulse.getId().getId(), 
                             getObjectMapper().writeValueAsString(uLight));
+        } catch (JsonProcessingException jProcessingException) {
+            jProcessingException.printStackTrace();
+            result = new Result<>(FAILURE, "Failed subscription");
+        }
+        
+        return result;
+    }
+    
+    @Override
+    public Result<String> unSubscribePulse(UserLight uLight) {
+        _LOGGER.debug("RedisPulseDao.unSubscribePulse: " + uLight);
+        
+        Result<String> result = new Result<>(SUCCESS, "Success");
+        
+        try {
+            long count = getJedis().srem(PULSE_SUBSCRIBE_USERID_SET_.toString() + uLight.getSubscribedPulseId(), 
+                            getObjectMapper().writeValueAsString(uLight));
+            
+            _LOGGER.debug("RedisPulseDao.unSubscribePulse count: " + uLight.getSubscribedPulseId() + " - " + count);
+            
+            if(count == 0L) {
+                deletePulse(uLight.getSubscribedPulseId());
+            }
         } catch (JsonProcessingException jProcessingException) {
             jProcessingException.printStackTrace();
             result = new Result<>(FAILURE, "Failed subscription");

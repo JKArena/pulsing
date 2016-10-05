@@ -36,6 +36,8 @@ public interface IUserService {
     
     Result<User> validateUser(String email, String password);
     
+    Result<String> logout(UserId userId);
+    
     void storeUserLight(UserLight user);
     
     Optional<UserLight> getUserLight(long userId);

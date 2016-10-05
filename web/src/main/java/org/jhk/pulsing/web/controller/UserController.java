@@ -84,4 +84,11 @@ public class UserController extends AbstractController {
         return userService.validateUser(email, password);
     }
     
+    @RequestMapping(value="/logout", method=RequestMethod.DELETE)
+    public @ResponseBody Result<String> logout(UserId userId) {
+        _LOGGER.debug("UserController.logout: " + userId);
+        
+        return userService.logout(userId);
+    }
+    
 }

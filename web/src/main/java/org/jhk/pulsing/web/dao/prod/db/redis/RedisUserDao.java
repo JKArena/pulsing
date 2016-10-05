@@ -39,6 +39,12 @@ public class RedisUserDao extends AbstractRedisDao {
     
     private static final Logger _LOGGER = LoggerFactory.getLogger(RedisUserDao.class);
     
+    public void removeUserLight(long userId) {
+        _LOGGER.debug("RedisUserDao.removeUserLight: " + userId);
+
+        getJedis().del(USER_LIGHT_.toString() + userId);
+    }
+    
     public void storeUserLight(UserLight userLight) {
         _LOGGER.debug("RedisUserDao.storeUserLight: " + userLight);
         

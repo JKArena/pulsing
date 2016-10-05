@@ -16,28 +16,37 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.web.dao;
-
-import java.util.Optional;
-
-import org.jhk.pulsing.serialization.avro.records.Pulse;
-import org.jhk.pulsing.serialization.avro.records.PulseId;
-import org.jhk.pulsing.web.common.Result;
-import org.jhk.pulsing.web.pojo.light.UserLight;
 
 /**
  * @author Ji Kim
  */
-public interface IPulseDao {
-    
-    Optional<Pulse> getPulse(PulseId pulseId);
-    
-    Result<Pulse> createPulse(Pulse pulse);
-    
-    Result<String> deletePulse(long pulseId);
-    
-    Result<String> subscribePulse(Pulse pulse, UserLight uLight);
-    
-    Result<String> unSubscribePulse(UserLight uLight);
-    
-}
+'use strict';
+
+import Fetch from '../../../common/Fetch';
+
+const LOGOUT_PATH = 'user/validateUser';
+
+const LogoutAction = Object.freeze(
+  {
+
+    logoutUser(userId) {
+      
+      let fData = new FormData();
+      fData.append('userId', userId.serialize());
+
+      return new Promise(function(resolve, reject) {
+
+        Fetch.DELETE_JSON(LOGOUT_PATH, {body: fData})
+          .then(function(result) {
+            console.debug('logoutUser', result);
+
+          });
+
+      });
+
+    }
+
+  }
+);
+
+export default LogoutAction;
