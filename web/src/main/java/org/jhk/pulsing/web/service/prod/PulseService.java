@@ -135,11 +135,15 @@ public class PulseService extends AbstractStormPublisher
         pulse.setAction(ACTION.SUBSCRIBE);
         pulse.setTimeStamp(Instant.now().getEpochSecond());
         
-        Optional<UserLight> uLight = redisUserDao.getUserLight(userId.getId());
+        Optional<UserLight> oUserLight = redisUserDao.getUserLight(userId.getId());
         Result<String> result = new Result<>(FAILURE, "Failed in subscription");
         
-        if(uLight.isPresent()) {
-            redisPulseDao.subscribePulse(pulse, uLight.get());
+        if(oUserLight.isPresent()) {
+            UserLight userLight = oUserLight.get();
+            userLight.setSubscribedPulseId(pulse.getId().getId());
+            
+            redisPulseDao.subscribePulse(pulse, userLight);
+            redisUserDao.storeUserLight(userLight); //need to update it with the new subscribed pulse id
             getStormPublisher().produce(CommonConstants.TOPICS.PULSE_SUBSCRIBE.toString(), pulse);
             result = new Result<>(SUCCESS, "Subscribed");
         }

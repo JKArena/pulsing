@@ -29,6 +29,7 @@ import org.jhk.pulsing.shared.util.CommonConstants;
 import org.jhk.pulsing.web.common.Result;
 import static org.jhk.pulsing.web.common.Result.CODE.*;
 
+import org.jhk.pulsing.web.dao.prod.db.redis.RedisPulseDao;
 import org.jhk.pulsing.web.dao.prod.db.redis.RedisUserDao;
 import org.jhk.pulsing.web.dao.prod.db.sql.MySqlUserDao;
 import org.jhk.pulsing.web.pojo.light.UserLight;
@@ -56,6 +57,10 @@ public class UserService extends AbstractStormPublisher
     @Inject
     @Named("redisUserDao")
     private RedisUserDao redisUserDao;
+    
+    @Inject
+    @Named("redisPulseDao")
+    private RedisPulseDao redisPulseDao;
     
     @Override
     public Result<User> getUser(UserId userId) {
@@ -90,6 +95,25 @@ public class UserService extends AbstractStormPublisher
         Optional<User> user = mySqlUserDao.validateUser(email, password);
         
         return user.isPresent() ? new Result<>(SUCCESS, user.get()) : new Result<>(FAILURE, null, "Failed in validating " + email + " : " + password);
+    }
+    
+    @Override
+    public Result<String> logout(UserId userId) {
+        
+        Optional<UserLight> oUserLight = redisUserDao.getUserLight(userId.getId());
+        
+        if(oUserLight.isPresent()) {
+            
+            UserLight uLight = oUserLight.get();
+            
+            redisUserDao.removeUserLight(userId.getId());
+            
+            if(uLight.getSubscribedPulseId() != 0L) {
+                redisPulseDao.unSubscribePulse(uLight);
+            }
+        }
+        
+        return new Result<>(SUCCESS, "loggedOut");
     }
     
     @Override

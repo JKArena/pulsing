@@ -158,6 +158,25 @@ export default Object.freeze(
           enumerable: true
         },
 
+        'DELETE_JSON' : {
+          get: function() {
+
+            return (dPath, options=Object.create(null)) => {
+              
+              const DEFAULT_HEADERS = new Headers({'Accept': 'application/json'});
+              const DEFAULT_OPTIONS = {method: 'DELETE',  mode: 'cors', headers: DEFAULT_HEADERS};
+
+              let request = new Request(Url.controllerUrl() + dPath);
+              let dOptions = Object.assign(DEFAULT_OPTIONS, options);
+
+              return fetchContent(request, dOptions, 'json');
+            }
+          },
+
+          set: function() {},
+          enumerable: true
+        },
+
         'GET_RAW' : {
           get: function() {
 
