@@ -82,10 +82,13 @@ public class PulseService extends AbstractStormPublisher
     
     /**
      * For creation of pulse there are couple of tasks that must be done
+     * 
      * 1) Add the pulse to Redis 
      * 2) Send the message to storm of the creation (need couple of different writes to Hadoop for Data + Edges for processing)
      * 3) Send the message to storm of the subscription (for trending of time interval)
      * 4) Send the websocket topic to clients (namely MapComponent) that a new pulse has been created (to either map or not)
+     * 
+     * Hmmm consider moving this to storm to prevent bad pulses from being created (i.e. filtering out bad words and etc)?
      * 
      * @param pulse
      * @return
@@ -130,13 +133,13 @@ public class PulseService extends AbstractStormPublisher
      * @return
      */
     @Override
-    public Result<String> subscribePulse(Pulse pulse, UserId userId) {
+    public Result<PulseId> subscribePulse(Pulse pulse, UserId userId) {
         pulse.setUserId(userId);
         pulse.setAction(ACTION.SUBSCRIBE);
         pulse.setTimeStamp(Instant.now().getEpochSecond());
         
         Optional<UserLight> oUserLight = redisUserDao.getUserLight(userId.getId());
-        Result<String> result = new Result<>(FAILURE, "Failed in subscription");
+        Result<PulseId> result = new Result<>(FAILURE, pulse.getId(), "Failed in subscription");
         
         if(oUserLight.isPresent()) {
             UserLight userLight = oUserLight.get();
@@ -145,7 +148,24 @@ public class PulseService extends AbstractStormPublisher
             redisPulseDao.subscribePulse(pulse, userLight);
             redisUserDao.storeUserLight(userLight); //need to update it with the new subscribed pulse id
             getStormPublisher().produce(CommonConstants.TOPICS.PULSE_SUBSCRIBE.toString(), pulse);
-            result = new Result<>(SUCCESS, "Subscribed");
+            result = new Result<>(SUCCESS, pulse.getId(), "Subscribed");
+        }
+        
+        return result;
+    }
+    
+    @Override
+    public Result<String> unSubscribePulse(Pulse pulse, UserId userId) {
+        
+        Optional<UserLight> oUserLight = redisUserDao.getUserLight(userId.getId());
+        Result<String> result = new Result<>(FAILURE, "Failed in unsubscribe");
+        
+        if(oUserLight.isPresent()) {
+            UserLight userLight = oUserLight.get();
+            redisPulseDao.unSubscribePulse(userLight);
+            
+            userLight.setSubscribedPulseId(0L);
+            redisUserDao.storeUserLight(userLight);
         }
         
         return result;

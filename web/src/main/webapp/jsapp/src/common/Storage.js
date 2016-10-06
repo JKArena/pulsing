@@ -23,8 +23,10 @@
 'use strict';
 
 import User from '../avro/User';
+import PulseId from '../avro/PulseId';
 
 const _PULSING_USER_KEY = 'pulsingUser';
+const _PULSING_SUBSCRIBED_PULSE_ID_KEY = 'pulsingSubscribedPulseId';
 const _MAPPER = new Map();
 
 export default Object.freeze(
@@ -40,21 +42,44 @@ export default Object.freeze(
             let user = null;
             
             if(userStr !== null) {
-              user = JSON.parse(sessionStorage.getItem(_PULSING_USER_KEY));
-              _MAPPER.set(_PULSING_USER_KEY, User.deserialize(user));
+              user = User.deserialize(JSON.parse(userStr));
+              _MAPPER.set(_PULSING_USER_KEY, user);
             }
             
             return user;
           },
-          set: function(user) {
-            if(!user) {
+          set: function(userJson) {
+            if(!userJson) {
               sessionStorage.removeItem(_PULSING_USER_KEY);
               _MAPPER.delete(_PULSING_USER_KEY);
               return;
             }
             
-            _MAPPER.set(_PULSING_USER_KEY, User.deserialize(user));
-            sessionStorage.setItem(_PULSING_USER_KEY, JSON.stringify(user));
+            let user = User.deserialize(userJson);
+            
+            _MAPPER.set(_PULSING_USER_KEY, user);
+            sessionStorage.setItem(_PULSING_USER_KEY, user.serialize());
+          },
+          enumerable: true
+        },
+
+        'subscribedPulseId' : {
+          get: function() {
+            if(_MAPPER.has(_PULSING_SUBSCRIBED_PULSE_ID_KEY)) {
+              return _MAPPER.get(_PULSING_SUBSCRIBED_PULSE_ID_KEY);
+            } else {
+              return null;
+            }
+          },
+          set: function(pulseIdJson) {
+            if(!pulseIdJson) {
+              _MAPPER.delete(_PULSING_SUBSCRIBED_PULSE_ID_KEY);
+              return;
+            }
+            
+            let pulseId = PulseId.deserialize(pulseIdJson);
+            
+            _MAPPER.set(_PULSING_SUBSCRIBED_PULSE_ID_KEY, pulseId);
           },
           enumerable: true
         }

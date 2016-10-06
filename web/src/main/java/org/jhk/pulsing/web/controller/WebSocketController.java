@@ -21,6 +21,7 @@ package org.jhk.pulsing.web.controller;
 import org.jhk.pulsing.web.websocket.model.MapPulseCreate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
@@ -33,12 +34,20 @@ public class WebSocketController {
     
     private static final Logger _LOGGER = LoggerFactory.getLogger(WebSocketController.class);
     
-    @MessageMapping("/pulseSocketJS")
+    @MessageMapping("/pulseSocketJS/pulseCreated")
     @SendTo("/topics/pulseCreated")
     public MapPulseCreate pulseCreated(MapPulseCreate mPulseCreate) {
         _LOGGER.debug("WebSocketController.pulseCreated: " + mPulseCreate);
         
         return mPulseCreate;
+    }
+    
+    @MessageMapping("/pulseSocketJS/pulseChat/{pulseId}/{userId}")
+    @SendTo("/topics/pulseChat/{pulseId}/{userId}")
+    public String pulseChat(@DestinationVariable long pulseId, @DestinationVariable long userId, String message) {
+        _LOGGER.debug("WebSocketController.pulseChat: " + pulseId);
+        
+        return "Chatting [" + pulseId + "/" + userId + "] - " + message;
     }
     
 }
