@@ -24,21 +24,29 @@
 
 import Fetch from '../../../common/Fetch';
 
-const LOGOUT_PATH = 'user/logout';
+const SUBSCRIBE_PULSE_PATH = 'pulse/subscribePulse';
 
-const LogoutAction = Object.freeze(
+const SubscribePulseAction = Object.freeze(
   {
 
-    logoutUser(userId) {
+    subscribePulse(pulseId, userId) {
       
       let fData = new FormData();
+      fData.append('pulseId', pulseId.serialize());
       fData.append('userId', userId.serialize());
 
       return new Promise(function(resolve, reject) {
 
-        Fetch.DELETE_JSON(LOGOUT_PATH, {body: fData})
+        Fetch.PUT_JSON(SUBSCRIBE_PULSE_PATH, {body: fData})
           .then(function(result) {
-            console.debug('logoutUser', result);
+            console.debug('subscribePulse', result);
+
+            if(result.code === 'SUCCESS') {
+              Storage.subscribedPulseId = JSON.parse(result.data);
+              resolve(Storage.subscribedPulseId);
+            }else {
+              reject(result.message);
+            }
 
           });
 
@@ -49,4 +57,4 @@ const LogoutAction = Object.freeze(
   }
 );
 
-export default LogoutAction;
+export default SubscribePulseAction;

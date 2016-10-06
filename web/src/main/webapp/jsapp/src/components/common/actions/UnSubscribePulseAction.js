@@ -16,32 +16,44 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.web.service;
-
-import java.util.Map;
-import java.util.Set;
-
-import org.jhk.pulsing.serialization.avro.records.Pulse;
-import org.jhk.pulsing.serialization.avro.records.PulseId;
-import org.jhk.pulsing.serialization.avro.records.UserId;
-import org.jhk.pulsing.web.common.Result;
-import org.jhk.pulsing.web.pojo.light.UserLight;
 
 /**
  * @author Ji Kim
  */
-public interface IPulseService {
-    
-    Result<Pulse> getPulse(PulseId pulseId);
-    
-    Result<Pulse> createPulse(Pulse pulse);
-    
-    Result<PulseId> subscribePulse(Pulse pulse, UserId userId);
-    
-    Result<String> unSubscribePulse(Pulse pulse, UserId userId);
-    
-    Map<Long, String> getTrendingPulseSubscriptions(int numMinutes);
-    
-    Map<Pulse, Set<UserLight>> getMapPulseDataPoints(Double lat, Double lng);
-    
-}
+'use strict';
+
+import Fetch from '../../../common/Fetch';
+
+const UN_SUBSCRIBE_PULSE_PATH = 'pulse/unSubscribePulse';
+
+const UnSubscribePulseAction = Object.freeze(
+  {
+
+    unSubscribePulse(pulseId, userId) {
+      
+      let fData = new FormData();
+      fData.append('pulseId', pulseId.serialize());
+      fData.append('userId', userId.serialize());
+
+      return new Promise(function(resolve, reject) {
+
+        Fetch.PUT_JSON(UN_SUBSCRIBE_PULSE_PATH, {body: fData})
+          .then(function(result) {
+            console.debug('unSubscribePulse', result);
+
+            if(result.code === 'SUCCESS') {
+              Storage.subscribedPulseId = null;
+            }else {
+              reject(result.message);
+            }
+
+          });
+
+      });
+
+    }
+
+  }
+);
+
+export default UnSubscribePulseAction;

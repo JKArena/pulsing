@@ -177,6 +177,25 @@ export default Object.freeze(
           enumerable: true
         },
 
+        'PUT_JSON' : {
+          get: function() {
+
+            return (putPath, options=Object.create(null)) => {
+              
+              const DEFAULT_HEADERS = new Headers({'Accept': 'application/json'});
+              const DEFAULT_OPTIONS = {method: 'PUT',  mode: 'cors', headers: DEFAULT_HEADERS};
+
+              let request = new Request(Url.controllerUrl() + putPath);
+              let putOptions = Object.assign(DEFAULT_OPTIONS, options);
+
+              return fetchContent(request, putOptions, 'json');
+            }
+          },
+
+          set: function() {},
+          enumerable: true
+        },
+
         'GET_RAW' : {
           get: function() {
 

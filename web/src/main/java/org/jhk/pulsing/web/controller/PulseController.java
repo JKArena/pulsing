@@ -71,16 +71,28 @@ public class PulseController extends AbstractController {
         return pulseService.getMapPulseDataPoints(lat, lng);
     }
     
-    @RequestMapping(value="/subscribePulse", method=RequestMethod.GET)
-    public @ResponseBody Result<String> subscribePulse(PulseId pulseId, UserId userId) {
+    @RequestMapping(value="/subscribePulse", method=RequestMethod.PUT)
+    public @ResponseBody Result<PulseId> subscribePulse(PulseId pulseId, UserId userId) {
         _LOGGER.debug("PulseController.subscribePulse: " + pulseId + " - " + userId);
+        
+        Result<Pulse> result = pulseService.getPulse(pulseId);
+        if(result.getCode() == Result.CODE.FAILURE) {
+            return new Result<PulseId>(Result.CODE.FAILURE, pulseId, result.getMessage());
+        }
+        
+        return pulseService.subscribePulse(result.getData(), userId);
+    }
+    
+    @RequestMapping(value="/unSubscribePulse", method=RequestMethod.PUT)
+    public @ResponseBody Result<String> unSubscribePulse(PulseId pulseId, UserId userId) {
+        _LOGGER.debug("PulseController.unSubscribePulse: " + pulseId + " - " + userId);
         
         Result<Pulse> result = pulseService.getPulse(pulseId);
         if(result.getCode() == Result.CODE.FAILURE) {
             return new Result<String>(Result.CODE.FAILURE, null, result.getMessage());
         }
         
-        return pulseService.subscribePulse(result.getData(), userId);
+        return pulseService.unSubscribePulse(result.getData(), userId);
     }
     
 }
