@@ -32,6 +32,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -41,9 +42,10 @@ import org.springframework.web.multipart.MultipartFile;
 /**
  * @author Ji Kim
  */
+@CrossOrigin(origins="*")
 @Controller
 @RequestMapping("/user")
-public class UserController extends AbstractController {
+public class UserController {
     
     private static final Logger _LOGGER = LoggerFactory.getLogger(UserController.class);
     

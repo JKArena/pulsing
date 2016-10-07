@@ -124,6 +124,7 @@ public class RedisPulseDao extends AbstractRedisDao
             getJedis().del(PULSE_.toString() + pulseId);
             getJedis().del(PULSE_SUBSCRIBE_USERID_SET_.toString() + pulseId);
             getJedis().zrem(PULSE_GEO_.toString(), pulseJson); // geo uses zset under the hood and since no corresponding remove API
+            //need to also send to remove it from the map component
         }
         
         return result;
@@ -202,6 +203,7 @@ public class RedisPulseDao extends AbstractRedisDao
             }
         });
         
+        _LOGGER.debug("RedisPulseDao.getMapPulseDataPoints: result " + mPulseDataPoints);
         return mPulseDataPoints;
     }
     

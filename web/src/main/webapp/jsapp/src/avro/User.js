@@ -39,8 +39,16 @@ class User extends AbstractAvro {
     
     this.json = json || AvroJson('User');
     this.formMapper = User[FORM_MAPPER];
-    this.watchId = global.navigator.geolocation.watchPosition(this._onPosition.bind(this),
-                      (err) => {console.error('Error in geolocation', err);}, U_GEOLOCATION_OPTS);
+    this.positionHandler = this._onPosition.bind(this);
+    this.watchPosition();
+  }
+
+  watchPosition() {
+    this.watchId = global.navigator.geolocation.watchPosition(this.positionHandler,
+                      (err) => {
+                        console.error('Error in geolocation', err);
+                        this.watchPosition();
+                      }, U_GEOLOCATION_OPTS);
   }
 
   clearGeoWatch() {
