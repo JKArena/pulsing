@@ -45,6 +45,10 @@ import org.jhk.pulsing.shared.util.CommonConstants;
   @NamedQuery(
     name = "findUser",
     query = "from MUser user where user.email = :email AND user.password = :password"
+  ),
+  @NamedQuery(
+    name = "checkEmailTaken",
+    query = "from MUser user where user.email = :email"
   )
 })
 @Entity()

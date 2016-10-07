@@ -26,20 +26,25 @@ import React from 'react';
 import AbstractMapStore from './AbstractMapStore';
 import Storage from '../../../common/Storage';
 import Url from '../../../common/Url';
+import SubscribePulseAction from '../../common/actions/SubscribePulseAction';
+import UnSubscribePulseAction from '../../common/actions/UnSubscribePulseAction';
 import Pulse from '../../../avro/Pulse';
 import {render} from 'react-dom';
 import MapPulseAction from '../actions/MapPulseAction';
 
-const _ROOT_URL = Url.rootUrl();
+const ROOT_URL = Url.rootUrl();
+const SUBSCRIBE_ACTION = 'subscribe';
+const UN_SUBSCRIBE_ACTION = 'unSubscribe';
 
 const InfoNode = (props) => {
   let pulse = props.pulse;
   let userLights = props.userLights;
   let desc = new Date(pulse.timeStamp*1000).toLocaleString(); //since held as seconds on server
   let subscribed = [];
+  let actionText = props.actionType === SUBSCRIBE_ACTION ? 'Subscribe' : 'UnSubscribe';
 
   userLights.forEach(uLight => {
-    let pPath = uLight.picturePath ? (_ROOT_URL + uLight.picturePath) : Url.DEFAULT_PICTURE_PATH;
+    let pPath = uLight.picturePath ? (ROOT_URL + uLight.picturePath) : Url.DEFAULT_PICTURE_PATH;
 
     subscribed.push(<li className='map-subscribed-entry' key={uLight.id}>
         <img src={pPath} className='map-subscribed-img'></img>
@@ -56,11 +61,7 @@ const InfoNode = (props) => {
     <ul className='map-subscriptions'>
       {subscribed}
     </ul>
-    {(() => {
-      if(props.clickHandler) {
-        return <a href='#' onClick={props.clickHandler}>Subscribe</a>;
-      }
-    })()}
+    <a href='#' onClick={props.clickHandler}>{actionText}</a>
   </div>);
 };
 
@@ -88,8 +89,26 @@ class GMapPulseStore extends AbstractMapStore {
       }.bind(this));
   }
 
-  _subscribePulse(url) {
-    console.debug('subscribePulse ', url);
+  _subscribeUnSubscribe(actionParam) {
+    console.debug('_subscribeUnSubscribe ', actionParam);
+
+    let userId = Storage.user.id;
+    let pulseId = actionParam.pulseId;
+    let Action = actionParam.type === SUBSCRIBE_ACTION ? SubscribePulseAction.subscribePulse :
+      UnSubscribePulseAction.unSubscribePulse;
+
+    Action(pulseId, userId)
+      .then(() => {
+        console.debug('success in _subscribeUnSubscribe', actionParam.type,
+          pulseId, userId);
+
+        //TODO
+        //need to toggle from subscribe to unsubscribe for this marker
+      })
+      .catch(() => {
+        console.error('error in _subscribeUnSubscribe', actionParam.type, pulseId, userId);
+      });
+
   }
 
   _getInfoNode(pulse, userId, userLights) {
@@ -98,17 +117,11 @@ class GMapPulseStore extends AbstractMapStore {
       return uLight.id === userId.id.id.long;
     });
 
-    if(isSubscribed.length > 0) {
-      //no need for subscribe
-      render((<InfoNode pulse={pulse} userLights={userLights} />), iNode);
-    } else {
-      let url = new URL(Url.SUBSCRIBE_PULSE_PATH);
-      url.searchParams.append('pulseId', pulse.id.serialize());
-      url.searchParams.append('userId', userId.serialize());
+    let type = isSubscribed.length > 0 ? UN_SUBSCRIBE_ACTION : SUBSCRIBE_ACTION;
+    let actionParam = {pulseId: pulse.id, type: type};
 
-      render((<InfoNode pulse={pulse} userLights={userLights}
-        clickHandler={this._subscribePulse.bind(this, url)} />), iNode);
-    }
+    render((<InfoNode pulse={pulse} userLights={userLights} actionType={type}
+        clickHandler={this._subscribeUnSubscribe.bind(this, actionParam)} />), iNode);
 
     return iNode;
   }
@@ -132,7 +145,6 @@ class GMapPulseStore extends AbstractMapStore {
     });
 
     this.dataPoints.push(marker);
-
   }
   
 }

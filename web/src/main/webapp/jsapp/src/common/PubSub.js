@@ -41,7 +41,7 @@ const API = Object.freeze(
           get: function() {
 
             return (topic, listener) => {
-              console.debug('subscribing to ', topic, listener);
+              console.debug('subscribing to ', topic);
               
               //can't use WeakMap or WeakSet
               let listeners = PUB_SUB.get(topic);

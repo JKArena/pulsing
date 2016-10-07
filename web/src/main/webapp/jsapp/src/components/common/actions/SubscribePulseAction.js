@@ -23,28 +23,27 @@
 'use strict';
 
 import Fetch from '../../../common/Fetch';
+import Url from '../../../common/Url';
 
-const SUBSCRIBE_PULSE_PATH = 'pulse/subscribePulse';
+const SUBSCRIBE_PULSE_PATH = 'pulse/subscribePulse/';
 
 const SubscribePulseAction = Object.freeze(
   {
 
     subscribePulse(pulseId, userId) {
-      
-      let fData = new FormData();
-      fData.append('pulseId', pulseId.serialize());
-      fData.append('userId', userId.serialize());
 
+      let url = new URL(Url.controllerUrl() + SUBSCRIBE_PULSE_PATH + pulseId.serialize() + '/' + userId.serialize());
+      
       return new Promise(function(resolve, reject) {
 
-        Fetch.PUT_JSON(SUBSCRIBE_PULSE_PATH, {body: fData})
+        Fetch.PUT_JSON(url)
           .then(function(result) {
             console.debug('subscribePulse', result);
 
             if(result.code === 'SUCCESS') {
               Storage.subscribedPulseId = JSON.parse(result.data);
               resolve(Storage.subscribedPulseId);
-            }else {
+            } else {
               reject(result.message);
             }
 

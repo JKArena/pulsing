@@ -74,6 +74,18 @@ public class MySqlUserDao {
         
         return new Result<>(SUCCESS, user);
     }
+    
+    public boolean isEmailTaken(String email) {
+        _LOGGER.debug("MySqlUserDao.isEmailTaken " + email);
+        
+        List<?> entries = getSession().createNamedQuery("checkEmailTaken")
+                .setParameter("email", email)
+                .getResultList();
+        
+        _LOGGER.debug("Result " + entries.size() + " : " + entries);
+        
+        return entries == null || entries.size() > 0;
+    }
 
     public Optional<User> validateUser(String email, String password) {
         _LOGGER.debug("MySqlUserDao.validateUser" + email + " : " + password);

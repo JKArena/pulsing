@@ -33,6 +33,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -41,9 +43,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 /**
  * @author Ji Kim
  */
+@CrossOrigin(origins="*")
 @Controller
 @RequestMapping("/pulse")
-public class PulseController extends AbstractController {
+public class PulseController {
     
     private static final Logger _LOGGER = LoggerFactory.getLogger(PulseController.class);
     
@@ -71,8 +74,8 @@ public class PulseController extends AbstractController {
         return pulseService.getMapPulseDataPoints(lat, lng);
     }
     
-    @RequestMapping(value="/subscribePulse", method=RequestMethod.PUT)
-    public @ResponseBody Result<PulseId> subscribePulse(PulseId pulseId, UserId userId) {
+    @RequestMapping(value="/subscribePulse/{pulseId}/{userId}", method=RequestMethod.PUT)
+    public @ResponseBody Result<PulseId> subscribePulse(@PathVariable PulseId pulseId, @PathVariable UserId userId) {
         _LOGGER.debug("PulseController.subscribePulse: " + pulseId + " - " + userId);
         
         Result<Pulse> result = pulseService.getPulse(pulseId);
@@ -83,8 +86,8 @@ public class PulseController extends AbstractController {
         return pulseService.subscribePulse(result.getData(), userId);
     }
     
-    @RequestMapping(value="/unSubscribePulse", method=RequestMethod.PUT)
-    public @ResponseBody Result<String> unSubscribePulse(PulseId pulseId, UserId userId) {
+    @RequestMapping(value="/unSubscribePulse/{pulseId}/{userId}", method=RequestMethod.PUT)
+    public @ResponseBody Result<String> unSubscribePulse(@PathVariable PulseId pulseId, @PathVariable UserId userId) {
         _LOGGER.debug("PulseController.unSubscribePulse: " + pulseId + " - " + userId);
         
         Result<Pulse> result = pulseService.getPulse(pulseId);

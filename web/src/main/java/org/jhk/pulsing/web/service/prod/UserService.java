@@ -76,7 +76,12 @@ public class UserService extends AbstractStormPublisher
 
     @Override
     public Result<User> createUser(User user) {
-        Result<User> cUser = new Result<User>(FAILURE, null, "Failed in creating " + user); 
+        
+        if(mySqlUserDao.isEmailTaken(user.getEmail().toString())) {
+            return new Result<User>(FAILURE, null, "Email is already taken " + user.getEmail());
+        }
+        
+        Result<User> cUser = new Result<User>(FAILURE, null, "Failed in creating " + user);
         
         try {
             cUser = mySqlUserDao.createUser(user);
