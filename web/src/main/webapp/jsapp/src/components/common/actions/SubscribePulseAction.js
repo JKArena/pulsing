@@ -24,6 +24,8 @@
 
 import Fetch from '../../../common/Fetch';
 import Url from '../../../common/Url';
+import Storage from '../../../common/Storage';
+import {TOPICS, API} from '../../../common/PubSub';
 
 const SUBSCRIBE_PULSE_PATH = 'pulse/subscribePulse/';
 
@@ -32,7 +34,8 @@ const SubscribePulseAction = Object.freeze(
 
     subscribePulse(pulseId, userId) {
 
-      let url = new URL(Url.controllerUrl() + SUBSCRIBE_PULSE_PATH + pulseId.serialize() + '/' + userId.serialize());
+      let url = new URL(Url.controllerUrl() + SUBSCRIBE_PULSE_PATH +
+                        pulseId.serialize() + '/' + userId.serialize());
       
       return new Promise(function(resolve, reject) {
 
@@ -42,7 +45,10 @@ const SubscribePulseAction = Object.freeze(
 
             if(result.code === 'SUCCESS') {
               Storage.subscribedPulseId = JSON.parse(result.data);
-              resolve(Storage.subscribedPulseId);
+              let subscribedPulseId = Storage.subscribedPulseId;
+              
+              API.publish(TOPICS.PULSE_SUBSCRIBED, {pulseId: subscribedPulseId});
+              resolve(subscribedPulseId);
             } else {
               reject(result.message);
             }

@@ -107,7 +107,7 @@ class Pulse extends AbstractAvro {
   }
   
   static deserialize(json) {
-    console.debug('deserialize', json);
+    console.debug('Pulse.deserialize', json);
     
     return new Pulse(json);
   }

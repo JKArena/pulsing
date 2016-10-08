@@ -58,7 +58,7 @@ class PillsComponent extends Component {
       return;
     }
     this.data.add(val);
-    this._addTag(val);
+    this.addTag(val);
     this.tagInputNode.value = '';
   }
 
@@ -68,6 +68,7 @@ class PillsComponent extends Component {
     });
     this.dataNodes = {};
     this.data = new Set();
+    this.tagInputNode.value = '';
   }
 
   removeTag(removeIndex) {
@@ -81,7 +82,7 @@ class PillsComponent extends Component {
     delete this.dataNodes[removeIndex];
   }
 
-  _addTag(val) {
+  addTag(val) {
     let ele = document.createElement('span');
     let removeIndex = this.nextDataIndex++;
 

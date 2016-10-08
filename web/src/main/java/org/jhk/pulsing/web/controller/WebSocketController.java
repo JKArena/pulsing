@@ -23,6 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 
@@ -34,7 +35,7 @@ public class WebSocketController {
     
     private static final Logger _LOGGER = LoggerFactory.getLogger(WebSocketController.class);
     
-    @MessageMapping("/pulseSocketJS/pulseCreated")
+    @MessageMapping("/pulseCreated")
     @SendTo("/topics/pulseCreated")
     public MapPulseCreate pulseCreated(MapPulseCreate mPulseCreate) {
         _LOGGER.debug("WebSocketController.pulseCreated: " + mPulseCreate);
@@ -42,12 +43,12 @@ public class WebSocketController {
         return mPulseCreate;
     }
     
-    @MessageMapping("/pulseSocketJS/pulseChat/{pulseId}/{userId}")
-    @SendTo("/topics/pulseChat/{pulseId}/{userId}")
-    public String pulseChat(@DestinationVariable long pulseId, @DestinationVariable long userId, String message) {
-        _LOGGER.debug("WebSocketController.pulseChat: " + pulseId);
+    @MessageMapping("/chat/{chatId}/{userId}")
+    @SendTo("/topics/chat/{chatId}")
+    public String chat(@Payload String message, @DestinationVariable long chatId, @DestinationVariable long userId) {
+        _LOGGER.debug("WebSocketController.chat: " + chatId + "/" + userId + " - " + message);
         
-        return "Chatting [" + pulseId + "/" + userId + "] - " + message;
+        return "Chatting [" + chatId + "/" + userId + "] - " + message;
     }
     
 }

@@ -24,6 +24,8 @@
 
 import Fetch from '../../../common/Fetch';
 import Url from '../../../common/Url';
+import Storage from '../../../common/Storage';
+import {TOPICS, API} from '../../../common/PubSub';
 
 const UN_SUBSCRIBE_PULSE_PATH = 'pulse/unSubscribePulse/';
 
@@ -32,7 +34,8 @@ const UnSubscribePulseAction = Object.freeze(
 
     unSubscribePulse(pulseId, userId) {
       
-      let url = new URL(Url.controllerUrl() + UN_SUBSCRIBE_PULSE_PATH + pulseId.serialize() + '/' + userId.serialize());
+      let url = new URL(Url.controllerUrl() + UN_SUBSCRIBE_PULSE_PATH +
+                        pulseId.serialize() + '/' + userId.serialize());
 
       return new Promise(function(resolve, reject) {
 
@@ -41,6 +44,7 @@ const UnSubscribePulseAction = Object.freeze(
             console.debug('unSubscribePulse', result);
 
             if(result.code === 'SUCCESS') {
+              API.publish(TOPICS.PULSE_UN_SUBSCRIBED, {pulseId: Storage.subscribedPulseId});
               Storage.subscribedPulseId = null;
             } else {
               reject(result.message);

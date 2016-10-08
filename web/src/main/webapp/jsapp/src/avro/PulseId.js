@@ -34,11 +34,11 @@ class PulseId extends AbstractAvro {
   }
   
   get id() {
-    return this.json;
+    return this.json['id']['long'];
   }
   
   static deserialize(json) {
-    console.debug('deserialize', json);
+    console.debug('PulseId.deserialize', json);
     
     return new PulseId(json);
   }

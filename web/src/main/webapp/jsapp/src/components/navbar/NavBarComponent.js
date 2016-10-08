@@ -39,8 +39,8 @@ class NavBarComponent extends Component {
     super(props);
 
     this.state = {loggedIn: !!Storage.user, navChangeState: true};
-    this.authHandler = this._onAuth.bind(this);
-    this.navigationChangeHandler = this._onNavigationChange.bind(this);
+    this.authHandler = this.onAuth.bind(this);
+    this.navigationChangeHandler = this.onNavigationChange.bind(this);
   }
   
   loggedOut() {
@@ -52,7 +52,7 @@ class NavBarComponent extends Component {
     this.setState(this.state);
   }
   
-  _onAuth(auth) {
+  onAuth(auth) {
     
     this.state.loggedIn = auth.loggedIn;
     this.setState(this.state);
@@ -70,8 +70,8 @@ class NavBarComponent extends Component {
     API.unsubscribe(TOPICS.NAVIGATION_CHANGE, this.navigationChangeHandler);
   }
 
-  _onNavigationChange(newNav) {
-    console.debug('Nav geochange', newNav);
+  onNavigationChange(newNav) {
+    console.debug('onNavigationChange', newNav);
     this.state.navChangeState = !this.state.navChangeState;
     this.setState(this.state);
 
