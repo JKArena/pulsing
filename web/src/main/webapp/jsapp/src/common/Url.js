@@ -27,7 +27,7 @@ const SPRING_ROOT_SUFFIX = ':8083/pulsing-web/';
 
 let PREFIX;
 
-function _url(suffix) {
+function url(suffix) {
   if(!PREFIX) {
     let location = global.location;
     PREFIX = location.protocol + '//' + location.hostname
@@ -42,11 +42,11 @@ export default Object.freeze(
       DEFAULT_PICTURE_PATH: '/images/defaultPicture.png',
       
       rootUrl() {
-        return _url(SPRING_ROOT_SUFFIX);
+        return url(SPRING_ROOT_SUFFIX);
       },
       
       controllerUrl() {
-        return _url(SPRING_CONTROLLER_SUFFIX);
+        return url(SPRING_CONTROLLER_SUFFIX);
       }
     }
 );

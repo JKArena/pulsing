@@ -34,7 +34,7 @@ class UserId extends AbstractAvro {
   }
   
   get id() {
-    return this.json;
+    return this.json['id']['long'];
   }
   
   get cookie() {
@@ -46,7 +46,7 @@ class UserId extends AbstractAvro {
   }
   
   static deserialize(json) {
-    console.debug('deserialize', json);
+    console.debug('UserId.deserialize', json);
     
     return new UserId(json);
   }

@@ -23,6 +23,10 @@
 'use strict';
 
 class AbstractAvro {
+
+  get raw() {
+    return this.json;
+  }
   
   formMap(form) {
     

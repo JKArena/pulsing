@@ -144,7 +144,7 @@ class User extends AbstractAvro {
   }
   
   static deserialize(json) {
-    console.debug('deserialize', json);
+    console.debug('User.deserialize', json);
     
     return new User(json);
   }

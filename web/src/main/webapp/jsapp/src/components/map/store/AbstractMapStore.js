@@ -49,11 +49,14 @@ class AbstractMapStore extends EventEmitter {
   }
 
   removeDataPoint(index) {
-    this.dataPoints[index].setMap(null);
-    this.dataPoints[index] = null; //just for now
+    throw new Error('AbstractMapStore should not be used standalone ' + index);
   }
 
   clearDataPoints() {
+    this.dataPoints.forEach((val, index) => {
+      this.removeDataPoint(index);
+    });
+    
     this.dataPoints.length = 0;
   }
   

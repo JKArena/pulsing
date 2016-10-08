@@ -46,7 +46,7 @@ const CreatePulseAction = Object.freeze(
       let pulse = new Pulse();
       let user = Storage.user;
       pulse.formMap(document.getElementById(formId));
-      pulse.userId = user.id.id;
+      pulse.userId = user.id.raw;
       pulse.tags = tagsArray;
       pulse.lat = user.lat;
       pulse.lng = user.lng;

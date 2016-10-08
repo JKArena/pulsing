@@ -31,7 +31,7 @@ import TrendingPulseSubscriptionsStore from './TrendingPulseSubscriptionsStore';
 import {TOPICS, API} from '../../../common/PubSub';
 import Storage from '../../../common/Storage';
 
-let _trending = new Map();
+let trending = new Map();
 
 class TrendingPulseSubscriptionsComponent extends Component {
   
@@ -40,13 +40,12 @@ class TrendingPulseSubscriptionsComponent extends Component {
     
     this.store = new TrendingPulseSubscriptionsStore();
     this.state = {loggedIn: !!Storage.user};
-    this.authHandler = this._onAuth.bind(this);
-    this.fetchHandler = this._onFetched.bind(this);
+    this.authHandler = this.onAuth.bind(this);
+    this.fetchHandler = this.onFetched.bind(this);
   }
 
   componentDidMount() {
-    console.debug('mounted tpsComponent');
-    
+
     this.store.addFetchedListener(this.fetchHandler);
     this.store.fetchTrending();
     
@@ -54,7 +53,6 @@ class TrendingPulseSubscriptionsComponent extends Component {
   }
   
   componentWillUnmount() {
-    console.debug('unmounted tpsComponent');
     
     if(this.store) {
       this.store.removeFetchedListener(this.fetchHandler);
@@ -70,21 +68,21 @@ class TrendingPulseSubscriptionsComponent extends Component {
   }
   
   handleSubscribe(evt) {
-    
     let user = Storage.user;
+
     console.debug('handleSubscribe', evt.target.id, user.id);
     
   }
   
-  _onAuth(auth) {
+  onAuth(auth) {
     this.state.loggedIn = auth.loggedIn;
     this.setState(this.state);
   }
   
-  _onFetched(trending) {
-    console.debug('_onFetched', trending);
+  onFetched(fetched) {
+    console.debug('onFetched', fetched);
     
-    _trending = trending;
+    trending = fetched;
     this.setState({});
   }
   
@@ -92,7 +90,7 @@ class TrendingPulseSubscriptionsComponent extends Component {
     let cols = [];
     let loggedIn = this.state.loggedIn;
     
-    _trending.forEach((value, key) => {
+    trending.forEach((value, key) => {
       
       cols.push(<Col xs={12} sm={6} md={4} lg={3} key={key}>
         <Thumbnail>

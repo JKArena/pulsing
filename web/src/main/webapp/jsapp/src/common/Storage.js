@@ -25,61 +25,61 @@
 import User from '../avro/User';
 import PulseId from '../avro/PulseId';
 
-const _PULSING_USER_KEY = 'pulsingUser';
-const _PULSING_SUBSCRIBED_PULSE_ID_KEY = 'pulsingSubscribedPulseId';
-const _MAPPER = new Map();
+const PULSING_USER_KEY = 'pulsingUser';
+const PULSING_SUBSCRIBED_PULSE_ID_KEY = 'pulsingSubscribedPulseId';
+const MAPPER = new Map();
 
 export default Object.freeze(
     Object.create(null,
       {
         'user' : {
           get: function() {
-            if(_MAPPER.has(_PULSING_USER_KEY)) {
-              return _MAPPER.get(_PULSING_USER_KEY);
+            if(MAPPER.has(PULSING_USER_KEY)) {
+              return MAPPER.get(PULSING_USER_KEY);
             }
             
-            let userStr = sessionStorage.getItem(_PULSING_USER_KEY);
+            let userStr = sessionStorage.getItem(PULSING_USER_KEY);
             let user = null;
             
             if(userStr !== null) {
               user = User.deserialize(JSON.parse(userStr));
-              _MAPPER.set(_PULSING_USER_KEY, user);
+              MAPPER.set(PULSING_USER_KEY, user);
             }
             
             return user;
           },
           set: function(userJson) {
             if(!userJson) {
-              sessionStorage.removeItem(_PULSING_USER_KEY);
-              _MAPPER.delete(_PULSING_USER_KEY);
+              sessionStorage.removeItem(PULSING_USER_KEY);
+              MAPPER.delete(PULSING_USER_KEY);
               return;
             }
             
             let user = User.deserialize(userJson);
             
-            _MAPPER.set(_PULSING_USER_KEY, user);
-            sessionStorage.setItem(_PULSING_USER_KEY, user.serialize());
+            MAPPER.set(PULSING_USER_KEY, user);
+            sessionStorage.setItem(PULSING_USER_KEY, user.serialize());
           },
           enumerable: true
         },
 
         'subscribedPulseId' : {
           get: function() {
-            if(_MAPPER.has(_PULSING_SUBSCRIBED_PULSE_ID_KEY)) {
-              return _MAPPER.get(_PULSING_SUBSCRIBED_PULSE_ID_KEY);
+            if(MAPPER.has(PULSING_SUBSCRIBED_PULSE_ID_KEY)) {
+              return MAPPER.get(PULSING_SUBSCRIBED_PULSE_ID_KEY);
             } else {
               return null;
             }
           },
           set: function(pulseIdJson) {
             if(!pulseIdJson) {
-              _MAPPER.delete(_PULSING_SUBSCRIBED_PULSE_ID_KEY);
+              MAPPER.delete(PULSING_SUBSCRIBED_PULSE_ID_KEY);
               return;
             }
             
             let pulseId = PulseId.deserialize(pulseIdJson);
             
-            _MAPPER.set(_PULSING_SUBSCRIBED_PULSE_ID_KEY, pulseId);
+            MAPPER.set(PULSING_SUBSCRIBED_PULSE_ID_KEY, pulseId);
           },
           enumerable: true
         }

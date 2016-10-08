@@ -32,6 +32,7 @@ import {TOPICS, API} from '../../common/PubSub';
 import Storage from '../../common/Storage';
 import Pulse from '../../avro/Pulse';
 import GMapPulseStore from './store/GMapPulseStore';
+import ChatComponent from '../chat/ChatComponent';
 
 const ZOOM_DEFAULT = 20;
 const API_URL = 'http://maps.googleapis.com/maps/api/js?key=AIzaSyAcUzIUuUTuOZndo3OGs2J4FV-8Ay963ug';
@@ -50,9 +51,9 @@ class MapComponent extends Component {
     this.store = KEY_STORE_MAPPER[props.params.store]();
     this.mapId = props.location.query.mapId;
     this.map = null;
-    this.geoChangeHandler = this._onGeoChange.bind(this);
-    this.dataPointsHandler = this._onDataPoints.bind(this);
-    this.pulseCreatedHandler = this._onPulseCreated.bind(this);
+    this.geoChangeHandler = this.onGeoChange.bind(this);
+    this.dataPointsHandler = this.onDataPoints.bind(this);
+    this.pulseCreatedHandler = this.onPulseCreated.bind(this);
 
     let user = Storage.user;
 
@@ -69,15 +70,12 @@ class MapComponent extends Component {
     this.ws = new WebSockets('pulseSocketJS');
     this.ws.connect()
       .then(frame => {
-        console.debug('frame', frame);
+        console.debug('map frame', frame);
         this.sub = this.ws.subscribe('/topics/pulseCreated', this.pulseCreatedHandler);
       });
-    /* Just for note
-    this.ws.send('/pulsingSocket/pulseSocketJS', {},
-                  JSON.stringify({pulseId: evt.target.id, userId: user.id.id}));
-    */
+    
     API.subscribe(TOPICS.USER_GEO_CHANGE, this.geoChangeHandler);
-    this._initialFetchDataPoints();
+    this.initialFetchDataPoints();
   }
 
   componentWillUnmount() {
@@ -108,12 +106,10 @@ class MapComponent extends Component {
   }
 
   componentDidUpdate() {
-    console.debug('componentDidUpdate');
-
-    this._initialFetchDataPoints();
+    this.initialFetchDataPoints();
   }
 
-  _initialFetchDataPoints() {
+  initialFetchDataPoints() {
     if(global.google && !this.map) {
       this.map = new global.google.maps.Map(document.getElementById(this.mapId), {
         center: {lat: this.state.lat, lng: this.state.lng},
@@ -124,8 +120,8 @@ class MapComponent extends Component {
     }
   }
 
-  _onPulseCreated(mPulseCreate) {
-    console.debug('_onPulseCreated', mPulseCreate);
+  onPulseCreated(mPulseCreate) {
+    console.debug('onPulseCreated', mPulseCreate);
     
     if(mPulseCreate && mPulseCreate.body) {
       let parsed = JSON.parse(mPulseCreate.body);
@@ -134,8 +130,8 @@ class MapComponent extends Component {
     }
   }
 
-  _onGeoChange(coordinates) {
-    console.debug('geoChange');
+  onGeoChange(coordinates) {
+    console.debug('onGeoChange');
 
     this.map = null;
     this.state = {
@@ -147,8 +143,8 @@ class MapComponent extends Component {
     this.setState(this.state);
   }
 
-  _onDataPoints(dataPoints) {
-    console.debug('fetched dataPoints', dataPoints);
+  onDataPoints(dataPoints) {
+    console.debug('fetched onDataPoints', dataPoints);
 
   }
 
@@ -161,6 +157,11 @@ class MapComponent extends Component {
             <Col sm={12}>
               <div id={this.mapId} className='map-node'>
               </div>
+            </Col>
+          </Row>
+          <Row>
+            <Col sm={12}>
+              <ChatComponent />
             </Col>
           </Row>
         </Grid>
