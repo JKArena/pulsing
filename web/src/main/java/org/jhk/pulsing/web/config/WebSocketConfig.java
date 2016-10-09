@@ -22,8 +22,10 @@ import org.jhk.pulsing.web.controller.TextWSocketHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.session.ExpiringSession;
+import org.springframework.session.web.socket.config.annotation.AbstractSessionWebSocketMessageBrokerConfigurer;
 import org.springframework.web.socket.WebSocketHandler;
-import org.springframework.web.socket.config.annotation.AbstractWebSocketMessageBrokerConfigurer;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
@@ -33,8 +35,9 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
  * @author Ji Kim
  */
 @Configuration
+@EnableScheduling
 @EnableWebSocketMessageBroker
-public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer
+public class WebSocketConfig extends AbstractSessionWebSocketMessageBrokerConfigurer<ExpiringSession>
                                 implements WebSocketConfigurer {
     
     @Override
@@ -44,7 +47,7 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer
     }
     
     @Override
-    public void registerStompEndpoints(StompEndpointRegistry registry) {
+    public void configureStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/pulseSocketJS").setAllowedOrigins("*").withSockJS();
     }
     
@@ -57,5 +60,5 @@ public class WebSocketConfig extends AbstractWebSocketMessageBrokerConfigurer
     public WebSocketHandler getTextWebSocketHandler() {
         return new TextWSocketHandler();
     }
-    
+
 }

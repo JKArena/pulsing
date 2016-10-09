@@ -18,6 +18,7 @@
  */
 package org.jhk.pulsing.web.controller;
 
+import org.jhk.pulsing.web.websocket.model.Chat;
 import org.jhk.pulsing.web.websocket.model.MapPulseCreate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,10 +46,11 @@ public class WebSocketController {
     
     @MessageMapping("/chat/{chatId}/{userId}")
     @SendTo("/topics/chat/{chatId}")
-    public String chat(@Payload String message, @DestinationVariable long chatId, @DestinationVariable long userId) {
-        _LOGGER.debug("WebSocketController.chat: " + chatId + "/" + userId + " - " + message);
+    public String chat(@Payload Chat message, @DestinationVariable("chatId") String chatId, 
+                            @DestinationVariable("userId") String userId) {
+        _LOGGER.debug("WebSocketController.chat: " + chatId + "/" + userId);
         
-        return "Chatting [" + chatId + "/" + userId + "] - " + message;
+        return "Dude";
     }
     
 }

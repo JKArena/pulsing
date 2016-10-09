@@ -56,7 +56,7 @@ class User extends AbstractAvro {
   }
   
   _onPosition(position) {
-    console.debug('position ', position);
+    console.debug('position ', position, this.lat, this.lng);
     
     let distance = 0;
     let coords = position.coords;
@@ -66,16 +66,26 @@ class User extends AbstractAvro {
         Math.pow(coords.longitude-this.lng, 2));
     }
 
-    if(!this.lat || distance >= GEOLOCATION_NOTIFICATION_CHANGE_THRESHOLD) {
-      API.publish(TOPICS.USER_GEO_CHANGE, {lat: coords.latitude, lng: coords.longitude});
+    let publishGeo = false;
+    let publishNavChange = false;
 
+    if(!this.lat || distance >= GEOLOCATION_NOTIFICATION_CHANGE_THRESHOLD) {
+      publishGeo = true;
+      
       if(!this.lat) {
-        API.publish(TOPICS.NAVIGATION_CHANGE, Common.MAIN_NAV_PATH);
+        publishNavChange = true;
       }
     }
 
     this.lat = coords.latitude;
     this.lng = coords.longitude;
+
+    if(publishNavChange) {
+      API.publish(TOPICS.NAVIGATION_CHANGE, Common.MAIN_NAV_PATH);
+    }
+    if(publishGeo) {
+      API.publish(TOPICS.USER_GEO_CHANGE, {lat: coords.latitude, lng: coords.longitude});
+    }
   }
   
   get id() {
