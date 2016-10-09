@@ -63,7 +63,6 @@ class CreatePulseComponent extends AbstractComponent {
         this.valueInputNode.value = '';
         this.descInputNode.value = '';
         this.refs.tagsComp.clearData();
-        //API.publish(TOPICS.NAVIGATION_CHANGE, Common.MAIN_NAV_PATH);
       })
       .catch(message => {
         this.state.errorMsg = message;

@@ -38,7 +38,7 @@ class NavBarComponent extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {loggedIn: !!Storage.user, navChangeState: true};
+    this.state = {loggedIn: !!Storage.user, lat: 0, lng: 0};
     this.authHandler = this.onAuth.bind(this);
     this.navigationChangeHandler = this.onNavigationChange.bind(this);
   }
@@ -72,14 +72,21 @@ class NavBarComponent extends Component {
 
   onNavigationChange(newNav) {
     console.debug('onNavigationChange', newNav);
-    this.state.navChangeState = !this.state.navChangeState;
+    
     this.setState(this.state);
 
     browserHistory.push(newNav);
   }
   
   render() {
+
     let user = Storage.user;
+
+    this.state.loggedIn = !!user;
+    if(this.state.loggedIn) {
+      this.state.lat = user.lat;
+      this.state.lng = user.lng;
+    }
 
     return (
         <div class='navbar-component'>
@@ -94,7 +101,7 @@ class NavBarComponent extends Component {
             <Navbar.Collapse>
 
               {(() => {
-                if(this.state.loggedIn && user.lat && user.lng) {
+                if(this.state.loggedIn && this.state.lat && this.state.lng) {
                   return <Nav>
                       <LinkContainer to={{ pathname: '/map/pulse', query: {mapId: 'pulseMap'} }}>
                         <NavItem>Map</NavItem>
