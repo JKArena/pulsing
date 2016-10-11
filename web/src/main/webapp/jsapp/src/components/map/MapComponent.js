@@ -67,7 +67,7 @@ class MapComponent extends Component {
 
   componentDidMount() {
     this.store.addDataPointsListener(this.dataPointsHandler);
-    this.ws = new WebSockets('pulseSocketJS');
+    this.ws = new WebSockets('socket');
     this.ws.connect()
       .then(frame => {
         console.debug('map frame', frame);

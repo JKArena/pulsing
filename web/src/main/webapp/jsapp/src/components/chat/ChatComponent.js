@@ -56,7 +56,7 @@ class ChatComponent extends Component {
     this.chatInputNode = findDOMNode(this.refs.chatInput);
     this.chatTabsNode = findDOMNode(this.refs.chatTabs);
 
-    this.ws = new WebSockets('pulseSocketJS');
+    this.ws = new WebSockets('socket');
     this.ws.connect()
       .then(frame => {
         console.debug('chat frame', frame);
@@ -121,8 +121,9 @@ class ChatComponent extends Component {
       return;
     }
     
-    this.ws.send('/socket/chat/' + this.state.chatId + '/'+ Storage.user.id.id, {},
+    this.ws.send('/pulsing/chat/' + this.state.chatId + '/'+ Storage.user.id.id, {},
                   JSON.stringify({message: this.chatInputNode.value}));
+    this.chatInputNode.value = '';
   }
   
   render() {
