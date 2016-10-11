@@ -36,7 +36,6 @@ public class WebSocketController {
     
     private static final Logger _LOGGER = LoggerFactory.getLogger(WebSocketController.class);
     
-    @MessageMapping("/pulseCreated")
     @SendTo("/topics/pulseCreated")
     public MapPulseCreate pulseCreated(MapPulseCreate mPulseCreate) {
         _LOGGER.debug("WebSocketController.pulseCreated: " + mPulseCreate);
@@ -46,11 +45,10 @@ public class WebSocketController {
     
     @MessageMapping("/chat/{chatId}/{userId}")
     @SendTo("/topics/chat/{chatId}")
-    public String chat(@Payload Chat message, @DestinationVariable("chatId") String chatId, 
-                            @DestinationVariable("userId") String userId) {
+    public Chat chat(@DestinationVariable String chatId, @DestinationVariable String userId, @Payload Chat msg) {
         _LOGGER.debug("WebSocketController.chat: " + chatId + "/" + userId);
         
-        return "Dude";
+        return msg;
     }
     
 }

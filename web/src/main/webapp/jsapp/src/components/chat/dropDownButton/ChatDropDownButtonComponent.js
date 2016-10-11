@@ -32,7 +32,9 @@ class ChatDropDownButtonComponent extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {};
+    this.state = {
+      title: 'Chat'
+    };
     this.menus = {};
   }
 
@@ -50,6 +52,14 @@ class ChatDropDownButtonComponent extends Component {
     this.setState(this.state);
   }
 
+  onSelect(eventKey) {
+    console.debug('onSelect ', eventKey);
+
+    this.state.title = this.menus[eventKey];
+    this.props.onSelect(eventKey);
+    this.setState(this.state);
+  }
+
   render() {
     let menuItems = [];
 
@@ -60,9 +70,9 @@ class ChatDropDownButtonComponent extends Component {
     });
     
     return (
-        <DropdownButton title='Chat' bsStyle='primary' id='chatDdb'
+        <DropdownButton title={this.state.title} bsStyle='primary' id='chatDdb'
           className='chatdropdownbutton-component'
-          ref='chatDropDown' onSelect={this.props.onSelect}>
+          ref='chatDropDown' onSelect={this.onSelect.bind(this)}>
           {menuItems}
         </DropdownButton>
     );

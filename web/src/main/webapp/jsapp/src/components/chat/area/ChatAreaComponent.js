@@ -39,7 +39,7 @@ class ChatAreaComponent extends Component {
   }
   
   componentDidMount() {
-    this.ws = new WebSockets('pulseSocketJS');
+    this.ws = new WebSockets('socket');
     this.ws.connect()
       .then(frame => {
         console.debug('chat area frame', this.subscription, frame);

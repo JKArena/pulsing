@@ -43,12 +43,12 @@ public class WebSocketConfig extends AbstractSessionWebSocketMessageBrokerConfig
     @Override
     public void configureMessageBroker(MessageBrokerRegistry registry) {
         registry.enableSimpleBroker("/topics");
-        registry.setApplicationDestinationPrefixes("/socket");
+        registry.setApplicationDestinationPrefixes("/pulsing");
     }
     
     @Override
     public void configureStompEndpoints(StompEndpointRegistry registry) {
-        registry.addEndpoint("/pulseSocketJS").setAllowedOrigins("*").withSockJS();
+        registry.addEndpoint("/socket").setAllowedOrigins("*").withSockJS();
     }
     
     @Override
