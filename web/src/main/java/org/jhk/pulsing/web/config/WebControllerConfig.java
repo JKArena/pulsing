@@ -30,6 +30,7 @@ import org.jhk.pulsing.web.serialization.JsonAvroDeserializer;
 import org.jhk.pulsing.web.serialization.StringToAvroRecordFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.http.converter.FormHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -48,6 +49,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
  */
 @Configuration
 @EnableWebMvc
+@Import({WebSocketConfig.class})
 public class WebControllerConfig extends WebMvcConfigurerAdapter {
     
     @Bean(name="pulseController")
