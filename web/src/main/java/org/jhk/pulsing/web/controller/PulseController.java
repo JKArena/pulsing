@@ -19,6 +19,7 @@
 package org.jhk.pulsing.web.controller;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.inject.Inject;
@@ -26,12 +27,16 @@ import javax.inject.Inject;
 import org.jhk.pulsing.serialization.avro.records.Pulse;
 import org.jhk.pulsing.serialization.avro.records.PulseId;
 import org.jhk.pulsing.serialization.avro.records.UserId;
+import org.jhk.pulsing.serialization.avro.serializers.SerializationHelper;
 import org.jhk.pulsing.web.common.Result;
 import org.jhk.pulsing.web.pojo.light.UserLight;
 import org.jhk.pulsing.web.service.IPulseService;
+import org.jhk.pulsing.web.service.IUserService;
+import org.jhk.pulsing.web.websocket.model.MapPulseCreate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,6 +44,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * @author Ji Kim
@@ -50,14 +57,48 @@ public class PulseController {
     
     private static final Logger _LOGGER = LoggerFactory.getLogger(PulseController.class);
     
+    private ObjectMapper _objectMapper = new ObjectMapper();
+    
     @Inject
     private IPulseService pulseService;
     
+    @Inject
+    private IUserService userService;
+    
+    @Inject
+    private SimpMessagingTemplate template;
+    
+    /**
+     * 1) Use the pulseService to create the pulse
+     * 2) If successful send the websocket topic to clients (namely MapComponent) that a new pulse has been created (to either map or not)
+     * 
+     * @param pulse
+     * @return
+     */
     @RequestMapping(value="/createPulse", method=RequestMethod.POST, consumes={MediaType.MULTIPART_FORM_DATA_VALUE})
     public @ResponseBody Result<Pulse> createPulse(@RequestParam Pulse pulse) {
         _LOGGER.debug("PulseController.createPulse: " + pulse);
         
-        return pulseService.createPulse(pulse);
+        Result<Pulse> result = pulseService.createPulse(pulse);
+        
+        if(result.getCode() == Result.CODE.SUCCESS) {
+            pulse = result.getData();
+            
+            Optional<UserLight> oUserLight = userService.getUserLight(pulse.getUserId().getId());
+            if(oUserLight.isPresent()) {
+                try {
+                    
+                    template.convertAndSend("/topics/pulseCreated", 
+                                            _objectMapper.writeValueAsString(new MapPulseCreate(oUserLight.get(), 
+                                                                                SerializationHelper.serializeAvroTypeToJSONString(pulse))));
+                } catch (Exception except) {
+                    _LOGGER.error("Error while converting pulse ", except);
+                    except.printStackTrace();
+                }
+            }
+        }
+        
+        return result;
     }
     
     @RequestMapping(value="/getTrendingPulseSubscriptions", method=RequestMethod.GET)

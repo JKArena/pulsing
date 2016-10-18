@@ -32,7 +32,6 @@ import org.jhk.pulsing.serialization.avro.records.ACTION;
 import org.jhk.pulsing.serialization.avro.records.Pulse;
 import org.jhk.pulsing.serialization.avro.records.PulseId;
 import org.jhk.pulsing.serialization.avro.records.UserId;
-import org.jhk.pulsing.serialization.avro.serializers.SerializationHelper;
 import org.jhk.pulsing.shared.util.CommonConstants;
 import org.jhk.pulsing.shared.util.Util;
 import org.jhk.pulsing.web.common.Result;
@@ -42,13 +41,9 @@ import org.jhk.pulsing.web.dao.prod.db.redis.RedisUserDao;
 import org.jhk.pulsing.web.pojo.light.UserLight;
 import org.jhk.pulsing.web.service.IPulseService;
 import org.jhk.pulsing.web.service.prod.helper.PulseServiceUtil;
-import org.jhk.pulsing.web.websocket.model.MapPulseCreate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * @author Ji Kim
@@ -59,8 +54,6 @@ public class PulseService extends AbstractStormPublisher
     
     private static final Logger _LOGGER = LoggerFactory.getLogger(PulseService.class);
     
-    private ObjectMapper _objectMapper = new ObjectMapper();
-    
     @Inject
     @Named("redisPulseDao")
     private RedisPulseDao redisPulseDao;
@@ -68,9 +61,6 @@ public class PulseService extends AbstractStormPublisher
     @Inject
     @Named("redisUserDao")
     private RedisUserDao redisUserDao;
-    
-    @Inject
-    private SimpMessagingTemplate template;
     
     @Override
     public Result<Pulse> getPulse(PulseId pulseId) {
@@ -86,7 +76,6 @@ public class PulseService extends AbstractStormPublisher
      * 1) Add the pulse to Redis 
      * 2) Send the message to storm of the creation (need couple of different writes to Hadoop for Data + Edges for processing)
      * 3) Send the message to storm of the subscription (for trending of time interval)
-     * 4) Send the websocket topic to clients (namely MapComponent) that a new pulse has been created (to either map or not)
      * 
      * Hmmm consider moving this to storm to prevent bad pulses from being created (i.e. filtering out bad words and etc)?
      * 
@@ -107,19 +96,6 @@ public class PulseService extends AbstractStormPublisher
         if(cPulse.getCode() == SUCCESS) {
             getStormPublisher().produce(CommonConstants.TOPICS.PULSE_CREATE.toString(), cPulse.getData());
             subscribePulse(pulse, pulse.getUserId());
-            
-            Optional<UserLight> oUserLight = redisUserDao.getUserLight(pulse.getUserId().getId());
-            if(oUserLight.isPresent()) {
-                try {
-                    
-                    template.convertAndSend("/topics/pulseCreated", 
-                                            _objectMapper.writeValueAsString(new MapPulseCreate(oUserLight.get(), 
-                                                                                SerializationHelper.serializeAvroTypeToJSONString(cPulse.getData()))));
-                } catch (Exception except) {
-                    _LOGGER.error("Error while converting pulse ", except);
-                    except.printStackTrace();
-                }
-            }
         }
         
         return cPulse;
