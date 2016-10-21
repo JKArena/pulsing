@@ -110,6 +110,8 @@ class SignupComponent extends AbstractComponent {
               <Col sm={12}>
                 <h1>Sign up</h1>
               </Col>
+            </Row>
+            <Row>
               <Col sm={12}>
                 <form class='form' id='signupform' action=''>
                   <FormGroup controlId='name' validationState={this.getValidState('name')}>
