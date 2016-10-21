@@ -29,57 +29,58 @@ const PULSING_USER_KEY = 'pulsingUser';
 const PULSING_SUBSCRIBED_PULSE_ID_KEY = 'pulsingSubscribedPulseId';
 const MAPPER = new Map();
 
+function _get(key, AvroClazz) {
+  if(MAPPER.has(key)) {
+    return MAPPER.get(key);
+  }
+
+  let jsonStr = sessionStorage.getItem(key);
+  let obj = null;
+
+  if(jsonStr !== null) {
+    obj = AvroClazz.deserialize(JSON.parse(jsonStr));
+    MAPPER.set(key, obj);
+  }
+
+  return obj;
+}
+
+function _set(key, json, AvroClazz) {
+  if(!json) {
+    sessionStorage.removeItem(key);
+    MAPPER.delete(key);
+    return;
+  }
+
+  let obj = AvroClazz.deserialize(json);
+
+  MAPPER.set(key, obj);
+  sessionStorage.setItem(key, obj.serialize());
+}
+
 export default Object.freeze(
     Object.create(null,
       {
         'user' : {
           get: function() {
-            if(MAPPER.has(PULSING_USER_KEY)) {
-              return MAPPER.get(PULSING_USER_KEY);
-            }
-            
-            let userStr = sessionStorage.getItem(PULSING_USER_KEY);
-            let user = null;
-            
-            if(userStr !== null) {
-              user = User.deserialize(JSON.parse(userStr));
-              MAPPER.set(PULSING_USER_KEY, user);
-            }
-            
-            return user;
+
+            return _get(PULSING_USER_KEY, User);
           },
           set: function(userJson) {
-            if(!userJson) {
-              sessionStorage.removeItem(PULSING_USER_KEY);
-              MAPPER.delete(PULSING_USER_KEY);
-              return;
-            }
-            
-            let user = User.deserialize(userJson);
-            
-            MAPPER.set(PULSING_USER_KEY, user);
-            sessionStorage.setItem(PULSING_USER_KEY, user.serialize());
+
+            _set(PULSING_USER_KEY, userJson, User);
           },
           enumerable: true
         },
 
         'subscribedPulseId' : {
           get: function() {
-            if(MAPPER.has(PULSING_SUBSCRIBED_PULSE_ID_KEY)) {
-              return MAPPER.get(PULSING_SUBSCRIBED_PULSE_ID_KEY);
-            } else {
-              return null;
-            }
+            
+            return _get(PULSING_SUBSCRIBED_PULSE_ID_KEY, PulseId);
           },
           set: function(pulseIdJson) {
-            if(!pulseIdJson) {
-              MAPPER.delete(PULSING_SUBSCRIBED_PULSE_ID_KEY);
-              return;
-            }
-            
-            let pulseId = PulseId.deserialize(pulseIdJson);
-            
-            MAPPER.set(PULSING_SUBSCRIBED_PULSE_ID_KEY, pulseId);
+
+            _set(PULSING_SUBSCRIBED_PULSE_ID_KEY, pulseIdJson, PulseId);
           },
           enumerable: true
         }

@@ -24,10 +24,35 @@
 
 require('./ChatArea.scss');
 
-import {Panel, Tab} from 'react-bootstrap';
 import {render, findDOMNode} from 'react-dom';
 import React, {Component} from 'react';
 import WebSockets from '../../../common/WebSockets';
+import Storage from '../../../common/Storage';
+
+const CHAT_OTHER = 'chat-other';
+const CHAT_SELF = 'chat-self';
+
+const Chat = (props) => {
+  let isSelf = props.isSelf;
+  let clazz = isSelf ? CHAT_SELF : CHAT_OTHER;
+
+  return (
+    <div className={clazz}>
+
+      {(() => {
+        if(!isSelf) {
+          return <div className='chat-name'>
+            {props.chat.name}
+          </div>;
+        }
+      })()}
+
+      <div className='chat-content'>
+        {props.chat.message}
+      </div>
+    </div>
+  );
+};
 
 class ChatAreaComponent extends Component {
 
@@ -39,6 +64,8 @@ class ChatAreaComponent extends Component {
   }
   
   componentDidMount() {
+    this.chatAreaNode = findDOMNode(this.refs.chatArea);
+
     this.ws = new WebSockets('socket');
     this.ws.connect()
       .then(frame => {
@@ -57,19 +84,24 @@ class ChatAreaComponent extends Component {
   onChat(mChat) {
     console.debug('onChat', mChat);
 
-    if(mChat && mChat.body) {
+    let user = Storage.user;
 
+    if(mChat && mChat.body) {
+      let chat = JSON.parse(mChat.body);
+      let isSelf = chat.userId === user.id.id;
+      let cEle = document.createElement('div');
+
+      this.chatAreaNode.appendChild(cEle);
+
+      render((<Chat isSelf={isSelf} chat={chat}></Chat>), cEle);
     }
   }
   
   render() {
     
     return (
-        <Tab className='chatarea-component' eventKey={this.props.subscription} title={this.props.title}>
-          <Panel>
-            &nbsp;
-          </Panel>
-        </Tab>
+        <div className='chatarea-component' ref='chatArea'>
+        </div>
     );
   }
 }

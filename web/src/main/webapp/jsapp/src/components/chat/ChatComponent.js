@@ -24,7 +24,7 @@
 
 require('./Chat.scss');
 
-import {Grid, Row, Col, FormGroup, FormControl, InputGroup, Button, Tabs} from 'react-bootstrap';
+import {Grid, Row, Col, FormGroup, FormControl, InputGroup, Button, Panel} from 'react-bootstrap';
 import {render, findDOMNode, unmountComponentAtNode} from 'react-dom';
 import React, {Component} from 'react';
 import {TOPICS, API} from '../../common/PubSub';
@@ -34,8 +34,7 @@ import ChatAreaComponent from './area/ChatAreaComponent';
 import ChatDropDownButtonComponent from './dropDownButton/ChatDropDownButtonComponent';
 
 const CHAT_PULSE_KEY = {
-  __proto__: null,
-  'PULSE': {text: 'Pulse', eventKey: ''}
+  __proto__: null
 };
 
 class ChatComponent extends Component {
@@ -47,6 +46,7 @@ class ChatComponent extends Component {
       chatId: ''
     };
     this.nodeMaps = new Map();
+    this.prevChatAreaNode = null;
 
     this.pulseSubscribedHandler = this.pulseSubscribed.bind(this);
     this.pulseUnSubscribedHandler = this.pulseUnSubscribed.bind(this);
@@ -54,7 +54,7 @@ class ChatComponent extends Component {
   
   componentDidMount() {
     this.chatInputNode = findDOMNode(this.refs.chatInput);
-    this.chatTabsNode = findDOMNode(this.refs.chatTabs);
+    this.chatPanelNode = findDOMNode(this.refs.chatPanel).querySelector(':scope .panel-body');
 
     this.ws = new WebSockets('socket');
     this.ws.connect()
@@ -64,6 +64,11 @@ class ChatComponent extends Component {
 
     API.subscribe(TOPICS.PULSE_SUBSCRIBED, this.pulseSubscribedHandler);
     API.subscribe(TOPICS.PULSE_UN_SUBSCRIBED, this.pulseUnSubscribedHandler);
+
+    let subscribedPulseId = Storage.subscribedPulseId;
+    if(subscribedPulseId) {
+      this.pulseSubscribed({pulseId: subscribedPulseId});
+    }
   }
   
   componentWillUnmount() {
@@ -83,31 +88,43 @@ class ChatComponent extends Component {
     let id = pSubscribed.pulseId.id;
     let subscription = '/topics/chat/' + id;
 
-    this.chatTabsNode.appendChild(caEle);
+    this.switchToNewChatAreaNode(caEle);
+    this.chatPanelNode.appendChild(caEle);
 
-    render((<ChatAreaComponent title='Pulse' subscription={subscription}></ChatAreaComponent>), caEle);
-    this.nodeMaps.set(id, {caEle: caEle});
+    render((<ChatAreaComponent subscription={subscription}></ChatAreaComponent>), caEle);
+    this.nodeMaps.set(id, caEle);
 
-    CHAT_PULSE_KEY.PULSE.eventKey = id;
-    this.refs.chatDropDownButton.addChatMenuItem(CHAT_PULSE_KEY.PULSE);
+    CHAT_PULSE_KEY[id] = {text: 'Pulse', eventKey: id};
+    this.refs.chatDropDownButton.addChatMenuItem(CHAT_PULSE_KEY[id]);
   }
 
   pulseUnSubscribed(pUnSubscribed) {
     console.debug('chat pulseUnSubscribed', pUnSubscribed);
 
     let id = pUnSubscribed.pulseId.id;
-    let nodes = this.nodeMaps.get(id);
-
-    unmountComponentAtNode(nodes.caEle);
+    let node = this.nodeMaps.get(id);
     this.nodeMaps.delete(id);
 
-    this.refs.chatDropDownButton.removeChatMenuItem(CHAT_PULSE_KEY.PULSE);
+    unmountComponentAtNode(node);
+    
+    this.refs.chatDropDownButton.removeChatMenuItem(CHAT_PULSE_KEY[id]);
   }
 
   handleChatSelect(eventKey) {
     console.debug('handleChatSelect', eventKey);
+    let node = this.nodeMaps.get(Number(eventKey));
 
     this.state.chatId = eventKey;
+    this.switchToNewChatAreaNode(node);
+  }
+
+  switchToNewChatAreaNode(cAreaNode) {
+    if(this.prevChatAreaNode !== null) {
+      this.prevChatAreaNode.style.display = 'none';
+    }
+
+    this.prevChatAreaNode = cAreaNode;
+    cAreaNode.style.display = '';
   }
 
   handleSelect() {
@@ -120,9 +137,11 @@ class ChatComponent extends Component {
     if(this.chatInputNode.value.length === 0) {
       return;
     }
+
+    let user = Storage.user;
     
-    this.ws.send('/pulsing/chat/' + this.state.chatId + '/'+ Storage.user.id.id, {},
-                  JSON.stringify({message: this.chatInputNode.value}));
+    this.ws.send('/pulsing/chat/' + this.state.chatId, {},
+                  JSON.stringify({message: this.chatInputNode.value, userId: user.id.id, name: user.name}));
     this.chatInputNode.value = '';
   }
   
@@ -148,8 +167,9 @@ class ChatComponent extends Component {
             </Row>
             <Row>
               <Col>
-                <Tabs onSelect={this.handleSelect.bind(this)} ref='chatTabs' id='chatT'>
-                </Tabs>
+                <Panel ref='chatPanel'>
+                &nbsp;
+                </Panel>
               </Col>
             </Row>
           </Grid>
