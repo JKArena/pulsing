@@ -60,7 +60,9 @@ const CreatePulseAction = Object.freeze(
             console.debug('create pulse', result);
 
             if(result.code === 'SUCCESS') {
-              resolve(JSON.parse(result.data));
+              let pulse = Pulse.deserialize(JSON.parse(result.data));
+              Storage.subscribedPulseId = pulse.id.raw;
+              resolve(pulse);
             }else {
               reject(result.message);
             }

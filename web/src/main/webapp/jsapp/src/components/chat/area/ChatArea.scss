@@ -1,2 +1,39 @@
 .chatarea-component {
+  height: 200px;
+}
+
+.chat-self {
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+}
+
+.chat-other {
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+
+.chat-name {
+  background-color: #87CEFA;
+  border: 2px solid #6A5ACD;
+  border-radius: 5px;
+  padding: 2px;
+  margin: 0 5px;
+}
+
+.chat-content {
+  border-radius: 10px;
+  display: inline-block;
+  padding: 5px 10px;
+}
+
+.chat-self > .chat-content {
+  background-color: #eceff1;
+  color: #1a1a1a;
+}
+
+.chat-other > .chat-content {
+  background-color: #00b0ff;
+  color: #fff;
 }

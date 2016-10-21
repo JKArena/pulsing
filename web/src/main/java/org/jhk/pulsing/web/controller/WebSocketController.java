@@ -43,10 +43,10 @@ public class WebSocketController {
         return mPulseCreate;
     }
     
-    @MessageMapping("/chat/{chatId}/{userId}")
+    @MessageMapping("/chat/{chatId}")
     @SendTo("/topics/chat/{chatId}")
-    public Chat chat(@DestinationVariable String chatId, @DestinationVariable String userId, @Payload Chat msg) {
-        _LOGGER.debug("WebSocketController.chat: " + chatId + "/" + userId);
+    public Chat chat(@DestinationVariable String chatId, @Payload Chat msg) {
+        _LOGGER.debug("WebSocketController.chat: " + chatId + "-" + msg);
         
         return msg;
     }

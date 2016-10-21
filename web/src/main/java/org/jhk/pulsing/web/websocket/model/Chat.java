@@ -26,15 +26,11 @@ import org.jhk.pulsing.shared.util.CommonConstants;
 public class Chat {
     
     private String _message;
+    private long _userId;
+    private String _name;
     
     public Chat() {
         super();
-    }
-    
-    public Chat(String message) {
-        super();
-        
-        _message = message;
     }
     
     public String getMessage() {
@@ -44,10 +40,26 @@ public class Chat {
         _message = message;
     }
     
+    public long getUserId() {
+        return _userId;
+    }
+    public void setUserId(long userId) {
+        _userId = userId;
+    }
+    
+    public String getName() {
+        return _name;
+    }
+    public void setName(String name) {
+        _name = name;
+    }
+    
     @Override
     public int hashCode() {
         int hashCodeVal = CommonConstants.HASH_CODE_INIT_VALUE;
         hashCodeVal = CommonConstants.HASH_CODE_MULTIPLY_VALUE * hashCodeVal + _message.hashCode();
+        hashCodeVal = CommonConstants.HASH_CODE_MULTIPLY_VALUE * hashCodeVal + (int) _userId;
+        hashCodeVal = CommonConstants.HASH_CODE_MULTIPLY_VALUE * hashCodeVal + _name.hashCode();
         return hashCodeVal;
     }
     
@@ -58,7 +70,7 @@ public class Chat {
         }
         
         Chat casted = (Chat) obj;
-        return casted._message.equals(_message);
+        return casted._message.equals(_message) && casted._userId == _userId;
     }
     
 }
