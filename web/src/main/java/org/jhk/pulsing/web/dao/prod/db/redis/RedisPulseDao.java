@@ -170,16 +170,25 @@ public class RedisPulseDao extends AbstractRedisDao
         return result;
     }
     
-    public Map<Pulse, Set<UserLight>> getMapPulseDataPoints(double lat, double lng) {
+    /**
+     * Need to return String as a key and not a Pulse object since the custom serializer is not invoked 
+     * when return to client but the general toString (which is NOT compatible with Avro's deserialier)
+     * 
+     * @param lat
+     * @param lng
+     * @return
+     */
+    public Map<String, Set<UserLight>> getMapPulseDataPoints(double lat, double lng) {
         _LOGGER.debug("RedisPulseDao.getMapPulseDataPoints: " + lat + " / " + lng);
         
-        Map<Pulse, Set<UserLight>> mPulseDataPoints = new HashMap<>();
+        Map<String, Set<UserLight>> mPulseDataPoints = new HashMap<>();
         
         List<GeoRadiusResponse> response = getJedis().georadius(PULSE_GEO_.toString(), lng, lat, CommonConstants.DEFAULT_PULSE_RADIUS, GeoUnit.M);
         response.stream().forEach(grResponse -> {
             
             try {
-                Pulse pulse = SerializationHelper.deserializeFromJSONStringToAvro(Pulse.class, Pulse.getClassSchema(), grResponse.getMemberByString());
+                String pString = grResponse.getMemberByString();
+                Pulse pulse = SerializationHelper.deserializeFromJSONStringToAvro(Pulse.class, Pulse.getClassSchema(), pString);
                 Set<UserLight> userIds = getJedis().smembers(PULSE_SUBSCRIBE_USERID_SET_.toString() + pulse.getId().getId()).stream()
                         .map(val -> {
                             
@@ -196,7 +205,7 @@ public class RedisPulseDao extends AbstractRedisDao
                         })
                         .collect(Collectors.toSet());
                 
-                mPulseDataPoints.put(pulse, userIds);
+                mPulseDataPoints.put(pString, userIds);
             } catch (IOException ioException) {
                 _LOGGER.warn("Failure in parsing of georadiusresponse: " + grResponse);
                 ioException.printStackTrace();

@@ -142,6 +142,7 @@ public class PulseService extends AbstractStormPublisher
             
             userLight.setSubscribedPulseId(0L);
             redisUserDao.storeUserLight(userLight);
+            result = new Result<>(SUCCESS, "Success in unsubscribe");
         }
         
         return result;
@@ -173,7 +174,7 @@ public class PulseService extends AbstractStormPublisher
     }
     
     @Override
-    public Map<Pulse, Set<UserLight>> getMapPulseDataPoints(Double lat, Double lng) {
+    public Map<String, Set<UserLight>> getMapPulseDataPoints(Double lat, Double lng) {
         
         return redisPulseDao.getMapPulseDataPoints(lat, lng);
     }

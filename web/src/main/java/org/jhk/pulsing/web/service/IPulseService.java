@@ -42,6 +42,6 @@ public interface IPulseService {
     
     Map<Long, String> getTrendingPulseSubscriptions(int numMinutes);
     
-    Map<Pulse, Set<UserLight>> getMapPulseDataPoints(Double lat, Double lng);
+    Map<String, Set<UserLight>> getMapPulseDataPoints(Double lat, Double lng);
     
 }
