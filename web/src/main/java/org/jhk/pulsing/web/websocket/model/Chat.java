@@ -28,6 +28,7 @@ public class Chat {
     private String _message;
     private long _userId;
     private String _name;
+    private String _picturePath;
     
     public Chat() {
         super();
@@ -52,6 +53,13 @@ public class Chat {
     }
     public void setName(String name) {
         _name = name;
+    }
+    
+    public String getPicturePath() {
+        return _picturePath;
+    }
+    public void setPicturePath(String picturePath) {
+        _picturePath = picturePath;
     }
     
     @Override

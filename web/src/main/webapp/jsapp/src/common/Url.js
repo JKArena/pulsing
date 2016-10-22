@@ -40,6 +40,10 @@ export default Object.freeze(
       __proto__: null,
 
       DEFAULT_PICTURE_PATH: '/images/defaultPicture.png',
+
+      getPicturePath(path) {
+        return path ? this.rootUrl() + path : this.DEFAULT_PICTURE_PATH;
+      },
       
       rootUrl() {
         return url(SPRING_ROOT_SUFFIX);

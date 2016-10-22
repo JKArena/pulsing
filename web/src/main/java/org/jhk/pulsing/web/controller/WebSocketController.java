@@ -18,6 +18,12 @@
  */
 package org.jhk.pulsing.web.controller;
 
+import java.util.Optional;
+
+import javax.inject.Inject;
+
+import org.jhk.pulsing.web.pojo.light.UserLight;
+import org.jhk.pulsing.web.service.IUserService;
 import org.jhk.pulsing.web.websocket.model.Chat;
 import org.jhk.pulsing.web.websocket.model.MapPulseCreate;
 import org.slf4j.Logger;
@@ -36,6 +42,9 @@ public class WebSocketController {
     
     private static final Logger _LOGGER = LoggerFactory.getLogger(WebSocketController.class);
     
+    @Inject
+    private IUserService userService;
+    
     @SendTo("/topics/pulseCreated")
     public MapPulseCreate pulseCreated(MapPulseCreate mPulseCreate) {
         _LOGGER.debug("WebSocketController.pulseCreated: " + mPulseCreate);
@@ -47,6 +56,11 @@ public class WebSocketController {
     @SendTo("/topics/chat/{chatId}")
     public Chat chat(@DestinationVariable String chatId, @Payload Chat msg) {
         _LOGGER.debug("WebSocketController.chat: " + chatId + "-" + msg);
+        
+        Optional<UserLight> oUserLight = userService.getUserLight(msg.getUserId());
+        oUserLight.ifPresent(user -> {
+            msg.setPicturePath(user.getPicturePath());
+        });
         
         return msg;
     }
