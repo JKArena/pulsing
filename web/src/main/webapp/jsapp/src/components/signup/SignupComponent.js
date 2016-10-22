@@ -105,15 +105,26 @@ class SignupComponent extends AbstractComponent {
     
     return (
         <div class='signup-component'>
-          <Grid>
-            <Row>
-              <Col sm={12}>
-                <h1>Sign up</h1>
-              </Col>
-            </Row>
-            <Row>
-              <Col sm={12}>
-                <form class='form' id='signupform' action=''>
+          <form class='form' id='signupform' action=''>
+            <Grid>
+              <Row>
+                <Col sm={12} md={12}>
+                  <h1>Sign up</h1>
+                </Col>
+              </Row>
+              <Row>
+                <Col sm={12} md={4}>
+                  <FormGroup controlId='avatar'>
+                    <ControlLabel>Picture</ControlLabel>
+                    <div>
+                      <Image id='avatar' rounded src='/images/dropzone.png' style={{'maxHeight': '300px'}} />
+                      <FormControl.Feedback />
+                    </div>
+                  </FormGroup>
+                </Col>
+
+                <Col sm={12}  md={8}>
+
                   <FormGroup controlId='name' validationState={this.getValidState('name')}>
                     <ControlLabel>Name</ControlLabel>
                     <FormControl type='text' name='name' onBlur={this.handleChange.bind(this)} />
@@ -133,15 +144,12 @@ class SignupComponent extends AbstractComponent {
                     <FormControl.Feedback />
                     <HelpBlock>wsad best password</HelpBlock>
                   </FormGroup>
-                  
-                  <FormGroup controlId='avatar'>
-                    <ControlLabel>Picture</ControlLabel>
-                    <div>
-                      <Image id='avatar' rounded src='/images/dropzone.png' style={{'maxHeight': '300px'}} />
-                      <FormControl.Feedback />
-                    </div>
-                  </FormGroup>
-                  
+
+                </Col>
+
+              </Row>
+              <Row>
+                <Col sm={12} md={12}>
                   {(() => {
                     
                     if(this.state.errorMsg) {
@@ -153,18 +161,17 @@ class SignupComponent extends AbstractComponent {
                     }
                     
                   })()}
-                  
+
                   <hr />
-                  
+
                   <div>
                     <Button id='signupBtn' bsSize='large' bsStyle='primary' block
                       onClick={this.handleSubmit.bind(this)}>| Signup</Button>
                   </div>
-                  
-                </form>
-              </Col>
-            </Row>
-          </Grid>
+                </Col>
+              </Row>
+            </Grid>
+          </form>
         </div>
     );
   }

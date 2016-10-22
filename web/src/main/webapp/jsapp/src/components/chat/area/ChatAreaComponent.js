@@ -28,6 +28,7 @@ import {render, findDOMNode} from 'react-dom';
 import React, {Component} from 'react';
 import WebSockets from '../../../common/WebSockets';
 import Storage from '../../../common/Storage';
+import Url from '../../../common/Url';
 
 const CHAT_OTHER = 'chat-other';
 const CHAT_SELF = 'chat-self';
@@ -41,9 +42,13 @@ const Chat = (props) => {
 
       {(() => {
         if(!isSelf) {
-          return <div className='chat-name'>
-            {props.chat.name}
-          </div>;
+          let chat = props.chat;
+          let pPath = Url.getPicturePath(chat.picturePath);
+
+          return <figure>
+            <img className='chat-img' src={pPath} alt={chat.name}></img>
+            <figcaption>{chat.name}</figcaption>
+          </figure>;
         }
       })()}
 

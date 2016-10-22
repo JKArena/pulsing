@@ -5,7 +5,6 @@ require('./InfoNode.scss');
 import React from 'react';
 import Url from '../../../common/Url';
 
-const ROOT_URL = Url.rootUrl();
 const SUBSCRIBE_ACTION = 'subscribe';
 const UN_SUBSCRIBE_ACTION = 'unSubscribe';
 
@@ -17,7 +16,7 @@ let InfoNodeStateLess = (props) => {
   let actionText = props.actionType === SUBSCRIBE_ACTION ? 'Subscribe' : 'UnSubscribe';
 
   userLights.forEach(uLight => {
-    let pPath = uLight.picturePath ? (ROOT_URL + uLight.picturePath) : Url.DEFAULT_PICTURE_PATH;
+    let pPath = Url.getPicturePath(uLight.picturePath);
 
     subscribed.push(<li className='map-subscribed-entry' key={uLight.id}>
         <img src={pPath} className='map-subscribed-img'></img>
