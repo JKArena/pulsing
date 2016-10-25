@@ -46,7 +46,7 @@ public final class CommonConstants {
 	};
 	
 	public enum CASSANDRA_KEYSPACE {
-	    TAG, USER;
+	    TAG, USER, CHAT;
 	};
 	
 	static {

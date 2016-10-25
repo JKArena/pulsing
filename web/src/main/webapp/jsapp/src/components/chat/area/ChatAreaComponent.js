@@ -37,12 +37,21 @@ const Chat = (props) => {
   let isSelf = props.isSelf;
   let clazz = isSelf ? CHAT_SELF : CHAT_OTHER;
 
+  let chat = props.chat;
+  let date = isSelf ? new Date() : new Date(chat.timeStamp*1000);
+
+  let chatContent = [<div className='chat-content'>{chat.message}</div>,
+                  <div className='chat-time' data-content={date.toLocaleTimeString()}></div>];
+  if(isSelf) {
+    chatContent.reverse();
+  }
+
   return (
     <div className={clazz}>
 
       {(() => {
         if(!isSelf) {
-          let chat = props.chat;
+          
           let pPath = Url.getPicturePath(chat.picturePath);
 
           return <figure>
@@ -52,9 +61,8 @@ const Chat = (props) => {
         }
       })()}
 
-      <div className='chat-content'>
-        {props.chat.message}
-      </div>
+      {chatContent}
+      
     </div>
   );
 };

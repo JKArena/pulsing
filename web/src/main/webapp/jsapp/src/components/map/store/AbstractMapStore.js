@@ -23,10 +23,20 @@
 'use strict';
 
 import {EventEmitter} from 'events';
+import Pulse from '../../../avro/Pulse';
+import MapPulseAction from '../actions/MapPulseAction';
 
 const DATA_POINTS_EVENT = 'dataPoints';
 
 class AbstractMapStore extends EventEmitter {
+
+  constructor() {
+    super();
+    this.dataPoints = [];
+
+    this.map = null;
+    this.prevLatLng = null;
+  }
   
   emitDataPoints(dataPoints) {
     this.emit(DATA_POINTS_EVENT, dataPoints);
@@ -41,7 +51,22 @@ class AbstractMapStore extends EventEmitter {
   }
   
   fetchDataPoints(map, latLng) {
-    throw new Error('AbstractMapStore should not be used standalone ' + latLng);
+    this.clearDataPoints();
+
+    this.map = map;
+    this.prevLatLng = latLng;
+
+    MapPulseAction.getMapPulseDataPoints(latLng)
+      .then(function(mpDataPoints) {
+        console.debug('GMapPulseStore retrieved ', mpDataPoints);
+        this.dataPoints = [];
+
+        Object.keys(mpDataPoints).forEach(pulse => {
+          this.addDataPoint(map, Pulse.deserialize(JSON.parse(pulse)), mpDataPoints[pulse]);
+        });
+
+        this.emitDataPoints(this.dataPoints);
+      }.bind(this));
   }
 
   addDataPoint(map, data) {

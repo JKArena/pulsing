@@ -29,39 +29,10 @@ import AbstractMapStore from './AbstractMapStore';
 import Storage from '../../../common/Storage';
 import SubscribePulseAction from '../../common/actions/SubscribePulseAction';
 import UnSubscribePulseAction from '../../common/actions/UnSubscribePulseAction';
-import Pulse from '../../../avro/Pulse';
-import MapPulseAction from '../actions/MapPulseAction';
 import {InfoNodeStateLess, SUBSCRIBE_ACTION, UN_SUBSCRIBE_ACTION} from '../info/InfoNodeStateLess';
 
 class GMapPulseStore extends AbstractMapStore {
-
-  constructor() {
-    super();
-    this.dataPoints = [];
-
-    this.map = null;
-    this.prevLatLng = null;
-  }
   
-  fetchDataPoints(map, latLng) {
-    this.clearDataPoints();
-
-    this.map = map;
-    this.prevLatLng = latLng;
-
-    MapPulseAction.getMapPulseDataPoints(latLng)
-      .then(function(mpDataPoints) {
-        console.debug('GMapPulseStore retrieved ', mpDataPoints);
-        this.dataPoints = [];
-
-        Object.keys(mpDataPoints).forEach(pulse => {
-          this.addDataPoint(map, Pulse.deserialize(JSON.parse(pulse)), mpDataPoints[pulse]);
-        });
-
-        this.emitDataPoints(this.dataPoints);
-      }.bind(this));
-  }
-
   subscribeUnSubscribe(actionParam) {
     console.debug('subscribeUnSubscribe ', arguments, actionParam);
 

@@ -18,6 +18,7 @@
  */
 package org.jhk.pulsing.web.controller;
 
+import java.time.Instant;
 import java.util.Optional;
 
 import javax.inject.Inject;
@@ -62,6 +63,7 @@ public class WebSocketController {
             msg.setPicturePath(user.getPicturePath());
         });
         
+        msg.setTimeStamp(Instant.now().getEpochSecond());
         return msg;
     }
     

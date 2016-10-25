@@ -127,11 +127,6 @@ class ChatComponent extends Component {
     cAreaNode.style.display = '';
   }
 
-  handleSelect() {
-    console.debug('handleSelect');
-
-  }
-
   handleChat() {
     console.debug('handleChat');
     if(this.chatInputNode.value.length === 0) {

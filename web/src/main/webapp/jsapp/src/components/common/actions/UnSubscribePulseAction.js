@@ -46,6 +46,7 @@ const UnSubscribePulseAction = Object.freeze(
             if(result.code === 'SUCCESS') {
               API.publish(TOPICS.PULSE_UN_SUBSCRIBED, {pulseId: Storage.subscribedPulseId});
               Storage.subscribedPulseId = null;
+              resolve();
             } else {
               reject(result.message);
             }

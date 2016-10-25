@@ -106,13 +106,6 @@ class NavBarComponent extends Component {
                       <LinkContainer to={{ pathname: '/map/pulse', query: {mapId: 'pulseMap'} }}>
                         <NavItem>Map</NavItem>
                       </LinkContainer>
-                    </Nav>;
-                }
-              })()}
-              
-              {(() => {
-                if(this.state.loggedIn) {
-                  return <Nav>
                       <NavDropdown id='pulseActions' title='Pulse Actions'>
                         <LinkContainer to='/createPulse'><NavItem>Create</NavItem></LinkContainer>
                       </NavDropdown>
