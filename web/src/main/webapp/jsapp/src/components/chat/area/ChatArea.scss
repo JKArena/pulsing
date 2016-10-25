@@ -90,3 +90,19 @@
   border-width: 14px;
   margin-top: -14px;
 }
+
+.chat-other > .chat-time:after {
+  display: inline-block;
+  content: attr(data-content);
+  transform: rotate(90deg);
+  font-size: 0.7em;
+  margin: 22px 0px 0px -14px;
+}
+
+.chat-self > .chat-time:before {
+  display: inline-block;
+  content: attr(data-content);
+  transform: rotate(90deg);
+  font-size: 0.7em;
+  margin: 22px -14px 0;
+}

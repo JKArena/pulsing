@@ -29,6 +29,7 @@ public class Chat {
     private long _userId;
     private String _name;
     private String _picturePath;
+    private long _timeStamp;
     
     public Chat() {
         super();
@@ -60,6 +61,13 @@ public class Chat {
     }
     public void setPicturePath(String picturePath) {
         _picturePath = picturePath;
+    }
+    
+    public long getTimeStamp() {
+        return _timeStamp;
+    }
+    public void setTimeStamp(long timeStamp) {
+        _timeStamp = timeStamp;
     }
     
     @Override
