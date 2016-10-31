@@ -15,3 +15,5 @@ Project for playing around with Lamba architecture :
 ![ScreenShot](https://github.com/JHKTruth/pulsing/blob/master/web/nonsrc/snapshot.png?raw=true)
 
 ![ScreenShot](https://github.com/JHKTruth/pulsing/blob/master/web/nonsrc/ssChat.png?raw=true)
+
+![ScreenShot](https://github.com/JHKTruth/pulsing/blob/master/web/nonsrc/diagram.png?raw=true)
