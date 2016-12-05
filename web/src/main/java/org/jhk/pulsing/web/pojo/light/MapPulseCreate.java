@@ -16,10 +16,9 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.web.websocket.model;
+package org.jhk.pulsing.web.pojo.light;
 
 import org.jhk.pulsing.shared.util.CommonConstants;
-import org.jhk.pulsing.web.pojo.light.UserLight;
 
 /**
  * @author Ji Kim

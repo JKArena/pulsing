@@ -23,10 +23,10 @@ import java.util.Optional;
 
 import javax.inject.Inject;
 
+import org.jhk.pulsing.web.pojo.light.Chat;
+import org.jhk.pulsing.web.pojo.light.MapPulseCreate;
 import org.jhk.pulsing.web.pojo.light.UserLight;
 import org.jhk.pulsing.web.service.IUserService;
-import org.jhk.pulsing.web.websocket.model.Chat;
-import org.jhk.pulsing.web.websocket.model.MapPulseCreate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
