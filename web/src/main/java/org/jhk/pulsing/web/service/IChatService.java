@@ -18,17 +18,16 @@
  */
 package org.jhk.pulsing.web.service;
 
-import org.jhk.pulsing.web.service.prod.ChatService;
+import java.util.UUID;
+
+import org.jhk.pulsing.serialization.avro.records.UserId;
+import org.jhk.pulsing.web.common.Result;
 
 /**
  * @author Ji Kim
  */
-public interface IServiceConfig {
+public interface IChatService {
     
-    IUserService getUserService();
-    
-    IPulseService getPulseService();
-    
-    ChatService getChatService();
+    Result<UUID> createChatLobby(UserId userId, String lobbyName);
     
 }

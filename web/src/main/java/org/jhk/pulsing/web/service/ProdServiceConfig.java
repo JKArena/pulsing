@@ -24,9 +24,11 @@ import java.util.Properties;
 import javax.inject.Inject;
 import javax.sql.DataSource;
 
+import org.jhk.pulsing.web.dao.prod.db.cassandra.CassandraChatDao;
 import org.jhk.pulsing.web.dao.prod.db.redis.RedisPulseDao;
 import org.jhk.pulsing.web.dao.prod.db.redis.RedisUserDao;
 import org.jhk.pulsing.web.dao.prod.db.sql.MySqlUserDao;
+import org.jhk.pulsing.web.service.prod.ChatService;
 import org.jhk.pulsing.web.service.prod.PulseService;
 import org.jhk.pulsing.web.service.prod.UserService;
 import org.springframework.context.annotation.Bean;
@@ -59,6 +61,12 @@ public class ProdServiceConfig implements IServiceConfig {
     
     @Bean
     @Override
+    public ChatService getChatService() {
+        return new ChatService();
+    }
+    
+    @Bean
+    @Override
     public IUserService getUserService() {
         return new UserService();
     }
@@ -82,6 +90,11 @@ public class ProdServiceConfig implements IServiceConfig {
     @Bean(name="mySqlUserDao")
     public MySqlUserDao getMySqlUserDao() {
         return new MySqlUserDao();
+    }
+    
+    @Bean(name="cassandraChatDao")
+    public CassandraChatDao getCassandraChatDao() {
+        return new CassandraChatDao();
     }
     
     @Bean

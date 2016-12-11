@@ -46,7 +46,7 @@ public class CassandraUserDao extends AbstractCassandraDao {
         
         //Since want to test it out and etc, create schema dynamically and destroy it after done
         SchemaStatement userSchemaStatement = SchemaBuilder.createTable(_USER_TBD_TABLE)
-                .addPartitionKey("id", DataType.text());
+                .addPartitionKey("id", DataType.bigint());
         
         getSession().execute(userSchemaStatement);
     }*/
