@@ -30,6 +30,7 @@ import React, {Component} from 'react';
 import {TOPICS, API} from '../../common/PubSub';
 import Storage from '../../common/Storage';
 import WebSockets from '../../common/WebSockets';
+import CreateChatLobbyAction from './actions/CreateChatLobbyAction';
 import ChatAreaComponent from './area/ChatAreaComponent';
 import ChatDropDownButtonComponent from './dropDownButton/ChatDropDownButtonComponent';
 
@@ -84,8 +85,17 @@ class ChatComponent extends Component {
   pulseSubscribed(pSubscribed) {
     console.debug('chat pulseSubscribed', pSubscribed);
 
+    this.mountChatAreaComponent(pSubscribed.pulseId.id, 'Pulse');
+  }
+
+  pulseUnSubscribed(pUnSubscribed) {
+    console.debug('chat pulseUnSubscribed', pUnSubscribed);
+
+    this.unmountChatAreaComponent(pUnSubscribed.pulseId.id);
+  }
+
+  mountChatAreaComponent(id, dropDownText) {
     let caEle = document.createElement('div');
-    let id = pSubscribed.pulseId.id;
     let subscription = '/topics/chat/' + id;
 
     this.switchToNewChatAreaNode(caEle);
@@ -94,14 +104,11 @@ class ChatComponent extends Component {
     render((<ChatAreaComponent subscription={subscription}></ChatAreaComponent>), caEle);
     this.nodeMaps.set(id, caEle);
 
-    CHAT_PULSE_KEY[id] = {text: 'Pulse', eventKey: id};
+    CHAT_PULSE_KEY[id] = {text: dropDownText, eventKey: id};
     this.refs.chatDropDownButton.addChatMenuItem(CHAT_PULSE_KEY[id]);
   }
 
-  pulseUnSubscribed(pUnSubscribed) {
-    console.debug('chat pulseUnSubscribed', pUnSubscribed);
-
-    let id = pUnSubscribed.pulseId.id;
+  unmountChatAreaComponent(id) {
     let node = this.nodeMaps.get(id);
     this.nodeMaps.delete(id);
 
@@ -134,10 +141,32 @@ class ChatComponent extends Component {
     }
 
     let user = Storage.user;
-    
-    this.ws.send('/pulsing/chat/' + this.state.chatId, {},
+
+    if(this.chatInputNode.value[0] === '/') {
+      //means an action
+      this.handleChatAction(user);
+      return;
+    } else {
+      //usual chat
+      this.ws.send('/pulsing/chat/' + this.state.chatId, {},
                   JSON.stringify({message: this.chatInputNode.value, userId: user.id.id, name: user.name}));
+    }
+
+    
     this.chatInputNode.value = '';
+  }
+
+  handleChatAction(user) {
+    let split = this.chatInputNode.value.split(' ');
+    
+    if(split[0] === '/create') {
+
+      let cLName = split[1];
+      CreateChatLobbyAction.createChatLobby(user.id, cLName)
+        .then((chatId) => {
+          this.mountChatAreaComponent(chatId, cLName);
+        });
+    }
   }
   
   render() {

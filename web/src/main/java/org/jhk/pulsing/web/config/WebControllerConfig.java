@@ -22,6 +22,7 @@ import java.util.List;
 
 import org.apache.avro.specific.SpecificRecord;
 import org.jhk.pulsing.serialization.avro.serializers.SerializationHelper;
+import org.jhk.pulsing.web.controller.ChatController;
 import org.jhk.pulsing.web.controller.PulseController;
 import org.jhk.pulsing.web.controller.UserController;
 import org.jhk.pulsing.web.controller.WebSocketController;
@@ -51,6 +52,11 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 @EnableWebMvc
 @Import({WebSocketConfig.class})
 public class WebControllerConfig extends WebMvcConfigurerAdapter {
+    
+    @Bean(name="chatController")
+    public ChatController getChatController() {
+        return new ChatController();
+    }
     
     @Bean(name="pulseController")
     public PulseController getPulseController() {
