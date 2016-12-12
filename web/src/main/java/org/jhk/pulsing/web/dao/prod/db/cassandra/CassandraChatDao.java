@@ -37,7 +37,6 @@ import com.datastax.driver.core.DataType;
 import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Row;
-import com.datastax.driver.core.schemabuilder.CreateIndex;
 import com.datastax.driver.core.schemabuilder.SchemaBuilder;
 import com.datastax.driver.core.schemabuilder.SchemaStatement;
 
@@ -111,17 +110,10 @@ public class CassandraChatDao extends AbstractCassandraDao {
     
     private void setUpChatLobbyTable() {
         
-        /*SchemaStatement cLSchemaStatement = SchemaBuilder.createTable(_CHAT_LOBBY_TABLE)
-                .ifNotExists()
-                .addPartitionKey("user_id", DataType.bigint())
-                .addPartitionKey("name", DataType.text())
-                .addColumn("chat_lobby_id", DataType.timeuuid());*/
-        
         getSession().execute("CREATE TABLE " + getKeySpace() + "." + _CHAT_LOBBY_TABLE + " (" +
-                "user_id bigint," +
+                "user_id bigint PRIMARY KEY," +
                 "name text," +
-                "chat_lobby_id timeuuid," +
-                "PRIMARY KEY (user_id, name) )");
+                "chat_lobby_id timeuuid )");
         
         _CHAT_LOBBY_QUERY = getSession().prepare("SELECT name FROM " + _CHAT_LOBBY_TABLE + " WHERE user_id=?");
         _CHAT_LOBBY_INSERT = getSession().prepare("INSERT INTO " + _CHAT_LOBBY_TABLE + " (chat_lobby_id, user_id, name) VALUES (?, ?, ?)");
