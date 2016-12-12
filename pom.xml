@@ -391,6 +391,12 @@ descent loss of performance)
         <artifactId>scala-library</artifactId>
         <version>${scala}</version>
       </dependency>
+
+      <dependency>
+        <groupId>org.hyperic</groupId>
+        <artifactId>sigar</artifactId>
+        <version>${sigar}</version>
+      </dependency>
       
     </dependencies>
   </dependencyManagement>
@@ -426,8 +432,8 @@ descent loss of performance)
     <jackson>2.7.4</jackson>
     <kafka>0.10.0.0</kafka> <!-- 0.8.2.2 on windows -->
     <mysql.connector.java>5.1.9</mysql.connector.java>
-    <cassandra.driver>3.1.0</cassandra.driver>
-    <cassandra>3.7</cassandra>
+    <cassandra.driver>3.1.2</cassandra.driver>
+    <cassandra>3.9</cassandra>
     <cascading.cassandra>2.0.6</cascading.cassandra>
     <hibernate>5.2.1.Final</hibernate>
     <junit>4.12</junit>
@@ -435,6 +441,7 @@ descent loss of performance)
     <jedis>2.8.1</jedis>
     <antrun>1.8</antrun>
     <hyperloglog>1.6.0</hyperloglog>
+    <sigar>1.6.4</sigar>
   </properties>
   
   <modules>
