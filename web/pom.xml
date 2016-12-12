@@ -148,6 +148,11 @@
     </dependency>
     
     <dependency>
+      <groupId>org.hyperic</groupId>
+      <artifactId>sigar</artifactId>
+    </dependency>
+    
+    <dependency>
       <groupId>mysql</groupId>
       <artifactId>mysql-connector-java</artifactId>
     </dependency>
@@ -220,5 +225,12 @@
     </plugins>
     
   </build>
+  
+  <repositories>
+    <repository>
+      <id>typesafe</id>
+      <url>http://repo.typesafe.com/typesafe/maven-releases/</url>
+    </repository>
+  </repositories>
   
 </project>

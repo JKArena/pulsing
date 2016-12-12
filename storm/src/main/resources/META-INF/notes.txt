@@ -1,5 +1,9 @@
 Mac
 
+Cassandra
+CREATE KEYSPACE IF NOT EXISTS CHAT WITH REPLICATION = { 'class' : 'SimpleStrategy', 'replication_factor' : 2 };
+for Tomcat launch configuration VM argument for UUID of Sigar -Djava.library.path="/usr/local/lib/cassandra/apache-cassandra-3.9/lib/sigar-bin"
+
 Hadoop
 HDFS daemons
 start-dfs.sh
