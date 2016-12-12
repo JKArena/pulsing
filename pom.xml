@@ -229,7 +229,7 @@
       </dependency>
 	  
       <dependency>
-        <groupId>aspectj</groupId>
+        <groupId>org.aspectj</groupId>
         <artifactId>aspectjweaver</artifactId>
         <version>${aspectjweaver}</version>
       </dependency>
@@ -397,12 +397,26 @@ descent loss of performance)
         <artifactId>sigar</artifactId>
         <version>${sigar}</version>
       </dependency>
+
+      <dependency>
+        <groupId>ch.qos.logback</groupId>
+        <artifactId>logback-classic</artifactId>
+        <version>${logback}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>jcl-over-slf4j</artifactId>
+        <version>${jcl}</version>
+      </dependency>
       
     </dependencies>
   </dependencyManagement>
   
   <properties>
     <pulsing.version>0.1-SNAPSHOT</pulsing.version>
+    <jcl>1.7.21</jcl>
+    <logback>1.1.8</logback>
     <storm>1.0.3-SNAPSHOT</storm> <!-- Replace with version from main repository later; there currently is a bug STORM-1907 in 1.0.x artifact that fails it in starting a worker -->
     <thrift>0.9.3</thrift>
     <avro>1.8.0</avro>
