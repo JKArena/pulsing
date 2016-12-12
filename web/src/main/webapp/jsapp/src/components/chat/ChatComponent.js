@@ -98,7 +98,6 @@ class ChatComponent extends Component {
     let caEle = document.createElement('div');
     let subscription = '/topics/chat/' + id;
 
-    this.switchToNewChatAreaNode(caEle);
     this.chatPanelNode.appendChild(caEle);
 
     render((<ChatAreaComponent subscription={subscription}></ChatAreaComponent>), caEle);
@@ -145,7 +144,6 @@ class ChatComponent extends Component {
     if(this.chatInputNode.value[0] === '/') {
       //means an action
       this.handleChatAction(user);
-      return;
     } else {
       //usual chat
       this.ws.send('/pulsing/chat/' + this.state.chatId, {},

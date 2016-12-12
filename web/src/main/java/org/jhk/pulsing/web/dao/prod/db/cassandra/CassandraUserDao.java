@@ -39,18 +39,6 @@ public class CassandraUserDao extends AbstractCassandraDao {
     private static final Logger _LOGGER = LoggerFactory.getLogger(CassandraUserDao.class);
     private static final String _USER_TBD_TABLE = "USER_TBD_TABLE";
     
-    /*
-    @Override
-    public void init() {
-        super.init();
-        
-        //Since want to test it out and etc, create schema dynamically and destroy it after done
-        SchemaStatement userSchemaStatement = SchemaBuilder.createTable(_USER_TBD_TABLE)
-                .addPartitionKey("id", DataType.bigint());
-        
-        getSession().execute(userSchemaStatement);
-    }*/
-    
     @Override
     public void destroy() {
         
