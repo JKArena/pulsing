@@ -105,7 +105,7 @@ public abstract class AbstractCassandraDao {
     @PreDestroy
     public void destroy() {
         
-        if(_session != null) {
+        if(_session != null && !_session.isClosed()) {
             _session.close();
         }
         
