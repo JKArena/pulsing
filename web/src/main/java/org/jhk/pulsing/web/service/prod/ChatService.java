@@ -20,6 +20,8 @@ package org.jhk.pulsing.web.service.prod;
 
 import static org.jhk.pulsing.web.common.Result.CODE.*;
 
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -29,6 +31,7 @@ import javax.inject.Named;
 import org.jhk.pulsing.serialization.avro.records.UserId;
 import org.jhk.pulsing.web.common.Result;
 import org.jhk.pulsing.web.dao.prod.db.cassandra.CassandraChatDao;
+import org.jhk.pulsing.web.pojo.light.Chat;
 import org.jhk.pulsing.web.service.IChatService;
 import org.springframework.stereotype.Service;
 
@@ -53,6 +56,24 @@ public class ChatService implements IChatService {
         }
         
         return result;
+    }
+
+    @Override
+    public Result<Map<String, UUID>> queryChatLobbies(UserId userId) {
+        
+        return new Result<Map<String, UUID>>(SUCCESS, cassandraChatDao.queryChatLobbies(userId));
+    }
+
+    @Override
+    public Result<List<Chat>> chatLobbyMessageQuery(UUID cLId, Long timeStamp) {
+        
+        return new Result<List<Chat>>(SUCCESS, cassandraChatDao.chatLobbyMessageQuery(cLId, timeStamp));
+    }
+
+    @Override
+    public void chatLobbyMessageInsert(UUID cLId, long from, long timeStamp, String message) {
+        
+        cassandraChatDao.chatLobbyMessageInsert(cLId, from, timeStamp, message);
     }
 
 }
