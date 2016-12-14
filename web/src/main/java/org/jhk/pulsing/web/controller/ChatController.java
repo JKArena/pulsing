@@ -18,12 +18,15 @@
  */
 package org.jhk.pulsing.web.controller;
 
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.inject.Inject;
 
 import org.jhk.pulsing.serialization.avro.records.UserId;
 import org.jhk.pulsing.web.common.Result;
+import org.jhk.pulsing.web.pojo.light.Chat;
 import org.jhk.pulsing.web.service.IChatService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,6 +48,20 @@ public class ChatController {
     
     @Inject
     private IChatService chatService;
+    
+    @RequestMapping(value="/queryChatLobbies", method=RequestMethod.GET)
+    public @ResponseBody Result<Map<String, UUID>> queryChatLobby(UserId userId) {
+        _LOGGER.debug("ChatController.queryChatLobbies: " + userId);
+        
+        return chatService.queryChatLobbies(userId);
+    }
+    
+    @RequestMapping(value="/chatLobbyMessageQuery", method=RequestMethod.GET)
+    public @ResponseBody Result<List<Chat>> chatLobbyMessageQuery(UUID cLId, Long timeStamp) {
+        _LOGGER.debug("ChatController.chatLobbyMessageQuery: " + cLId + " - " + timeStamp);
+        
+        return chatService.chatLobbyMessageQuery(cLId, timeStamp);
+    }
     
     @RequestMapping(value="/createChatLobby", method=RequestMethod.POST)
     public @ResponseBody Result<UUID> createChatLobby(UserId userId, String lobbyName) {

@@ -38,10 +38,10 @@ const Chat = (props) => {
   let clazz = isSelf ? CHAT_SELF : CHAT_OTHER;
 
   let chat = props.chat;
-  let date = isSelf ? new Date() : new Date(chat.timeStamp*1000);
+  let dateLTS = (isSelf ? new Date() : new Date(chat.timeStamp*1000)).toLocaleTimeString();
 
-  let chatContent = [<div className='chat-content'>{chat.message}</div>,
-                  <div className='chat-time' data-content={date.toLocaleTimeString()}></div>];
+  let chatContent = [<div className='chat-content' key={dateLTS +'_msg'}>{chat.message}</div>,
+                  <div className='chat-time' key={dateLTS +'_time'} data-content={dateLTS}></div>];
   if(isSelf) {
     chatContent.reverse();
   }

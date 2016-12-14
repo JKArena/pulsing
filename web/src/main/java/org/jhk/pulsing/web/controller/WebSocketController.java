@@ -20,12 +20,14 @@ package org.jhk.pulsing.web.controller;
 
 import java.time.Instant;
 import java.util.Optional;
+import java.util.UUID;
 
 import javax.inject.Inject;
 
 import org.jhk.pulsing.web.pojo.light.Chat;
 import org.jhk.pulsing.web.pojo.light.MapPulseCreate;
 import org.jhk.pulsing.web.pojo.light.UserLight;
+import org.jhk.pulsing.web.service.IChatService;
 import org.jhk.pulsing.web.service.IUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,6 +48,9 @@ public class WebSocketController {
     @Inject
     private IUserService userService;
     
+    @Inject
+    private IChatService chatService;
+    
     @SendTo("/topics/pulseCreated")
     public MapPulseCreate pulseCreated(MapPulseCreate mPulseCreate) {
         _LOGGER.debug("WebSocketController.pulseCreated: " + mPulseCreate);
@@ -53,10 +58,10 @@ public class WebSocketController {
         return mPulseCreate;
     }
     
-    @MessageMapping("/chat/{chatId}")
+    @MessageMapping("/chat/{chatId}/{isChatLobby}")
     @SendTo("/topics/chat/{chatId}")
-    public Chat chat(@DestinationVariable String chatId, @Payload Chat msg) {
-        _LOGGER.debug("WebSocketController.chat: " + chatId + "-" + msg);
+    public Chat chat(@DestinationVariable String chatId, @DestinationVariable boolean isChatLobby, @Payload Chat msg) {
+        _LOGGER.debug("WebSocketController.chat: " + chatId + ":" + isChatLobby + "-" + msg);
         
         Optional<UserLight> oUserLight = userService.getUserLight(msg.getUserId());
         oUserLight.ifPresent(user -> {
@@ -64,6 +69,11 @@ public class WebSocketController {
         });
         
         msg.setTimeStamp(Instant.now().getEpochSecond());
+        
+        if(isChatLobby) {
+            chatService.chatLobbyMessageInsert(UUID.fromString(chatId), msg.getUserId(), msg.getTimeStamp(), msg.getMessage());
+        }
+        
         return msg;
     }
     

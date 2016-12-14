@@ -85,13 +85,13 @@ class ChatComponent extends Component {
   pulseSubscribed(pSubscribed) {
     console.debug('chat pulseSubscribed', pSubscribed);
 
-    this.mountChatAreaComponent(pSubscribed.pulseId.id, 'Pulse');
+    this.mountChatAreaComponent(pSubscribed.pulseId.id+'', 'Pulse');
   }
 
   pulseUnSubscribed(pUnSubscribed) {
     console.debug('chat pulseUnSubscribed', pUnSubscribed);
 
-    this.unmountChatAreaComponent(pUnSubscribed.pulseId.id);
+    this.unmountChatAreaComponent(pUnSubscribed.pulseId.id+'');
   }
 
   mountChatAreaComponent(id, dropDownText) {
@@ -118,7 +118,7 @@ class ChatComponent extends Component {
 
   handleChatSelect(eventKey) {
     console.debug('handleChatSelect', eventKey);
-    let node = this.nodeMaps.get(Number(eventKey));
+    let node = this.nodeMaps.get(eventKey);
 
     this.state.chatId = eventKey;
     this.switchToNewChatAreaNode(node);
@@ -146,7 +146,8 @@ class ChatComponent extends Component {
       this.handleChatAction(user);
     } else {
       //usual chat
-      this.ws.send('/pulsing/chat/' + this.state.chatId, {},
+      let isChatLobby = CHAT_PULSE_KEY[this.state.chatId].text !== 'Pulse';
+      this.ws.send('/pulsing/chat/' + this.state.chatId + '/' + isChatLobby, {},
                   JSON.stringify({message: this.chatInputNode.value, userId: user.id.id, name: user.name}));
     }
 

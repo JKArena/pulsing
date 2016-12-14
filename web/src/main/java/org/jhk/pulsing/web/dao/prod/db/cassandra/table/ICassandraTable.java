@@ -16,27 +16,13 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.web.service;
-
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-
-import org.jhk.pulsing.serialization.avro.records.UserId;
-import org.jhk.pulsing.web.common.Result;
-import org.jhk.pulsing.web.pojo.light.Chat;
+package org.jhk.pulsing.web.dao.prod.db.cassandra.table;
 
 /**
  * @author Ji Kim
  */
-public interface IChatService {
+public interface ICassandraTable {
     
-    Result<UUID> createChatLobby(UserId userId, String lobbyName);
-    
-    Result<Map<String, UUID>> queryChatLobbies(UserId userId);
-    
-    Result<List<Chat>> chatLobbyMessageQuery(UUID cLId, Long timeStamp);
-    
-    void chatLobbyMessageInsert(UUID cLId, long from, long timeStamp, String message);
+    void destroy();
     
 }
