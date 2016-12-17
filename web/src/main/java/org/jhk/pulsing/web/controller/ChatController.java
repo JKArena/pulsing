@@ -56,11 +56,11 @@ public class ChatController {
         return chatService.queryChatLobbies(userId);
     }
     
-    @RequestMapping(value="/chatLobbyMessageQuery", method=RequestMethod.GET)
-    public @ResponseBody Result<List<Chat>> chatLobbyMessageQuery(UUID cLId, Long timeStamp) {
-        _LOGGER.debug("ChatController.chatLobbyMessageQuery: " + cLId + " - " + timeStamp);
+    @RequestMapping(value="/queryChatLobbyMessages", method=RequestMethod.GET)
+    public @ResponseBody Result<List<Chat>> queryChatLobbyMessages(UUID cLId, Long timeStamp) {
+        _LOGGER.debug("ChatController.queryChatLobbyMessages: " + cLId + " - " + timeStamp);
         
-        return chatService.chatLobbyMessageQuery(cLId, timeStamp);
+        return chatService.queryChatLobbyMessages(cLId, timeStamp);
     }
     
     @RequestMapping(value="/createChatLobby", method=RequestMethod.POST)

@@ -65,9 +65,9 @@ public class ChatService implements IChatService {
     }
 
     @Override
-    public Result<List<Chat>> chatLobbyMessageQuery(UUID cLId, Long timeStamp) {
+    public Result<List<Chat>> queryChatLobbyMessages(UUID cLId, Long timeStamp) {
         
-        return new Result<List<Chat>>(SUCCESS, cassandraChatDao.chatLobbyMessageQuery(cLId, timeStamp));
+        return new Result<List<Chat>>(SUCCESS, cassandraChatDao.queryChatLobbyMessages(cLId, timeStamp));
     }
 
     @Override

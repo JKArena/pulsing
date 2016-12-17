@@ -60,7 +60,7 @@ public final class ChatMessageTable implements ICassandraTable {
         SchemaStatement cMSchemaStatement = SchemaBuilder.createTable(_CHAT_MESSAGE_TABLE)
                 .ifNotExists()
                 .addPartitionKey("chat_lobby_id", DataType.timeuuid())
-                .addClusteringColumn("timestamp", DataType.timestamp())
+                .addClusteringColumn("timestamp", DataType.bigint())
                 .addColumn("user_id", DataType.bigint())
                 .addColumn("message", DataType.text())
                 .withOptions().clusteringOrder("timestamp", SchemaBuilder.Direction.DESC);
