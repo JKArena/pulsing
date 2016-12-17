@@ -55,7 +55,7 @@ public class CassandraChatDao extends AbstractCassandraDao {
         _chatMessageTable.messageInsert(cLId, from, timeStamp, message);
     }
     
-    public List<Chat> chatLobbyMessageQuery(UUID cLId, Long timeStamp) {
+    public List<Chat> queryChatLobbyMessages(UUID cLId, Long timeStamp) {
         
         return _chatMessageTable.messageQuery(cLId, timeStamp);
     }

@@ -24,7 +24,7 @@
 
 require('./Signup.scss');
 
-import {Grid, Row, Col, FormGroup, ControlLabel, FormControl, HelpBlock, Button, Image} from 'react-bootstrap';
+import {Grid, Row, Col, FormGroup, ControlLabel, FormControl, HelpBlock, Button, Image, Panel} from 'react-bootstrap';
 import React from 'react';
 
 import AbstractComponent from '../AbstractComponent';
