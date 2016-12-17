@@ -6,6 +6,21 @@
   display: flex;
 }
 
+.chat-system-message {
+  align-items: center;
+  justify-content: center;
+}
+
+.chat-smessage-content {
+  background: -webkit-linear-gradient(to left, #2BC0E4 , #EAECC6);
+  background: linear-gradient(to left, #2BC0E4 , #EAECC6);
+  border-radius: 10px;
+  font: bold 1em Monospace;
+  margin: 10px 0;
+  padding: 10px;
+  text-align: center;
+}
+
 .chat-self {
   align-items: flex-end;
   justify-content: flex-end;
