@@ -27,8 +27,11 @@ require('./ChatArea.scss');
 import {render, findDOMNode} from 'react-dom';
 import React, {Component} from 'react';
 import WebSockets from '../../../common/WebSockets';
+import {TOPICS, API} from '../../../common/PubSub';
 import Storage from '../../../common/Storage';
 import Url from '../../../common/Url';
+
+import GetChatLobbyMessagesAction from '../actions/GetChatLobbyMessagesAction';
 
 const CHAT_OTHER = 'chat-other';
 const CHAT_SELF = 'chat-self';
@@ -67,24 +70,37 @@ const Chat = (props) => {
   );
 };
 
+const SystemMessage = (props) => {
+  let msg = props.msg;
+  
+  return (
+    <div className='chat-system-message'>
+      <div className='chat-smessage-content'>
+        {msg}
+      </div>
+    </div>
+  );
+};
+
 class ChatAreaComponent extends Component {
 
   constructor(props) {
     super(props);
 
     this.chatHandler = this.onChat.bind(this);
+    this.id = props.id;
     this.subscription = props.subscription;
+    this.isChatLobby = props.isChatLobby;
+
+    this.firstChat = null;
+
+    this.chatNotificationHandler = this.onChatNotification.bind(this);
   }
   
   componentDidMount() {
     this.chatAreaNode = findDOMNode(this.refs.chatArea);
 
-    this.ws = new WebSockets('socket');
-    this.ws.connect()
-      .then(frame => {
-        console.debug('chat area frame', this.subscription, frame);
-        this.sub = this.ws.subscribe(this.subscription, this.chatHandler);
-      });
+    API.subscribe(TOPICS.CHAT_AREA, this.chatNotificationHandler);
   }
   
   componentWillUnmount() {
@@ -92,22 +108,80 @@ class ChatAreaComponent extends Component {
       this.ws.destroy();
       this.ws = null;
     }
+
+    API.unsubscribe(TOPICS.CHAT_AREA, this.chatNotificationHandler);
+  }
+
+  onChatNotification(data) {
+    console.debug('chat notification ', data);
+
+    let action = data.action;
+    let id = data.id;
+
+    if(action === 'chatConnect' && this.subscription && this.id === id) {
+
+      if(!this.ws) {
+        this.ws = new WebSockets('socket');
+        this.ws.connect()
+          .then(frame => {
+            console.debug('chat area frame', this.subscription, frame);
+            this.sub = this.ws.subscribe(this.subscription, this.chatHandler);
+          });
+
+        if(this.isChatLobby) {
+          //divide by 1000 since held as seconds on the server side
+          GetChatLobbyMessagesAction.queryChatLobbyMessages(this.subscription, (+new Date())/1000)
+            .then((chatMessages) => {
+              chatMessages.reverse();
+
+              chatMessages.forEach(message => {
+
+                this.addChat(message, true);
+              });
+            });
+        }
+      }
+    } else if(action === 'systemMessage') {
+
+      let sMEle = document.createElement('div');
+      this.chatAreaNode.appendChild(sMEle);
+
+      render((<SystemMessage msg={data.message}></SystemMessage>), sMEle);
+    }
+
   }
 
   onChat(mChat) {
     console.debug('onChat', mChat);
 
-    let user = Storage.user;
-
     if(mChat && mChat.body) {
       let chat = JSON.parse(mChat.body);
-      let isSelf = chat.userId === user.id.id;
-      let cEle = document.createElement('div');
-
-      this.chatAreaNode.appendChild(cEle);
-
-      render((<Chat isSelf={isSelf} chat={chat}></Chat>), cEle);
+      
+      this.addChat(chat);
     }
+  }
+
+  addChat(chat, insertBefore=false) {
+
+    let user = Storage.user;
+    let isSelf = chat.userId === user.id.id;
+    let cEle = document.createElement('div');
+
+    if(!this.firstChat) {
+      //before the request for previous messages is finished, chat
+      //could have been done so preserve the firstChat to insertBefore it.
+      //could have just done firstChild on the container, but then will need
+      //to query it so just hold onto it
+      this.firstChat = cEle;
+    }
+
+    if(insertBefore && this.firstChat) {
+      this.chatAreaNode.insertBefore(cEle, this.firstChat);
+    } else {
+      this.chatAreaNode.appendChild(cEle);
+    }
+    
+    render((<Chat isSelf={isSelf} chat={chat}></Chat>), cEle);
   }
   
   render() {

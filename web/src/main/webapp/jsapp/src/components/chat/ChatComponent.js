@@ -31,6 +31,7 @@ import {TOPICS, API} from '../../common/PubSub';
 import Storage from '../../common/Storage';
 import WebSockets from '../../common/WebSockets';
 import CreateChatLobbyAction from './actions/CreateChatLobbyAction';
+import GetChatLobbiesAction from './actions/GetChatLobbiesAction';
 import ChatAreaComponent from './area/ChatAreaComponent';
 import ChatDropDownButtonComponent from './dropDownButton/ChatDropDownButtonComponent';
 
@@ -38,13 +39,15 @@ const CHAT_PULSE_KEY = {
   __proto__: null
 };
 
+const GENERAL_CHAT_KEY = 'general';
+
 class ChatComponent extends Component {
 
   constructor(props) {
     super(props);
 
     this.state = {
-      chatId: ''
+      chatId: GENERAL_CHAT_KEY
     };
     this.nodeMaps = new Map();
     this.prevChatAreaNode = null;
@@ -70,6 +73,16 @@ class ChatComponent extends Component {
     if(subscribedPulseId) {
       this.pulseSubscribed({pulseId: subscribedPulseId});
     }
+
+    this.mountChatAreaComponent(GENERAL_CHAT_KEY, 'Chat');
+
+    GetChatLobbiesAction.queryChatLobbies(Storage.user.id)
+      .then((chatLobbies) => {
+        Object.keys(chatLobbies).forEach(key => {
+
+          this.mountChatAreaComponent(chatLobbies[key], key);
+        });
+      });
   }
   
   componentWillUnmount() {
@@ -96,14 +109,21 @@ class ChatComponent extends Component {
 
   mountChatAreaComponent(id, dropDownText) {
     let caEle = document.createElement('div');
-    let subscription = '/topics/chat/' + id;
+    let subscription = '';
 
     this.chatPanelNode.appendChild(caEle);
+    CHAT_PULSE_KEY[id] = {text: dropDownText, eventKey: id};
 
-    render((<ChatAreaComponent subscription={subscription}></ChatAreaComponent>), caEle);
+    if(id !== GENERAL_CHAT_KEY) {
+      subscription = '/topics/chat/' + id;
+      caEle.style.display = 'none';
+    } else {
+      this.switchToNewChatAreaNode(caEle);
+    }
+    
+    render((<ChatAreaComponent id={id} subscription={subscription} isChatLobby={this.isChatLobby(id)}></ChatAreaComponent>), caEle);
     this.nodeMaps.set(id, caEle);
 
-    CHAT_PULSE_KEY[id] = {text: dropDownText, eventKey: id};
     this.refs.chatDropDownButton.addChatMenuItem(CHAT_PULSE_KEY[id]);
   }
 
@@ -118,19 +138,28 @@ class ChatComponent extends Component {
 
   handleChatSelect(eventKey) {
     console.debug('handleChatSelect', eventKey);
-    let node = this.nodeMaps.get(eventKey);
-
+    
     this.state.chatId = eventKey;
+
+    API.publish(TOPICS.CHAT_AREA, {action: 'chatConnect', id: this.state.chatId});
+    
+    let node = this.nodeMaps.get(eventKey);
     this.switchToNewChatAreaNode(node);
   }
 
   switchToNewChatAreaNode(cAreaNode) {
+    console.debug('switchToNewChatAreaNode', cAreaNode);
+
     if(this.prevChatAreaNode !== null) {
       this.prevChatAreaNode.style.display = 'none';
     }
 
     this.prevChatAreaNode = cAreaNode;
     cAreaNode.style.display = '';
+  }
+
+  isChatLobby(chatId) {
+    return CHAT_PULSE_KEY[chatId].text !== 'Pulse' && CHAT_PULSE_KEY[chatId].eventKey !== GENERAL_CHAT_KEY;
   }
 
   handleChat() {
@@ -145,12 +174,11 @@ class ChatComponent extends Component {
       //means an action
       this.handleChatAction(user);
     } else {
-      //usual chat
-      let isChatLobby = CHAT_PULSE_KEY[this.state.chatId].text !== 'Pulse';
-      this.ws.send('/pulsing/chat/' + this.state.chatId + '/' + isChatLobby, {},
+      //usual chat, need to send whether chatLobby as need to log
+      
+      this.ws.send('/pulsing/chat/' + this.state.chatId + '/' + this.isChatLobby(this.state.chatId), {},
                   JSON.stringify({message: this.chatInputNode.value, userId: user.id.id, name: user.name}));
     }
-
     
     this.chatInputNode.value = '';
   }
@@ -163,8 +191,19 @@ class ChatComponent extends Component {
       let cLName = split[1];
       CreateChatLobbyAction.createChatLobby(user.id, cLName)
         .then((chatId) => {
+
           this.mountChatAreaComponent(chatId, cLName);
+          API.publish(TOPICS.CHAT_AREA, {action: 'systemMessage', id: this.state.chatId,
+              message: 'Chat Lobby : ' + cLName + ' created successfully!'});
         });
+    } else if(split[0] === '/invite') {
+
+      //so to allow inviting friends to the chatLobby
+      if(this.isChatLobby(this.state.chatId)) {
+        //let uName = split[1];
+
+      }
+      
     }
   }
   
