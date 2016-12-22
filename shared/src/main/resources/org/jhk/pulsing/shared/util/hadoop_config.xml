@@ -2,6 +2,11 @@
 <configuration>
   <hadoop>
     <property>
+      <name>spark.master.workspace</name>
+      <value>/data/sparkmaster/</value>
+    </property>
+    
+    <property>
       <name>hive.master.workspace</name>
       <value>/data/hivemaster/</value>
     </property>
@@ -9,6 +14,11 @@
     <property>
       <name>pail.master.workspace</name>
       <value>/data/pailmaster/</value>
+    </property>
+    
+    <property>
+      <name>spark.newdata.workspace</name>
+      <value>/data/sparknewdata/</value>
     </property>
     
     <property>

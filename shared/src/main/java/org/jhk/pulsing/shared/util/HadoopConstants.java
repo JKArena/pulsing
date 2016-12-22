@@ -41,8 +41,10 @@ public final class HadoopConstants {
     
     public static final String PAIL_MASTER_WORKSPACE;
     public static final String HIVE_MASTER_WORKSPACE;
+    public static final String SPARK_MASTER_WORKSPACE;
     public static final String PAIL_NEW_DATA_WORKSPACE;
     public static final String HIVE_NEW_DATA_WORKSPACE;
+    public static final String SPARK_NEW_DATA_WORKSPACE;
     private static final String TEMP_DATA_WORKSPACE;
     
     public static final String CASCALOG_HFS_SEQFILE_SOURCE_KEY = ":source";
@@ -70,8 +72,12 @@ public final class HadoopConstants {
         
         PAIL_MASTER_WORKSPACE = tempParseMap.get("pail.master.workspace");
         HIVE_MASTER_WORKSPACE = tempParseMap.get("hive.master.workspace");
+        SPARK_MASTER_WORKSPACE = tempParseMap.get("spark.master.workspace");
+        
         PAIL_NEW_DATA_WORKSPACE = tempParseMap.get("pail.newdata.workspace");
         HIVE_NEW_DATA_WORKSPACE = tempParseMap.get("hive.newdata.workspace");
+        SPARK_NEW_DATA_WORKSPACE = tempParseMap.get("spark.newdata.workspace");
+        
         TEMP_DATA_WORKSPACE = tempParseMap.get("tempdata.workspace");
         HDFS_URL_PORT = tempParseMap.get("url.port");
     }

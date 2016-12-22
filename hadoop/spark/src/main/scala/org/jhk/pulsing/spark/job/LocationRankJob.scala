@@ -22,11 +22,19 @@ import org.apache.spark.SparkConf
 import org.apache.spark.SparkContext
 import org.apache.spark.SparkContext._
 
+import org.jhk.pulsing.shared.util.CommonConstants._
+
 /**
+ * Initial thought is to allow add location feature in the project and allow ranking of 
+ * the location by the user. Then this job will compute the rank for the location.
+ * 
+ * Additionally maybe just to play around allow tagging of the location and then gather 
+ * rank for the tags and do additional mappings as well.
+ * 
  * @author Ji Kim
  */
-class TagGroupJob {
-  val configuration = new SparkConf().setMaster("pulsing.jhk.org").setAppName("Pulsing")
+class LocationRank {
+  val configuration = new SparkConf().setMaster(PROJECT_POINT).setAppName(APP_NAME)
   val sparkContext = new SparkContext(configuration);
   
 }

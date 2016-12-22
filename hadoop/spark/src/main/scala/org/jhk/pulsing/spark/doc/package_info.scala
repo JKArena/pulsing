@@ -221,8 +221,114 @@ package org.jhk.pulsing.spark.doc
  * 	loop(List(start), Set())
  * }
  * 
+ * ____________________________________________________________________________________________________________________________________________________________________
+ * 
+ * In Scala, the code inside an object, trait or class's body is the constructor.
+ * 
+ * object Test extends Application {
+ * 	println("");
+ * }
+ * 
+ * trait Application {
+ * 	def main(args: Array[String]): Unit = {}
+ * }
+ * 
+ * When compiling traits, Scala creates an interface/implementation pair of classes. The interface is for JVM interoperability and 
+ * the implementation is a set of static methods that can be used by classes implementing the trait. When compiling 
+ * the Test object, a main method is created that forwards to the Application implementation class. Although this method is 
+ * empty, the logic inside the Test object is placed in the Test object's constructor. Next, Scala creates "static forwarders" 
+ * for the object. One of these static forwarder methods will be the main method, in the signature the JVM expects. The 
+ * static forwarder will call the method on the singleton instance of the Test object. This instance is constructed in a static 
+ * initialization block.
+ * 
+ * DelayedInit is a marker trait for the compiler. When implementing a class that extends DelayedInit, the entire constructor is 
+ * wrapped into a function and passed tot he delayedInit method
+ * 
+ * trait DelayedInit {
+ * 	def delayedInit(x: => Unit): Unit
+ * }
+ * 
+ * trait App extends DelayedInit {
+ * 	var x: Option[Function0[Unit]] = None
+ * 	override def delayedInit(cons: => Unit) {
+ * 		x = Some(() => cons)
+ * 	}
+ * 	def main(args: Array[String]): Unit = 
+ * 		x.foreach(_())
+ * }
+ * 
+ * val x = new App { println("Now initialized") }
+ * x.main(Array())
+ * 
+ * The DelayedInit trait can be dangerous because it delays the construction of the object until a later time; methods 
+ * that expect a fully initialized object may fail subtly at runtime. The DelayedInit trait is ideal for situations 
+ * where object construction and initialization are delayed (i.e. Spring bean container).
+ * 
+ * Inheritance-based composition of Logger and DataAccess
+ * trait Logger {
+ * 	def log(category: String, msg: String): Unit = {
+ * 		println(msg)
+ * 	}
+ * }
+ * 
+ * trait DataAccess {
+ * 	def query[A](in: String): A = {
+ * 		...
+ * 	}
+ * }
+ * 
+ * trait LoggedDataAccess extends DataAccess with Logger {
+ * 	def query[A](in: String): A = {
+ * 		log("QUERY", in)
+ * 		super.query(in)
+ * 	}
+ * }
+ * 
+ * ____________________________________________________________________________________________________________________________________________________________________
+ * 
+ * Scala import statement can give arbitrary names to imported entities using the {OriginalBinding => NewBinding} syntax
+ * This helps conflict with java package and scala package [i.e. java.util.List and scala.List, can do import java.util.{List => JList} ]
+ * 
+ * As a general rule, anytime you use the {} characters you're creating a new scope. In Scala scopes can be nested
+ * 
+ * class Foo(x: Int) {
+ * 	def tmp = {
+ * 		x
+ * 	}
+ * }
+ * 
+ * Scala's precedence on bindings:
+ * 1) Definitions and declarations that are local, inherited, or made available by a package clase in the same source file where the definition 
+ * occurs have highest precedence.
+ * 2) Explicit imports have next higest precedence.
+ * 3) Wildcard imports (import foo._) have next higest precedence.
+ * 4) Definitions made available by a package clause not in the source file where the definition occurs have lowest precedence.
+ * 
+ * An implicit view is an automatic conversion of one type to another to satisfy an expression.
+ * def foo(msg: String) = println(msg)
+ * foo(5) => will result in error with Int argument with String parameter
+ * 
+ * implicit def intToString(x: Int) = x.toString
+ * now ok. The implicit scope used for implicit views is the same as for implicit parameters. But when the compiler is looking for type associations, it uses the type it's 
+ * attempting to convert from, not the type it's attempting to convert to.
+ * 
+ * Implicit views are the most abused feature in Scala. Take care as can cause code inclarity + performance penalty.
+ * 
+ * Any class that's defined within a package is nested inside the package. Any implicts defined on a package object will be on the plicit scope for all types defined 
+ * inside the package.
+ * 
+ * package object foo {
+ * 	implicit def foo = new Foo
+ * }
+ * 
+ * package foo {
+ * 	class Foo {
+ * 		override def toString = "Foo"
+ * 	}
+ * }
+ * 
+ * Place all implicits in package object, otherwise confusing as crap. In Scala, packages can be defined in multiple files and the types defined in each source file is 
+ * aggregated to create the complete package.
+ * 
  * @author Ji Kim
  */
-object package_info {
-  
-}

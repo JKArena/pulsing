@@ -32,6 +32,8 @@ public final class CommonConstants {
     public static final int DEFAULT_STORM_INTERVAL_SECONDS;
     
     public static final String CASSANDRA_CONTACT_POINT;
+    public static final String PROJECT_POINT;
+    public static final String APP_NAME;
     
     public static final String TIME_INTERVAL_ID_VALUE_DELIM = "0x07";
     public static final String TIME_INTERVAL_PERSIST_TIMESTAMP_DELIM = "0x13";
@@ -61,7 +63,10 @@ public final class CommonConstants {
             DEFAULT_STORM_TICK_TUPLE_FREQ_SECONDS = Integer.parseInt(props.getProperty("default_storm_tick_tuple_freq_seconds"));
             DEFAULT_STORM_INTERVAL_SECONDS = Integer.parseInt(props.getProperty("default_storm_interval_seconds"));
             
-            CASSANDRA_CONTACT_POINT = props.getProperty("cassandra_contact_point");
+            PROJECT_POINT = props.getProperty("project_point");
+            CASSANDRA_CONTACT_POINT = PROJECT_POINT;
+            
+            APP_NAME = props.getProperty("app_name");
         } catch (IOException ioExcept) {
             throw new RuntimeException("Error while reading common.properties", ioExcept);
         }
