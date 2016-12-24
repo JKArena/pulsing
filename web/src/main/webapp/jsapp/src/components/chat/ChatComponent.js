@@ -30,10 +30,10 @@ import React, {Component} from 'react';
 import {TOPICS, API} from '../../common/PubSub';
 import Storage from '../../common/Storage';
 import WebSockets from '../../common/WebSockets';
+import DropDownButtonComponent from '../../dropDownButton/DropDownButtonComponent';
 import CreateChatLobbyAction from './actions/CreateChatLobbyAction';
 import GetChatLobbiesAction from './actions/GetChatLobbiesAction';
 import ChatAreaComponent from './area/ChatAreaComponent';
-import ChatDropDownButtonComponent from './dropDownButton/ChatDropDownButtonComponent';
 
 const CHAT_PULSE_KEY = {
   __proto__: null
@@ -217,7 +217,7 @@ class ChatComponent extends Component {
                 <FormGroup>
                   <InputGroup>
                     <InputGroup.Button>
-                      <ChatDropDownButtonComponent ref='chatDropDownButton' onSelect={this.handleChatSelect.bind(this)} />
+                      <DropDownButtonComponent ref='chatDropDownButton' title='Chat' onSelect={this.handleChatSelect.bind(this)} />
                     </InputGroup.Button>
                     <FormControl type='text' ref='chatInput' />
                     <InputGroup.Button>

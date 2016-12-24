@@ -22,31 +22,34 @@
  */
 'use strict';
 
-require('./ChatDropDownButton.scss');
+require('./DropDownButton.scss');
 
 import {DropdownButton, MenuItem} from 'react-bootstrap';
 import React, {Component} from 'react';
 
-class ChatDropDownButtonComponent extends Component {
+let dDButtonId = 0;
+
+class DropDownButtonComponent extends Component {
 
   constructor(props) {
     super(props);
 
     this.state = {
-      title: 'Chat'
+      title: (props.title || 'General')
     };
+    this.id = 'dDButton' + dDButtonId++;
     this.menus = {};
   }
 
   addChatMenuItem(menuItem) {
-    console.debug('addChatMenuItem', menuItem);
+    console.debug('addMenuItem', menuItem);
 
     this.menus[menuItem.eventKey] = menuItem.text;
     this.setState(this.state);
   }
 
   removeChatMenuItem(menuItem) {
-    console.debug('removeChatMenuItem', menuItem);
+    console.debug('removeMenuItem', menuItem);
 
     delete this.menus[menuItem.eventKey];
     this.setState(this.state);
@@ -70,15 +73,15 @@ class ChatDropDownButtonComponent extends Component {
     });
     
     return (
-        <DropdownButton title={this.state.title} bsStyle='primary' id='chatDdb'
-          className='chatdropdownbutton-component'
-          ref='chatDropDown' onSelect={this.onSelect.bind(this)}>
+        <DropdownButton title={this.state.title} bsStyle='primary' id={this.id}
+          className='dropdownbutton-component'
+          onSelect={this.onSelect.bind(this)}>
           {menuItems}
         </DropdownButton>
     );
   }
 }
 
-ChatDropDownButtonComponent.displayName = 'ChatDropDownButtonComponent';
+DropDownButtonComponent.displayName = 'DropDownButtonComponent';
 
-export default ChatDropDownButtonComponent;
+export default DropDownButtonComponent;
