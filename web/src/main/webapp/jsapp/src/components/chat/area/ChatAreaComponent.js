@@ -25,7 +25,9 @@
 require('./ChatArea.scss');
 
 import {render, findDOMNode} from 'react-dom';
+import {Popover, OverlayTrigger, ButtonGroup, MenuItem} from 'react-bootstrap';
 import React, {Component} from 'react';
+import DropDownButtonComponent from '../../../dropDownButton/DropDownButtonComponent';
 import WebSockets from '../../../common/WebSockets';
 import {TOPICS, API} from '../../../common/PubSub';
 import Storage from '../../../common/Storage';
@@ -35,6 +37,14 @@ import GetChatLobbyMessagesAction from '../actions/GetChatLobbyMessagesAction';
 
 const CHAT_OTHER = 'chat-other';
 const CHAT_SELF = 'chat-self';
+
+const chatActions = (
+  <Popover title='Actions'>
+    <ButtonGroup vertical>
+      <DropDownButtonComponent title='Invite to ChatLobby'></DropDownButtonComponent>
+    </ButtonGroup>
+  </Popover>
+);
 
 const Chat = (props) => {
   let isSelf = props.isSelf;
@@ -57,10 +67,12 @@ const Chat = (props) => {
           
           let pPath = Url.getPicturePath(chat.picturePath);
 
-          return <figure>
-            <img className='chat-img' src={pPath} alt={chat.name}></img>
-            <figcaption>{chat.name}</figcaption>
-          </figure>;
+          return <OverlayTrigger trigger={['hover', 'focus']} placement='bottom' overlay={chatActions}>
+            <figure>
+              <img className='chat-img' src={pPath} alt={chat.name}></img>
+              <figcaption>{chat.name}</figcaption>
+            </figure>
+          </OverlayTrigger>;
         }
       })()}
 
