@@ -5,7 +5,7 @@ Allows creation of Pulse which others around the area can subscribe to and when 
 1. Storm+Trident+Kafka+Zookeeper
 2. Hadoop+Cassandra and playing around with
    * Cascading+JCascade+Pail
-   * Spark
+   * Spark+Scala
    * Hive
 2. MySQL/Hibernate
 3. Redis for computed + session management

@@ -31,28 +31,14 @@
     </dependency>
     
     <dependency>
-      <groupId>org.apache.cassandra</groupId>
-      <artifactId>cassandra-clientutil</artifactId>
+      <groupId>com.datastax.spark</groupId>
+      <artifactId>spark-cassandra-connector_2.11</artifactId>
+      <version>${spark.cassandra}</version>
     </dependency>
     
     <dependency>
-      <groupId>com.datastax.cassandra</groupId>
-      <artifactId>cassandra-driver-core</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>com.datastax.cassandra</groupId>
-      <artifactId>cassandra-driver-extras</artifactId>
-    </dependency>
-
-    <dependency>
       <groupId>org.scala-lang</groupId>
       <artifactId>scala-library</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>org.apache.spark</groupId>
-      <artifactId>spark-core_2.11</artifactId>
     </dependency>
     
     <dependency>
