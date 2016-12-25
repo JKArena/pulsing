@@ -60,6 +60,21 @@ public class CassandraChatDao extends AbstractCassandraDao {
         return _chatMessageTable.messageQuery(cLId, timeStamp);
     }
     
+    public Optional<Boolean> chatLobbySubscribe(UUID cLId, String lobbyName, UserId userId) {
+        
+        Map<String, UUID> cLobbies = queryChatLobbies(userId);
+        boolean exists = cLobbies.values().stream().anyMatch(chatLobbyId -> {
+            return chatLobbyId.equals(cLId);
+        });
+        
+        if(exists) {
+            return Optional.empty();
+        }
+        _chatLobbyTable.chatLobbySubscribe(userId, lobbyName, cLId);
+        
+        return Optional.of(true);
+    }
+    
     @Override
     public void init() {
         super.init();

@@ -27,7 +27,7 @@ require('./ChatArea.scss');
 import {render, findDOMNode} from 'react-dom';
 import {Popover, OverlayTrigger, ButtonGroup, MenuItem} from 'react-bootstrap';
 import React, {Component} from 'react';
-import DropDownButtonComponent from '../../../dropDownButton/DropDownButtonComponent';
+import DropDownButtonComponent from '../../common/dropDownButton/DropDownButtonComponent';
 import WebSockets from '../../../common/WebSockets';
 import {TOPICS, API} from '../../../common/PubSub';
 import Storage from '../../../common/Storage';
@@ -38,7 +38,7 @@ import GetChatLobbyMessagesAction from '../actions/GetChatLobbyMessagesAction';
 const CHAT_OTHER = 'chat-other';
 const CHAT_SELF = 'chat-self';
 
-const chatActions = (
+const CHAT_ACTIONS = (
   <Popover title='Actions'>
     <ButtonGroup vertical>
       <DropDownButtonComponent title='Invite to ChatLobby'></DropDownButtonComponent>
@@ -51,7 +51,7 @@ const Chat = (props) => {
   let clazz = isSelf ? CHAT_SELF : CHAT_OTHER;
 
   let chat = props.chat;
-  let dateLTS = (isSelf ? new Date() : new Date(chat.timeStamp*1000)).toLocaleTimeString();
+  let dateLTS = (isSelf ? new Date() : new Date(chat.timeStamp)).toLocaleTimeString();
 
   let chatContent = [<div className='chat-content' key={dateLTS +'_msg'}>{chat.message}</div>,
                   <div className='chat-time' key={dateLTS +'_time'} data-content={dateLTS}></div>];
@@ -67,7 +67,7 @@ const Chat = (props) => {
           
           let pPath = Url.getPicturePath(chat.picturePath);
 
-          return <OverlayTrigger trigger={['hover', 'focus']} placement='bottom' overlay={chatActions}>
+          return <OverlayTrigger trigger={['hover', 'focus']} placement='bottom' overlay={CHAT_ACTIONS}>
             <figure>
               <img className='chat-img' src={pPath} alt={chat.name}></img>
               <figcaption>{chat.name}</figcaption>
@@ -126,11 +126,10 @@ class ChatAreaComponent extends Component {
 
   onChatNotification(data) {
     console.debug('chat notification ', data);
+    if(this.id !== data.id) return;
 
     let action = data.action;
-    let id = data.id;
-
-    if(action === 'chatConnect' && this.subscription && this.id === id) {
+    if(action === 'chatConnect' && this.subscription) {
 
       if(!this.ws) {
         this.ws = new WebSockets('socket');
@@ -141,8 +140,9 @@ class ChatAreaComponent extends Component {
           });
 
         if(this.isChatLobby) {
-          //divide by 1000 since held as seconds on the server side
-          GetChatLobbyMessagesAction.queryChatLobbyMessages(this.subscription, (+new Date())/1000)
+          //need to fetch previous chat messages
+
+          GetChatLobbyMessagesAction.queryChatLobbyMessages(this.subscription, (+new Date()))
             .then((chatMessages) => {
               chatMessages.reverse();
 
@@ -170,6 +170,7 @@ class ChatAreaComponent extends Component {
       let chat = JSON.parse(mChat.body);
       
       this.addChat(chat);
+      this.processChatData(chat);
     }
   }
 
@@ -194,6 +195,16 @@ class ChatAreaComponent extends Component {
     }
     
     render((<Chat isSelf={isSelf} chat={chat}></Chat>), cEle);
+  }
+
+  /*
+   * This function is to process any data that is sent for specific actions
+   * (i.e. /chatLobbyInvite)
+   */
+  processChatData(chat) {
+    if(chat.type === 'CHAT_LOBBY_INVITE') {
+      Storage.chatLobbyInvitation = chat.data;
+    }
   }
   
   render() {

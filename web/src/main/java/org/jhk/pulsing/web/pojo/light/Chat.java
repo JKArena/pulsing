@@ -18,6 +18,9 @@
  */
 package org.jhk.pulsing.web.pojo.light;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.jhk.pulsing.shared.util.CommonConstants;
 
 /**
@@ -25,14 +28,23 @@ import org.jhk.pulsing.shared.util.CommonConstants;
  */
 public class Chat {
     
+    public enum TYPE {
+        PULSE, CHAT_LOBBY, CHAT_LOBBY_INVITE, CHAT_LOBBY_JOIN, SYSTEM_MESSAGE;
+    }
+    
     private String _message;
     private long _userId;
     private String _name;
     private String _picturePath;
+    private Map<String, Object> _data;
     private long _timeStamp;
+    private TYPE _type;
     
     public Chat() {
         super();
+        
+        _type = TYPE.PULSE;
+        _data = new HashMap<>();
     }
     
     public String getMessage() {
@@ -40,6 +52,23 @@ public class Chat {
     }
     public void setMessage(String message) {
         _message = message;
+    }
+    
+    public Map<String, Object> getData() {
+        return _data;
+    }
+    public void setData(Map<String, Object> data) {
+        _data = data;
+    }
+    public void addData(String key, Object value) {
+        _data.put(key, value);
+    }
+    
+    public TYPE getType() {
+        return _type;
+    }
+    public void setType(TYPE type) {
+        _type = type;
     }
     
     public long getUserId() {
@@ -68,6 +97,19 @@ public class Chat {
     }
     public void setTimeStamp(long timeStamp) {
         _timeStamp = timeStamp;
+    }
+    
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        builder.append("{");
+        builder.append("userId: " + _userId + ", ");
+        builder.append("name: " + _name + ", ");
+        builder.append("type: " + _type + ", ");
+        builder.append("message: " + _message + ", ");
+        builder.append("data: " + _data);
+        builder.append("}");
+        return builder.toString();
     }
     
     @Override

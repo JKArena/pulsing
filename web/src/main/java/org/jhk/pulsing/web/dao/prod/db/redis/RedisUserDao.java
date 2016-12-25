@@ -21,8 +21,11 @@ package org.jhk.pulsing.web.dao.prod.db.redis;
 import static org.jhk.pulsing.shared.util.RedisConstants.REDIS_KEY.*;
 
 import java.util.Optional;
+import java.util.StringJoiner;
 
 import org.jhk.pulsing.shared.util.RedisConstants;
+import org.jhk.pulsing.shared.util.RedisConstants.INVITATION_ID;
+import org.jhk.pulsing.shared.util.Util;
 import org.jhk.pulsing.web.dao.prod.db.AbstractRedisDao;
 import org.jhk.pulsing.web.pojo.light.UserLight;
 import org.slf4j.Logger;
@@ -76,6 +79,29 @@ public class RedisUserDao extends AbstractRedisDao {
         }
         
         return uLight;
+    }
+    
+    /**
+     * Since can expire by key only (i.e. can't use sadd), generate the id of the invitation and use any value for the value
+     * 
+     * @param userId
+     * @param prefix
+     * @param expiration
+     * @return
+     */
+    public String createInvitationId(long userId, INVITATION_ID prefix, int expiration) {
+        _LOGGER.debug("RedisUserDao.createInvitationId: " + userId + " - " + prefix + ", " + expiration);
+        
+        String key = new StringJoiner("_").add(prefix.toString()).add(userId+"").add(Util.uniqueId()+"").toString();
+        getJedis().setex(key, expiration, "1");
+        
+        return key;
+    }
+    
+    public boolean removeInvitationId(String invitationId) {
+        _LOGGER.debug("RedisUserDao.removeInvitationId: " + invitationId);
+        
+        return getJedis().del(invitationId) == 1L;
     }
     
 }

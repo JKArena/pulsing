@@ -90,6 +90,12 @@ public final class ChatLobbyTable implements ICassandraTable {
         
         UUID cLId = UUIDGen.getTimeUUID();
         
+        return chatLobbySubscribe(userId, lobbyName, cLId);
+    }
+    
+    public Optional<UUID> chatLobbySubscribe(UserId userId, String lobbyName, UUID cLId) {
+        _LOGGER.info("ChatLobbyTable.chatLobbySubscribe : " + userId + ", " + lobbyName);
+        
         BoundStatement cLInsert = _CHAT_LOBBY_INSERT.bind(cLId, userId.getId(), lobbyName);
         _session.executeAsync(cLInsert);
         

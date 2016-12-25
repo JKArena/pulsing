@@ -22,6 +22,7 @@ import java.util.Optional;
 
 import org.jhk.pulsing.serialization.avro.records.User;
 import org.jhk.pulsing.serialization.avro.records.UserId;
+import org.jhk.pulsing.shared.util.RedisConstants.INVITATION_ID;
 import org.jhk.pulsing.web.common.Result;
 import org.jhk.pulsing.web.pojo.light.UserLight;
 
@@ -29,6 +30,8 @@ import org.jhk.pulsing.web.pojo.light.UserLight;
  * @author Ji Kim
  */
 public interface IUserService {
+    
+    long SYSTEM_USER_ID = -1L;
     
     Result<User> getUser(UserId userId);
     
@@ -41,5 +44,17 @@ public interface IUserService {
     void storeUserLight(UserLight user);
     
     Optional<UserLight> getUserLight(long userId);
+    
+    /**
+     * Creates an expiring invitationId for the userId (i.e. for /chatLobbyInvite action)
+     * 
+     * @param userId
+     * @param prefix
+     * @param expiration in seconds
+     * @return
+     */
+    String createInvitationId(long userId, INVITATION_ID prefix, int expiration);
+    
+    boolean removeInvitationId(String invitationId);
     
 }

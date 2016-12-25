@@ -39,4 +39,6 @@ public interface IChatService {
     
     void chatLobbyMessageInsert(UUID cLId, long from, long timeStamp, String message);
     
+    Result<Boolean> chatLobbySubscribe(UUID cLId, String lobbyName, UserId userId);
+    
 }
