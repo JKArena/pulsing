@@ -39,6 +39,10 @@ public final class RedisConstants {
         USER_LIGHT_;
     }
     
+    public enum INVITATION_ID {
+        CHAT_LOBBY_INVITE_;
+    }
+    
     static {
         
         Properties props = new Properties();

@@ -75,5 +75,13 @@ public class ChatService implements IChatService {
         
         cassandraChatDao.chatLobbyMessageInsert(cLId, from, timeStamp, message);
     }
+    
+    @Override
+    public Result<Boolean> chatLobbySubscribe(UUID cLId, String lobbyName, UserId userId) {
+        
+        Optional<Boolean> chatSubscribe = cassandraChatDao.chatLobbySubscribe(cLId, lobbyName, userId);
+        
+        return chatSubscribe.isPresent() ? new Result<>(SUCCESS, chatSubscribe.get()) : new Result<>(FAILURE, false, "Unable to subscribe to chatLobby " + lobbyName);
+    }
 
 }

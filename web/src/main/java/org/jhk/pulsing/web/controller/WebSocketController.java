@@ -24,6 +24,7 @@ import java.util.UUID;
 
 import javax.inject.Inject;
 
+import org.jhk.pulsing.shared.util.RedisConstants;
 import org.jhk.pulsing.web.pojo.light.Chat;
 import org.jhk.pulsing.web.pojo.light.MapPulseCreate;
 import org.jhk.pulsing.web.pojo.light.UserLight;
@@ -45,6 +46,8 @@ public class WebSocketController {
     
     private static final Logger _LOGGER = LoggerFactory.getLogger(WebSocketController.class);
     
+    private static final int CHAT_LOBBY_INVITE_EXPIRATION = 300; // 5 minutes
+    
     @Inject
     private IUserService userService;
     
@@ -58,19 +61,34 @@ public class WebSocketController {
         return mPulseCreate;
     }
     
-    @MessageMapping("/chat/{chatId}/{isChatLobby}")
+    @MessageMapping("/privateChat/{toUserId}")
+    @SendTo("/topics/privateChat/{toUserId}")
+    public Chat privateChat(@DestinationVariable long toUserId, @Payload Chat msg) {
+        _LOGGER.debug("WebSocketController.privateChat: " + toUserId + "-" + msg);
+        
+        msg.setTimeStamp(Instant.now().toEpochMilli());
+        
+        if(msg.getType() == Chat.TYPE.CHAT_LOBBY_INVITE) {
+            String invitationId = userService.createInvitationId(toUserId, RedisConstants.INVITATION_ID.CHAT_LOBBY_INVITE_, CHAT_LOBBY_INVITE_EXPIRATION);
+            msg.addData("invitationId", invitationId);
+        }
+        
+        return msg;
+    }
+    
+    @MessageMapping("/chat/{chatId}")
     @SendTo("/topics/chat/{chatId}")
-    public Chat chat(@DestinationVariable String chatId, @DestinationVariable boolean isChatLobby, @Payload Chat msg) {
-        _LOGGER.debug("WebSocketController.chat: " + chatId + ":" + isChatLobby + "-" + msg);
+    public Chat chat(@DestinationVariable String chatId, @Payload Chat msg) {
+        _LOGGER.debug("WebSocketController.chat: " + chatId + ": " + msg);
         
         Optional<UserLight> oUserLight = userService.getUserLight(msg.getUserId());
         oUserLight.ifPresent(user -> {
             msg.setPicturePath(user.getPicturePath());
         });
         
-        msg.setTimeStamp(Instant.now().getEpochSecond());
+        msg.setTimeStamp(Instant.now().toEpochMilli());
         
-        if(isChatLobby) {
+        if(msg.getType() == Chat.TYPE.CHAT_LOBBY) {
             chatService.chatLobbyMessageInsert(UUID.fromString(chatId), msg.getUserId(), msg.getTimeStamp(), msg.getMessage());
         }
         

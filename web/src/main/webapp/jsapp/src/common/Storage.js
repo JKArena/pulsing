@@ -27,7 +27,34 @@ import PulseId from '../avro/PulseId';
 
 const PULSING_USER_KEY = 'pulsingUser';
 const PULSING_SUBSCRIBED_PULSE_ID_KEY = 'pulsingSubscribedPulseId';
+const CHAT_LOBBY_INVITATION_KEY = 'chatLobbyInvitation';
 const MAPPER = new Map();
+
+function _getSimpleJSON(key) {
+  if(MAPPER.has(key)) {
+    return MAPPER.get(key);
+  }
+
+  let jsonStr = sessionStorage.getItem(key);
+  let obj = null;
+  if(jsonStr !== null) {
+    obj = JSON.parse(jsonStr);
+    MAPPER.set(key, obj);
+  }
+
+  return obj;
+}
+
+function _setSimpleJSON(key, jsonVal) {
+  if(!jsonVal) {
+    sessionStorage.removeItem(key);
+    MAPPER.delete(key);
+    return;
+  }
+
+  MAPPER.set(key, jsonVal);
+  sessionStorage.setItem(key, JSON.stringify(jsonVal));
+}
 
 function _get(key, AvroClazz) {
   if(MAPPER.has(key)) {
@@ -81,6 +108,28 @@ export default Object.freeze(
           set: function(pulseIdJson) {
 
             _set(PULSING_SUBSCRIBED_PULSE_ID_KEY, pulseIdJson, PulseId);
+          },
+          enumerable: true
+        },
+
+        'chatLobbyInvitation' : {
+          get: function() {
+            
+            return _getSimpleJSON(CHAT_LOBBY_INVITATION_KEY);
+          },
+          set: function(json) {
+            let jsonVal = _getSimpleJSON(CHAT_LOBBY_INVITATION_KEY);
+            
+            if(jsonVal) {
+              if(jsonVal.findIndex(val => { return val.invitationId === json.invitationId; }) !== -1) {
+                return;
+              }
+
+              jsonVal.push(json);
+            } else {
+              jsonVal = [json];
+            }
+            _setSimpleJSON(CHAT_LOBBY_INVITATION_KEY, jsonVal);
           },
           enumerable: true
         }

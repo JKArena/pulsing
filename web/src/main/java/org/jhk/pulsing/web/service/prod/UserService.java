@@ -26,6 +26,7 @@ import javax.inject.Named;
 import org.jhk.pulsing.serialization.avro.records.User;
 import org.jhk.pulsing.serialization.avro.records.UserId;
 import org.jhk.pulsing.shared.util.CommonConstants;
+import org.jhk.pulsing.shared.util.RedisConstants.INVITATION_ID;
 import org.jhk.pulsing.web.common.Result;
 import static org.jhk.pulsing.web.common.Result.CODE.*;
 
@@ -119,6 +120,18 @@ public class UserService extends AbstractStormPublisher
         }
         
         return new Result<>(SUCCESS, "loggedOut");
+    }
+    
+    @Override
+    public String createInvitationId(long userId, INVITATION_ID prefix, int expiration) {
+        
+        return redisUserDao.createInvitationId(userId, prefix, expiration);
+    }
+    
+    @Override
+    public boolean removeInvitationId(String invitationId) {
+        
+        return redisUserDao.removeInvitationId(invitationId);
     }
     
     @Override

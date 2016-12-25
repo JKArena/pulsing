@@ -30,16 +30,28 @@ import React, {Component} from 'react';
 import {TOPICS, API} from '../../common/PubSub';
 import Storage from '../../common/Storage';
 import WebSockets from '../../common/WebSockets';
-import DropDownButtonComponent from '../../dropDownButton/DropDownButtonComponent';
+import DropDownButtonComponent from '../common/dropDownButton/DropDownButtonComponent';
 import CreateChatLobbyAction from './actions/CreateChatLobbyAction';
 import GetChatLobbiesAction from './actions/GetChatLobbiesAction';
+import ChatLobbySubscribeAction from './actions/ChatLobbySubscribeAction';
 import ChatAreaComponent from './area/ChatAreaComponent';
 
-const CHAT_PULSE_KEY = {
+//below would have key as the identifier of the chatArea and values being a JSON object of text to display
+//and other necessary information
+const CHAT_MAPPER = {
   __proto__: null
 };
+const GENERAL_CHAT_KEY = 'general'; //for general,default chat area (i.e. chat lobby invite, whisper, and etc)
 
-const GENERAL_CHAT_KEY = 'general';
+//types for the Chat message, so to be handled appropriately from the client+server side
+const CHAT_TYPE = {
+  __proto__: null,
+  'PULSE': 'PULSE',
+  'CHAT_LOBBY': 'CHAT_LOBBY',
+  'CHAT_LOBBY_INVITE': 'CHAT_LOBBY_INVITE',
+  'GENERAL': 'GENERAL',
+  'WHISPER': 'WHISPER'
+};
 
 class ChatComponent extends Component {
 
@@ -112,19 +124,23 @@ class ChatComponent extends Component {
     let subscription = '';
 
     this.chatPanelNode.appendChild(caEle);
-    CHAT_PULSE_KEY[id] = {text: dropDownText, eventKey: id};
+    CHAT_MAPPER[id] = {text: dropDownText, eventKey: id};
 
     if(id !== GENERAL_CHAT_KEY) {
       subscription = '/topics/chat/' + id;
       caEle.style.display = 'none';
     } else {
+      //general chat is the default chat area and will also have other chat contents
+      //such as whispers, chat lobby invites, system messages, and etc
+
+      subscription = '/topics/privateChat/' + Storage.user.id.id;
       this.switchToNewChatAreaNode(caEle);
     }
     
     render((<ChatAreaComponent id={id} subscription={subscription} isChatLobby={this.isChatLobby(id)}></ChatAreaComponent>), caEle);
     this.nodeMaps.set(id, caEle);
 
-    this.refs.chatDropDownButton.addChatMenuItem(CHAT_PULSE_KEY[id]);
+    this.refs.chatDropDownButton.addChatMenuItem(CHAT_MAPPER[id]);
   }
 
   unmountChatAreaComponent(id) {
@@ -133,7 +149,7 @@ class ChatComponent extends Component {
 
     unmountComponentAtNode(node);
     
-    this.refs.chatDropDownButton.removeChatMenuItem(CHAT_PULSE_KEY[id]);
+    this.refs.chatDropDownButton.removeChatMenuItem(CHAT_MAPPER[id]);
   }
 
   handleChatSelect(eventKey) {
@@ -158,8 +174,24 @@ class ChatComponent extends Component {
     cAreaNode.style.display = '';
   }
 
+  /*
+   * Returns the main types from CHAT_TYPE,
+   * note CHAT_LOBBY_INVITE, WHISPER types should not use this function
+   * as it should be set manually during the actions
+   */
+  getChatType(chatId) {
+    if(this.isChatLobby(chatId)) {
+      return CHAT_TYPE.CHAT_LOBBY;
+    } else if(CHAT_MAPPER[chatId].text === 'Pulse') {
+      return CHAT_TYPE.PULSE;
+    } else {
+      return CHAT_TYPE.GENERAL;
+    }
+  }
+
   isChatLobby(chatId) {
-    return CHAT_PULSE_KEY[chatId].text !== 'Pulse' && CHAT_PULSE_KEY[chatId].eventKey !== GENERAL_CHAT_KEY;
+    //note others such as WHISPER, CHAT_INVITE, and etc are by chatAction /whisper name and etc
+    return CHAT_MAPPER[chatId].text !== 'Pulse' && CHAT_MAPPER[chatId].eventKey !== GENERAL_CHAT_KEY;
   }
 
   handleChat() {
@@ -174,10 +206,12 @@ class ChatComponent extends Component {
       //means an action
       this.handleChatAction(user);
     } else {
-      //usual chat, need to send whether chatLobby as need to log
+      //usual chat, need to send the type (i.e. for chatLobby need to log the message)
       
-      this.ws.send('/pulsing/chat/' + this.state.chatId + '/' + this.isChatLobby(this.state.chatId), {},
-                  JSON.stringify({message: this.chatInputNode.value, userId: user.id.id, name: user.name}));
+      this.ws.send('/pulsing/chat/' + this.state.chatId, {},
+                  JSON.stringify({message: this.chatInputNode.value,
+                                  type: this.getChatType(this.state.chatId),
+                                  userId: user.id.id, name: user.name}));
     }
     
     this.chatInputNode.value = '';
@@ -186,24 +220,54 @@ class ChatComponent extends Component {
   handleChatAction(user) {
     let split = this.chatInputNode.value.split(' ');
     
-    if(split[0] === '/create') {
+    if(split[0] === '/createChatLobby') {
 
       let cLName = split[1];
       CreateChatLobbyAction.createChatLobby(user.id, cLName)
         .then((chatId) => {
 
           this.mountChatAreaComponent(chatId, cLName);
-          API.publish(TOPICS.CHAT_AREA, {action: 'systemMessage', id: this.state.chatId,
-              message: 'Chat Lobby : ' + cLName + ' created successfully!'});
+          API.publish(TOPICS.CHAT_AREA, {action: 'systemMessage', id: GENERAL_CHAT_KEY,
+                        message: 'Chat Lobby : ' + cLName + ' created successfully!'});
         });
-    } else if(split[0] === '/invite') {
+    } else if(split[0] === '/chatLobbyInvite') {
 
-      //so to allow inviting friends to the chatLobby
-      if(this.isChatLobby(this.state.chatId)) {
-        //let uName = split[1];
+      if(split.length > 2) {
+        //ChatArea's popover will allow easy access for id, but for /chatInvite perhaps store in Redis
+        //the mapping of userId => {name: userId} from the chatLobbyMessages + friends (TODO)
+        let uId = split[1]; //temp for now, assume knows the uId
+        let cInfo = null;
 
+        for (let key of Object.keys(CHAT_MAPPER)) {
+          if(CHAT_MAPPER[key].text === split[2]) { //chat name
+            cInfo = CHAT_MAPPER[key];
+            break;
+          }
+        }
+
+        if(cInfo) {
+          let cMessage = `Chat Lobby Invite - ${cInfo.text} from: ${user.name}. Type /chatLobbyJoin <chatName>`;
+
+          this.ws.send('/pulsing/privateChat/' + uId, {},
+                  JSON.stringify({message: cMessage, userId: user.id.id, type: CHAT_TYPE.CHAT_LOBBY_INVITE,
+                                  data: {chatName: cInfo.text, chatId: cInfo.eventKey}, name: user.name}));
+        }
+        
       }
-      
+    } else if(split[0] === '/chatLobbyJoin') {
+
+      //will be an Array of chatName, chatId, and invitationId (maybe Map later)
+      let chatLobby = Storage.chatLobbyInvitation.filter(entry => {
+        return entry.chatName === split[1];
+      });
+
+      if(chatLobby.length === 1) {
+
+        ChatLobbySubscribeAction.chatLobbySubscribe(chatLobby[0], Storage.user.id)
+          .then(() => {
+            this.mountChatAreaComponent(chatLobby[0].chatId, chatLobby[0].chatName);
+          });
+      }
     }
   }
   
