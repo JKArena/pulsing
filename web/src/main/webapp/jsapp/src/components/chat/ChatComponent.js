@@ -149,6 +149,7 @@ class ChatComponent extends Component {
   mountChatAreaComponent(id, dropDownText) {
     let caEle = document.createElement('div');
     let subscription = '';
+    let eagerConnect = false;
 
     this.chatPanelNode.appendChild(caEle);
     CHAT_MAPPER[id] = {text: dropDownText, eventKey: id};
@@ -160,12 +161,13 @@ class ChatComponent extends Component {
       //general chat is the default chat area and will also have other chat contents
       //such as whispers, chat lobby invites, system messages, and etc
 
+      eagerConnect = true; //need eager connect for system messages and etc
       subscription = '/topics/privateChat/' + Storage.user.id.id;
       this.switchToNewChatAreaNode(caEle);
     }
     
-    render((<ChatAreaComponent id={id} subscription={subscription} isChatLobby={this.isChatLobby(id)}></ChatAreaComponent>),
-            caEle);
+    render((<ChatAreaComponent id={id} subscription={subscription} eagerConnect={eagerConnect}
+            isChatLobby={this.isChatLobby(id)}></ChatAreaComponent>), caEle);
     this.nodeMaps.set(id, caEle);
 
     this.refs.chatDropDownButton.addChatMenuItem(CHAT_MAPPER[id]);

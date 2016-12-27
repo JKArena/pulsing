@@ -29,18 +29,21 @@ const GET_CHAT_LOBBY_MESSAGES_PATH = 'chat/queryChatLobbyMessages/';
 const GetChatLobbyMessagesAction = Object.freeze(
   {
 
-    queryChatLobbyMessages(cLId, timestamp) {
+    queryChatLobbyMessages(cLId, timeStamp) {
 
       let params = {__proto__: null,
                     'cLId': cLId,
-                    'timestamp': timestamp};
+                    'timeStamp': timeStamp};
       return new Promise(function(resolve, reject) {
 
         Fetch.GET_JSON(GET_CHAT_LOBBY_MESSAGES_PATH, {}, params)
           .then(function(json) {
             console.debug('queryChatLobbyMessages result', json);
-            
-            resolve(json);
+            if(json.code === 'SUCCESS') {
+              resolve(json.data);
+            } else {
+              reject(json.message);
+            }
           })
           .catch(function(err) {
             console.error(err);
