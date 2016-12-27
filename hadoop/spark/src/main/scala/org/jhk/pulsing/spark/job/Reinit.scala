@@ -16,43 +16,25 @@
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.jhk.pulsing.spark.job
+
+import org.apache.hadoop.conf.Configuration
+import org.apache.hadoop.fs.FileSystem
+import org.apache.hadoop.fs.Path
+
+import org.jhk.pulsing.shared.util.HadoopConstants
+import org.jhk.pulsing.shared.util.HadoopConstants.DIRECTORIES._
 
 /**
+ * Simple reinit like hadoop/cascading as the cleanUp.sh script clears out the data for disk usage
+ * 
  * @author Ji Kim
  */
-'use strict';
-
-import Fetch from '../../../common/Fetch';
-
-const GET_CHAT_LOBBY_MESSAGES_PATH = 'chat/queryChatLobbyMessages/';
-
-const GetChatLobbyMessagesAction = Object.freeze(
-  {
-
-    queryChatLobbyMessages(cLId, timestamp) {
-
-      let params = {__proto__: null,
-                    'cLId': cLId,
-                    'timestamp': timestamp};
-      return new Promise(function(resolve, reject) {
-
-        Fetch.GET_JSON(GET_CHAT_LOBBY_MESSAGES_PATH, {}, params)
-          .then(function(json) {
-            console.debug('queryChatLobbyMessages result', json);
-            
-            resolve(json);
-          })
-          .catch(function(err) {
-            console.error(err);
-
-            reject(err);
-          });
-
-      });
-
-    }
-
-  }
-);
-
-export default GetChatLobbyMessagesAction;
+class Reinit {
+  println("Testing");
+  val fSystem = FileSystem.get(new Configuration());
+  
+  fSystem.mkdirs(new Path(HadoopConstants.SPARK_MASTER_WORKSPACE))
+  fSystem.mkdirs(new Path(HadoopConstants.SPARK_NEW_DATA_WORKSPACE))
+  
+}

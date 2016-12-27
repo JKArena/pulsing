@@ -35,6 +35,7 @@ import Url from '../../../common/Url';
 
 import GetChatLobbyMessagesAction from '../actions/GetChatLobbyMessagesAction';
 
+const SYSTEM_MESSAGE_CHAT_TYPE = 'SYSTEM_MESSAGE';
 const CHAT_OTHER = 'chat-other';
 const CHAT_SELF = 'chat-self';
 
@@ -142,7 +143,8 @@ class ChatAreaComponent extends Component {
         if(this.isChatLobby) {
           //need to fetch previous chat messages
 
-          GetChatLobbyMessagesAction.queryChatLobbyMessages(this.subscription, (+new Date()))
+          let splitted = this.subscription.split('/');
+          GetChatLobbyMessagesAction.queryChatLobbyMessages(splitted[splitted.length-1], (+new Date()))
             .then((chatMessages) => {
               chatMessages.reverse();
 
@@ -154,11 +156,8 @@ class ChatAreaComponent extends Component {
         }
       }
     } else if(action === 'systemMessage') {
-
-      let sMEle = document.createElement('div');
-      this.chatAreaNode.appendChild(sMEle);
-
-      render((<SystemMessage msg={data.message}></SystemMessage>), sMEle);
+      
+      this.addSystemMessage(data.message);
     }
 
   }
@@ -168,10 +167,21 @@ class ChatAreaComponent extends Component {
 
     if(mChat && mChat.body) {
       let chat = JSON.parse(mChat.body);
-      
-      this.addChat(chat);
-      this.processChatData(chat);
+
+      if(chat.type === SYSTEM_MESSAGE_CHAT_TYPE) {
+        this.addSystemMessage(chat.message);
+      } else {
+        this.addChat(chat);
+        this.processChatData(chat);
+      }
     }
+  }
+
+  addSystemMessage(message) {
+    let sMEle = document.createElement('div');
+    this.chatAreaNode.appendChild(sMEle);
+
+    render((<SystemMessage msg={message}></SystemMessage>), sMEle);
   }
 
   addChat(chat, insertBefore=false) {
