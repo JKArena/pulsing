@@ -73,7 +73,7 @@ public class UserController {
     }
     
     @RequestMapping(value="/getUser", method=RequestMethod.GET)
-    public @ResponseBody Result<User> getUser(UserId userId) {
+    public @ResponseBody Result<User> getUser(@RequestParam UserId userId) {
         _LOGGER.debug("UserController.getUser: " + userId);
         
         return userService.getUser(userId);
