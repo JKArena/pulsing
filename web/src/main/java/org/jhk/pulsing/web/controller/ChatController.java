@@ -40,6 +40,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -78,7 +79,7 @@ public class ChatController {
      * @return
      */
     @RequestMapping(value="/queryChatLobbyMessages", method=RequestMethod.GET)
-    public @ResponseBody Result<List<Chat>> queryChatLobbyMessages(UUID cLId, Long timeStamp) {
+    public @ResponseBody Result<List<Chat>> queryChatLobbyMessages(@RequestParam UUID cLId, Long timeStamp) {
         _LOGGER.debug("ChatController.queryChatLobbyMessages: " + cLId + " - " + timeStamp);
         
         return chatService.queryChatLobbyMessages(cLId, timeStamp);

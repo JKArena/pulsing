@@ -24,7 +24,7 @@
 
 require('./Chat.scss');
 
-import {Grid, Row, Col, FormGroup, FormControl, InputGroup, Button, Panel} from 'react-bootstrap';
+import {Popover, OverlayTrigger, Table, Grid, Row, Col, FormGroup, FormControl, InputGroup, Button, Panel} from 'react-bootstrap';
 import {render, findDOMNode, unmountComponentAtNode} from 'react-dom';
 import React, {Component} from 'react';
 import {TOPICS, API} from '../../common/PubSub';
@@ -35,6 +35,33 @@ import CreateChatLobbyAction from './actions/CreateChatLobbyAction';
 import GetChatLobbiesAction from './actions/GetChatLobbiesAction';
 import ChatLobbySubscribeAction from './actions/ChatLobbySubscribeAction';
 import ChatAreaComponent from './area/ChatAreaComponent';
+
+const CHAT_ACTION_HELP = (
+  <Popover title='Chat Actions'>
+    <Table responsive>
+      <thead>
+        <tr>
+          <th>Command</th>
+          <th>Description</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>/createChatLobby chatLobbyName</td>
+          <td>Creates a chat lobby of chatLobbyName</td>
+        </tr>
+        <tr>
+          <td>/chatLobbyInvite userId chatLobbyName</td>
+          <td>Invites userId to chatLobbyName</td>
+        </tr>
+        <tr>
+          <td>/chatLobbyJoin chatLobbyName</td>
+          <td>Joins chatLobbyName</td>
+        </tr>
+      </tbody>
+    </Table>
+  </Popover>
+);
 
 //below would have key as the identifier of the chatArea and values being a JSON object of text to display
 //and other necessary information
@@ -137,7 +164,8 @@ class ChatComponent extends Component {
       this.switchToNewChatAreaNode(caEle);
     }
     
-    render((<ChatAreaComponent id={id} subscription={subscription} isChatLobby={this.isChatLobby(id)}></ChatAreaComponent>), caEle);
+    render((<ChatAreaComponent id={id} subscription={subscription} isChatLobby={this.isChatLobby(id)}></ChatAreaComponent>),
+            caEle);
     this.nodeMaps.set(id, caEle);
 
     this.refs.chatDropDownButton.addChatMenuItem(CHAT_MAPPER[id]);
@@ -220,41 +248,39 @@ class ChatComponent extends Component {
   handleChatAction(user) {
     let split = this.chatInputNode.value.split(' ');
     
-    if(split[0] === '/createChatLobby') {
+    if(split[0] === '/createChatLobby' && split.length === 2) {
 
       let cLName = split[1];
       CreateChatLobbyAction.createChatLobby(user.id, cLName)
         .then((chatId) => {
 
           this.mountChatAreaComponent(chatId, cLName);
-          API.publish(TOPICS.CHAT_AREA, {action: 'systemMessage', id: GENERAL_CHAT_KEY,
+          API.publish(TOPICS.CHAT_AREA, {action: 'systemMessage', id: this.state.chatId,
                         message: 'Chat Lobby : ' + cLName + ' created successfully!'});
         });
-    } else if(split[0] === '/chatLobbyInvite') {
+    } else if(split[0] === '/chatLobbyInvite' && split.length > 2) {
 
-      if(split.length > 2) {
-        //ChatArea's popover will allow easy access for id, but for /chatInvite perhaps store in Redis
-        //the mapping of userId => {name: userId} from the chatLobbyMessages + friends (TODO)
-        let uId = split[1]; //temp for now, assume knows the uId
-        let cInfo = null;
+      //ChatArea's popover will allow easy access for id, but for /chatInvite perhaps store in Redis
+      //the mapping of userId => {name: userId} from the chatLobbyMessages + friends (TODO)
+      let uId = split[1]; //temp for now, assume knows the uId
+      let cInfo = null;
 
-        for (let key of Object.keys(CHAT_MAPPER)) {
-          if(CHAT_MAPPER[key].text === split[2]) { //chat name
-            cInfo = CHAT_MAPPER[key];
-            break;
-          }
+      for (let key of Object.keys(CHAT_MAPPER)) {
+        if(CHAT_MAPPER[key].text === split[2]) { //chat name
+          cInfo = CHAT_MAPPER[key];
+          break;
         }
-
-        if(cInfo) {
-          let cMessage = `Chat Lobby Invite - ${cInfo.text} from: ${user.name}. Type /chatLobbyJoin <chatName>`;
-
-          this.ws.send('/pulsing/privateChat/' + uId, {},
-                  JSON.stringify({message: cMessage, userId: user.id.id, type: CHAT_TYPE.CHAT_LOBBY_INVITE,
-                                  data: {chatName: cInfo.text, chatId: cInfo.eventKey}, name: user.name}));
-        }
-        
       }
-    } else if(split[0] === '/chatLobbyJoin') {
+
+      if(cInfo) {
+        let cMessage = `Chat Lobby Invite from: ${user.name}. Type /chatLobbyJoin ${cInfo.text}`;
+
+        this.ws.send('/pulsing/privateChat/' + uId, {},
+                JSON.stringify({message: cMessage, userId: user.id.id, type: CHAT_TYPE.CHAT_LOBBY_INVITE,
+                                data: {chatName: cInfo.text, chatId: cInfo.eventKey}, name: user.name}));
+      }
+
+    } else if(split[0] === '/chatLobbyJoin' && split.length === 2) {
 
       //will be an Array of chatName, chatId, and invitationId (maybe Map later)
       let chatLobby = Storage.chatLobbyInvitation.filter(entry => {
@@ -281,9 +307,12 @@ class ChatComponent extends Component {
                 <FormGroup>
                   <InputGroup>
                     <InputGroup.Button>
-                      <DropDownButtonComponent ref='chatDropDownButton' title='Chat' onSelect={this.handleChatSelect.bind(this)} />
+                      <DropDownButtonComponent ref='chatDropDownButton' title='Chat'
+                        onSelect={this.handleChatSelect.bind(this)} />
                     </InputGroup.Button>
-                    <FormControl type='text' ref='chatInput' />
+                    <OverlayTrigger trigger={['hover', 'focus']} placement='bottom' overlay={CHAT_ACTION_HELP}>
+                      <FormControl type='text' ref='chatInput' />
+                    </OverlayTrigger>
                     <InputGroup.Button>
                       <Button onClick={this.handleChat.bind(this)}>Send</Button>
                     </InputGroup.Button>

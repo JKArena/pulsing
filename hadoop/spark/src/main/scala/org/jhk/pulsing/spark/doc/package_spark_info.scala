@@ -131,5 +131,11 @@ package org.jhk.pulsing.spark.doc
  * 	}.filter(x => x._2 != null)
  * }
  * 
+ * UI at localhost:4040
+ * 
+ * Since running on yarn
+ * ./bin/spark-submit --master yarn --deploy-mode cluster --class org.jhk.pulsing.spark.job.LocationRank --name "Location Rank"
+ * 	pulsing-hadoop-spark-0.1-SNAPSHOT.jar
+ * 
  * @author Ji Kim
  */

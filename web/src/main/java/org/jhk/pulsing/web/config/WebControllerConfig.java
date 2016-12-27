@@ -19,6 +19,7 @@
 package org.jhk.pulsing.web.config;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.apache.avro.specific.SpecificRecord;
 import org.jhk.pulsing.serialization.avro.serializers.SerializationHelper;
@@ -32,6 +33,7 @@ import org.jhk.pulsing.web.serialization.StringToAvroRecordFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.core.convert.converter.Converter;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.http.converter.FormHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
@@ -91,12 +93,20 @@ public class WebControllerConfig extends WebMvcConfigurerAdapter {
         super.addFormatters(registry);
         
         registry.addConverterFactory(new StringToAvroRecordFactory());
+        registry.addConverter(new Converter<String, UUID>() {
+            @Override
+            public UUID convert(String source) {
+                return UUID.fromString(source);
+            }
+        });
     }
     
     @Override
     public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
         configurer.enable();
     }
+    
+    
     
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
