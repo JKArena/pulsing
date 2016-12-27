@@ -67,7 +67,7 @@ public class ChatController {
     private SimpMessagingTemplate template;
     
     @RequestMapping(value="/queryChatLobbies", method=RequestMethod.GET)
-    public @ResponseBody Result<Map<String, UUID>> queryChatLobby(UserId userId) {
+    public @ResponseBody Result<Map<String, UUID>> queryChatLobby(@RequestParam UserId userId) {
         _LOGGER.debug("ChatController.queryChatLobbies: " + userId);
         
         return chatService.queryChatLobbies(userId);
@@ -79,7 +79,7 @@ public class ChatController {
      * @return
      */
     @RequestMapping(value="/queryChatLobbyMessages", method=RequestMethod.GET)
-    public @ResponseBody Result<List<Chat>> queryChatLobbyMessages(@RequestParam UUID cLId, Long timeStamp) {
+    public @ResponseBody Result<List<Chat>> queryChatLobbyMessages(@RequestParam UUID cLId, @RequestParam Long timeStamp) {
         _LOGGER.debug("ChatController.queryChatLobbyMessages: " + cLId + " - " + timeStamp);
         
         return chatService.queryChatLobbyMessages(cLId, timeStamp);

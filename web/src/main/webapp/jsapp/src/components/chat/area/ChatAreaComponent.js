@@ -104,14 +104,17 @@ class ChatAreaComponent extends Component {
     this.id = props.id;
     this.subscription = props.subscription;
     this.isChatLobby = props.isChatLobby;
-
-    this.firstChat = null;
+    this.eagerConnect = !!props.eagerConnect;
 
     this.chatNotificationHandler = this.onChatNotification.bind(this);
   }
   
   componentDidMount() {
     this.chatAreaNode = findDOMNode(this.refs.chatArea);
+
+    if(this.eagerConnect) {
+      this.connectWS();
+    }
 
     API.subscribe(TOPICS.CHAT_AREA, this.chatNotificationHandler);
   }
@@ -125,36 +128,37 @@ class ChatAreaComponent extends Component {
     API.unsubscribe(TOPICS.CHAT_AREA, this.chatNotificationHandler);
   }
 
+  connectWS() {
+    if(!this.ws) {
+      this.ws = new WebSockets('socket');
+      this.ws.connect()
+        .then(frame => {
+          console.debug('chat area frame', this.subscription, frame);
+          this.sub = this.ws.subscribe(this.subscription, this.chatHandler);
+        });
+
+      if(this.isChatLobby) {
+        //need to fetch previous chat messages
+        let splitted = this.subscription.split('/');
+        GetChatLobbyMessagesAction.queryChatLobbyMessages(splitted[splitted.length-1], (+new Date()))
+          .then((chatMessages) => {
+            chatMessages.reverse();
+
+            chatMessages.forEach(message => {
+              this.addChat(message);
+            });
+          });
+      }
+    }
+  }
+
   onChatNotification(data) {
     console.debug('chat notification ', data);
     if(this.id !== data.id) return;
 
     let action = data.action;
     if(action === 'chatConnect' && this.subscription) {
-
-      if(!this.ws) {
-        this.ws = new WebSockets('socket');
-        this.ws.connect()
-          .then(frame => {
-            console.debug('chat area frame', this.subscription, frame);
-            this.sub = this.ws.subscribe(this.subscription, this.chatHandler);
-          });
-
-        if(this.isChatLobby) {
-          //need to fetch previous chat messages
-
-          let splitted = this.subscription.split('/');
-          GetChatLobbyMessagesAction.queryChatLobbyMessages(splitted[splitted.length-1], (+new Date()))
-            .then((chatMessages) => {
-              chatMessages.reverse();
-
-              chatMessages.forEach(message => {
-
-                this.addChat(message, true);
-              });
-            });
-        }
-      }
+      this.connectWS();
     } else if(action === 'systemMessage') {
       
       this.addSystemMessage(data.message);
@@ -184,25 +188,13 @@ class ChatAreaComponent extends Component {
     render((<SystemMessage msg={message}></SystemMessage>), sMEle);
   }
 
-  addChat(chat, insertBefore=false) {
+  addChat(chat) {
 
     let user = Storage.user;
     let isSelf = chat.userId === user.id.id;
     let cEle = document.createElement('div');
 
-    if(!this.firstChat) {
-      //before the request for previous messages is finished, chat
-      //could have been done so preserve the firstChat to insertBefore it.
-      //could have just done firstChild on the container, but then will need
-      //to query it so just hold onto it
-      this.firstChat = cEle;
-    }
-
-    if(insertBefore && this.firstChat) {
-      this.chatAreaNode.insertBefore(cEle, this.firstChat);
-    } else {
-      this.chatAreaNode.appendChild(cEle);
-    }
+    this.chatAreaNode.appendChild(cEle);
     
     render((<Chat isSelf={isSelf} chat={chat}></Chat>), cEle);
   }

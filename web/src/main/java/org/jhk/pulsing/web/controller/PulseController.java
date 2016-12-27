@@ -109,7 +109,7 @@ public class PulseController {
     }
     
     @RequestMapping(value="/getMapPulseDataPoints", method=RequestMethod.GET)
-    public @ResponseBody Map<String, Set<UserLight>> getMapPulseDataPoints(double lat, double lng) {
+    public @ResponseBody Map<String, Set<UserLight>> getMapPulseDataPoints(@RequestParam double lat, @RequestParam double lng) {
         _LOGGER.debug("PulseController.getMapPulseDataPoints: " + lat + " / " + lng);
         
         return pulseService.getMapPulseDataPoints(lat, lng);
