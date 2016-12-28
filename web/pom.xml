@@ -32,6 +32,11 @@
     </dependency>
     
     <dependency>
+      <groupId>org.jhk.pulsing.db.cassandra</groupId>
+      <artifactId>pulsing-db-cassandra</artifactId>
+    </dependency>
+    
+    <dependency>
       <groupId>org.jhk.pulsing.plugin.maven</groupId>
       <artifactId>pulsing-plugin-maven</artifactId>
     </dependency>

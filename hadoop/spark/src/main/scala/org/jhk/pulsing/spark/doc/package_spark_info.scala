@@ -137,5 +137,10 @@ package org.jhk.pulsing.spark.doc
  * ./bin/spark-submit --master yarn --deploy-mode cluster --class org.jhk.pulsing.spark.job.LocationRank --name "Location Rank"
  * 	pulsing-hadoop-spark-0.1-SNAPSHOT.jar
  * 
+ * reboot and hold down Cmd-R
+ * terminal csrutil disable
+ * sudo ln -s /usr/bin/java /bin/java
+ * csrutil enable
+ * 
  * @author Ji Kim
  */

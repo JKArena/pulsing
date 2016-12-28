@@ -26,7 +26,6 @@
     {"name": "userId", "type": "UserId", "default": null},
     {"name": "lat", "type": "double", "default": 0.0},
   	{"name": "lng", "type": "double", "default": 0.0},
-    //{"name": "coordinates", "type": ["null", {"type": "array", "items": "double"}], "default": null},
     {"name": "tags", "type": ["null", {"type": "array", "items": "string"}], "default": null},
     {"name": "timeStamp", "type": ["null", "long"], "default": null},
     {"name": "value", "type": ["null", "string"], "default": null},

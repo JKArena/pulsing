@@ -18,6 +18,7 @@
  */
 package org.jhk.pulsing.web.dao.prod.db.cassandra;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -26,10 +27,13 @@ import java.util.UUID;
 import org.jhk.pulsing.serialization.avro.records.UserId;
 import org.jhk.pulsing.shared.util.CommonConstants;
 import org.jhk.pulsing.web.dao.prod.db.AbstractCassandraDao;
-import org.jhk.pulsing.web.dao.prod.db.cassandra.table.chat.ChatLobbyTable;
-import org.jhk.pulsing.web.dao.prod.db.cassandra.table.chat.ChatMessageTable;
+import org.jhk.pulsing.db.cassandra.chat.ChatLobbyTable;
+import org.jhk.pulsing.db.cassandra.chat.ChatMessageTable;
 import org.jhk.pulsing.web.pojo.light.Chat;
 import org.springframework.stereotype.Repository;
+
+import com.datastax.driver.core.ResultSet;
+import com.datastax.driver.core.Row;
 
 /**
  * @author Ji Kim
@@ -56,8 +60,19 @@ public class CassandraChatDao extends AbstractCassandraDao {
     }
     
     public List<Chat> queryChatLobbyMessages(UUID cLId, Long timeStamp) {
+        ResultSet cLMQResult = _chatMessageTable.messageQuery(cLId, timeStamp);
         
-        return _chatMessageTable.messageQuery(cLId, timeStamp);
+        List<Chat> cLMessages = new LinkedList<>();
+        
+        for(Row message : cLMQResult) {
+            Chat entry = new Chat();
+            entry.setUserId(message.getLong("user_id"));
+            entry.setTimeStamp(message.getLong("timestamp"));
+            entry.setMessage(message.getString("message"));
+            
+            cLMessages.add(entry);
+        }
+        return cLMessages;
     }
     
     public Optional<Boolean> chatLobbySubscribe(UUID cLId, String lobbyName, UserId userId) {

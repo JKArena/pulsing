@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.web.dao.prod.db.cassandra.table;
+package org.jhk.pulsing.db.cassandra;
 
 /**
  * @author Ji Kim
