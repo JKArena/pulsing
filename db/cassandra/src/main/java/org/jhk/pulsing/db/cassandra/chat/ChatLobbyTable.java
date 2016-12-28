@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.web.dao.prod.db.cassandra.table.chat;
+package org.jhk.pulsing.db.cassandra.chat;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,7 +25,7 @@ import java.util.UUID;
 
 import org.apache.cassandra.utils.UUIDGen;
 import org.jhk.pulsing.serialization.avro.records.UserId;
-import org.jhk.pulsing.web.dao.prod.db.cassandra.table.ICassandraTable;
+import org.jhk.pulsing.db.cassandra.ICassandraTable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

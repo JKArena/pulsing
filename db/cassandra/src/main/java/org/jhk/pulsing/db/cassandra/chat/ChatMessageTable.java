@@ -16,14 +16,11 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.web.dao.prod.db.cassandra.table.chat;
+package org.jhk.pulsing.db.cassandra.chat;
 
-import java.util.LinkedList;
-import java.util.List;
 import java.util.UUID;
 
-import org.jhk.pulsing.web.dao.prod.db.cassandra.table.ICassandraTable;
-import org.jhk.pulsing.web.pojo.light.Chat;
+import org.jhk.pulsing.db.cassandra.ICassandraTable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,7 +28,6 @@ import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.DataType;
 import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.ResultSet;
-import com.datastax.driver.core.Row;
 import com.datastax.driver.core.Session;
 import com.datastax.driver.core.schemabuilder.SchemaBuilder;
 import com.datastax.driver.core.schemabuilder.SchemaStatement;
@@ -80,24 +76,11 @@ public final class ChatMessageTable implements ICassandraTable {
         _session.executeAsync(cLMInsert);
     }
     
-    public List<Chat> messageQuery(UUID cLId, Long timeStamp) {
+    public ResultSet messageQuery(UUID cLId, Long timeStamp) {
         _LOGGER.info("ChatMessageTable.messageQuery : " + cLId + " - " + timeStamp);
         
         BoundStatement cLMQuery = _CHAT_MESSAGE_QUERY.bind(cLId, timeStamp);
-        ResultSet cLMQResult = _session.execute(cLMQuery);
-        
-        List<Chat> cLMessages = new LinkedList<>();
-        
-        for(Row message : cLMQResult) {
-            Chat entry = new Chat();
-            entry.setUserId(message.getLong("user_id"));
-            entry.setTimeStamp(message.getLong("timestamp"));
-            entry.setMessage(message.getString("message"));
-            
-            cLMessages.add(entry);
-        }
-        
-        return cLMessages;
+        return _session.execute(cLMQuery);
     }
 
     @Override

@@ -35,6 +35,12 @@
         <artifactId>pulsing-db-mysql</artifactId>
         <version>${pulsing.version}</version>
       </dependency>
+
+      <dependency>
+        <groupId>org.jhk.pulsing.db.cassandra</groupId>
+        <artifactId>pulsing-db-cassandra</artifactId>
+        <version>${pulsing.version}</version>
+      </dependency>
 	  
       <dependency>
         <groupId>org.jhk.pulsing.shared</groupId>

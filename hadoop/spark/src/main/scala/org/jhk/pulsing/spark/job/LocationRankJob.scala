@@ -34,7 +34,9 @@ import org.jhk.pulsing.shared.util.CommonConstants._
  * @author Ji Kim
  */
 class LocationRank {
-  val configuration = new SparkConf().setMaster(PROJECT_POINT).setAppName(APP_NAME)
-  val sparkContext = new SparkContext(configuration);
   
+  def main(args: Array[String]): Unit = {
+    val configuration = new SparkConf().setMaster(PROJECT_POINT).setAppName(APP_NAME)
+    val sparkContext = new SparkContext(configuration);
+  }
 }

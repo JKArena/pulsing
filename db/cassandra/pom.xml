@@ -8,12 +8,17 @@
 	<version>${pulsing.version}</version>
   </parent>
   
-  <groupId>org.jhk.pulsing.db.mysql</groupId>
-  <artifactId>pulsing-db-mysql</artifactId>
-  <name>pulsing-db-mysql</name>
-  <url>https://github.com/JHKTruth/pulsing/db/mysql</url>
+  <groupId>org.jhk.pulsing.db.cassandra</groupId>
+  <artifactId>pulsing-db-cassandra</artifactId>
+  <name>pulsing-db-cassandra</name>
+  <url>https://github.com/JHKTruth/pulsing/db/cassandra</url>
   
   <dependencies>
+
+    <dependency>
+      <groupId>org.jhk.pulsing.serialization.avro</groupId>
+      <artifactId>pulsing-avro</artifactId>
+    </dependency>
 
     <dependency>
       <groupId>org.jhk.pulsing.shared</groupId>
@@ -21,13 +26,13 @@
     </dependency>
     
     <dependency>
-      <groupId>org.hibernate</groupId>
-      <artifactId>hibernate-core</artifactId>
+      <groupId>com.datastax.cassandra</groupId>
+      <artifactId>cassandra-driver-core</artifactId>
     </dependency>
 
     <dependency>
-      <groupId>org.hibernate</groupId>
-      <artifactId>hibernate-validator</artifactId>
+      <groupId>com.datastax.cassandra</groupId>
+      <artifactId>cassandra-driver-extras</artifactId>
     </dependency>
     
     <dependency>
