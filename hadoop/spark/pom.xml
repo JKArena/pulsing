@@ -49,9 +49,32 @@
     </dependency>
     
     <dependency>
+      <groupId>org.apache.spark</groupId>
+      <artifactId>spark-hive_2.11</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.spark</groupId>
+      <artifactId>spark-streaming_2.11</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.spark</groupId>
+      <artifactId>spark-mllib_2.11</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.apache.spark</groupId>
+      <artifactId>spark-streaming-kafka_2.11</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    
+    <dependency>
       <groupId>com.datastax.spark</groupId>
       <artifactId>spark-cassandra-connector_2.11</artifactId>
-      <version>${spark.cassandra}</version>
     </dependency>
     
     <dependency>
