@@ -55,7 +55,7 @@ public final class HadoopConstants {
     }
     
     public enum DIRECTORIES {
-        TEMP, SNAPSHOT, SHREDDED, TAG_GROUP_MAPPING, EQUIVS_ITERATE;
+        TEMP, SNAPSHOT, SHREDDED, TAG_GROUP_MAPPING, EQUIVS_ITERATE, SPARK_STREAM_LOCATION_CREATE;
     };
     
     private static final String HADOOP_CONFIG_XML = "hadoop_config.xml";
