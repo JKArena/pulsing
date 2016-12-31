@@ -16,8 +16,8 @@
   <dependencies>
     
     <dependency>
-      <groupId>org.jhk.pulsing.serialization.thrift</groupId>
-      <artifactId>pulsing-thrift</artifactId>
+      <groupId>org.jhk.pulsing.serialization.avro</groupId>
+      <artifactId>pulsing-avro</artifactId>
     </dependency>
     
     <dependency>
