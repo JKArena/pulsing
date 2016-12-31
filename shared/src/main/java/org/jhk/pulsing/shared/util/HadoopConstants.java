@@ -39,6 +39,7 @@ public final class HadoopConstants {
     public static final String CONFIG_FS_DEFAULT_KEY = "fs.defaultFS";
     public static final String HDFS_URL_PORT;
     
+    public static final String TRAINING_DATA_WORKSPACE;
     public static final String PAIL_MASTER_WORKSPACE;
     public static final String HIVE_MASTER_WORKSPACE;
     public static final String SPARK_MASTER_WORKSPACE;
@@ -70,6 +71,7 @@ public final class HadoopConstants {
             throw new RuntimeException("Failure in parsing of " + HADOOP_CONFIG_XML, exception);
         }
         
+        TRAINING_DATA_WORKSPACE = tempParseMap.get("training.data.workspace");
         PAIL_MASTER_WORKSPACE = tempParseMap.get("pail.master.workspace");
         HIVE_MASTER_WORKSPACE = tempParseMap.get("hive.master.workspace");
         SPARK_MASTER_WORKSPACE = tempParseMap.get("spark.master.workspace");
