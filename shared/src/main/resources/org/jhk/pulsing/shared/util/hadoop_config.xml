@@ -2,6 +2,11 @@
 <configuration>
   <hadoop>
     <property>
+      <name>training.data.workspace</name>
+      <value>/training/data/</value>
+    </property>
+    
+    <property>
       <name>spark.master.workspace</name>
       <value>/data/sparkmaster/</value>
     </property>
