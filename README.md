@@ -14,7 +14,8 @@ Allows creation of Pulse which others around the area can subscribe to and when 
 4. Avro+Thrift for serializations
 5. Bootstrap+ReactJS+Router+NodeJS
 6. Spring (WebSocket,Aspect, and etc)
-7. Java8+Ecmascript6 and etc (i.e. maybe Apache Mesos + Oozie)
+7. Python Django (for compare)
+8. Java8+Ecmascript6 and etc (i.e. maybe Apache Mesos + Oozie)
 
 ![ScreenShot](https://github.com/JHKTruth/pulsing/blob/master/web/nonsrc/snapshot.png?raw=true)
 
