@@ -5,3 +5,4 @@ pip3.6 install virtualenv
 Always execute below for the terminal (since need python 2.7 for other frameworks)
 python3 env_pulsing_3_6/bin/activate_this.py
 
+python3 manage.py startapp locations

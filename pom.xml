@@ -509,7 +509,8 @@ descent loss of performance)
     <module>serialization</module>
     <module>shared</module>
     <module>storm</module>
-    <module>web</module>
+    <module>spark</module>
+    <module>spring</module>
   </modules>
   
   <build>

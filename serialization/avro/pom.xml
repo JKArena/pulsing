@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.jhk.pulsing.serialization</groupId>
     <artifactId>pulsing-serialization</artifactId>
-	<version>${pulsing.version}</version>
+	  <version>${pulsing.version}</version>
   </parent>
   
   <groupId>org.jhk.pulsing.serialization.avro</groupId>
@@ -14,14 +14,13 @@
   <url>https://github.com/JHKTruth/pulsing/serialization/avro</url>
   
   <dependencies>
-    
     <dependency>
-	  <groupId>org.apache.kafka</groupId>
+	    <groupId>org.apache.kafka</groupId>
       <artifactId>kafka-clients</artifactId>
     </dependency>
     
     <dependency>
-	  <groupId>org.apache.avro</groupId>
+	    <groupId>org.apache.avro</groupId>
       <artifactId>avro</artifactId>
     </dependency>
     
@@ -34,9 +33,8 @@
   </dependencies>
   
   <build>
-  
-  	<plugins>
-    
+    <plugins>
+
   	  <plugin>
         <groupId>org.apache.avro</groupId>
         <artifactId>avro-maven-plugin</artifactId>
@@ -83,7 +81,6 @@
       </plugin>
       
     </plugins>
-    
   </build>
   
 </project>
