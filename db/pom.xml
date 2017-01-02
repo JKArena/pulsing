@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.jhk.pulsing</groupId>
     <artifactId>pulsing-project</artifactId>
-	<version>${pulsing.version}</version>
+	  <version>${pulsing.version}</version>
   </parent>
   
   <groupId>org.jhk.pulsing.db</groupId>

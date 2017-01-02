@@ -8,10 +8,10 @@
     <version>${pulsing.version}</version>
   </parent>
   
-  <groupId>org.jhk.pulsing.web</groupId>
-  <artifactId>pulsing-web</artifactId>
+  <groupId>org.jhk.pulsing.spring</groupId>
+  <artifactId>pulsing-spring</artifactId>
   <packaging>war</packaging>
-  <name>pulsing-web</name>
+  <name>pulsing-spring</name>
   <url>http://maven.apache.org</url>
   
   <dependencies>
@@ -229,7 +229,7 @@
   </dependencies>
   
   <build>
-    <finalName>pulsing-web</finalName>
+    <finalName>pulsing-spring</finalName>
     
     <plugins>
       <plugin>
@@ -243,7 +243,7 @@
             <param>org.jhk.pulsing.serialization.avro.records.User</param>
             <param>org.jhk.pulsing.serialization.avro.records.UserId</param>
           </avroclasses>
-          <destination>${project.build.sourceDirectory}/../webapp/jsapp/src/avro/avrojson.js</destination>
+          <destination>${basedir}/../src/main/jsapp/src/avro/avrojson.js</destination>
           <testdestination>${basedir}/src/test/resources/org/jhk/pulsing/serialization/avro/serializers.js</testdestination>
         </configuration>
         <executions>

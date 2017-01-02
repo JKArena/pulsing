@@ -3,15 +3,15 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>org.jhk.pulsing.hadoop</groupId>
-    <artifactId>pulsing-hadoop</artifactId>
+    <groupId>org.jhk.pulsing</groupId>
+    <artifactId>pulsing-project</artifactId>
     <version>${pulsing.version}</version>
   </parent>
   
-  <groupId>org.jhk.pulsing.hadoop.spark</groupId>
-  <artifactId>pulsing-hadoop-spark</artifactId>
-  <name>pulsing-hadoop-spark</name>
-  <url>https://github.com/JHKTruth/pulsing/hadoop/spark</url>
+  <groupId>org.jhk.pulsing.spark</groupId>
+  <artifactId>pulsing-spark</artifactId>
+  <name>pulsing-spark</name>
+  <url>https://github.com/JHKTruth/pulsing/spark</url>
   
   <dependencies>
     

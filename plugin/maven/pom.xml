@@ -4,7 +4,7 @@
   <parent>
     <groupId>org.jhk.pulsing.plugin</groupId>
     <artifactId>pulsing-plugin</artifactId>
-	<version>${pulsing.version}</version>
+	  <version>${pulsing.version}</version>
   </parent>
   
   <groupId>org.jhk.pulsing.plugin.maven</groupId>

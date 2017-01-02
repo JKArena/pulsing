@@ -27,8 +27,8 @@
 
     <dependency>
       <groupId>com.backtype</groupId>
-	  <artifactId>dfs-datastores</artifactId>
-	</dependency>
+	    <artifactId>dfs-datastores</artifactId>
+	  </dependency>
     
     <dependency>
       <groupId>com.backtype</groupId>

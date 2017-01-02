@@ -22,8 +22,8 @@
  */
 'use strict';
 
-const SPRING_CONTROLLER_SUFFIX = ':8083/pulsing-web/controller/';
-const SPRING_ROOT_SUFFIX = ':8083/pulsing-web/';
+const SPRING_CONTROLLER_SUFFIX = ':8083/pulsing-spring/controller/';
+const SPRING_ROOT_SUFFIX = ':8083/pulsing-spring/';
 
 let PREFIX;
 

@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.jhk.pulsing</groupId>
     <artifactId>pulsing-project</artifactId>
-	<version>${pulsing.version}</version>
+	  <version>${pulsing.version}</version>
   </parent>
   
   <groupId>org.jhk.pulsing.storm</groupId>
@@ -41,7 +41,7 @@
     </dependency>
     
     <dependency>
-	  <groupId>org.apache.storm</groupId>
+	    <groupId>org.apache.storm</groupId>
       <artifactId>storm-core</artifactId>
       <scope>provided</scope>
       <exclusions>
@@ -53,7 +53,7 @@
     </dependency>
     
     <dependency>
-	  <groupId>org.apache.storm</groupId>
+	    <groupId>org.apache.storm</groupId>
       <artifactId>storm-kafka</artifactId>
     </dependency>
     
