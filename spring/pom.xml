@@ -243,7 +243,7 @@
             <param>org.jhk.pulsing.serialization.avro.records.User</param>
             <param>org.jhk.pulsing.serialization.avro.records.UserId</param>
           </avroclasses>
-          <destination>${basedir}/../src/main/jsapp/src/avro/avrojson.js</destination>
+          <destination>${basedir}/../nodeJs/src/main/jsapp/src/avro/avrojson.js</destination>
           <testdestination>${basedir}/src/test/resources/org/jhk/pulsing/serialization/avro/serializers.js</testdestination>
         </configuration>
         <executions>
