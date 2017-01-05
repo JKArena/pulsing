@@ -21,3 +21,16 @@ under the License.
 
 from django.db import models
 
+class Locations(models.Model):
+  name = models.CharField(max_length=30)
+  description = models.CharField(max_length=100, blank=True)
+  lat = models.DecimalField(max_digits=7, decimal_places=4, verbose_name='latitude')
+  lng = models.DecimalField(max_digits=7, decimal_places=4, verbose_name='longitude')
+  user_id = models.BigIntegerField()
+  creation_date = models.DateField()
+
+  def __str__(self):
+    return u'Location: %s at %d/%d' % (self.name, self.lat, self.lng)
+
+  class Meta:
+    ordering = ['name']
