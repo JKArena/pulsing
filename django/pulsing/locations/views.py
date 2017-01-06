@@ -20,4 +20,43 @@ under the License.
 """
 
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import JsonResponse, HttpResponse, HttpResponseBadRequest
+from django import forms
+
+import datetime
+
+class LocationForm(forms.Form):
+  name = forms.CharField()
+  description = forms.CharField(max_length=100, blank=True)
+  lat = forms.DecimalField(max_digits=7, decimal_places=4)
+  lng = forms.DecimalField(max_digits=7, decimal_places=4)
+
+def addLocation(request)
+  form = LocationForm(request.POST)
+  if(form.is_valid())
+    cleaned = form.cleaned_data
+  else
+    return HttpResponseBadRequest()
+
+def queryLocation(request, userId, lat, lng)
+  return JsonResponse({
+      code: 'SUCCESS',
+      data: [
+        {
+          name: 'TEST',
+          description: 'Test',
+          lat: 55.2344,
+          lng: 56.4900,
+          user_id: 1,
+          creation_date: datetime.datetime.now()
+        },
+        {
+          name: 'ANOTHER',
+          description: 'Another',
+          lat: 79.2534,
+          lng: 32.9720,
+          user_id: 2,
+          creation_date: datetime.datetime.now()
+        }
+      ]
+    })
