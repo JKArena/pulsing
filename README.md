@@ -3,7 +3,7 @@ Project for playing around with Lamba architecture/Realtime big data app.
 Allows creation of Pulse which others around the area can subscribe to and when good the group can gogo *-*. For example driving down and one sees a restaurant that one wants to eat at and friends are too far away; create a pulse, get others to join up, and go together xD. Allows chatting for the pulse group as well as creating private chat lobbies.
 
 1. Kafka as queue with Zookeeper
-2. Storm+Trident/Spark-streaming for real time data processing
+2. Storm+Trident/Spark-streaming for real time data processing (both to compare)
 3. Hadoop for HDFS + Yarn
    * Cascading+JCascade+Pail
    * Spark ml for machine learning
@@ -14,7 +14,7 @@ Allows creation of Pulse which others around the area can subscribe to and when 
 4. Avro+Thrift for serializations
 5. Bootstrap+ReactJS+Router+NodeJS
 6. Spring (WebSocket,Aspect, and etc)
-7. Python Django with Memcached (to compare with 5+6)
+7. Python Django with Memcached (to compare)
 8. Java8+Ecmascript6 and etc (i.e. maybe Apache Mesos + Oozie)
 
 ![ScreenShot](https://github.com/JHKTruth/pulsing/blob/master/spring/nonsrc/ssChat.png?raw=true)
