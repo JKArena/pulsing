@@ -33,3 +33,17 @@ from django.core.urlresolvers import reverse
 return django.http.HttpResponseRedirect(reverse('locations-add', args=(value,)))
 
 0.0.0.0:9050/admin
+
+To tell caching mechanisms that the page output depends on request headers use
+from django.views.decorators.vary import vary_on_headers
+
+@vary_on_headers('User-Agent')
+def view(request)
+
+@vary_on_cookie
+
+from django.views.decorators.cache import cache_control
+@cache_control(private=True)
+So to control privacy of data and where data should be stored in a cascade of caches
+
+mySQLClient driver for the DB

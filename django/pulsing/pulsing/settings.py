@@ -42,7 +42,9 @@ INSTALLED_APPS = (
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'django.middleware.cache.FetchFromCacheMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
@@ -50,6 +52,12 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
 )
+
+# Cache all for now; later use @cache_page decorator for view handlers + cache for templates
+# and from django.core.cache import caches for code. Remove UpdateCacheMiddleware + FetchFromCacheMiddleware
+CACHE_MIDDLEWARE_ALIAS = 'pulsing_cache'
+CACHE_MIDDLEWARE_SECONDS = 450
+CACHE_MIDDLEWARE_KEY_PREFIX = 'pulsing.jhk.org'
 
 ROOT_URLCONF = 'pulsing.urls'
 
@@ -62,6 +70,8 @@ TEMPLATES = [
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
+                'django.template.context_processors.i18n',
+                'django.template.context_processors.csrf',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
@@ -71,14 +81,20 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'pulsing.wsgi.application'
 
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': '0.0.0.0:11211',
+    }
+}
 
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'OPTIONS': {'read_default_file': os.path.join(BASE_DIR, 'db.mysql.cnf')},
     }
 }
 

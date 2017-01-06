@@ -1,0 +1,5 @@
+[client]
+database = pulsing
+user = pulsing
+password = wsad
+default-character-set = utf8
