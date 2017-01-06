@@ -41,7 +41,7 @@ const LoginAction = Object.freeze(Object.create(null, {
         
         return new Promise(function(resolve, reject) {
 
-          Fetch.POST_JSON(LOGIN_PATH, {body: fData})
+          Fetch.POST_JSON(LOGIN_PATH, {body: fData}, false)
             .then(function(result) {
               console.debug('loginUser', result);
               
@@ -55,8 +55,6 @@ const LoginAction = Object.freeze(Object.create(null, {
               btn.removeAttribute('disabled');
             })
             .catch(function(err) {
-              console.error(err);
-              
               btn.removeAttribute('disabled');
               reject(err.message || err);
             });

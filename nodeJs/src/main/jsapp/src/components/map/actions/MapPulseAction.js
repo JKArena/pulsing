@@ -44,8 +44,6 @@ const MapPulseAction = Object.freeze(
             resolve(json);
           })
           .catch(function(err) {
-            console.error(err);
-
             reject(err);
           });
 

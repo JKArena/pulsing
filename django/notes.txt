@@ -27,4 +27,9 @@ form = LocationForm(request.POST)
 if(form.is_valid())
   cd = form.cleaned_data //maps it to Python types
 
+in template href="{% url 'locations-add' value %}"
+in code 
+from django.core.urlresolvers import reverse
+return django.http.HttpResponseRedirect(reverse('locations-add', args=(value,)))
+
 0.0.0.0:9050/admin

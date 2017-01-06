@@ -67,8 +67,6 @@ const SignupAction = Object.freeze(Object.create(null, {
               btn.removeAttribute('disabled');
             })
             .catch(function(err) {
-              console.error(err);
-              
               btn.removeAttribute('disabled');
               reject(err.message || err);
             });

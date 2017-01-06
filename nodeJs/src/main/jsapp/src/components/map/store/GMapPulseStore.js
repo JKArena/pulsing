@@ -47,9 +47,6 @@ class GMapPulseStore extends AbstractMapStore {
           pulseId, userId);
 
         this.fetchDataPoints(this.map, this.prevLatLng);
-      })
-      .catch(() => {
-        console.error('error in subscribeUnSubscribe', actionParam.type, pulseId, userId);
       });
 
   }
