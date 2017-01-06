@@ -23,6 +23,7 @@
 'use strict';
 
 import Url from './Url';
+import {TOPICS, API} from './PubSub';
 
 const BASIC = Symbol('basic');
 
@@ -62,7 +63,6 @@ const FETCH_RESPONSE_HANDLER = Object.freeze(Object.create(null, {
             resolve(result);
           })
           .catch(function(err) {
-            console.error(`Failure in ${basic_type} `, err);
             reject(err);
           });
         
@@ -87,11 +87,11 @@ const FETCH_RESPONSE_HANDLER = Object.freeze(Object.create(null, {
  })
 );
 
-function fetchContent(request, options, responseType='json') {
+function fetchContent(request, hOptions, responseType, logError) {
   
   return new Promise(function(resolve, reject) {
 
-    fetch(request, options)
+    fetch(request, hOptions)
       .then(function(response) {
 
         if(response.ok) {
@@ -99,13 +99,25 @@ function fetchContent(request, options, responseType='json') {
           FETCH_RESPONSE_HANDLER[responseType](response, resolve, reject);
 
         }else {
-          console.error('Failure in getting response ', response);
+          if(logError) {
+            API.publish(TOPICS.ERROR_MESSAGE, {error: err, additional: {
+              msg: `Failure in ${responseType} `,
+              args: [request, hOptions]
+            }});
+          }
+          
           reject(response);
         }
 
       })
       .catch(function(err) {
-        console.error('Failure in fetching ', err);
+        if(logError) {
+          API.publish(TOPICS.ERROR_MESSAGE, {error: err, additional: {
+            msg: `Failure in ${responseType} `,
+            args: [request, hOptions]
+          }});
+        }
+
         reject(err);
       });
 
@@ -119,7 +131,8 @@ export default Object.freeze(
         'GET_JSON' : {
           get: function() {
 
-            return (gPath, options=Object.create(null), params=Object.create(null)) => {
+
+            return (gPath, hOptions=Object.create(null), params=Object.create(null), logError=true) => {
               
               const DEFAULT_HEADERS = new Headers({'Accept': 'application/json'});
               const DEFAULT_OPTIONS = {method: 'GET',  mode: 'cors', headers: DEFAULT_HEADERS};
@@ -129,9 +142,9 @@ export default Object.freeze(
                 url.searchParams.append(key, params[key]);
               });
               let request = new Request(url);
-              let gOptions = Object.assign(DEFAULT_OPTIONS, options);
+              let gOptions = Object.assign(DEFAULT_OPTIONS, hOptions);
 
-              return fetchContent(request, gOptions, 'json');
+              return fetchContent(request, gOptions, 'json', logError);
             }
           },
 
@@ -142,15 +155,15 @@ export default Object.freeze(
         'POST_JSON' : {
           get: function() {
 
-            return (pPath, options=Object.create(null)) => {
+            return (pPath, hOptions=Object.create(null), logError=true) => {
               
               const DEFAULT_HEADERS = new Headers({'Accept': 'application/json'});
               const DEFAULT_OPTIONS = {method: 'POST',  mode: 'cors', headers: DEFAULT_HEADERS};
 
               let request = new Request(Url.controllerUrl() + pPath);
-              let pOptions = Object.assign(DEFAULT_OPTIONS, options);
+              let pOptions = Object.assign(DEFAULT_OPTIONS, hOptions);
 
-              return fetchContent(request, pOptions, 'json');
+              return fetchContent(request, pOptions, 'json', logError);
             }
           },
 
@@ -161,15 +174,15 @@ export default Object.freeze(
         'DELETE_JSON' : {
           get: function() {
 
-            return (dPath, options=Object.create(null)) => {
+            return (dPath, hOptions=Object.create(null), logError=true) => {
               
               const DEFAULT_HEADERS = new Headers({'Accept': 'application/json'});
               const DEFAULT_OPTIONS = {method: 'DELETE',  mode: 'cors', headers: DEFAULT_HEADERS};
 
               let request = new Request(Url.controllerUrl() + dPath);
-              let dOptions = Object.assign(DEFAULT_OPTIONS, options);
+              let dOptions = Object.assign(DEFAULT_OPTIONS, hOptions);
 
-              return fetchContent(request, dOptions, 'json');
+              return fetchContent(request, dOptions, 'json', logError);
             }
           },
 
@@ -180,15 +193,15 @@ export default Object.freeze(
         'PUT_JSON' : {
           get: function() {
 
-            return (putURL, options=Object.create(null)) => {
+            return (putURL, hOptions=Object.create(null), logError=true) => {
 
               const DEFAULT_HEADERS = new Headers({'Accept': 'application/json'});
               const DEFAULT_OPTIONS = {method: 'PUT',  mode: 'cors', headers: DEFAULT_HEADERS};
 
               let request = new Request(putURL);
-              let putOptions = Object.assign(DEFAULT_OPTIONS, options);
+              let putOptions = Object.assign(DEFAULT_OPTIONS, hOptions);
 
-              return fetchContent(request, putOptions, 'json');
+              return fetchContent(request, putOptions, 'json', logError);
             }
           },
 
@@ -199,14 +212,14 @@ export default Object.freeze(
         'GET_RAW' : {
           get: function() {
 
-            return (path, options=Object.create(null)) => {
+            return (path, hOptions=Object.create(null), logError=true) => {
               
               const DEFAULT_OPTIONS = {method: 'GET',  mode: 'cors'};
 
               let request = new Request(path);
-              let opts = Object.assign(DEFAULT_OPTIONS, options);
+              let opts = Object.assign(DEFAULT_OPTIONS, hOptions);
 
-              return fetchContent(request, opts, 'raw');
+              return fetchContent(request, opts, 'raw', logError);
             }
           },
 

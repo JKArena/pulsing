@@ -28,8 +28,32 @@ require('./App.css');
 
 import React from 'react';
 import NavBarComponent from './navbar/NavBarComponent';
+import {TOPICS, API} from './common/PubSub';
 
 class AppComponent extends React.Component {
+
+  constructor(props) {
+    super(props);
+
+    this.errorHandler = this.onError.bind(this);
+  }
+
+  componentDidMount() {
+    API.subscribe(TOPICS.ERROR_MESSAGE, this.errorHandler);
+  }
+
+  componentWillUnmount() {
+    API.unsubscribe(TOPICS.ERROR_MESSAGE, this.errorHandler);
+  }
+
+  /*
+   * @param errorData json object with {error: err, additional : {msg: '', serverLog: false, args: []}
+   */
+  onError(errorData) {
+    console.error('Error', errorData);
+
+  }
+
   render() {
     return (
       <div>

@@ -47,6 +47,10 @@ class User extends AbstractAvro {
     this.watchId = global.navigator.geolocation.watchPosition(this.positionHandler,
                       (err) => {
                         console.error('Error in geolocation', err);
+                        API.publish(TOPICS.ERROR_MESSAGE, {error: err, additional: {
+                          msg: 'Error in user geolocation',
+                          args: []
+                        }});
                         this.watchPosition();
                       }, U_GEOLOCATION_OPTS);
   }

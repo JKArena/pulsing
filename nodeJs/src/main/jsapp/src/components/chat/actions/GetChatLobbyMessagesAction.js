@@ -46,8 +46,6 @@ const GetChatLobbyMessagesAction = Object.freeze(
             }
           })
           .catch(function(err) {
-            console.error(err);
-
             reject(err);
           });
 

@@ -17,7 +17,7 @@ Allows creation of Pulse which others around the area can subscribe to and when 
 7. Python Django with Memcached (to compare with 5+6)
 8. Java8+Ecmascript6 and etc (i.e. maybe Apache Mesos + Oozie)
 
-![ScreenShot](https://github.com/JHKTruth/pulsing/blob/master/web/nonsrc/ssChat.png?raw=true)
+![ScreenShot](https://github.com/JHKTruth/pulsing/blob/master/spring/nonsrc/ssChat.png?raw=true)
 
 
-![ScreenShot](https://github.com/JHKTruth/pulsing/blob/master/web/nonsrc/diagram.png?raw=true)
+![ScreenShot](https://github.com/JHKTruth/pulsing/blob/master/spring/nonsrc/diagram.png?raw=true)

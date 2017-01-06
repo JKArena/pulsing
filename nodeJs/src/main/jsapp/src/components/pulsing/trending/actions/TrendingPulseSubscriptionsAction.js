@@ -46,8 +46,6 @@ const TrendingPulseSubscriptionsAction = Object.freeze(Object.create(null, {
             resolve(trending);
           })
           .catch(function(err) {
-            console.error(err);
-
             reject(err);
           });
 

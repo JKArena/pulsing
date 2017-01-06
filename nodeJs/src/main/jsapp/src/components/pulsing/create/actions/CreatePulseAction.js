@@ -55,7 +55,7 @@ const CreatePulseAction = Object.freeze(
 
       return new Promise(function(resolve, reject) {
 
-        Fetch.POST_JSON(CREATE_PULSE_PATH, {body: fData})
+        Fetch.POST_JSON(CREATE_PULSE_PATH, {body: fData}, false)
           .then(function(result) {
             console.debug('create pulse', result);
 
@@ -70,8 +70,6 @@ const CreatePulseAction = Object.freeze(
             btn.removeAttribute('disabled');
           })
           .catch(function(err) {
-            console.error(err);
-
             btn.removeAttribute('disabled');
             reject(err.message || err);
           });

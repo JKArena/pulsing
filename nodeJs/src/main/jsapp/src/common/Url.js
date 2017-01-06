@@ -25,6 +25,8 @@
 const SPRING_CONTROLLER_SUFFIX = ':8083/pulsing-spring/controller/';
 const SPRING_ROOT_SUFFIX = ':8083/pulsing-spring/';
 
+const DJANGO_SUFFIX = ':9050/';
+
 let PREFIX;
 
 function url(suffix) {

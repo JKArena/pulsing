@@ -26,12 +26,14 @@ import Url from './Url';
 
 import SocketJs from 'sockjs-client';
 import StompJs from 'stompjs';
+import {TOPICS, API} from './PubSub';
 
 class WebSockets {
   
   constructor(url) {
     
-    this.socket = new SocketJs(Url.controllerUrl() + url);
+    this.url = Url.controllerUrl() + url;
+    this.socket = new SocketJs(this.url);
     this.stomp = StompJs.over(this.socket);
     
     this.connected = false;
@@ -50,6 +52,10 @@ class WebSockets {
           resolve(frame);
         },
         error => {
+          API.publish(TOPICS.ERROR_MESSAGE, {error: error, additional: {
+            msg: `Failure in WebSocket connect`,
+            args: [this.url]
+          }});
           reject(error);
         });
       
