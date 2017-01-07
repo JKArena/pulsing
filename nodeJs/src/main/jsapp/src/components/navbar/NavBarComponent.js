@@ -112,6 +112,16 @@ class NavBarComponent extends Component {
                     </Nav>;
                 }
               })()}
+
+              {(() => {
+                if(this.state.loggedIn) {
+                  return <Nav>
+                      <NavDropdown id='locationActions' title='Location Actions'>
+                        <LinkContainer to='/createLocation'><NavItem>Create</NavItem></LinkContainer>
+                      </NavDropdown>
+                    </Nav>;
+                }
+              })()}
               
               {(() => {
                 if(this.state.loggedIn) {
