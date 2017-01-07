@@ -52,7 +52,7 @@ const SignupAction = Object.freeze(Object.create(null, {
         
         return new Promise(function(resolve, reject) {
 
-          Fetch.POST_JSON(LOGIN_PATH, {body: fData})
+          Fetch.POST_JSON(LOGIN_PATH, {body: fData}, false)
             .then(function(result) {
               console.debug('signup', result);
               

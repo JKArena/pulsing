@@ -56,7 +56,7 @@ MIDDLEWARE_CLASSES = (
 # Cache all for now; later use @cache_page decorator for view handlers + cache for templates
 # and from django.core.cache import caches for code. Remove UpdateCacheMiddleware + FetchFromCacheMiddleware
 CACHE_MIDDLEWARE_ALIAS = 'pulsing_cache'
-CACHE_MIDDLEWARE_SECONDS = 450
+CACHE_MIDDLEWARE_SECONDS = 300
 CACHE_MIDDLEWARE_KEY_PREFIX = 'pulsing.jhk.org'
 
 ROOT_URLCONF = 'pulsing.urls'
