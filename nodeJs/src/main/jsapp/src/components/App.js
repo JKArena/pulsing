@@ -28,7 +28,7 @@ require('./App.css');
 
 import React from 'react';
 import NavBarComponent from './navbar/NavBarComponent';
-import {TOPICS, API} from './common/PubSub';
+import {TOPICS, API} from '../common/PubSub';
 
 class AppComponent extends React.Component {
 

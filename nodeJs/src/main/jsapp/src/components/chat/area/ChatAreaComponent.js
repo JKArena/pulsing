@@ -25,7 +25,7 @@
 require('./ChatArea.scss');
 
 import {render, findDOMNode} from 'react-dom';
-import {Popover, OverlayTrigger, ButtonGroup, MenuItem} from 'react-bootstrap';
+import {Popover, OverlayTrigger, ButtonGroup} from 'react-bootstrap';
 import React, {Component} from 'react';
 import DropDownButtonComponent from '../../common/dropDownButton/DropDownButtonComponent';
 import WebSockets from '../../../common/WebSockets';

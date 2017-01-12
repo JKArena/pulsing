@@ -100,7 +100,7 @@ function fetchContent(request, hOptions, responseType, logError) {
 
         }else {
           if(logError) {
-            API.publish(TOPICS.ERROR_MESSAGE, {error: err, additional: {
+            API.publish(TOPICS.ERROR_MESSAGE, {error: new Error('Failure in fetch'), additional: {
               msg: `Failure in ${responseType} `,
               args: [request, hOptions]
             }});
@@ -125,6 +125,10 @@ function fetchContent(request, hOptions, responseType, logError) {
   
 }
 
+function generatePath(path) {
+  return path.startsWith('http') ? path : Url.controllerUrl() + path;
+}
+
 export default Object.freeze(
     Object.create(null,
       {
@@ -137,7 +141,8 @@ export default Object.freeze(
               const DEFAULT_HEADERS = new Headers({'Accept': 'application/json'});
               const DEFAULT_OPTIONS = {method: 'GET',  mode: 'cors', headers: DEFAULT_HEADERS};
               
-              let url = new URL(Url.controllerUrl() + gPath);
+              
+              let url = new URL(generatePath(gPath));
               Object.keys(params).forEach(key => {
                 url.searchParams.append(key, params[key]);
               });
@@ -160,7 +165,7 @@ export default Object.freeze(
               const DEFAULT_HEADERS = new Headers({'Accept': 'application/json'});
               const DEFAULT_OPTIONS = {method: 'POST',  mode: 'cors', headers: DEFAULT_HEADERS};
 
-              let request = new Request(Url.controllerUrl() + pPath);
+              let request = new Request(generatePath(pPath));
               let pOptions = Object.assign(DEFAULT_OPTIONS, hOptions);
 
               return fetchContent(request, pOptions, 'json', logError);
@@ -179,7 +184,7 @@ export default Object.freeze(
               const DEFAULT_HEADERS = new Headers({'Accept': 'application/json'});
               const DEFAULT_OPTIONS = {method: 'DELETE',  mode: 'cors', headers: DEFAULT_HEADERS};
 
-              let request = new Request(Url.controllerUrl() + dPath);
+              let request = new Request(generatePath(dPath));
               let dOptions = Object.assign(DEFAULT_OPTIONS, hOptions);
 
               return fetchContent(request, dOptions, 'json', logError);

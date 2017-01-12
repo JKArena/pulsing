@@ -20,13 +20,13 @@ under the License.
 """
 
 from django.contrib import admin
-from .models import Location
+from .models import Locations
 
 class LocationAdmin(admin.ModelAdmin):
   list_display = ('name', 'lat', 'lng', 'user_id', 'creation_date')
-  search_fields = ('user_id')
-  list_filter = ('creation_date')
+  search_fields = ('user_id',)
+  list_filter = ('creation_date',)
   date_hierarchy = 'creation_date'
   ordering = ('user_id', '-creation_date')
 
-admin.site.register(Location, LocationAdmin)
+admin.site.register(Locations, LocationAdmin)

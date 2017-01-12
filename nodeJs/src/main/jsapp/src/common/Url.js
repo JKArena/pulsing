@@ -26,6 +26,7 @@ const SPRING_CONTROLLER_SUFFIX = ':8083/pulsing-spring/controller/';
 const SPRING_ROOT_SUFFIX = ':8083/pulsing-spring/';
 
 const DJANGO_SUFFIX = ':9050/';
+const NGINX_SUFFIX = ':8080/';
 
 let PREFIX;
 
@@ -46,11 +47,19 @@ export default Object.freeze(
       getPicturePath(path) {
         return path ? this.rootUrl() + path : this.DEFAULT_PICTURE_PATH;
       },
-      
-      rootUrl() {
-        return url(SPRING_ROOT_SUFFIX);
+
+      djangoRootUrl() {
+        return url(DJANGO_SUFFIX);
+      },
+
+      nginxRootUrl() {
+        return url(NGINX_SUFFIX);
       },
       
+      springRootUrl() {
+        return url(SPRING_ROOT_SUFFIX);
+      },
+
       controllerUrl() {
         return url(SPRING_CONTROLLER_SUFFIX);
       }

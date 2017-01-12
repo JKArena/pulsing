@@ -53,7 +53,7 @@ class WebSockets {
         },
         error => {
           API.publish(TOPICS.ERROR_MESSAGE, {error: error, additional: {
-            msg: `Failure in WebSocket connect`,
+            msg: 'Failure in WebSocket connect',
             args: [this.url]
           }});
           reject(error);

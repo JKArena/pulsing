@@ -24,8 +24,8 @@ from django.db import models
 class Locations(models.Model):
   name = models.CharField(max_length=30)
   description = models.CharField(max_length=100, blank=True)
-  lat = models.DecimalField(max_digits=7, decimal_places=4, verbose_name='latitude')
-  lng = models.DecimalField(max_digits=7, decimal_places=4, verbose_name='longitude')
+  lat = models.DecimalField(max_digits=9, decimal_places=6, verbose_name='latitude')
+  lng = models.DecimalField(max_digits=9, decimal_places=6, verbose_name='longitude')
   user_id = models.BigIntegerField()
   creation_date = models.DateField()
 

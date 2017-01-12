@@ -28,8 +28,8 @@ import datetime
 class LocationForm(forms.Form):
   name = forms.CharField()
   description = forms.CharField(max_length=100, blank=True)
-  lat = forms.DecimalField(max_digits=7, decimal_places=4)
-  lng = forms.DecimalField(max_digits=7, decimal_places=4)
+  lat = forms.DecimalField(max_digits=9, decimal_places=6)
+  lng = forms.DecimalField(max_digits=9, decimal_places=6)
   userId = forms.BigIntegerField()
 
 def addLocation(request)
