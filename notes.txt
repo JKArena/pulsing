@@ -1,0 +1,3 @@
+Play around with nginx and RTMP
+
+./configure --with-http_ssl_module --add-module=/usr/local/lib/nginx/rtmp/nginx-rtmp-module-master --with-openssl=/usr/local/lib/openssl/openssl-1.0.2j

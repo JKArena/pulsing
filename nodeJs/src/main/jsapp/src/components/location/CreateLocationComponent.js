@@ -24,11 +24,11 @@
 
 require('./CreateLocation.scss');
 
-import {Grid, Row, Col, FormGroup, ControlLabel, FormControl, HelpBlock, Button, Panel} from 'react-bootstrap';
+import {Grid, Row, Col, FormGroup, ControlLabel, FormControl, Button, Panel} from 'react-bootstrap';
 import React from 'react';
 
-import {TOPICS, API} from '../../common/PubSub';
 import AbstractComponent from '../AbstractComponent';
+import CreateLocationAction from './actions/CreateLocationAction';
 
 class CreateLocationComponent extends AbstractComponent {
 
@@ -78,7 +78,7 @@ class CreateLocationComponent extends AbstractComponent {
                     <FormControl.Feedback />
                   </FormGroup>
 
-                  <FormGroup controlId='description' validationState={this.getValidState('description')}>
+                  <FormGroup controlId='description'>
                     <ControlLabel>Description</ControlLabel>
                     <FormControl componentClass="textarea" name='description' onBlur={this.handleChange.bind(this)} />
                     <FormControl.Feedback />

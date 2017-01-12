@@ -26,7 +26,7 @@ import Fetch from '../../../common/Fetch';
 import Url from '../../../common/Url';
 import Storage from '../../../common/Storage';
 
-const CREATE_LOCATION_PATH = 'chat/chatLobbySubscribe/';
+const CREATE_LOCATION_PATH = 'locations/add/';
 
 const CreateLocationAction = Object.freeze(
   {
@@ -43,7 +43,7 @@ const CreateLocationAction = Object.freeze(
 
       return new Promise(function(resolve, reject) {
 
-        Fetch.POST_JSON(CREATE_LOCATION_PATH, {body: fData}, false)
+        Fetch.POST_JSON(Url.djangoRootUrl() + CREATE_LOCATION_PATH, {body: fData}, false)
           .then(function(result) {
             console.debug('signup', result);
 
