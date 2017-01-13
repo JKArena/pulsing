@@ -18,11 +18,12 @@ under the License.
 
 @author Ji Kim
 """
+
 from django.conf.urls import url
 from . import views
 
 urlpatterns = [
-  url(r'^add/$', view.addLocation)
-  url(r'^query/(?P<userId>[0-9]{64})/(?P<lat>\d{1,3}[\.\d{1,4}]?)/(?P<lng>\d{1,3}[\.\d{1,4}]?))/$', view.queryLocation)
+  url(r'^add/$', views.addLocation),
+  url(r'^query/(?P<userId>[0-9]{1,64})/(?P<lat>[0-9]{1,3}\.[0-9]{1,4})/(?P<lng>[0-9]{1,3}\.[0-9]{1,4})/$', views.queryLocation)
 ]
 

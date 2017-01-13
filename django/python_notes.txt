@@ -1,0 +1,33 @@
+One item tuple, must use comma (1,) and empty tuple ()
+"is" operator is for reference check. a is b, a is not None. Whereas == is value equal.
+
+2 in (4, "frog", 2) => True
+
+Python's and, or return the operand that determined the result (not True or False)
+five = 5
+two = 2
+five and two => 2
+
+In Python, block of code that is sequence of one or more statements is called a suite. B/c 
+some of Python's syntax requires that a suite be present, Python provides keyword pass which is a 
+statement that does nothing and that can be used where a suite is required
+
+12 / 3 results in 4.0 in Python. if need int, cast the result int(12/3) or use truncating division
+operation //
+
+seeds = ["sesame", "sunflower"]
+seeds += ["poppy"]
+
+for entry in ["foo", "bar"]
+  print entry
+else
+  print "have nothing"
+
+try
+  //stuff
+except exception1 as variable1:
+  //handle
+except exception2 as variable2:
+  //handle 2
+else
+  //me optional
