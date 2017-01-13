@@ -1,3 +1,4 @@
 env_pulsing_3_6
 __pycache__
 **/*.pyc
+pulsing/debug.log

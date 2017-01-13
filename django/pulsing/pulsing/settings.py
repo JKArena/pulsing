@@ -45,7 +45,6 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
@@ -57,6 +56,7 @@ CORS_ORIGIN_WHITELIST = (
     'localhost:8000'
 )
 
+# 'django.middleware.csrf.CsrfViewMiddleware', for django csrf later
 # Cache all for now; later use @cache_page decorator for view handlers + cache for templates
 # and from django.core.cache import caches for code. Remove UpdateCacheMiddleware + FetchFromCacheMiddleware
 CACHE_MIDDLEWARE_ALIAS = 'pulsing_cache'
@@ -82,6 +82,25 @@ TEMPLATES = [
         },
     },
 ]
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'debug.log'),
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}
 
 WSGI_APPLICATION = 'pulsing.wsgi.application'
 

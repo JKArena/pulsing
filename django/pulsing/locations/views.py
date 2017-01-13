@@ -27,37 +27,42 @@ import datetime
 
 class LocationForm(forms.Form):
   name = forms.CharField()
-  description = forms.CharField(max_length=100, blank=True)
+  description = forms.CharField(max_length=100)
   lat = forms.DecimalField(max_digits=9, decimal_places=6)
   lng = forms.DecimalField(max_digits=9, decimal_places=6)
-  userId = forms.BigIntegerField()
+  userId = forms.IntegerField()
 
-def addLocation(request)
+def addLocation(request):
   form = LocationForm(request.POST)
-  if(form.is_valid())
+  if(form.is_valid()):
     cleaned = form.cleaned_data
-  else
+    return JsonResponse({
+      'code': 'SUCCESS',
+      'data': [],
+      'message': ''
+    });
+  else:
     return HttpResponseBadRequest()
 
-def queryLocation(request, userId, lat, lng)
+def queryLocation(request, userId, lat, lng):
   return JsonResponse({
-      code: 'SUCCESS',
-      data: [
+      'code': 'SUCCESS',
+      'data': [
         {
-          name: 'TEST',
-          description: 'Test',
-          lat: 55.2344,
-          lng: 56.4900,
-          user_id: 1,
-          creation_date: datetime.datetime.now()
+          'name': 'TEST',
+          'description': 'Test',
+          'lat': 55.2344,
+          'lng': 56.4900,
+          'user_id': 1,
+          'creation_date': datetime.datetime.now()
         },
         {
-          name: 'ANOTHER',
-          description: 'Another',
-          lat: 79.2534,
-          lng: 32.9720,
-          user_id: 2,
-          creation_date: datetime.datetime.now()
+          'name': 'ANOTHER',
+          'description': 'Another',
+          'lat': 79.2534,
+          'lng': 32.9720,
+          'user_id': 2,
+          'creation_date': datetime.datetime.now()
         }
       ]
     })
