@@ -25,21 +25,31 @@
 import Fetch from '../../../common/Fetch';
 import Url from '../../../common/Url';
 import Storage from '../../../common/Storage';
+import Location from '../../../../avro/Location';
 
 const CREATE_LOCATION_PATH = 'locations/add/';
 
 const CreateLocationAction = Object.freeze(
   {
 
-    createLocation(btnId, formId) {
+    createLocation(btnId, formId, tags) {
 
       let btn = document.getElementById(btnId);
       btn.setAttribute('disabled', 'disabled');
 
+      let tagsArray = [];
+      tags.forEach(val => {
+        tagsArray.push(val);
+      });
+
+      let fData = new FormData();
+      let loc = new Location();
       let user = Storage.user;
-      let fData = new FormData(document.getElementById(formId));
+      loc.formMap(document.getElementById(formId));
+      loc.userId = user.id.raw;
+      loc.tags = tagsArray;
       
-      fData.append('userId', user.id.id);
+      fData.append('location', loc.serialize());
 
       return new Promise(function(resolve, reject) {
 

@@ -242,6 +242,8 @@
             <param>org.jhk.pulsing.serialization.avro.records.PulseId</param>
             <param>org.jhk.pulsing.serialization.avro.records.User</param>
             <param>org.jhk.pulsing.serialization.avro.records.UserId</param>
+            <param>org.jhk.pulsing.serialization.avro.records.Location</param>
+            <param>org.jhk.pulsing.serialization.avro.records.LocationId</param>
           </avroclasses>
           <destination>${basedir}/../nodeJs/src/main/jsapp/src/avro/avrojson.js</destination>
           <testdestination>${basedir}/src/test/resources/org/jhk/pulsing/serialization/avro/serializers.js</testdestination>

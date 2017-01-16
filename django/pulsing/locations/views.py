@@ -23,7 +23,10 @@ from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse, HttpResponseBadRequest
 from django import forms
 
+import logging
 import datetime
+
+logger = logging.getLogger(__name__)
 
 class LocationForm(forms.Form):
   name = forms.CharField()
@@ -31,8 +34,13 @@ class LocationForm(forms.Form):
   lat = forms.DecimalField(max_digits=9, decimal_places=6)
   lng = forms.DecimalField(max_digits=9, decimal_places=6)
   userId = forms.IntegerField()
+  tags = django.forms.CharField()
+
+  def clean_tags(self):
+    return self.cleaned_data['tags'].strip().split()
 
 def addLocation(request):
+  logger.debug('addLocation')
   form = LocationForm(request.POST)
   if(form.is_valid()):
     cleaned = form.cleaned_data
@@ -45,6 +53,7 @@ def addLocation(request):
     return HttpResponseBadRequest()
 
 def queryLocation(request, userId, lat, lng):
+  logger.debug('queryLocation ' + userId + ' - ' + lat + '/' + lng)
   return JsonResponse({
       'code': 'SUCCESS',
       'data': [
