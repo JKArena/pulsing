@@ -27,6 +27,7 @@ require('./CreateLocation.scss');
 import {Grid, Row, Col, FormGroup, ControlLabel, FormControl, Button, Panel} from 'react-bootstrap';
 import React from 'react';
 
+import PillsComponent from '../common/pills/PillsComponent';
 import AbstractComponent from '../AbstractComponent';
 import CreateLocationAction from './actions/CreateLocationAction';
 
@@ -50,9 +51,10 @@ class CreateLocationComponent extends AbstractComponent {
       return;
     }
     
-    CreateLocationAction.createLocation('createLocationBtn', 'createLocationForm')
+    CreateLocationAction.createLocation('createLocationBtn', 'createLocationForm', this.refs.tagsComp.getData())
       .then(() => {
         this.state.errorMsg = '';
+        this.refs.tagsComp.clearData();
       })
       .catch(message => {
         this.state.errorMsg = message;
@@ -95,6 +97,8 @@ class CreateLocationComponent extends AbstractComponent {
                     <FormControl type='number' name='lng' onBlur={this.handleChange.bind(this)} />
                     <FormControl.Feedback />
                   </FormGroup>
+
+                  <PillsComponent label='Tags' ref='tagsComp' />
                   
                   {(() => {
                     

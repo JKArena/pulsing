@@ -31,3 +31,29 @@ except exception2 as variable2:
   //handle 2
 else
   //me optional
+
+Binary numbers are written with a leading 0b, octal numbers with a leading 0o.*, and hexadecimal numbers with a leading 0x.
+
+(2145).bit_length() returns 12 (number of bits required to represent the int it is called on)
+
+def equal_float(a, b):
+  return abs(a-b) <= sys.float_info.epsilon
+
+sys.float.epsilon is effectively the smallest difference that the machine can distinguish between two 
+floating numbers.
+
+14.25.hex() => floating number as hex string
+float.fromhex(string)
+
+z = -89.5+2.125j
+z.real, z.imag => (-89.5, 2.125)
+The functions in the math module do not work with complex numbers. This is a deliberate design decision 
+that ensures that users of the math module get exceptions rather than silently getting complex numbers in some situations. Users of complex numbers can import cmath module.
+
+longStr = ("Stuff here "
+           "what here.")
+
+Using + to concatenate and += to append is not particulary efficent when many strings are involved. For joining lots of strings it is usually best to use the str.join() method
+s = s[:12] + "wo " + s[12:]
+seq[start:end:step] being full syntax
+if negative step is given, start index defaults to -1 and starts from the end

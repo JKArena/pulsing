@@ -52,6 +52,7 @@
                 <import>${project.basedir}/src/main/avro/picture.avsc</import>
                 <import>${project.basedir}/src/main/avro/pulseId.avsc</import>
                 <import>${project.basedir}/src/main/avro/userId.avsc</import>
+                <import>${project.basedir}/src/main/avro/locationId.avsc</import>
               </imports>
             </configuration>
           </execution>
