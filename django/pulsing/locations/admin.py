@@ -23,7 +23,7 @@ from django.contrib import admin
 from .models import Locations
 
 class LocationAdmin(admin.ModelAdmin):
-  list_display = ('name', 'lat', 'lng', 'user_id', 'creation_date')
+  list_display = ('name', 'user_id', 'creation_date')
   search_fields = ('user_id',)
   list_filter = ('creation_date',)
   date_hierarchy = 'creation_date'
