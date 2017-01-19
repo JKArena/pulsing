@@ -19,15 +19,34 @@ under the License.
 @author Ji Kim
 """
 
-from django.db import models
+from django.contrib.gis.db import models
+from django.db import connection
 
 class Locations(models.Model):
+  OGR_FID = models.AutoField(primary_key=True)
+  SHAPE = models.GeometryField(spatial_index=True, null=False)
+  osm_id = models.CharField(max_length=100)
   name = models.CharField(max_length=30)
+  barrier = models.CharField(max_length=100)
+  highway = models.CharField(max_length=100)
+  ref = models.CharField(max_length=100)
+  address = models.CharField(max_length=100)
+  is_in = models.CharField(max_length=100)
+  place = models.CharField(max_length=100)
+  man_made = models.CharField(max_length=100)
+  other_tags = models.CharField(max_length=100)
   description = models.CharField(max_length=100, blank=True)
-  lat = models.DecimalField(max_digits=9, decimal_places=6, verbose_name='latitude')
-  lng = models.DecimalField(max_digits=9, decimal_places=6, verbose_name='longitude')
   user_id = models.BigIntegerField()
   creation_date = models.DateField()
+
+  def customSQL(self):
+    cursor = connection.cursor()
+    cursor.execute("SELECT * FROM locations LIMIT 10")
+    desc = cursor.description
+    return [
+      dict(zip([col[0] for col in desc], row))
+      for row in cursor.fetchall()
+    ]
 
   def __str__(self):
     return u'Location: %s at %d/%d' % (self.name, self.lat, self.lng)

@@ -1,3 +1,25 @@
 Play around with nginx and RTMP
 
 ./configure --with-http_ssl_module --add-module=/usr/local/lib/nginx/rtmp/nginx-rtmp-module-master --with-openssl=/usr/local/lib/openssl/openssl-1.0.2j
+
+Using Openstreetmap (OSM) for gis
+http://download.geofabrik.de/north-america-latest.osm.pbf
+
+MySQL config =>
+
+mysql >
+SET NAMES utf8mb4; 
+ALTER DATABASE pulsing CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci;
+
+[client]
+default-character-set = utf8mb4
+
+[mysql]
+default-character-set = utf8mb4
+
+[mysqld]
+character-set-client-handshake = FALSE
+character-set-server = utf8mb4
+collation-server = utf8mb4_unicode_ci
+
+ogr2ogr -overwrite -progress -f "MySQL" MYSQL:pulsing,user=pulsing,password=wsad north-america-latest.osm.pbf
