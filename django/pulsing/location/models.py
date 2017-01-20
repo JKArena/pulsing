@@ -146,3 +146,22 @@ class SpatialRefSys(models.Model):
     class Meta:
         managed = False
         db_table = 'spatial_ref_sys'
+
+
+class Tl2013UsZcta510(models.Model):
+    ogr_fid = models.AutoField(db_column='OGR_FID', unique=True)  # Field name made lowercase.
+    shape = models.GeometryField(db_column='SHAPE')  # Field name made lowercase.
+    zcta5ce10 = models.CharField(max_length=5, blank=True, null=True)
+    geoid10 = models.CharField(max_length=5, blank=True, null=True)
+    classfp10 = models.CharField(max_length=2, blank=True, null=True)
+    mtfcc10 = models.CharField(max_length=5, blank=True, null=True)
+    funcstat10 = models.CharField(max_length=1, blank=True, null=True)
+    aland10 = models.FloatField(blank=True, null=True)
+    awater10 = models.FloatField(blank=True, null=True)
+    intptlat10 = models.CharField(max_length=11, blank=True, null=True)
+    intptlon10 = models.CharField(max_length=12, blank=True, null=True)
+    objects = models.GeoManager()
+
+    class Meta:
+        managed = False
+        db_table = 'tl_2013_us_zcta510'
