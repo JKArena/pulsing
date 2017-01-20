@@ -27,7 +27,7 @@ import Url from '../../../common/Url';
 import Storage from '../../../common/Storage';
 import Location from '../../../../avro/Location';
 
-const CREATE_LOCATION_PATH = 'locations/add/';
+const CREATE_LOCATION_PATH = 'location/add/';
 
 const CreateLocationAction = Object.freeze(
   {
