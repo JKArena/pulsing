@@ -8,14 +8,14 @@ Allows creation of Pulse which others around the area can subscribe to and when 
    * Cascading+JCascade+Pail
    * Spark ml for machine learning
    * Hive+Spark SQL
-4. MySQL/Hibernate for user data and location data
+4. MySQL/Hibernate for user data and location (GIS) data
 5. Cassandra for chatLobby messages which are created by users
-6. Redis for computed + session management (pulse data with geo radius search)
-4. Avro+Thrift for serializations
-5. Bootstrap+ReactJS+Router+NodeJS
-6. Spring (WebSocket,Aspect, and etc)
-7. Python Django with Memcached (to compare)
-8. Java8+Ecmascript6 and etc (i.e. maybe Apache Mesos + Oozie)
+6. Redis for websocket+session management and cache (short lived pulse data with geo radius search)
+4. Avro+Thrift for serializations (both to compare)
+5. Bootstrap+ReactJS+Router
+6. Spring (WebSocket,Aspect, and etc) for service calls
+7. Python Django with Memcached for service calls (to compare with Spring)
+8. Nginx (for RTMP), Java8, Scala, Ecmascript6 and etc
 
 ![ScreenShot](https://github.com/JHKTruth/pulsing/blob/master/spring/nonsrc/ssChat.png?raw=true)
 
