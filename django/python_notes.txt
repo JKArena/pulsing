@@ -57,3 +57,18 @@ Using + to concatenate and += to append is not particulary efficent when many st
 s = s[:12] + "wo " + s[12:]
 seq[start:end:step] being full syntax
 if negative step is given, start index defaults to -1 and starts from the end
+
+The local variables that are currently in scope are available from the built in locals() function.
+element = "Silver"
+number = 47
+"Element {number} is {element}".format(**locals()) => "Element 47 is Silver"
+If we need to include braces inside format strings, we need to double them up
+"{{{0}}} {1} ;-}}".format("In braces", "Not") => "{In braces} Not ;-}"
+
+Refer to format specification as is rather lengthy and full featured
+"{0:-^25}".format(s) # - fill, center align, minimum width 25 
+{field_name!conversion:format_specification} with conversion being 
+s: string form, r: representational form, a representational form but only using ASCII characters
+
+
+
