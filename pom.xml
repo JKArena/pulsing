@@ -429,6 +429,12 @@ descent loss of performance)
       </dependency>
 
       <dependency>
+        <groupId>com.google.maps</groupId>
+        <artifactId>google-maps-services</artifactId>
+        <version>${map.services}</version>
+      </dependency>
+
+      <dependency>
         <groupId>org.hyperic</groupId>
         <artifactId>sigar</artifactId>
         <version>${sigar}</version>
@@ -498,6 +504,7 @@ descent loss of performance)
     <freemarker>2.3.23</freemarker>
     <jedis>2.8.1</jedis>
     <antrun>1.8</antrun>
+    <map.services>0.1.17</map.services>
     <hyperloglog>1.6.0</hyperloglog>
     <sigar>1.6.4</sigar>
   </properties>
