@@ -39,8 +39,7 @@ class CreateLocationComponent extends AbstractComponent {
     this.state = {
       validity: {
         name: 0, //-1 invalid, 0 initial, 1 valid
-        lat: 0,
-        lng: 0
+        address: 0
       },
       errorMsg: ''
     };
@@ -80,18 +79,18 @@ class CreateLocationComponent extends AbstractComponent {
                     <FormControl.Feedback />
                   </FormGroup>
 
+                  <FormGroup controlId='address' validationState={this.getValidState('address')}>
+                    <ControlLabel>Address</ControlLabel>
+                    <FormControl type='text' name='lat' onBlur={this.handleChange.bind(this)} />
+                    <FormControl.Feedback />
+                  </FormGroup>
+
                   <FormGroup controlId='description'>
                     <ControlLabel>Description</ControlLabel>
                     <FormControl componentClass="textarea" name='description' onBlur={this.handleChange.bind(this)} />
                     <FormControl.Feedback />
                   </FormGroup>
                   
-                  <FormGroup controlId='lat' validationState={this.getValidState('lat')}>
-                    <ControlLabel>Latitude</ControlLabel>
-                    <FormControl type='number' name='lat' onBlur={this.handleChange.bind(this)} />
-                    <FormControl.Feedback />
-                  </FormGroup>
-
                   <FormGroup controlId='lng' validationState={this.getValidState('lng')}>
                     <ControlLabel>Longitude</ControlLabel>
                     <FormControl type='number' name='lng' onBlur={this.handleChange.bind(this)} />

@@ -62,20 +62,12 @@ class Location extends AbstractAvro {
     this.json.description = {'string' : description};
   }
   
-  get lat() {
-    return this.json.lat;
+  get address() {
+    return this.getProperty('address', 'string');
   }
 
-  set lat(lat) {
-    this.json.lat = lat;
-  }
-
-  get lng() {
-    return this.json.lng;
-  }
-
-  set lng(lng) {
-    this.json.lng = lng;
+  set address(address) {
+    this.json.address = {'string' : address};
   }
 
   get tags() {
