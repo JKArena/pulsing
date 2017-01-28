@@ -10,7 +10,7 @@
 from __future__ import unicode_literals
 
 from django.contrib.gis.db import models
-
+from django.db import connection
 
 class DjangoMigrations(models.Model):
     app = models.CharField(max_length=255)
@@ -131,6 +131,22 @@ class Points(models.Model):
     man_made = models.TextField(blank=True, null=True)
     other_tags = models.TextField(blank=True, null=True)
     objects = models.GeoManager()
+
+    def pointsOfInterest(self, lng, lat, zipcode, tags, start=0, end=10):
+        cursor = connection.cursor()
+        cursor.execute("SELECT osm_id, name, "
+            "round(st_distance_sphere(shape, st_geomfromtext('POINT (%f %f)', 1) ), 2) as dist"
+            "FROM points"
+            "WHERE st_within(shape,"
+            "(select shape from tl_2013_us_zcta510 where zcta5ce10='%d') )"
+            "and (other_tags like '%s')"
+            "and name is not null"
+            "ORDER BY dist asc LIMIT %d,%d;", [lng, lat, zipcode, tags, start, end])
+        desc = cursor.description
+        return [
+            dict(zip([col[0] for col in desc], row))
+            for row in cursor.fetchall()
+        ]
 
     class Meta:
         managed = False

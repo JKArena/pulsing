@@ -22,10 +22,10 @@
  */
 'use strict';
 
-import Fetch from '../../../common/Fetch';
-import Url from '../../../common/Url';
-import Storage from '../../../common/Storage';
-import Location from '../../../../avro/Location';
+import Fetch from '../../../../common/Fetch';
+import Url from '../../../../common/Url';
+import Storage from '../../../../common/Storage';
+import Location from '../../../../../avro/Location';
 
 const CREATE_LOCATION_PATH = 'location/add/';
 
