@@ -27,8 +27,8 @@ require('./CreateLocation.scss');
 import {Grid, Row, Col, FormGroup, ControlLabel, FormControl, Button, Panel} from 'react-bootstrap';
 import React from 'react';
 
-import PillsComponent from '../common/pills/PillsComponent';
-import AbstractComponent from '../AbstractComponent';
+import PillsComponent from '../../common/pills/PillsComponent';
+import AbstractComponent from '../../AbstractComponent';
 import CreateLocationAction from './actions/CreateLocationAction';
 
 class CreateLocationComponent extends AbstractComponent {

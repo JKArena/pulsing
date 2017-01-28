@@ -31,7 +31,7 @@ import App from './components/App';
 import TrendingPulseSubscriptionsComponent from './components/pulsing/trending/TrendingPulseSubscriptionsComponent';
 import MapComponent from './components/map/MapComponent';
 import CreatePulseComponent from './components/pulsing/create/CreatePulseComponent';
-import CreateLocationComponent from './components/location/CreateLocationComponent';
+import CreateLocationComponent from './components/location/create/CreateLocationComponent';
 import SignupComponent from './components/signup/SignupComponent';
 import LoginComponent from './components/login/LoginComponent';
 
