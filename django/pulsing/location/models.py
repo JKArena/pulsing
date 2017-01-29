@@ -37,7 +37,7 @@ class GeometryColumns(models.Model):
 
 
 class Lines(models.Model):
-    ogr_fid = models.AutoField(db_column='OGR_FID', unique=True)  # Field name made lowercase.
+    ogr_fid = models.AutoField(db_column='OGR_FID', primary_key=True)  # Field name made lowercase.
     shape = models.GeometryField(db_column='SHAPE')  # Field name made lowercase.
     osm_id = models.TextField(blank=True, null=True)
     name = models.TextField(blank=True, null=True)
@@ -55,7 +55,7 @@ class Lines(models.Model):
 
 
 class Multilinestrings(models.Model):
-    ogr_fid = models.AutoField(db_column='OGR_FID', unique=True)  # Field name made lowercase.
+    ogr_fid = models.AutoField(db_column='OGR_FID', primary_key=True)  # Field name made lowercase.
     shape = models.GeometryField(db_column='SHAPE')  # Field name made lowercase.
     osm_id = models.TextField(blank=True, null=True)
     name = models.TextField(blank=True, null=True)
@@ -69,7 +69,7 @@ class Multilinestrings(models.Model):
 
 
 class Multipolygons(models.Model):
-    ogr_fid = models.AutoField(db_column='OGR_FID', unique=True)  # Field name made lowercase.
+    ogr_fid = models.AutoField(db_column='OGR_FID', primary_key=True)  # Field name made lowercase.
     shape = models.GeometryField(db_column='SHAPE')  # Field name made lowercase.
     osm_id = models.TextField(blank=True, null=True)
     osm_way_id = models.TextField(blank=True, null=True)
@@ -104,7 +104,7 @@ class Multipolygons(models.Model):
 
 
 class OtherRelations(models.Model):
-    ogr_fid = models.AutoField(db_column='OGR_FID', unique=True)  # Field name made lowercase.
+    ogr_fid = models.AutoField(db_column='OGR_FID', primary_key=True)  # Field name made lowercase.
     shape = models.GeometryField(db_column='SHAPE')  # Field name made lowercase.
     osm_id = models.TextField(blank=True, null=True)
     name = models.TextField(blank=True, null=True)
@@ -118,7 +118,7 @@ class OtherRelations(models.Model):
 
 
 class Points(models.Model):
-    ogr_fid = models.AutoField(db_column='OGR_FID', unique=True)  # Field name made lowercase.
+    ogr_fid = models.AutoField(db_column='OGR_FID', primary_key=True)  # Field name made lowercase.
     shape = models.GeometryField(db_column='SHAPE')  # Field name made lowercase.
     osm_id = models.TextField(blank=True, null=True)
     name = models.TextField(blank=True, null=True)
@@ -165,7 +165,7 @@ class SpatialRefSys(models.Model):
 
 
 class Tl2013UsZcta510(models.Model):
-    ogr_fid = models.AutoField(db_column='OGR_FID', unique=True)  # Field name made lowercase.
+    ogr_fid = models.AutoField(db_column='OGR_FID', primary_key=True)  # Field name made lowercase.
     shape = models.GeometryField(db_column='SHAPE')  # Field name made lowercase.
     zcta5ce10 = models.CharField(max_length=5, blank=True, null=True)
     geoid10 = models.CharField(max_length=5, blank=True, null=True)
