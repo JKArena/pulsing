@@ -28,6 +28,8 @@ import org.apache.spark.streaming.kafka010._
 import org.apache.spark.streaming.kafka010.LocationStrategies.PreferConsistent
 import org.apache.spark.streaming.kafka010.ConsumerStrategies.Subscribe
 
+import com.google.maps.GeoApiContext
+
 import org.jhk.pulsing.shared.util.CommonConstants._
 import org.jhk.pulsing.shared.util.HadoopConstants
 
@@ -35,6 +37,7 @@ import org.jhk.pulsing.shared.util.HadoopConstants
  * @author Ji Kim
  */
 class Location {
+  val GEO_CONTEXT = new GeoApiContext().setApiKey(MAP_API_KEY)
   val CHECKPOINT = HadoopConstants.getWorkingDirectory(HadoopConstants.DIRECTORIES.SPARK_STREAM_LOCATION_CREATE)
   
   def createStreamingContext() = {
