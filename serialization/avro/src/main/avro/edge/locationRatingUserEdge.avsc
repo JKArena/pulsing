@@ -22,8 +22,8 @@
   "type": "record",
   "name": "LocationRatingUserEdge",
   "fields": [
-    {"name": "locationId", "type": "LocationId", "default": null},
-    {"name": "userId", "type": "UserId", "default": null},
-    {"name": "ratingId", "type": "RatingId", "default": null}
+    {"name": "locationId", "type": "org.jhk.pulsing.serialization.avro.records.LocationId", "default": null},
+    {"name": "userId", "type": "org.jhk.pulsing.serialization.avro.records.UserId", "default": null},
+    {"name": "ratingId", "type": "org.jhk.pulsing.serialization.avro.records.RatingId", "default": null}
   ]
 }

@@ -37,7 +37,6 @@ import org.jhk.pulsing.shared.util.HadoopConstants
  * @author Ji Kim
  */
 class Location {
-  val GEO_CONTEXT = new GeoApiContext().setApiKey(MAP_API_KEY)
   val CHECKPOINT = HadoopConstants.getWorkingDirectory(HadoopConstants.DIRECTORIES.SPARK_STREAM_LOCATION_CREATE)
   
   def createStreamingContext() = {
@@ -70,7 +69,21 @@ class Location {
       Subscribe[String, String](topics, kafkaParameters)
     )
     
-    stream.map(record => (record.key, record.value))
+    stream.mapPartitions{
+      records =>
+      val geoContext = new GeoApiContext().setApiKey(MAP_API_KEY)
+      
+      records.map { record =>
+        //perform avro deserialization
+        
+      }.map { case (avro) =>
+        //perform geo call
+        
+      }
+    }
+    
+    streamingContext.start()
+    streamingContext.awaitTermination()
   }
   
 }

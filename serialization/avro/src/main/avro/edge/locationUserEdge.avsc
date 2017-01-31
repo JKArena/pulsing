@@ -22,7 +22,7 @@
   "type": "record",
   "name": "LocationUserEdge",
   "fields": [
-    {"name": "locationId", "type": "LocationId", "default": null},
-    {"name": "userId", "type": "UserId", "default": null}
+    {"name": "locationId", "type": "org.jhk.pulsing.serialization.avro.records.LocationId", "default": null},
+    {"name": "userId", "type": "org.jhk.pulsing.serialization.avro.records.UserId", "default": null}
   ]
 }

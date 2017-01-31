@@ -32,10 +32,16 @@ import org.apache.avro.io.JsonDecoder;
 import org.apache.avro.specific.SpecificDatumReader;
 import org.apache.avro.specific.SpecificDatumWriter;
 import org.apache.avro.specific.SpecificRecord;
+import org.jhk.pulsing.serialization.avro.records.Location;
+import org.jhk.pulsing.serialization.avro.records.LocationId;
 import org.jhk.pulsing.serialization.avro.records.Pulse;
 import org.jhk.pulsing.serialization.avro.records.PulseId;
+import org.jhk.pulsing.serialization.avro.records.Rating;
+import org.jhk.pulsing.serialization.avro.records.RatingId;
 import org.jhk.pulsing.serialization.avro.records.User;
 import org.jhk.pulsing.serialization.avro.records.UserId;
+import org.jhk.pulsing.serialization.avro.records.edge.LocationRatingUserEdge;
+import org.jhk.pulsing.serialization.avro.records.edge.LocationUserEdge;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -76,6 +82,10 @@ public final class SerializationHelper {
         _AVRO_RECORDS.add(new AvroRecords<PulseId>(PulseId.class, PulseId.getClassSchema()));
         _AVRO_RECORDS.add(new AvroRecords<User>(User.class, User.getClassSchema()));
         _AVRO_RECORDS.add(new AvroRecords<UserId>(UserId.class, UserId.getClassSchema()));
+        _AVRO_RECORDS.add(new AvroRecords<Location>(Location.class, Location.getClassSchema()));
+        _AVRO_RECORDS.add(new AvroRecords<LocationId>(LocationId.class, LocationId.getClassSchema()));
+        _AVRO_RECORDS.add(new AvroRecords<Rating>(Rating.class, Rating.getClassSchema()));
+        _AVRO_RECORDS.add(new AvroRecords<RatingId>(RatingId.class, RatingId.getClassSchema()));
     }
     
     public static Stream<AvroRecords<? extends SpecificRecord>> getAvroRecordStream() {

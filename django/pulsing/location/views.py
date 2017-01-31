@@ -22,6 +22,7 @@ under the License.
 from django.shortcuts import render
 from django.http import JsonResponse, HttpResponse, HttpResponseBadRequest
 from django import forms
+from shared.kafka import Publisher
 
 import logging
 import datetime
@@ -44,6 +45,8 @@ def addLocation(request):
   form = LocationForm(request.POST)
   if(form.is_valid()):
     cleaned = form.cleaned_data
+
+
     return JsonResponse({
       'code': 'SUCCESS',
       'data': [],
