@@ -32,7 +32,7 @@ import org.jhk.pulsing.shared.util.HadoopConstants
 /**
  * @author Ji Kim
  */
-class ForbiddenPulseWords {
+object ForbiddenPulseWords {
   
   val FORBIDDEN_WORDS_PATH = HadoopConstants.HDFS_URL_PORT + HadoopConstants.TRAINING_DATA_WORKSPACE + "forbiddenPulseWords.txt";
   

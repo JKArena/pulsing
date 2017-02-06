@@ -27,6 +27,6 @@ package org.jhk.pulsing.spark.ml
  * 
  * @author Ji Kim
  */
-class LocationRank {
+object LocationRank {
   
 }

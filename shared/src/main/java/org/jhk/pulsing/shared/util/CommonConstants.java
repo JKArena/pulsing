@@ -35,6 +35,7 @@ public final class CommonConstants {
     public static final String PROJECT_POINT;
     public static final String APP_NAME;
     public static final String MAP_API_KEY;
+    public static final String SPARK_YARN_CLUSTER_MASTER;
     
     public static final String TIME_INTERVAL_ID_VALUE_DELIM = "0x07";
     public static final String TIME_INTERVAL_PERSIST_TIMESTAMP_DELIM = "0x13";
@@ -69,6 +70,7 @@ public final class CommonConstants {
             
             APP_NAME = props.getProperty("app_name");
             MAP_API_KEY = props.getProperty("map_api_key");
+            SPARK_YARN_CLUSTER_MASTER = props.getProperty("spark_yarn_cluster_master");
         } catch (IOException ioExcept) {
             throw new RuntimeException("Error while reading common.properties", ioExcept);
         }

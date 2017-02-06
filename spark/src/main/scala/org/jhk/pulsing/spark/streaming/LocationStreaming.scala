@@ -18,6 +18,7 @@
  */
 package org.jhk.pulsing.spark.streaming
 
+import org.apache.log4j.{Level, LogManager, PropertyConfigurator}
 import org.apache.spark.SparkConf
 import org.apache.spark.streaming._
 import org.apache.spark.streaming.StreamingContext._
@@ -36,11 +37,11 @@ import org.jhk.pulsing.shared.util.HadoopConstants
 /**
  * @author Ji Kim
  */
-class Location {
+object LocationStreaming {
   val CHECKPOINT = HadoopConstants.getWorkingDirectory(HadoopConstants.DIRECTORIES.SPARK_STREAM_LOCATION_CREATE)
   
   def createStreamingContext() = {
-    val configuration = new SparkConf().setMaster(PROJECT_POINT).setAppName("location-create")
+    val configuration = new SparkConf().setMaster(SPARK_YARN_CLUSTER_MASTER).setAppName("location-create")
     val streamingContext = new StreamingContext(configuration, Seconds(10))
     
     streamingContext.checkpoint(CHECKPOINT)
@@ -50,6 +51,8 @@ class Location {
   def main(args: Array[String]): Unit = {
     
     val streamingContext = StreamingContext.getOrCreate(CHECKPOINT, createStreamingContext _)
+    val logger = LogManager.getRootLogger
+    logger.info("Starting Location Streaming...")
     
     val kafkaParameters = Map[String, Object](
       "bootstrap.servers" -> "localhost:9092",
@@ -69,7 +72,7 @@ class Location {
       Subscribe[String, String](topics, kafkaParameters)
     )
     
-    stream.mapPartitions{
+    val mapped = stream.mapPartitions{
       records =>
       val geoContext = new GeoApiContext().setApiKey(MAP_API_KEY)
       
@@ -81,6 +84,7 @@ class Location {
         
       }
     }
+    mapped.print()
     
     streamingContext.start()
     streamingContext.awaitTermination()
