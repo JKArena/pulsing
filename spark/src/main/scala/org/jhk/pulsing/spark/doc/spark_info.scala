@@ -134,8 +134,8 @@ package org.jhk.pulsing.spark.doc
  * UI at localhost:4040
  * 
  * Since running on yarn
- * ./bin/spark-submit --master yarn --deploy-mode cluster --class org.jhk.pulsing.spark.job.LocationRank --name "Location Rank"
- * 	pulsing-hadoop-spark-0.1-SNAPSHOT.jar
+ * ./bin/spark-submit --master yarn --deploy-mode cluster --class org.jhk.pulsing.spark.streaming.Location --name "Location Create"
+ * 	pulsing-spark-0.1-SNAPSHOT.jar
  * 
  * reboot and hold down Cmd-R
  * terminal csrutil disable
