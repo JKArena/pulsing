@@ -457,12 +457,19 @@ descent loss of performance)
         <artifactId>jcl-over-slf4j</artifactId>
         <version>${jcl}</version>
       </dependency>
+
+      <dependency>
+        <groupId>com.esri.geometry</groupId>
+        <artifactId>esri-geometry-api</artifactId>
+        <version>${esri.geometry}</version>
+      </dependency>
       
     </dependencies>
   </dependencyManagement>
   
   <properties>
     <pulsing.version>0.1-SNAPSHOT</pulsing.version>
+    <esri.geometry>1.2.1</esri.geometry>
     <jcl>1.7.21</jcl>
     <logback>1.1.8</logback>
     <storm>1.0.3-SNAPSHOT</storm> <!-- Replace with version from main repository later; there currently is a bug STORM-1907 in 1.0.x artifact that fails it in starting a worker -->
