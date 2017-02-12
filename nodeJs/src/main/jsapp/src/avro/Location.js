@@ -96,10 +96,7 @@ class Location extends AbstractAvro {
                             field: 'description'
                           },
                           {
-                            field: 'lat'
-                          },
-                          {
-                            field: 'lng'
+                            field: 'address'
                           }
                          ]);
   }
