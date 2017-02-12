@@ -78,10 +78,13 @@ object LocationStreaming {
       
       records.map { record =>
         //perform avro deserialization
+        println("record " + record)
         
       }.map { case (avro) =>
         //perform geo call
+        println("avro " + avro)
         
+        //GeocodingResult[] result = GeocodingApi.geocode(geoContext, "address").await()
       }
     }
     mapped.print()

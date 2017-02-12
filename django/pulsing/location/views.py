@@ -27,31 +27,34 @@ from shared.kafka import Publisher
 import logging
 import datetime
 
+LOCATION_CREATE_TOPIC = 'LOCATION_CREATE'
 logger = logging.getLogger(__name__)
+publisher = Publisher()
 
 class LocationForm(forms.Form):
   name = forms.CharField()
+  address = forms.CharField()
   description = forms.CharField(max_length=100)
-  lat = forms.DecimalField(max_digits=9, decimal_places=6)
-  lng = forms.DecimalField(max_digits=9, decimal_places=6)
   userId = forms.IntegerField()
-  tags = django.forms.CharField()
+  id = forms.IntegerField()
+  tags = forms.CharField()
 
   def clean_tags(self):
     return self.cleaned_data['tags'].strip().split()
 
 def addLocation(request):
   logger.debug('addLocation')
-  form = LocationForm(request.POST)
-  if(form.is_valid()):
-    cleaned = form.cleaned_data
+  
+  if('location' in request.POST):
+    location = request.POST['location']
 
+    publisher.publish(LOCATION_CREATE_TOPIC, location)
 
     return JsonResponse({
       'code': 'SUCCESS',
       'data': [],
       'message': ''
-    });
+    })
   else:
     return HttpResponseBadRequest()
 

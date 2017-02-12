@@ -81,22 +81,16 @@ class CreateLocationComponent extends AbstractComponent {
 
                   <FormGroup controlId='address' validationState={this.getValidState('address')}>
                     <ControlLabel>Address</ControlLabel>
-                    <FormControl type='text' name='lat' onBlur={this.handleChange.bind(this)} />
+                    <FormControl type='text' name='address' onBlur={this.handleChange.bind(this)} />
                     <FormControl.Feedback />
                   </FormGroup>
 
                   <FormGroup controlId='description'>
                     <ControlLabel>Description</ControlLabel>
-                    <FormControl componentClass="textarea" name='description' onBlur={this.handleChange.bind(this)} />
+                    <FormControl componentClass="textarea" name='description' />
                     <FormControl.Feedback />
                   </FormGroup>
                   
-                  <FormGroup controlId='lng' validationState={this.getValidState('lng')}>
-                    <ControlLabel>Longitude</ControlLabel>
-                    <FormControl type='number' name='lng' onBlur={this.handleChange.bind(this)} />
-                    <FormControl.Feedback />
-                  </FormGroup>
-
                   <PillsComponent label='Tags' ref='tagsComp' />
                   
                   {(() => {

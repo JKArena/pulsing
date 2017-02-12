@@ -23,7 +23,7 @@ from confluent_kafka import Producer
 
 class Publisher():
 
-  def __init__(self, config={'bootstrap.servers': 'localhost:9092', 'acks': 'all', 'retries': 3}):
+  def __init__(self, config={'bootstrap.servers': 'localhost:9092', 'retries': 3}):
     self.producer = Producer(config)
 
   def publish(self, topic, data):

@@ -70,5 +70,196 @@ Refer to format specification as is rather lengthy and full featured
 {field_name!conversion:format_specification} with conversion being 
 s: string form, r: representational form, a representational form but only using ASCII characters
 
+def product(a, b, c):
+  return a*b*c
 
+L = [2, 3, 5]
+product(*L)
+product(2, *L[1:])
+
+first, *rest = [9, 2, -4, 8, 7]
+(9, [2, -4, 8, 7])
+
+for loop in range(len(L)):
+  L[i] = process(L[i])
+
+To delete
+woods[2:4] = [] or del woods[2:4]
+
+To set every odd index value in x list to 0
+x[1::2] = [0] * len(x[1::2])
+
+List comprehension => [expression for item in iterable if condition]
+temp = []
+for item in iterable:
+  if condition:
+    temp.append(expression)
+
+leaps = [years for years in range(1900, 1940) if (y %4 == 0 and y % 100 != 0) or (y % 400 == 0)]
+
+codes = []
+for sex in "MF":
+  for size in "SMLX":
+    if sex == "F" and size == "X":
+      continue
+    for color in "BGW":
+      codes.append(sex+size+color)
+
+codes = [sex+size+color for sex in "MF" for size in "SMLX" for color in "BGW" if not (sex== "F" and size == "X")]
+
+Python provides two built-in set types: the mutable set type and the immutable frozenset. The built-in mutable data types,
+such as dict, list, and set, are not hashable since their hash value changes depending on the items they contain, so they cannot 
+be added to sets.
+
+s - t (difference)
+s & t (intersection)
+s ^ t (returns a new set that has every item that is in set s and every item that is in set t, but excluding items that are in both sets)
+s | t (union)
+
+Set comprehension {expression for item in iterable if condition}
+html = {x for x in files if x.lower().endswith((".htm", ".html"))}
+
+If a binary operator is used with a set and a frozen set, the data type of the result is the same as the left-hand operand's data type.
+So if f is a frozen set and s is a set, f& s will produce a frozen set and s& f will produce a set.
+
+A new ordered mapping type, collections.OrderedDict, was introduced with Python 3.1; this is a dictionary that has the same methods and 
+properties as the built-in dict, but stores its items in insertion order
+d1 = dict({"id": "foobar", "name": 1234})
+for key, value in d1.items()
+  print(key, value)
+
+The dict.items(), dict.keys(), and dict.values() methods all return dictionary views. A dictionary view is effectively a read-only iterable object 
+that appears to hold the dictionary's items or keys or values, depending on the view we have asked for.
+
+d = {}.fromkeys("ABCD", 3)  # d == {'A': 3, 'B': 3, 'C': 3, 'D': 3}
+s = set("ACX")              # s == {'A', 'C', 'X'}
+matches = d.keys() & s      # matches == {'A', 'C'}
+
+fin = open(filename, encoding="utf-8")
+fout = open(filename, "w", encoding="utf-8")
+
+for line in open(filename, encoding="utf-8"):
+  process(line)
+
+Dictionary comprehension {keyexpression: valueexpression for key, value in iterable if condition}
+file_size = {name: os.path.getsize(name) for name in os.listdir(".") if os.path.isfile(name)}
+
+Default dictionaries differ from regular dictionaries in how it handles missing keys. In regular dictionary if one accesses a key which does not 
+exit a KeyError exception is thrown; however for default dictionaries a default value is returned.
+words = collections.defaultdict(int) => will call function int() to get the default value as argument is a function reference
+
+Ordered dictionaries collections.OrderedDict([('z', -4), ('e', 19)])
+
+An iterable data type is one that can return each of its items one at a time. Any object that has an __iter__() method, or any sequence (i.e. 
+an object that has a __getitem__() method taking integer arguments starting from 0) is an iterable and can provide an iterator. An iterator is an 
+object that provides a __next__() method which returns next time and raises a StopIteration exception when there are no more items.
+
+When we use a for item in iterable loop, Python in effect calls iter(iterable) to get an iterator. This iterator's __next__() method is then called at each loop
+iteration to get the next item, and when the StopIteration exception is raised, it is caught and the loop is terminated.
+
+The enumerate() function takes an iterator and returns an enumerator object. This object can be treated like an iterator, and at each iteration it returns a 
+2-tuple with the tuple's first item the iteration number and the second item the next item from the iterator enumerate() was called on.
+
+Fpr deep copy =>
+import copy
+x = [53, 68, ["A", "B"]]
+y = copy.deepcopy(x)
+
+Ternary expression
+expression1 if boolean_expression else expression2
+
+while boolean_expression:
+  while_suite
+else:
+  else_suite
+
+The optional else clause is rather confusingly named since the else clause's suite is always executed if the loop terminates normally. If the loop is broken 
+out of due to a break statement or a return statement or if an exception is raised, the else clause's suite is not exected. On the plus side, the behavior 
+of the else clause is the same for while loops, for ... in loops, and try ... except blocks.
+
+try:
+  try_suite
+except exception_group1 as variable1:
+  except_suite1
+except exception_groupN as variableN:
+  except_suiteN
+else:
+  else_suite
+finally:
+  finally_suite
+
+Raising Exceptions
+raise exception(args)
+raise exception(args) from original_exception
+raise
+
+Third syntax is used when no exception is specified, raise will reraise the currently active exception--and if there isn't one it will raise a TypeError.
+
+When default values are given they are created at the time the def statement is executed (i.e. when the function is created), not when the function is called.
+def append_stuff(x, lst=[]) #Issue
+  ...
+
+def append_stuff(x, lst=None):
+  """I am docstring for this function
+  Bow before me and read me 0_0
+  """
+  lst = [] if lst is None else lst
+  ...
+
+def product(*args):
+  result = 1
+  for arg in args:
+    result *= arg
+  return result
+
+options = dict(paper="A4", color=True)
+print_setup(**options)
+
+def main():
+  if args[0] in {"en", "fr"}:
+    global Language
+    Language = args.pop(0)
+
+By using the global statement, the statement is used to modify the global variable.
+
+lambda parameters: expression
+The result of a lambda expression is an anonymous function. When a lambda function is called it returns the result of computing the expression as its result.
+s = lambda x: "" if x == 1 else "s"
+elements = [(2, 12, "Mg"), (1, 11, "Na")]
+elements.sort(key=lambda entry: (entry[2].lower(), entry[1]))
+
+import importable1, ..., importableN
+import importable as preferred_name
+from importable import object as preferred_name
+from importable import object1, ..., objectN
+from importable import (object1, ..., objectN)
+from importable import *
+
+Last syntax, the * means "import everything that is not private", which in practical terms means either that 
+every object in the module is imported except for those whose names begin with a leading underscore, or, if the module 
+has a global __all__ variable that holds a list of names, that all the objects named in the __all__ variable are imported.
+
+The built-in sys module has a list called sys.path that holds a list of the directories that constitute the Python path.
+The first directory is the directory that contains the program itself, even if the program was invoked from another directory.
+If the PYTHONPATH environment variable is set, the paths specified in it are the next ones in the list, and the final paths are 
+those needed to access Python's standard library--these are set when Python is installed. When we first import a module, if it 
+isn't built-in, Python looks for the module in each path listed in sys.path in turn. Package is simply a directory that contains 
+a set of modules and a file called __init__.py. In some situations it is convenient to load in all of a package's modules using 
+a single statement. To do this we must edit the package's __init__.py file to contain a statement which specifies which modules 
+we want loaded. Thisstatement must assign a list of module names to the special variable __all__.
+__all__ = ["Bmp", "Jpeg", "Png", "Tiff"]
+from Graphics import *
+
+from ..Graphics import Png
+Above relative import with leading dots in front of the module name (each dot representing stepping up one directory), can be 
+used only in modules that are inside a package.
+
+.pyo is an optimized byte-code compiled version of the module. .pyc is a nonoptimized byte-code compiled version of the module.
+
+Whenever a module is imported Python creates a variable for the module called __name__ and stores the module's name in this 
+variable.  Whenever a .py file is run Python creates a variable for the program called __name__ and sets it to the string "__main__".
+
+Rather than explicitly checking the row and column is accessed, IndexError exception occurs because a nonexistent row or column is accessed, we catch the exception and raise the appropriate module-specific exception in its place. This style of programming is known colloquially as "it's easier to ask forgiveness than permission", and is generally considered more Pythonic than "look before you leap", where checks are made in advance. Relying on exceptions to be raised rather than checking in advance is more efficient when exceptions are rare.
+
+struct module provides functions for packing and unpacking numbers, Booleans, and string to and from bytes objects using their binary representations.
 
