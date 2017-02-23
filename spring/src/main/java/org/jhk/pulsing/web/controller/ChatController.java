@@ -92,6 +92,13 @@ public class ChatController {
         return chatService.createChatLobby(userId, lobbyName);
     }
     
+    @RequestMapping(value="/chatLobbyUnSubscribe/{cLId}/{lobbyName}/{userId}", method=RequestMethod.PUT)
+    public @ResponseBody Result<String> chatLobbyUnSubscribe(@PathVariable UUID cLId, @PathVariable String lobbyName, @PathVariable UserId userId) {
+        _LOGGER.debug("ChatController.chatLobbyUnSubscribe: " + cLId + " - " + userId);
+        
+        return chatService.chatLobbyUnSubscribe(userId, cLId, lobbyName);
+    }
+    
     @RequestMapping(value="/chatLobbySubscribe/{cLId}/{lobbyName}/{chatLobbyInvitationId}/{userId}", method=RequestMethod.PUT)
     public @ResponseBody Result<Boolean> chatLobbySubscribe(@PathVariable UUID cLId, @PathVariable String lobbyName, 
                                                                 @PathVariable String chatLobbyInvitationId, @PathVariable UserId userId) {

@@ -49,9 +49,32 @@ public class CassandraChatDao extends AbstractCassandraDao {
         return _chatLobbyTable.queryChatLobbies(userId);
     }
     
+    public boolean userHasChatLobbyId(UserId userId, UUID cLId) {
+        Map<String, UUID> cLobbies = queryChatLobbies(userId);
+        
+        boolean exists = cLobbies.values().stream().anyMatch(chatLobbyId -> {
+            return chatLobbyId.equals(cLId);
+        });
+        
+        return exists;
+    }
+    
     public Optional<UUID> createChatLobby(UserId userId, String lobbyName) {
         
         return _chatLobbyTable.createChatLobby(userId, lobbyName);
+    }
+    
+    public boolean chatLobbyUnSubscribe(UserId userId, UUID cLId, String lobbyName) {
+        
+        boolean exists = userHasChatLobbyId(userId, cLId);
+        
+        if(!exists) {
+            return false;
+        }
+        
+        _chatLobbyTable.chatLobbyUnSubscribe(userId, cLId, lobbyName);
+        
+        return true;
     }
     
     public void chatLobbyMessageInsert(UUID cLId, long from, long timeStamp, String message) {
@@ -77,10 +100,7 @@ public class CassandraChatDao extends AbstractCassandraDao {
     
     public Optional<Boolean> chatLobbySubscribe(UUID cLId, String lobbyName, UserId userId) {
         
-        Map<String, UUID> cLobbies = queryChatLobbies(userId);
-        boolean exists = cLobbies.values().stream().anyMatch(chatLobbyId -> {
-            return chatLobbyId.equals(cLId);
-        });
+        boolean exists = userHasChatLobbyId(userId, cLId);
         
         if(exists) {
             return Optional.empty();

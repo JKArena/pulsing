@@ -57,6 +57,15 @@ public class ChatService implements IChatService {
         
         return result;
     }
+    
+    @Override
+    public Result<String> chatLobbyUnSubscribe(UserId userId, UUID cLId, String lobbyName) {
+        
+        boolean executed = cassandraChatDao.chatLobbyUnSubscribe(userId, cLId, lobbyName);
+        
+        return executed ? new Result<>(SUCCESS, "Successfully sent unsubscribe chat lobby " + cLId) : 
+            new Result<>(FAILURE, "UserId " + userId + " is not subscribed to " + cLId);
+    }
 
     @Override
     public Result<Map<String, UUID>> queryChatLobbies(UserId userId) {

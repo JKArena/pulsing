@@ -33,6 +33,8 @@ public interface IChatService {
     
     Result<UUID> createChatLobby(UserId userId, String lobbyName);
     
+    Result<String> chatLobbyUnSubscribe(UserId userId, UUID cLId, String lobbyName);
+    
     Result<Map<String, UUID>> queryChatLobbies(UserId userId);
     
     Result<List<Chat>> queryChatLobbyMessages(UUID cLId, Long timeStamp);

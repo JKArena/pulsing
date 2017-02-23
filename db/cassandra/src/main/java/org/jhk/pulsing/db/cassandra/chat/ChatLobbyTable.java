@@ -57,12 +57,15 @@ public final class ChatLobbyTable implements ICassandraTable {
         _keySpace = keySpace;
         
         _session.execute("CREATE TABLE " + _keySpace + "." + _CHAT_LOBBY_TABLE + " (" +
-                "user_id bigint PRIMARY KEY," +
+                "chat_lobby_id timeuuid," +
+                "user_id bigint," +
                 "name text," +
-                "chat_lobby_id timeuuid )");
+                "active Boolean," +
+                "PRIMARY KEY (user_id, chat_lobby_id)" + //user_id for partitioning and chat_lobby_id for clustering
+                " )");
         
-        _CHAT_LOBBY_QUERY = _session.prepare("SELECT name, chat_lobby_id FROM " + _CHAT_LOBBY_TABLE + " WHERE user_id=?");
-        _CHAT_LOBBY_INSERT = _session.prepare("INSERT INTO " + _CHAT_LOBBY_TABLE + " (chat_lobby_id, user_id, name) VALUES (?, ?, ?)");
+        _CHAT_LOBBY_QUERY = _session.prepare("SELECT name, chat_lobby_id, active FROM " + _CHAT_LOBBY_TABLE + " WHERE user_id=?");
+        _CHAT_LOBBY_INSERT = _session.prepare("INSERT INTO " + _CHAT_LOBBY_TABLE + " (chat_lobby_id, user_id, name, active) VALUES (?, ?, ?, ?)");
     }
     
     public Map<String, UUID> queryChatLobbies(UserId userId) {
@@ -93,10 +96,16 @@ public final class ChatLobbyTable implements ICassandraTable {
         return chatLobbySubscribe(userId, lobbyName, cLId);
     }
     
+    public void chatLobbyUnSubscribe(UserId userId, UUID cLId, String lobbyName) {
+        _LOGGER.info("ChatLobbyTable.chatLobbyUnSubscribe : " + userId + " - " + cLId);
+        
+        _session.executeAsync(_CHAT_LOBBY_INSERT.bind(cLId, userId.getId(), lobbyName, Boolean.FALSE));
+    }
+    
     public Optional<UUID> chatLobbySubscribe(UserId userId, String lobbyName, UUID cLId) {
         _LOGGER.info("ChatLobbyTable.chatLobbySubscribe : " + userId + ", " + lobbyName);
         
-        BoundStatement cLInsert = _CHAT_LOBBY_INSERT.bind(cLId, userId.getId(), lobbyName);
+        BoundStatement cLInsert = _CHAT_LOBBY_INSERT.bind(cLId, userId.getId(), lobbyName, Boolean.TRUE);
         _session.executeAsync(cLInsert);
         
         return Optional.of(cLId);

@@ -24,6 +24,8 @@
   "fields": [
     {"name": "id", "type": "LocationId", "default": null},
     {"name": "userId", "type": "UserId", "default": null},
+    {"name": "lat", "type": "double", "default": 0.0},
+  	{"name": "lng", "type": "double", "default": 0.0},
     {"name": "address", "type": ["null", "string"], "default": null},
     {"name": "tags", "type": ["null", {"type": "array", "items": "string"}], "default": null},
     {"name": "timeStamp", "type": ["null", "long"], "default": null},
