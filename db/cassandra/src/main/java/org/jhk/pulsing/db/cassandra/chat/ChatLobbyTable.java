@@ -78,7 +78,15 @@ public final class ChatLobbyTable implements ICassandraTable {
         
         _LOGGER.info("CassandraChatDao.queryChatLobbies cLQResult : " + cLQResult);
         cLQResult.forEach(chatLobby -> {
-            chatLobbies.put(chatLobby.getString("name"), chatLobby.getUUID("chat_lobby_id"));
+            
+            String chatLobbyName = chatLobby.getString("name");
+            boolean activeState = chatLobby.getBool("active");
+            
+            _LOGGER.info("CassandraChatDao.queryChatLobbies chatLobbyName : " + chatLobbyName + " - " + activeState);
+            
+            if(activeState) {
+                chatLobbies.put(chatLobbyName, chatLobby.getUUID("chat_lobby_id"));
+            }
         });
         
         return chatLobbies;

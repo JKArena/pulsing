@@ -96,7 +96,14 @@ public class ChatController {
     public @ResponseBody Result<String> chatLobbyUnSubscribe(@PathVariable UUID cLId, @PathVariable String lobbyName, @PathVariable UserId userId) {
         _LOGGER.debug("ChatController.chatLobbyUnSubscribe: " + cLId + " - " + userId);
         
-        return chatService.chatLobbyUnSubscribe(userId, cLId, lobbyName);
+        Result<String> result = chatService.chatLobbyUnSubscribe(userId, cLId, lobbyName);
+        
+        if(result.getCode() == Result.CODE.SUCCESS) {
+            Optional<UserLight> uLight = userService.getUserLight(userId.getId());
+            sendSystemMessage(cLId, "User " + (uLight.isPresent() ? uLight.get().getName() + " " : "") + " left the chat lobby ");
+        }
+        
+        return result;
     }
     
     @RequestMapping(value="/chatLobbySubscribe/{cLId}/{lobbyName}/{chatLobbyInvitationId}/{userId}", method=RequestMethod.PUT)
@@ -111,19 +118,20 @@ public class ChatController {
         Result<Boolean> chatSubscribe = chatService.chatLobbySubscribe(cLId, lobbyName, userId);
         
         if(chatSubscribe.getData()) {
-            
             Optional<UserLight> uLight = userService.getUserLight(userId.getId());
-            try {
-                String sMessage = "User " + (uLight.isPresent() ? uLight.get().getName() + " " : "") + " joined the chat lobby " + lobbyName + ", welcome him/her!!!";
-                
-                template.convertAndSend("/topics/chat/" + cLId, _objectMapper.writeValueAsString(createSystemMessage(sMessage)));
-            } catch (Exception except) {
-                _LOGGER.error("Error while converting pulse ", except);
-                except.printStackTrace();
-            }
+            sendSystemMessage(cLId, "User " + (uLight.isPresent() ? uLight.get().getName() + " " : "") + " joined the chat lobby " + lobbyName + ", welcome him/her!!!");
         }
         
         return chatSubscribe;
+    }
+    
+    private void sendSystemMessage(UUID cLId, String message) {
+        try {
+            template.convertAndSend("/topics/chat/" + cLId, _objectMapper.writeValueAsString(createSystemMessage(message)));
+        } catch (Exception except) {
+            _LOGGER.error("Error while converting pulse ", except);
+            except.printStackTrace();
+        }
     }
     
     private Chat createSystemMessage(String message) {

@@ -34,6 +34,7 @@ import DropDownButtonComponent from '../common/dropDownButton/DropDownButtonComp
 import CreateChatLobbyAction from './actions/CreateChatLobbyAction';
 import GetChatLobbiesAction from './actions/GetChatLobbiesAction';
 import ChatLobbySubscribeAction from './actions/ChatLobbySubscribeAction';
+import ChatLobbyUnSubscribeAction from './actions/ChatLobbyUnSubscribeAction';
 import ChatAreaComponent from './area/ChatAreaComponent';
 
 const CHAT_ACTION_HELP = (
@@ -57,6 +58,10 @@ const CHAT_ACTION_HELP = (
         <tr>
           <td>/chatLobbyJoin chatLobbyName</td>
           <td>Joins chatLobbyName</td>
+        </tr>
+        <tr>
+          <td>/chatLobbyLeave chatLobbyName</td>
+          <td>Leave chatLobbyName</td>
         </tr>
       </tbody>
     </Table>
@@ -180,6 +185,7 @@ class ChatComponent extends Component {
     unmountComponentAtNode(node);
     
     this.refs.chatDropDownButton.removeChatMenuItem(CHAT_MAPPER[id]);
+    delete CHAT_MAPPER[id];
   }
 
   handleChatSelect(eventKey) {
@@ -247,6 +253,19 @@ class ChatComponent extends Component {
     this.chatInputNode.value = '';
   }
 
+  getChatLobbyInfo(cLName) {
+    let cInfo = null;
+
+    for (let key of Object.keys(CHAT_MAPPER)) {
+      if(CHAT_MAPPER[key].text === cLName) { //chat name
+        cInfo = CHAT_MAPPER[key];
+        break;
+      }
+    }
+
+    return cInfo;
+  }
+
   handleChatAction(user) {
     let split = this.chatInputNode.value.split(' ');
     
@@ -265,14 +284,7 @@ class ChatComponent extends Component {
       //ChatArea's popover will allow easy access for id, but for /chatInvite perhaps store in Redis
       //the mapping of userId => {name: userId} from the chatLobbyMessages + friends (TODO)
       let uId = split[1]; //temp for now, assume knows the uId
-      let cInfo = null;
-
-      for (let key of Object.keys(CHAT_MAPPER)) {
-        if(CHAT_MAPPER[key].text === split[2]) { //chat name
-          cInfo = CHAT_MAPPER[key];
-          break;
-        }
-      }
+      let cInfo = this.getChatLobbyInfo(split[2]);
 
       if(cInfo) {
         let cMessage = `Chat Lobby Invite from: ${user.name}. Type /chatLobbyJoin ${cInfo.text}`;
@@ -294,6 +306,22 @@ class ChatComponent extends Component {
         ChatLobbySubscribeAction.chatLobbySubscribe(chatLobby[0], Storage.user.id)
           .then(() => {
             this.mountChatAreaComponent(chatLobby[0].chatId, chatLobby[0].chatName);
+          });
+      }
+    } else if(split[0] === '/chatLobbyLeave' && split.length === 2) {
+
+      let cLName = split[1];
+      let cInfo = this.getChatLobbyInfo(cLName);
+
+      if(cInfo) {
+        let chatId = cInfo.eventKey;
+
+        ChatLobbyUnSubscribeAction.chatLobbyUnSubscribe(chatId, cLName, Storage.user.id)
+          .then(() => {
+
+            this.unmountChatAreaComponent(chatId);
+            API.publish(TOPICS.CHAT_AREA, {action: 'systemMessage', id: this.state.chatId,
+                        message: 'Chat Lobby : Left ' + cLName + '...'});
           });
       }
     }
