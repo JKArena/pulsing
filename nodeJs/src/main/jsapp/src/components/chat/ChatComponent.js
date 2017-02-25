@@ -38,34 +38,36 @@ import ChatLobbyUnSubscribeAction from './actions/ChatLobbyUnSubscribeAction';
 import ChatAreaComponent from './area/ChatAreaComponent';
 
 const CHAT_ACTION_HELP = (
-  <Popover title='Chat Actions'>
-    <Table responsive>
-      <thead>
-        <tr>
-          <th>Command</th>
-          <th>Description</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>/createChatLobby chatLobbyName</td>
-          <td>Creates a chat lobby of chatLobbyName</td>
-        </tr>
-        <tr>
-          <td>/chatLobbyInvite userId chatLobbyName</td>
-          <td>Invites userId to chatLobbyName</td>
-        </tr>
-        <tr>
-          <td>/chatLobbyJoin chatLobbyName</td>
-          <td>Joins chatLobbyName</td>
-        </tr>
-        <tr>
-          <td>/chatLobbyLeave chatLobbyName</td>
-          <td>Leave chatLobbyName</td>
-        </tr>
-      </tbody>
-    </Table>
-  </Popover>
+  <div className='chat-action-help'>
+    <Popover title='Chat Actions' id='chatActionHelp'>
+      <Table responsive>
+        <thead>
+          <tr>
+            <th>Command</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>/createChatLobby chatLobbyName</td>
+            <td>Creates a chat lobby of chatLobbyName</td>
+          </tr>
+          <tr>
+            <td>/chatLobbyInvite userId chatLobbyName</td>
+            <td>Invites userId to chatLobbyName</td>
+          </tr>
+          <tr>
+            <td>/chatLobbyJoin chatLobbyName</td>
+            <td>Joins chatLobbyName</td>
+          </tr>
+          <tr>
+            <td>/chatLobbyLeave chatLobbyName</td>
+            <td>Leave chatLobbyName</td>
+          </tr>
+        </tbody>
+      </Table>
+    </Popover>
+  </div>
 );
 
 //below would have key as the identifier of the chatArea and values being a JSON object of text to display
