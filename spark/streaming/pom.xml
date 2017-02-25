@@ -36,12 +36,12 @@
       <artifactId>hadoop-hdfs</artifactId>
       <scope>provided</scope>
     </dependency>
-    
+    <!-- 
     <dependency>
       <groupId>net.agkn</groupId>
       <artifactId>hll</artifactId>
     </dependency>
-
+    -->
     <dependency>
       <groupId>org.apache.spark</groupId>
       <artifactId>spark-core_2.11</artifactId>
@@ -59,15 +59,18 @@
       <artifactId>spark-streaming-kafka-0-10_2.11</artifactId>
       <scope>provided</scope>
     </dependency>
-
+    
+    <!-- 
     <dependency>
       <groupId>com.datastax.spark</groupId>
       <artifactId>spark-cassandra-connector_2.11</artifactId>
     </dependency>
-
+     -->
+    
     <dependency>
       <groupId>org.scala-lang</groupId>
       <artifactId>scala-library</artifactId>
+      <scope>provided</scope>
     </dependency>
 
     <dependency>
@@ -151,6 +154,19 @@
             <include>**/*Suite.*</include>
           </includes>
         </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>3.0.0</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>

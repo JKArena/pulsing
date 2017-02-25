@@ -44,13 +44,14 @@ object LocationStreaming {
     val configuration = new SparkConf().setMaster(SPARK_YARN_CLUSTER_MASTER).setAppName("location-create")
     val streamingContext = new StreamingContext(configuration, Seconds(10))
     
-    streamingContext.checkpoint(CHECKPOINT)
+    //streamingContext.checkpoint(CHECKPOINT)
     streamingContext
   }
   
   def main(args: Array[String]): Unit = {
     
-    val streamingContext = StreamingContext.getOrCreate(CHECKPOINT, createStreamingContext _)
+    //val streamingContext = StreamingContext.getOrCreate(CHECKPOINT, createStreamingContext _) Spark 13316 Bug
+    val streamingContext = createStreamingContext
     val logger = LogManager.getRootLogger
     logger.info("Starting Location Streaming...")
     
