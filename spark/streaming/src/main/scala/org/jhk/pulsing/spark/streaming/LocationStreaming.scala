@@ -73,22 +73,20 @@ object LocationStreaming {
       Subscribe[String, String](topics, kafkaParameters)
     )
     
-    val mapped = stream.mapPartitions{
-      records =>
-      val geoContext = new GeoApiContext().setApiKey(MAP_API_KEY)
+    stream.foreachRDD{ rdd =>
+      rdd.foreachPartition { partitionRecord =>
+        
+        val geoContext = new GeoApiContext().setApiKey(MAP_API_KEY)
+        
+        partitionRecord.foreach(record => {
+          //perform avro deserialization + geo api call
+          val recordLogger = LogManager.getLogger("Location")
+          recordLogger.info("record " + record)
+          //GeocodingResult[] result = GeocodingApi.geocode(geoContext, "address").await()
+        })
       
-      records.map { record =>
-        //perform avro deserialization
-        println("record " + record)
-        
-      }.map { case (avro) =>
-        //perform geo call
-        println("avro " + avro)
-        
-        //GeocodingResult[] result = GeocodingApi.geocode(geoContext, "address").await()
       }
     }
-    mapped.print()
     
     streamingContext.start()
     streamingContext.awaitTermination()
