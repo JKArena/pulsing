@@ -55,10 +55,10 @@ const CreateLocationAction = Object.freeze(
 
         Fetch.POST_JSON(Url.djangoRootUrl() + CREATE_LOCATION_PATH, {body: fData}, false)
           .then(function(result) {
-            console.debug('signup', result);
+            console.debug('create location', result);
 
             if(result.code === 'SUCCESS') {
-              resolve(JSON.parse(result.data));
+              resolve();
             }else {
               reject(result.message);
             }

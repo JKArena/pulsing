@@ -56,7 +56,11 @@ def addLocation(request):
       'message': ''
     })
   else:
-    return HttpResponseBadRequest()
+    return JsonResponse({
+      'code': 'FAILURE',
+      'data': [],
+      'message': 'Failed to process'
+    })
 
 def queryLocation(request, userId, lat, lng):
   logger.debug('queryLocation ' + userId + ' - ' + lat + '/' + lng)
