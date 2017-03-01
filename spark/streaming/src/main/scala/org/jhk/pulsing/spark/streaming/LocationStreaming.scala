@@ -22,6 +22,7 @@ import org.apache.log4j.{Level, LogManager, PropertyConfigurator}
 import org.apache.spark.SparkConf
 import org.apache.spark.streaming._
 import org.apache.spark.streaming.StreamingContext._
+import org.apache.spark.TaskContext
 
 import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.apache.kafka.common.serialization.StringDeserializer
@@ -30,9 +31,13 @@ import org.apache.spark.streaming.kafka010.LocationStrategies.PreferConsistent
 import org.apache.spark.streaming.kafka010.ConsumerStrategies.Subscribe
 
 import com.google.maps.GeoApiContext
+import com.google.maps.GeocodingApi
+import com.google.maps.model.GeocodingResult
 
 import org.jhk.pulsing.shared.util.CommonConstants._
 import org.jhk.pulsing.shared.util.HadoopConstants
+import org.jhk.pulsing.serialization.avro.records.Location
+import org.jhk.pulsing.serialization.avro.serializers.SerializationHelper
 
 /**
  * @author Ji Kim
@@ -61,9 +66,9 @@ object LocationStreaming {
       "value.deserializer" -> classOf[StringDeserializer],
       //The cache is keyed by topicpartition and group.id, so use a separate group.id
       //for each call to createDirectStream.
-      "group.id" -> "location_create_stream", 
-      "auto.offset.reset" -> "latest",
-      "enable.auto.commit" -> (false: java.lang.Boolean)
+      "group.id" -> "location_create_stream" 
+      //"auto.offset.reset" -> "latest",
+      //"enable.auto.commit" -> (false: java.lang.Boolean)
     )
     
     val topics = List(TOPICS.LOCATION_CREATE.toString()).toSet
@@ -74,15 +79,28 @@ object LocationStreaming {
     )
     
     stream.foreachRDD{ rdd =>
-      rdd.foreachPartition { partitionRecord =>
+      rdd.foreachPartition { records =>
         
+        val context = TaskContext.get
         val geoContext = new GeoApiContext().setApiKey(MAP_API_KEY)
+        val partitionLogger = LogManager.getLogger("Location")
+        partitionLogger.info(s"Location Create for partition: ${context.partitionId}")
         
-        partitionRecord.foreach(record => {
+        records.foreach(record => {
           //perform avro deserialization + geo api call
-          val recordLogger = LogManager.getLogger("Location")
-          recordLogger.info("record " + record)
-          //GeocodingResult[] result = GeocodingApi.geocode(geoContext, "address").await()
+          
+          partitionLogger.info("Processing record - " + record)
+          
+          val deserialized = SerializationHelper.deserializeFromJSONStringToAvro(classOf[Location], Location.getClassSchema(), record.value)
+          val result:Array[GeocodingResult] = GeocodingApi.geocode(geoContext, deserialized.getAddress().toString()).await()
+          
+          partitionLogger.info("GeocodingResult - " + result.length)
+          
+          val geoLoc = result(0).geometry.location;
+          deserialized.setLat(geoLoc.lat)
+          deserialized.setLng(geoLoc.lng)
+          
+          partitionLogger.info("Deserialized - " + deserialized)
         })
       
       }
