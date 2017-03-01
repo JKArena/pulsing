@@ -101,6 +101,16 @@ LOGGING = {
             'level': 'DEBUG',
             'propagate': True,
         },
+        'location': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'shared': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
     },
 }
 

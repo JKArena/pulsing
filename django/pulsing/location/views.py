@@ -31,17 +31,6 @@ LOCATION_CREATE_TOPIC = 'LOCATION_CREATE'
 logger = logging.getLogger(__name__)
 publisher = Publisher()
 
-class LocationForm(forms.Form):
-  name = forms.CharField()
-  address = forms.CharField()
-  description = forms.CharField(max_length=100)
-  userId = forms.IntegerField()
-  id = forms.IntegerField()
-  tags = forms.CharField()
-
-  def clean_tags(self):
-    return self.cleaned_data['tags'].strip().split()
-
 def addLocation(request):
   logger.debug('addLocation')
   
@@ -56,11 +45,7 @@ def addLocation(request):
       'message': ''
     })
   else:
-    return JsonResponse({
-      'code': 'FAILURE',
-      'data': [],
-      'message': 'Failed to process'
-    })
+    return HttpResponseBadRequest()
 
 def queryLocation(request, userId, lat, lng):
   logger.debug('queryLocation ' + userId + ' - ' + lat + '/' + lng)

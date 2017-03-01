@@ -263,3 +263,13 @@ Rather than explicitly checking the row and column is accessed, IndexError excep
 
 struct module provides functions for packing and unpacking numbers, Booleans, and string to and from bytes objects using their binary representations.
 
+Comparison special methods (i.e. __lt__, __le__, __eq__, __ge__, __gt__)
+if not isinstance(other, Point): return NotImplemented
+In this case if NotImplemented is returned, Python will then try calling other.__eq__(self) to see whether the other type supports the comparison with the Point type, and if there is no such method or if that methods also retruns NotImplemented, Python will give up and raise a TypeError exception.
+
+The property() decorator function is built-in and takes up to four arguments: a getter function, a setter function, a deleter function, and a docstring. The effect of using @property is the same as calling the property() function with just one argument, the getter function.
+
+The decorator for the setter may look strange at first sight. Every property that is created has a getter, setter, and deleter attribute, so once the radius property is created using @property, the radius.getter, radius.setter, and radius.deleter attributes become available.
+
+So when we write f = Fuzzy(0.7), under the hood Python calls Fuzzy.__new__(Fuzzy, 0.7) to create a new object. Class methods are set up by using the built-in classmethod() function used as a decorato.
+
