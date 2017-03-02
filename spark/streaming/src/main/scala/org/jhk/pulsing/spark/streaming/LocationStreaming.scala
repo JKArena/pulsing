@@ -61,7 +61,7 @@ object LocationStreaming {
     logger.info("Starting Location Streaming...")
     
     val kafkaParameters = Map[String, Object](
-      "bootstrap.servers" -> "localhost:9092",
+      "bootstrap.servers" -> DEFAULT_BOOTSTRAP_URL,
       "key.deserializer" -> classOf[StringDeserializer],
       "value.deserializer" -> classOf[StringDeserializer],
       //The cache is keyed by topicpartition and group.id, so use a separate group.id

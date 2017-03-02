@@ -467,19 +467,13 @@ descent loss of performance)
       <dependency>
         <groupId>com.esri.hadoop</groupId>
         <artifactId>spatial-sdk-hive</artifactId>
-        <version>${esri.hive}</version>
+        <version>${esri.hadoop}</version>
       </dependency>
 
       <dependency>
         <groupId>com.esri.hadoop</groupId>
         <artifactId>spatial-sdk-json</artifactId>
-        <version>${esri.hive}</version>
-      </dependency>
-      
-      <dependency>
-        <groupId>com.esri.hadoop</groupId>
-        <artifactId>spatial-sdk-hadoop</artifactId>
-        <version>${esri.hive}</version>
+        <version>${esri.hadoop}</version>
       </dependency>
       
     </dependencies>

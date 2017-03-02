@@ -25,7 +25,7 @@ import logging
 
 class Publisher():
 
-  def __init__(self, config={'bootstrap.servers': 'localhost:9092', 'retries': 3, 'api.version.request': True}):
+  def __init__(self, config={'bootstrap.servers': 'pulsing.jhk.org:9092', 'retries': 3, 'api.version.request': True}):
     super().__init__()
     self.__producer = Producer(config)
     self.logger = logging.getLogger(__name__)

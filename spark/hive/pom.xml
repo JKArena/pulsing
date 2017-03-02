@@ -70,11 +70,6 @@
     </dependency>
 
     <dependency>
-      <groupId>com.esri.hadoop</groupId>
-      <artifactId>spatial-sdk-hadoop</artifactId>
-    </dependency>
-
-    <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <scope>test</scope>

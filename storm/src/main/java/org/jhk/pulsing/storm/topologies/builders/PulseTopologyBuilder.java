@@ -143,7 +143,7 @@ public final class PulseTopologyBuilder {
     }
     
     private static TransactionalTridentKafkaSpout buildTridentSpout() {
-        BrokerHosts host = new ZkHosts("localhost");
+        BrokerHosts host = new ZkHosts(CommonConstants.DEFAULT_BOOTSTRAP_HOST);
         TridentKafkaConfig spoutConfig = new TridentKafkaConfig(host, CommonConstants.TOPICS.PULSE_CREATE.toString());
         spoutConfig.scheme = new SchemeAsMultiScheme(new StringScheme());
         return new TransactionalTridentKafkaSpout(spoutConfig);
