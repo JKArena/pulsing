@@ -55,10 +55,25 @@
     </dependency>
     
     <dependency>
-       <groupId>com.esri.geometry</groupId>
+      <groupId>com.esri.geometry</groupId>
       <artifactId>esri-geometry-api</artifactId>
     </dependency>
     
+    <dependency>
+      <groupId>com.esri.hadoop</groupId>
+      <artifactId>spatial-sdk-hive</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.esri.hadoop</groupId>
+      <artifactId>spatial-sdk-json</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.esri.hadoop</groupId>
+      <artifactId>spatial-sdk-hadoop</artifactId>
+    </dependency>
+
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>

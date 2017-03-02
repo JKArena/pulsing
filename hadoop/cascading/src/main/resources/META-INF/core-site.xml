@@ -20,7 +20,7 @@
    -->
   <property>
     <name>fs.defaultFS</name>
-    <value>hdfs://0.0.0.0</value>
+    <value>hdfs://pulsing.jhk.org</value>
   </property>
   
   <property>
