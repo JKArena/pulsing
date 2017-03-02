@@ -1,1 +1,1 @@
-python3 ./manage.py runserver 0.0.0.0:9050
+python3 ./manage.py runserver pulsing.jhk.org:9050

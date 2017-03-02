@@ -101,7 +101,7 @@ public final class UserTopologyBuilder {
     }
     
     private static KafkaSpout buildSpout() {
-        BrokerHosts host = new ZkHosts("localhost");
+        BrokerHosts host = new ZkHosts(CommonConstants.DEFAULT_BOOTSTRAP_HOST);
         
         SpoutConfig spoutConfig = new SpoutConfig(host, CommonConstants.TOPICS.USER_CREATE.toString(), 
                                                     "/kafkastorm", "user-create");

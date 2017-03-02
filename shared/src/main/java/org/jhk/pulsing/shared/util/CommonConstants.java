@@ -28,6 +28,7 @@ public final class CommonConstants {
     
     public static final String DEFAULT_BOOTSTRAP_HOST;
     public static final int DEFAULT_BOOTSTRAP_PORT;
+    public static final String DEFAULT_BOOTSTRAP_URL;
     public static final int DEFAULT_STORM_TICK_TUPLE_FREQ_SECONDS;
     public static final int DEFAULT_STORM_INTERVAL_SECONDS;
     
@@ -62,6 +63,7 @@ public final class CommonConstants {
             
             DEFAULT_BOOTSTRAP_HOST = props.getProperty("bootstrap_host");
             DEFAULT_BOOTSTRAP_PORT = Integer.parseInt(props.getProperty("bootstrap_port"));
+            DEFAULT_BOOTSTRAP_URL = DEFAULT_BOOTSTRAP_HOST + ":" + DEFAULT_BOOTSTRAP_PORT;
             DEFAULT_STORM_TICK_TUPLE_FREQ_SECONDS = Integer.parseInt(props.getProperty("default_storm_tick_tuple_freq_seconds"));
             DEFAULT_STORM_INTERVAL_SECONDS = Integer.parseInt(props.getProperty("default_storm_interval_seconds"));
             
