@@ -463,6 +463,24 @@ descent loss of performance)
         <artifactId>esri-geometry-api</artifactId>
         <version>${esri.geometry}</version>
       </dependency>
+
+      <dependency>
+        <groupId>com.esri.hadoop</groupId>
+        <artifactId>spatial-sdk-hive</artifactId>
+        <version>${esri.hive}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>com.esri.hadoop</groupId>
+        <artifactId>spatial-sdk-json</artifactId>
+        <version>${esri.hive}</version>
+      </dependency>
+      
+      <dependency>
+        <groupId>com.esri.hadoop</groupId>
+        <artifactId>spatial-sdk-hadoop</artifactId>
+        <version>${esri.hive}</version>
+      </dependency>
       
     </dependencies>
   </dependencyManagement>
@@ -470,6 +488,7 @@ descent loss of performance)
   <properties>
     <pulsing.version>0.1-SNAPSHOT</pulsing.version>
     <esri.geometry>1.2.1</esri.geometry>
+    <esri.hadoop>1.1</esri.hadoop>
     <jcl>1.7.21</jcl>
     <logback>1.1.8</logback>
     <storm>1.0.3-SNAPSHOT</storm> <!-- Replace with version from main repository later; there currently is a bug STORM-1907 in 1.0.x artifact that fails it in starting a worker -->

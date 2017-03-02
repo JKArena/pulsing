@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?><!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<configuration>
+  <property>
+    <name>hive.execution.engine</name>
+    <value>spark</value>
+    <description>
+      Expects one of [mr, tez, spark].
+      Chooses execution engine. Options are: mr (Map reduce, default), tez, spark. While MR
+      remains the default engine for historical reasons, it is itself a historical engine
+      and is deprecated in Hive 2 line. It may be removed without further warning.
+    </description>
+  </property>
+  <property>
+    <name>spark.master</name>
+    <value>pulsing.jhk.org:7077</value>
+  </property>
+  <property>
+    <name>spark.eventLog.enabled</name>
+    <value>true</value>
+  </property>
+  <property>
+    <name>spark.eventLog.dir</name>
+    <value>../sparkLogs</value>
+  </property>
+  <property>
+    <name>spark.executor.memory</name>
+    <value>512m</value>
+  </property>
+  <property>
+    <name>spark.serializer</name>
+    <value>org.apache.spark.serializer.KryoSerializer</value>
+  </property>
+  <property>
+    <name>hive.merge.sparkfiles</name>
+    <value>true</value>
+  </property>
+  <property>
+    <name>hive.enforce.bucketing</name>
+    <value>true</value>
+  </property>
+  <property>
+    <name>hive.optimize.bucketmapjoin</name>
+    <value>true</value>
+  </property>
+  <property>
+    <name>hive.exec.compress.output</name>
+    <value>true</value>
+  </property>
+  <property>
+    <name>avro.output.codec</name>
+    <value>snappy</value>
+  </property>
+  <property>
+    <name>fs.defaultFS</name>
+    <value>hdfs://pulsing.jhk.org</value>
+  </property>
+  <property>
+    <name>yarn.resourcemanager.address</name>
+    <value>pulsing.jhk.org:8032</value>
+  </property>
+  <property>
+    <name>javax.jdo.option.ConnectionURL</name>
+    <value>jdbc:mysql://pulsing.jhk.org/pulsing?createDatabaseIfNotExist=true</value>
+    <description>
+      MySQL for standalone metastore. Default is Derby embedded metastore, but only one embedded Derby database can 
+      access the database files on disk at any one time, which means you can have only one Hive session open at a time 
+      that accesses the same metastore.
+      
+      Beyond standalone metastore is remote metastore, where one or more metastore servers run in separate processes to 
+      the Hive service. This brings better manageability and security because the database tier can be completely 
+      firewalled off, and the clients no longer need the database credentials.
+    </description>
+  </property>
+  <property>
+    <name>javax.jdo.option.ConnectionDriverName</name>
+    <value>com.mysql.jdbc.Driver</value>
+    <description>
+      MySQL Connector/J in Hive's lib directory
+    </description>
+  </property>
+  <property>
+    <name>javax.jdo.option.ConnectionUserName</name>
+    <value>pulsing</value>
+  </property>
+  <property>
+    <name>javax.jdo.option.ConnectionPassword</name>
+    <value>wsad</value>
+  </property>
+  <property>
+    <name>hive.server2.thrift.port</name>
+    <value>10000</value>
+    <description>
+      Thrift, JDBC, and ODBC connectors for hive --service hiveserver2
+      Hive provides a Type 4 (pure Java) JDBC driver, defined in the class org.apache.hadoop.hive.jdbc.HiveDriver
+      When configured with a JDBC URI of the form jdbc:hive2://host:port/dbname, a Java application will connect 
+      to a Hive server running in a separate process at the given host and port. (The driver makes calls to an 
+      interface implemented by the Hive Thrift Client using the Java Thrift bindings.)
+      
+      You may alternatively choose to connect to Hive via JDBC in embedded mode using the URI jdbc:hive2://.
+      In this mode Hive runs in the same JVM as the application invoking it; there is no need to launch it as 
+      a standalone server, since it does not use the Thrift service or the Hive Thrift Client.
+    </description>
+  </property>
+  <property>
+    <name>hive.log.dir</name>
+    <value>../logs</value>
+  </property>
+  <property>
+    <name>hive.root.logger</name>
+    <value>DEBUG, console</value>
+  </property>
+</configuration>

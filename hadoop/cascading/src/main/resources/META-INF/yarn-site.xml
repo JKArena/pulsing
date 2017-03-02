@@ -8,7 +8,12 @@
    -->
   <property>
     <name>yarn.resourcemanager.hostname</name>
-    <value>0.0.0.0</value>
+    <value>pulsing.jhk.org</value>
+  </property>
+  
+  <property>
+    <name>yarn.resourcemanager.scheduler.class</name>
+    <value>org.apache.hadoop.yarn.server.resourcemanager.scheduler.fair.FairScheduler</value>
   </property>
   
   <!-- 
@@ -18,7 +23,7 @@
    -->
   <property>
     <name>yarn.resourcemanager.address</name>
-    <value>0.0.0.0:8032</value>
+    <value>pulsing.jhk.org:8032</value>
   </property>
   
   <!-- 
