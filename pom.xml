@@ -475,6 +475,18 @@ descent loss of performance)
         <artifactId>spatial-sdk-json</artifactId>
         <version>${esri.hadoop}</version>
       </dependency>
+
+      <dependency>
+        <groupId>org.apache.spark</groupId>
+        <artifactId>spark-hive_2.11</artifactId>
+        <version>${spark.sql}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.apache.spark</groupId>
+        <artifactId>spark-sql_2.11</artifactId>
+        <version>${spark.sql}</version>
+      </dependency>
       
     </dependencies>
   </dependencyManagement>
@@ -499,6 +511,7 @@ descent loss of performance)
     <spark>2.1.0</spark>
     <spark.cassandra>1.6.3</spark.cassandra>
     <spark.kafka>2.1.0</spark.kafka>
+    <spark.sql>2.1.0</spark.sql>
     <dfs-datastores>1.3.6</dfs-datastores>
     <scala>2.11.8</scala>
     <cascalog>2.1.1</cascalog> <!-- 3.0.0 -->

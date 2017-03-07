@@ -29,6 +29,7 @@ import org.apache.kafka.common.serialization.StringDeserializer
 import org.apache.spark.streaming.kafka010._
 import org.apache.spark.streaming.kafka010.LocationStrategies.PreferConsistent
 import org.apache.spark.streaming.kafka010.ConsumerStrategies.Subscribe
+import org.apache.spark.sql.SparkSession
 
 import com.google.maps.GeoApiContext
 import com.google.maps.GeocodingApi
@@ -66,9 +67,9 @@ object LocationStreaming {
       "value.deserializer" -> classOf[StringDeserializer],
       //The cache is keyed by topicpartition and group.id, so use a separate group.id
       //for each call to createDirectStream.
-      "group.id" -> "location_create_stream" 
-      //"auto.offset.reset" -> "latest",
-      //"enable.auto.commit" -> (false: java.lang.Boolean)
+      "group.id" -> "location_create_stream", 
+      "auto.offset.reset" -> "latest",
+      "enable.auto.commit" -> (false: java.lang.Boolean)
     )
     
     val topics = List(TOPICS.LOCATION_CREATE.toString()).toSet
@@ -83,6 +84,12 @@ object LocationStreaming {
         
         val context = TaskContext.get
         val geoContext = new GeoApiContext().setApiKey(MAP_API_KEY)
+        
+        val sparkSession = SparkSession.builder.master(SPARK_YARN_CLUSTER_MASTER)
+          .appName("Location Create Hive")
+          .enableHiveSupport()
+          .getOrCreate()
+
         val partitionLogger = LogManager.getLogger("Location")
         partitionLogger.info(s"Location Create for partition: ${context.partitionId}")
         
