@@ -1,4 +1,4 @@
-Project for playing around with Lamba architecture/Realtime big data app.
+Project for playing around with Realtime big data app.
 
 Allows creation of Pulse which others around the area can subscribe to and when good the group can gogo *-*. For example driving down and one sees a restaurant that one wants to eat at and friends are too far away; create a pulse, get others to join up, and go together xD. Allows chatting for the pulse group as well as creating private chat lobbies.
 
