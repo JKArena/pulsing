@@ -21,14 +21,8 @@ package org.jhk.pulsing.web.service;
 /**
  * @author Ji Kim
  */
-public interface IServiceConfig {
+public interface IFriendService {
     
-    IFriendService getFriendService();
     
-    IUserService getUserService();
-    
-    IPulseService getPulseService();
-    
-    IChatService getChatService();
     
 }

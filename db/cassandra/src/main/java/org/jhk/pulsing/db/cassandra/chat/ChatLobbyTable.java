@@ -61,10 +61,11 @@ public final class ChatLobbyTable implements ICassandraTable {
                 "user_id bigint," +
                 "name text," +
                 "active Boolean," +
-                "PRIMARY KEY (user_id, chat_lobby_id)" + //user_id for partitioning and chat_lobby_id for clustering
-                " )");
+                "PRIMARY KEY (user_id, active)" + //user_id for partitioning and chat_lobby_id + active for clustering
+                " )" + 
+                "WITH CLUSTERING ORDER BY (active DESC);");
         
-        _CHAT_LOBBY_QUERY = _session.prepare("SELECT name, chat_lobby_id, active FROM " + _CHAT_LOBBY_TABLE + " WHERE user_id=?");
+        _CHAT_LOBBY_QUERY = _session.prepare("SELECT name, chat_lobby_id FROM " + _CHAT_LOBBY_TABLE + " WHERE user_id=? AND active = true LIMIT 20");
         _CHAT_LOBBY_INSERT = _session.prepare("INSERT INTO " + _CHAT_LOBBY_TABLE + " (chat_lobby_id, user_id, name, active) VALUES (?, ?, ?, ?)");
     }
     
@@ -76,17 +77,14 @@ public final class ChatLobbyTable implements ICassandraTable {
         BoundStatement cLQuery = _CHAT_LOBBY_QUERY.bind(userId.getId());
         ResultSet cLQResult = _session.execute(cLQuery);
         
-        _LOGGER.info("CassandraChatDao.queryChatLobbies cLQResult : " + cLQResult);
+        _LOGGER.info("ChatLobbyTable.queryChatLobbies cLQResult : " + cLQResult);
         cLQResult.forEach(chatLobby -> {
             
             String chatLobbyName = chatLobby.getString("name");
             boolean activeState = chatLobby.getBool("active");
             
-            _LOGGER.info("CassandraChatDao.queryChatLobbies chatLobbyName : " + chatLobbyName + " - " + activeState);
-            
-            if(activeState) {
-                chatLobbies.put(chatLobbyName, chatLobby.getUUID("chat_lobby_id"));
-            }
+            _LOGGER.info("ChatLobbyTable.queryChatLobbies chatLobbyName : " + chatLobbyName + " - " + activeState);
+            chatLobbies.put(chatLobbyName, chatLobby.getUUID("chat_lobby_id"));
         });
         
         return chatLobbies;

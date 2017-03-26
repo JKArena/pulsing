@@ -16,19 +16,28 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.web.service;
+package org.jhk.pulsing.web.controller;
+
+import javax.inject.Inject;
+
+import org.jhk.pulsing.web.service.IFriendService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  * @author Ji Kim
  */
-public interface IServiceConfig {
+@CrossOrigin(origins="*")
+@Controller
+@RequestMapping("/friend")
+public class FriendController {
     
-    IFriendService getFriendService();
+    private static final Logger _LOGGER = LoggerFactory.getLogger(FriendController.class);
     
-    IUserService getUserService();
-    
-    IPulseService getPulseService();
-    
-    IChatService getChatService();
+    @Inject
+    private IFriendService friendService;
     
 }
