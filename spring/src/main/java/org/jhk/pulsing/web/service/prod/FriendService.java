@@ -16,19 +16,23 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.web.service;
+package org.jhk.pulsing.web.service.prod;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import org.jhk.pulsing.web.dao.prod.db.cassandra.CasssandraFriendChatDao;
+import org.jhk.pulsing.web.service.IFriendService;
+import org.springframework.stereotype.Service;
 
 /**
  * @author Ji Kim
  */
-public interface IServiceConfig {
+@Service
+public class FriendService implements IFriendService {
     
-    IFriendService getFriendService();
-    
-    IUserService getUserService();
-    
-    IPulseService getPulseService();
-    
-    IChatService getChatService();
+    @Inject
+    @Named("cassandraFriendDao")
+    private CasssandraFriendChatDao cassandraFriendDao;
     
 }
