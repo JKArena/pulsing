@@ -26,6 +26,7 @@ const SPRING_CONTROLLER_SUFFIX = ':8083/pulsing-spring/controller/';
 const SPRING_ROOT_SUFFIX = ':8083/pulsing-spring/';
 
 const DJANGO_SUFFIX = ':9050/';
+const ELASTIC_SEARCH_SUFFIX = ':9200/';
 const NGINX_SUFFIX = ':8080/';
 
 let PREFIX;
@@ -50,6 +51,10 @@ export default Object.freeze(
 
       djangoRootUrl() {
         return url(DJANGO_SUFFIX);
+      },
+
+      elasticSearchRootUrl() {
+        return url(ELASTIC_SEARCH_SUFFIX);
       },
 
       nginxRootUrl() {
