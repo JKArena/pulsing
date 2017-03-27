@@ -25,6 +25,7 @@ import java.util.UUID;
 import javax.inject.Inject;
 
 import org.jhk.pulsing.shared.util.RedisConstants;
+import org.jhk.pulsing.web.pojo.light.Alert;
 import org.jhk.pulsing.web.pojo.light.Chat;
 import org.jhk.pulsing.web.pojo.light.MapPulseCreate;
 import org.jhk.pulsing.web.pojo.light.UserLight;
@@ -59,6 +60,13 @@ public class WebSocketController {
         _LOGGER.debug("WebSocketController.pulseCreated: " + mPulseCreate);
         
         return mPulseCreate;
+    }
+    
+    @SendTo("/topics/alert/{toUserId}")
+    public Alert systemAlert(Alert alert) {
+        _LOGGER.debug("WebSocketController.systemAlert: " + alert);
+        
+        return alert;
     }
     
     @MessageMapping("/privateChat/{toUserId}")
