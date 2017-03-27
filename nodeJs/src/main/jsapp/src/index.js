@@ -32,6 +32,7 @@ import TrendingPulseSubscriptionsComponent from './components/pulsing/trending/T
 import MapComponent from './components/map/MapComponent';
 import CreatePulseComponent from './components/pulsing/create/CreatePulseComponent';
 import CreateLocationComponent from './components/location/create/CreateLocationComponent';
+import AlertListingComponent from './components/alert/AlertListingComponent';
 import SignupComponent from './components/signup/SignupComponent';
 import LoginComponent from './components/login/LoginComponent';
 
@@ -43,6 +44,7 @@ render((
       <Route path='map/:store' component={MapComponent} />
       <Route path='createPulse' component={CreatePulseComponent} />
       <Route path='createLocation' component={CreateLocationComponent} />
+      <Route path='alertListing' component={AlertListingComponent} />
       <Route path='signup' component={SignupComponent} />
       <Route path='login' component={LoginComponent} />
     </Route>

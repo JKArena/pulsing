@@ -25,11 +25,13 @@
 require('./NavBar.scss');
 
 import React, {Component} from 'react';
+import {findDOMNode} from 'react-dom';
 import {IndexLink, browserHistory} from 'react-router';
-import {Navbar, Nav, NavItem, NavDropdown} from 'react-bootstrap';
+import {Navbar, Nav, NavItem, NavDropdown, Badge} from 'react-bootstrap';
 import {LinkContainer} from 'react-router-bootstrap';
 
 import {TOPICS, API} from '../../common/PubSub';
+import WebSockets from '../../common/WebSockets';
 import Storage from '../../common/Storage';
 import Common from '../../common/Common';
 
@@ -38,7 +40,7 @@ class NavBarComponent extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {loggedIn: !!Storage.user, lat: 0, lng: 0};
+    this.state = {loggedIn: !!Storage.user, lat: 0, lng: 0, alerts: 0};
     this.authHandler = this.onAuth.bind(this);
     this.navigationChangeHandler = this.onNavigationChange.bind(this);
   }
@@ -63,6 +65,8 @@ class NavBarComponent extends Component {
   componentDidMount() {
     API.subscribe(TOPICS.AUTH, this.authHandler);
     API.subscribe(TOPICS.NAVIGATION_CHANGE, this.navigationChangeHandler);
+
+    this.badgeNode = findDOMNode(this.refs.badge);
   }
   
   componentWillUnmount() {
@@ -122,7 +126,7 @@ class NavBarComponent extends Component {
                     </Nav>;
                 }
               })()}
-              
+
               {(() => {
                 if(this.state.loggedIn) {
                   return <Nav pullRight onSelect={this.loggedOut.bind(this)}>
@@ -133,6 +137,14 @@ class NavBarComponent extends Component {
                     <LinkContainer to='/signup'><NavItem>Signup</NavItem></LinkContainer>
                     <LinkContainer to='/login'><NavItem>Login</NavItem></LinkContainer>
                   </Nav>;
+                }
+              })()}
+
+              {(() => {
+                if(this.state.loggedIn) {
+                  return <Nav pullRight>
+                      <LinkContainer to='/alertListing'><NavItem>Alert <Badge ref='badge'>{this.state.alerts}</Badge></NavItem></LinkContainer>
+                    </Nav>;
                 }
               })()}
               
