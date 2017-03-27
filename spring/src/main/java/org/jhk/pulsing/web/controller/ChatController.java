@@ -27,6 +27,8 @@ import javax.inject.Inject;
 
 import org.jhk.pulsing.serialization.avro.records.UserId;
 import org.jhk.pulsing.web.common.Result;
+import org.jhk.pulsing.web.common.SystemMessageUtil;
+
 import static org.jhk.pulsing.web.common.Result.CODE.*;
 import org.jhk.pulsing.web.pojo.light.Chat;
 import org.jhk.pulsing.web.pojo.light.UserLight;
@@ -43,8 +45,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 /**
  * @author Ji Kim
  */
@@ -54,8 +54,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class ChatController {
     
     private static final Logger _LOGGER = LoggerFactory.getLogger(ChatController.class);
-    
-    private ObjectMapper _objectMapper = new ObjectMapper();
     
     @Inject
     private IUserService userService;
@@ -100,7 +98,8 @@ public class ChatController {
         
         if(result.getCode() == Result.CODE.SUCCESS) {
             Optional<UserLight> uLight = userService.getUserLight(userId.getId());
-            sendSystemMessage(cLId, "User " + (uLight.isPresent() ? uLight.get().getName() + " " : "") + " left the chat lobby ");
+            SystemMessageUtil.sendSystemChatMessage(template, cLId, 
+                    "User " + (uLight.isPresent() ? uLight.get().getName() + " " : "") + " left the chat lobby ");
         }
         
         return result;
@@ -119,30 +118,11 @@ public class ChatController {
         
         if(chatSubscribe.getData()) {
             Optional<UserLight> uLight = userService.getUserLight(userId.getId());
-            sendSystemMessage(cLId, "User " + (uLight.isPresent() ? uLight.get().getName() + " " : "") + " joined the chat lobby " + lobbyName + ", welcome him/her!!!");
+            SystemMessageUtil.sendSystemChatMessage(template, cLId, 
+                    "User " + (uLight.isPresent() ? uLight.get().getName() + " " : "") + " joined the chat lobby " + lobbyName + ", welcome him/her!!!");
         }
         
         return chatSubscribe;
-    }
-    
-    private void sendSystemMessage(UUID cLId, String message) {
-        try {
-            template.convertAndSend("/topics/chat/" + cLId, _objectMapper.writeValueAsString(createSystemMessage(message)));
-        } catch (Exception except) {
-            _LOGGER.error("Error while converting pulse ", except);
-            except.printStackTrace();
-        }
-    }
-    
-    private Chat createSystemMessage(String message) {
-        
-        Chat msg = new Chat();
-        msg.setMessage(message);
-        msg.setName("System Notification");
-        msg.setType(Chat.TYPE.SYSTEM_MESSAGE);
-        msg.setUserId(IUserService.SYSTEM_USER_ID);
-        
-        return msg;
     }
     
 }
