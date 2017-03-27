@@ -22,10 +22,10 @@
  */
 'use strict';
 
-import Fetch from '../../../common/Fetch';
-import Url from '../../../common/Url';
-import Storage from '../../../common/Storage';
-import {TOPICS, API} from '../../../common/PubSub';
+import Fetch from '../../../../common/Fetch';
+import Url from '../../../../common/Url';
+import Storage from '../../../../common/Storage';
+import {TOPICS, API} from '../../../../common/PubSub';
 
 const SUBSCRIBE_PULSE_PATH = 'pulse/subscribePulse/';
 

@@ -69,7 +69,7 @@ public final class ChatLobbyTable implements ICassandraTable {
         _CHAT_LOBBY_INSERT = _session.prepare("INSERT INTO " + _CHAT_LOBBY_TABLE + " (chat_lobby_id, user_id, name, rank) VALUES (?, ?, ?, ?)");
     }
     
-    public Map<String, UUID> queryChatLobbies(UserId userId, long limit) {
+    public Map<String, UUID> queryChatLobbies(UserId userId, int limit) {
         _LOGGER.info("ChatLobbyTable.queryChatLobbies : " + userId);
         
         Map<String, UUID> chatLobbies = new HashMap<>();
@@ -98,7 +98,7 @@ public final class ChatLobbyTable implements ICassandraTable {
      * @return
      */
     public boolean chatLobbyExists(UserId userId, String lobbyName) {
-        Map<String, UUID> qCLobby = queryChatLobbies(userId, Long.MAX_VALUE);
+        Map<String, UUID> qCLobby = queryChatLobbies(userId, Integer.MAX_VALUE);
         return qCLobby.containsKey(lobbyName);
     }
     
