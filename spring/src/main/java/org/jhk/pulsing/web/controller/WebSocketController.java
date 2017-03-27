@@ -25,6 +25,7 @@ import java.util.UUID;
 import javax.inject.Inject;
 
 import org.jhk.pulsing.shared.util.RedisConstants;
+import org.jhk.pulsing.web.common.SystemMessageUtil;
 import org.jhk.pulsing.web.pojo.light.Alert;
 import org.jhk.pulsing.web.pojo.light.Chat;
 import org.jhk.pulsing.web.pojo.light.MapPulseCreate;
@@ -37,6 +38,7 @@ import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
 /**
@@ -54,6 +56,9 @@ public class WebSocketController {
     
     @Inject
     private IChatService chatService;
+    
+    @Inject
+    private SimpMessagingTemplate template;
     
     @SendTo("/topics/pulseCreated")
     public MapPulseCreate pulseCreated(MapPulseCreate mPulseCreate) {
@@ -77,8 +82,10 @@ public class WebSocketController {
         msg.setTimeStamp(Instant.now().toEpochMilli());
         
         if(msg.getType() == Chat.TYPE.CHAT_LOBBY_INVITE) {
-            String invitationId = userService.createInvitationId(toUserId, RedisConstants.INVITATION_ID.CHAT_LOBBY_INVITE_, CHAT_LOBBY_INVITE_EXPIRATION);
+            String invitationId = userService.createInvitationId(toUserId, msg.getUserId(), RedisConstants.INVITATION_ID.CHAT_LOBBY_INVITE_, CHAT_LOBBY_INVITE_EXPIRATION);
             msg.addData("invitationId", invitationId);
+            
+            SystemMessageUtil.sendSystemAlertMessage(template, toUserId, msg.getMessage());
         }
         
         return msg;

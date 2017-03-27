@@ -20,14 +20,20 @@ package org.jhk.pulsing.web.dao.prod.db.redis;
 
 import static org.jhk.pulsing.shared.util.RedisConstants.REDIS_KEY.*;
 
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.StringJoiner;
 
+import org.jhk.pulsing.serialization.avro.records.UserId;
 import org.jhk.pulsing.shared.util.RedisConstants;
 import org.jhk.pulsing.shared.util.RedisConstants.INVITATION_ID;
 import org.jhk.pulsing.shared.util.Util;
 import org.jhk.pulsing.web.dao.prod.db.AbstractRedisDao;
+import org.jhk.pulsing.web.pojo.light.Invitation;
 import org.jhk.pulsing.web.pojo.light.UserLight;
+import org.joda.time.Instant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
@@ -82,24 +88,95 @@ public class RedisUserDao extends AbstractRedisDao {
     }
     
     /**
+     * For now just invitations, later additional alerts
+     * 
+     * @param userId
+     * @return
+     */
+    public List<Invitation> getAlertList(UserId userId) {
+        
+        List<Invitation> invitations = new LinkedList<>();
+        List<String> remove = new LinkedList<>();
+        
+        String setKey = INVITATIONS_.toString() + userId.getId();
+        long current = Instant.now().getMillis();
+        
+        Set<String> invitationSet = getJedis().smembers(setKey);
+        _LOGGER.debug("RedisUserDao.getAlertList: invitation size " + invitationSet.size());
+        
+        invitationSet.stream()
+            .forEach(value -> {
+                try {
+                    Invitation invitation = getObjectMapper().readValue(value, Invitation.class);
+                    
+                    if(invitation.getExpiration() <= current) {
+                        //expired
+                        remove.add(value);
+                    }else {
+                        invitations.add(invitation);
+                    }
+                } catch (Exception exception) {
+                    _LOGGER.error("Error reading invitation", exception);
+                    exception.printStackTrace();
+                }
+            });
+        
+        if(!remove.isEmpty()) {
+            getJedis().srem(setKey, remove.toArray(new String[0]));
+        }
+        
+        return invitations;
+    }
+    
+    /**
      * Since can expire by key only (i.e. can't use sadd), generate the id of the invitation and use any value for the value
      * 
      * @param userId
      * @param prefix
-     * @param expiration
+     * @param expiration in seconds
      * @return
      */
-    public String createInvitationId(long userId, INVITATION_ID prefix, int expiration) {
-        _LOGGER.debug("RedisUserDao.createInvitationId: " + userId + " - " + prefix + ", " + expiration);
+    public String createInvitationId(long toUserId, long fromUserId, INVITATION_ID prefix, int expiration) {
+        _LOGGER.debug("RedisUserDao.createInvitationId: " + toUserId + "/" + fromUserId + " - " + prefix + ", " + expiration);
         
-        String key = new StringJoiner("_").add(prefix.toString()).add(userId+"").add(Util.uniqueId()+"").toString();
+        String key = new StringJoiner("_").add(prefix.toString()).add(toUserId+"").add(Util.uniqueId()+"").toString();
         getJedis().setex(key, expiration, "1");
+        
+        try {
+            Invitation invitation = new Invitation(fromUserId, prefix, key, (expiration*1000)+Instant.now().getMillis());
+            getJedis().sadd(INVITATIONS_.toString() + toUserId, getObjectMapper().writeValueAsString(invitation));
+        } catch (JsonProcessingException jpException) {
+            _LOGGER.error("Error writing invitation", jpException);
+            jpException.printStackTrace();
+        }
         
         return key;
     }
     
-    public boolean removeInvitationId(String invitationId) {
+    public boolean removeInvitationId(long userId, String invitationId) {
         _LOGGER.debug("RedisUserDao.removeInvitationId: " + invitationId);
+        
+        String setKey = INVITATIONS_.toString() + userId;
+        
+        Set<String> invites = getJedis().smembers(setKey);
+        Optional<String> invite = invites.stream()
+                .filter(value -> {
+                    try {
+                        Invitation invitation = getObjectMapper().readValue(value, Invitation.class);
+                        if(invitation.getInvitationId().equals(invitationId)) {
+                            return true;
+                        }
+                    } catch (Exception exception) {
+                        _LOGGER.error("Error reading invitation", exception);
+                        exception.printStackTrace();
+                    }
+                    return false;
+                })
+                .findAny();
+        
+        if(invite.isPresent()) {
+            getJedis().srem(setKey, invite.get());
+        }
         
         return getJedis().del(invitationId) == 1L;
     }

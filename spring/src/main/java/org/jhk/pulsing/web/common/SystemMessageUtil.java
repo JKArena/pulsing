@@ -20,10 +20,10 @@ package org.jhk.pulsing.web.common;
 
 import java.util.UUID;
 
-import org.jhk.pulsing.serialization.avro.records.UserId;
 import org.jhk.pulsing.web.pojo.light.Alert;
 import org.jhk.pulsing.web.pojo.light.Chat;
 import org.jhk.pulsing.web.service.IUserService;
+import org.joda.time.Instant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -43,9 +43,9 @@ public final class SystemMessageUtil {
         super();
     }
     
-    public static void sendSystemAlertMessage(SimpMessagingTemplate template, UserId userId, String message) {
+    public static void sendSystemAlertMessage(SimpMessagingTemplate template, long userId, String message) {
         try {
-            template.convertAndSend("/topics/alert/" + userId, _objectMapper.writeValueAsString(createSystemAlertMessage(userId, message)));
+            template.convertAndSend("/topics/alert/" + userId, _objectMapper.writeValueAsString(createSystemAlertMessage(message)));
         } catch (Exception except) {
             _LOGGER.error("Error while converting for system alert message ", except);
             except.printStackTrace();
@@ -61,12 +61,11 @@ public final class SystemMessageUtil {
         }
     }
     
-    private static Alert createSystemAlertMessage(UserId userId, String message) {
+    private static Alert createSystemAlertMessage(String message) {
         
         Alert msg = new Alert();
         msg.setMessage(message);
-        msg.setType(Alert.TYPE.FRIEND_INVITE);
-        msg.setUserId(userId.getId());
+        msg.setTimeStamp(Instant.now().getMillis());
         
         return msg;
     }

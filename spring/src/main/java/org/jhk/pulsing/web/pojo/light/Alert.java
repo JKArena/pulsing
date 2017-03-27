@@ -25,34 +25,14 @@ import org.jhk.pulsing.shared.util.CommonConstants;
  */
 public class Alert {
     
-    public enum TYPE {
-        FRIEND_INVITE;
-    }
-    
     private String _message;
-    private long _userId;
-    private long _timeStamp;
-    private TYPE _type;
+    private long _timeStamp; //milliseconds so to allow Date conversion on client side
     
     public String getMessage() {
         return _message;
     }
     public void setMessage(String message) {
         _message = message;
-    }
-    
-    public TYPE getType() {
-        return _type;
-    }
-    public void setType(TYPE type) {
-        _type = type;
-    }
-    
-    public long getUserId() {
-        return _userId;
-    }
-    public void setUserId(long userId) {
-        _userId = userId;
     }
     
     public long getTimeStamp() {
@@ -66,8 +46,7 @@ public class Alert {
     public String toString() {
         StringBuilder builder = new StringBuilder();
         builder.append("{");
-        builder.append("userId: " + _userId + ", ");
-        builder.append("type: " + _type + ", ");
+        builder.append("timeStamp: " + _timeStamp + ",");
         builder.append("message: " + _message);
         builder.append("}");
         return builder.toString();
@@ -77,7 +56,6 @@ public class Alert {
     public int hashCode() {
         int hashCodeVal = CommonConstants.HASH_CODE_INIT_VALUE;
         hashCodeVal = CommonConstants.HASH_CODE_MULTIPLY_VALUE * hashCodeVal + _message.hashCode();
-        hashCodeVal = CommonConstants.HASH_CODE_MULTIPLY_VALUE * hashCodeVal + (int) _userId;
         return hashCodeVal;
     }
     
@@ -88,7 +66,7 @@ public class Alert {
         }
         
         Alert casted = (Alert) obj;
-        return casted._message.equals(_message) && casted._userId == _userId;
+        return casted._message.equals(_message);
     }
     
 }

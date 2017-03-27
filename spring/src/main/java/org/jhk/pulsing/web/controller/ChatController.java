@@ -110,7 +110,7 @@ public class ChatController {
                                                                 @PathVariable String chatLobbyInvitationId, @PathVariable UserId userId) {
         _LOGGER.debug("ChatController.chatLobbySubscribe: " + cLId + " - " + lobbyName + " : " + userId + ";" + chatLobbyInvitationId);
         
-        if(!userService.removeInvitationId(chatLobbyInvitationId)) {
+        if(!userService.removeInvitationId(userId.getId(), chatLobbyInvitationId)) {
             return new Result<>(FAILURE, null, "Failed to subscribe to chatLobby " + lobbyName + " - the invitationId has expired.");
         }
         

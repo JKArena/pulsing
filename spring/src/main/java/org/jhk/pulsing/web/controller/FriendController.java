@@ -86,9 +86,8 @@ public class FriendController {
             return new Result<>(FAILURE, null, "User " + userId + " is already friends with " + friendId);
         }
         
-        String invitationId = userService.createInvitationId(userId.getId(), RedisConstants.INVITATION_ID.FRIEND_REQUEST_INVITE_, FRIEND_REQUEST_INVITE_EXPIRATION);
-        SystemMessageUtil.sendSystemAlertMessage(template, userId,
-                "Friend request from " + uLight.get().getName());
+        String invitationId = userService.createInvitationId(friendId.getId(), userId.getId(), RedisConstants.INVITATION_ID.FRIEND_REQUEST_INVITE_, FRIEND_REQUEST_INVITE_EXPIRATION);
+        SystemMessageUtil.sendSystemAlertMessage(template, friendId.getId(), "Friend request from " + uLight.get().getName());
         
         return new Result<>(SUCCESS, invitationId, "Sent out friend request to friend");
     }
