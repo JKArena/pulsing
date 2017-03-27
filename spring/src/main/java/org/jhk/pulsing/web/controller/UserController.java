@@ -20,6 +20,7 @@ package org.jhk.pulsing.web.controller;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -27,6 +28,7 @@ import org.jhk.pulsing.serialization.avro.records.Picture;
 import org.jhk.pulsing.serialization.avro.records.User;
 import org.jhk.pulsing.serialization.avro.records.UserId;
 import org.jhk.pulsing.web.common.Result;
+import org.jhk.pulsing.web.pojo.light.Invitation;
 import org.jhk.pulsing.web.service.IUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,6 +72,13 @@ public class UserController {
         }
         
         return userService.createUser(user);
+    }
+    
+    @RequestMapping(value="/getAlertList", method=RequestMethod.GET)
+    public @ResponseBody Result<List<Invitation>> getAlertList(@RequestParam UserId userId) {
+        _LOGGER.debug("UserController.getAlertList: " + userId);
+        
+        return userService.getAlertList(userId);
     }
     
     @RequestMapping(value="/getUser", method=RequestMethod.GET)

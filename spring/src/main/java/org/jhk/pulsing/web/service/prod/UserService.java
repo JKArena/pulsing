@@ -18,6 +18,7 @@
  */
 package org.jhk.pulsing.web.service.prod;
 
+import java.util.List;
 import java.util.Optional;
 
 import javax.inject.Inject;
@@ -33,6 +34,7 @@ import static org.jhk.pulsing.web.common.Result.CODE.*;
 import org.jhk.pulsing.web.dao.prod.db.redis.RedisPulseDao;
 import org.jhk.pulsing.web.dao.prod.db.redis.RedisUserDao;
 import org.jhk.pulsing.web.dao.prod.db.sql.MySqlUserDao;
+import org.jhk.pulsing.web.pojo.light.Invitation;
 import org.jhk.pulsing.web.pojo.light.UserLight;
 import org.jhk.pulsing.web.service.IUserService;
 import org.springframework.stereotype.Service;
@@ -123,15 +125,21 @@ public class UserService extends AbstractStormPublisher
     }
     
     @Override
-    public String createInvitationId(long userId, INVITATION_ID prefix, int expiration) {
+    public Result<List<Invitation>> getAlertList(UserId userId) {
         
-        return redisUserDao.createInvitationId(userId, prefix, expiration);
+        return new Result<List<Invitation>>(SUCCESS, redisUserDao.getAlertList(userId));
     }
     
     @Override
-    public boolean removeInvitationId(String invitationId) {
+    public String createInvitationId(long toUserId, long fromUserId, INVITATION_ID prefix, int expiration) {
         
-        return redisUserDao.removeInvitationId(invitationId);
+        return redisUserDao.createInvitationId(toUserId, fromUserId, prefix, expiration);
+    }
+    
+    @Override
+    public boolean removeInvitationId(long userId, String invitationId) {
+        
+        return redisUserDao.removeInvitationId(userId, invitationId);
     }
     
     @Override
