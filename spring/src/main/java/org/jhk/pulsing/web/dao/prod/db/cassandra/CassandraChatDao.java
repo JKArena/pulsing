@@ -41,7 +41,7 @@ import com.datastax.driver.core.Row;
 @Repository
 public class CassandraChatDao extends AbstractCassandraDao {
     
-    private static final Long _DEFAULT_CHAT_LOBBY_LISTING = 10L;
+    private static final int _DEFAULT_CHAT_LOBBY_LISTING = 10;
     
     private ChatLobbyTable _chatLobbyTable;
     private ChatMessageTable _chatMessageTable;

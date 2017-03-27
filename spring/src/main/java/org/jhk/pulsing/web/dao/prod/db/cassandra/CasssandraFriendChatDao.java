@@ -32,7 +32,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class CasssandraFriendChatDao extends AbstractCassandraDao {
     
-    private static final Long _DEFAULT_FRIEND_LISTING = 20L;
+    private static final int _DEFAULT_FRIEND_LISTING = 20;
     
     private FriendTable _friendTable;
     
