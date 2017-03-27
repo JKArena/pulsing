@@ -60,42 +60,52 @@ public final class ChatLobbyTable implements ICassandraTable {
                 "chat_lobby_id timeuuid," +
                 "user_id bigint," +
                 "name text," +
-                "active Boolean," +
-                "PRIMARY KEY (user_id, active)" + //user_id for partitioning and chat_lobby_id + active for clustering
+                "rank int," +
+                "PRIMARY KEY (user_id, rank)" + //user_id for partitioning and chat_lobby_id + rank for clustering (for now 1, but allow ranking of chat lobby later)
                 " )" + 
-                "WITH CLUSTERING ORDER BY (active DESC);");
+                "WITH CLUSTERING ORDER BY (rank DESC);");
         
-        _CHAT_LOBBY_QUERY = _session.prepare("SELECT name, chat_lobby_id FROM " + _CHAT_LOBBY_TABLE + " WHERE user_id=? AND active = true LIMIT 20");
-        _CHAT_LOBBY_INSERT = _session.prepare("INSERT INTO " + _CHAT_LOBBY_TABLE + " (chat_lobby_id, user_id, name, active) VALUES (?, ?, ?, ?)");
+        _CHAT_LOBBY_QUERY = _session.prepare("SELECT name, chat_lobby_id FROM " + _CHAT_LOBBY_TABLE + " WHERE user_id=? AND rank > 0 LIMIT ?");
+        _CHAT_LOBBY_INSERT = _session.prepare("INSERT INTO " + _CHAT_LOBBY_TABLE + " (chat_lobby_id, user_id, name, rank) VALUES (?, ?, ?, ?)");
     }
     
-    public Map<String, UUID> queryChatLobbies(UserId userId) {
+    public Map<String, UUID> queryChatLobbies(UserId userId, long limit) {
         _LOGGER.info("ChatLobbyTable.queryChatLobbies : " + userId);
         
         Map<String, UUID> chatLobbies = new HashMap<>();
         
-        BoundStatement cLQuery = _CHAT_LOBBY_QUERY.bind(userId.getId());
+        BoundStatement cLQuery = _CHAT_LOBBY_QUERY.bind(userId.getId(), limit);
         ResultSet cLQResult = _session.execute(cLQuery);
         
         _LOGGER.info("ChatLobbyTable.queryChatLobbies cLQResult : " + cLQResult);
         cLQResult.forEach(chatLobby -> {
             
             String chatLobbyName = chatLobby.getString("name");
-            boolean activeState = chatLobby.getBool("active");
+            int rank = chatLobby.getInt("rank");
             
-            _LOGGER.info("ChatLobbyTable.queryChatLobbies chatLobbyName : " + chatLobbyName + " - " + activeState);
+            _LOGGER.info("ChatLobbyTable.queryChatLobbies chatLobbyName : " + chatLobbyName + " - " + rank);
             chatLobbies.put(chatLobbyName, chatLobby.getUUID("chat_lobby_id"));
         });
         
         return chatLobbies;
     }
     
+    /**
+     * TODO use Spark SQL for query of whether the entry exists, since need to query all
+     * 
+     * @param userId
+     * @param lobbyName
+     * @return
+     */
+    public boolean chatLobbyExists(UserId userId, String lobbyName) {
+        Map<String, UUID> qCLobby = queryChatLobbies(userId, Long.MAX_VALUE);
+        return qCLobby.containsKey(lobbyName);
+    }
+    
     public Optional<UUID> createChatLobby(UserId userId, String lobbyName) {
         _LOGGER.info("ChatLobbyTable.createChatLobby : " + userId + ", " + lobbyName);
         
-        Map<String, UUID> qCLobby = queryChatLobbies(userId);
-        
-        if(qCLobby.containsKey(lobbyName)) return Optional.empty();
+        if(chatLobbyExists(userId, lobbyName)) return Optional.empty();
         
         UUID cLId = UUIDGen.getTimeUUID();
         
@@ -105,13 +115,13 @@ public final class ChatLobbyTable implements ICassandraTable {
     public void chatLobbyUnSubscribe(UserId userId, UUID cLId, String lobbyName) {
         _LOGGER.info("ChatLobbyTable.chatLobbyUnSubscribe : " + userId + " - " + cLId);
         
-        _session.executeAsync(_CHAT_LOBBY_INSERT.bind(cLId, userId.getId(), lobbyName, Boolean.FALSE));
+        _session.executeAsync(_CHAT_LOBBY_INSERT.bind(cLId, userId.getId(), lobbyName, -1));
     }
     
     public Optional<UUID> chatLobbySubscribe(UserId userId, String lobbyName, UUID cLId) {
         _LOGGER.info("ChatLobbyTable.chatLobbySubscribe : " + userId + ", " + lobbyName);
         
-        BoundStatement cLInsert = _CHAT_LOBBY_INSERT.bind(cLId, userId.getId(), lobbyName, Boolean.TRUE);
+        BoundStatement cLInsert = _CHAT_LOBBY_INSERT.bind(cLId, userId.getId(), lobbyName, 1);
         _session.executeAsync(cLInsert);
         
         return Optional.of(cLId);

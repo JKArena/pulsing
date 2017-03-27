@@ -41,12 +41,14 @@ import com.datastax.driver.core.Row;
 @Repository
 public class CassandraChatDao extends AbstractCassandraDao {
     
+    private static final Long _DEFAULT_CHAT_LOBBY_LISTING = 10L;
+    
     private ChatLobbyTable _chatLobbyTable;
     private ChatMessageTable _chatMessageTable;
     
     public Map<String, UUID> queryChatLobbies(UserId userId) {
         
-        return _chatLobbyTable.queryChatLobbies(userId);
+        return _chatLobbyTable.queryChatLobbies(userId, _DEFAULT_CHAT_LOBBY_LISTING);
     }
     
     public boolean userHasChatLobbyId(UserId userId, UUID cLId) {

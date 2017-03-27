@@ -32,6 +32,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class CasssandraFriendChatDao extends AbstractCassandraDao {
     
+    private static final Long _DEFAULT_FRIEND_LISTING = 20L;
+    
     private FriendTable _friendTable;
     
     public void friend(UserId fId, String fName, UserId sId, String sName, long timeStamp) {
@@ -44,7 +46,12 @@ public class CasssandraFriendChatDao extends AbstractCassandraDao {
     
     public Map<Long, String> queryFriends(UserId userId) {
         
-        return _friendTable.queryFriends(userId);
+        return _friendTable.queryFriends(userId, _DEFAULT_FRIEND_LISTING);
+    }
+    
+    public boolean areFriends(UserId userId, UserId friendId) {
+        
+        return _friendTable.areFriends(userId, friendId);
     }
     
     @Override

@@ -27,8 +27,8 @@ import React from 'react';
 
 import AbstractMapStore from './AbstractMapStore';
 import Storage from '../../../common/Storage';
-import SubscribePulseAction from '../../common/actions/SubscribePulseAction';
-import UnSubscribePulseAction from '../../common/actions/UnSubscribePulseAction';
+import SubscribePulseAction from '../../common/actions/subscription/SubscribePulseAction';
+import UnSubscribePulseAction from '../../common/actions/subscription/UnSubscribePulseAction';
 import {InfoNodeStateLess, SUBSCRIBE_ACTION, UN_SUBSCRIBE_ACTION} from '../info/InfoNodeStateLess';
 
 class GMapPulseStore extends AbstractMapStore {

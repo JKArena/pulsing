@@ -21,6 +21,8 @@ package org.jhk.pulsing.web.service.prod;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.jhk.pulsing.serialization.avro.records.UserId;
+import org.jhk.pulsing.web.common.Result;
 import org.jhk.pulsing.web.dao.prod.db.cassandra.CasssandraFriendChatDao;
 import org.jhk.pulsing.web.service.IFriendService;
 import org.springframework.stereotype.Service;
@@ -34,5 +36,11 @@ public class FriendService implements IFriendService {
     @Inject
     @Named("cassandraFriendDao")
     private CasssandraFriendChatDao cassandraFriendDao;
+
+    @Override
+    public boolean areFriends(UserId userId, UserId friendId) {
+        
+        return cassandraFriendDao.areFriends(userId, friendId);
+    }
     
 }
