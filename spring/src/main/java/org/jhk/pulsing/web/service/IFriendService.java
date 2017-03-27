@@ -18,11 +18,13 @@
  */
 package org.jhk.pulsing.web.service;
 
+import org.jhk.pulsing.serialization.avro.records.UserId;
+
 /**
  * @author Ji Kim
  */
 public interface IFriendService {
     
-    
+    boolean areFriends(UserId userId, UserId friendId);
     
 }

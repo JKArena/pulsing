@@ -14,7 +14,8 @@ Allows creation of Pulse which others around the area can subscribe to and when 
 7. Bootstrap+ReactJS+Router
 8. Spring with Redis (websocket+session management and cache (short lived pulse data with geo radius search)) for service calls
 9. Python Django with Memcached for service calls (to compare with Spring + Redis)
-10. Nginx (for RTMP), Java8, Scala, Ecmascript6 and etc
+10. ElasticSearch for tag searches initially
+11. Nginx (for RTMP), Java8, Scala, Ecmascript6 and etc
 
 ![ScreenShot](https://github.com/JHKTruth/pulsing/blob/master/spring/nonsrc/ssChat.png?raw=true)
 

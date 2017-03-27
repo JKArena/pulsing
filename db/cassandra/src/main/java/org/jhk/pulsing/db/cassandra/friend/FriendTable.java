@@ -57,20 +57,20 @@ public final class FriendTable implements ICassandraTable {
                 "name text," +
                 "friend_user_id bigint," +
                 "friend_name text," +
-                "active Boolean," +
+                "rank int," +
                 "timestamp bigint," +
-                "PRIMARY KEY (user_id, active)" + //user_id for partitioning and timestamp for clustering
+                "PRIMARY KEY (user_id, rank)" + //user_id for partitioning and rank for clustering
                 " )" + 
-                "WITH CLUSTERING ORDER BY (active DESC);");
+                "WITH CLUSTERING ORDER BY (rank DESC);");
         
-        _FRIEND_QUERY = _session.prepare("SELECT * FROM " + _FRIEND_TABLE + " WHERE user_id=? AND active = true LIMIT 40");
-        _FRIEND_INSERT = _session.prepare("INSERT INTO " + _FRIEND_TABLE + " (user_id, name, friend_user_id, friend_name, active, timestamp) VALUES (?, ?, ?, ?, ?, ?)");
+        _FRIEND_QUERY = _session.prepare("SELECT * FROM " + _FRIEND_TABLE + " WHERE user_id=? AND rank > 0 LIMIT ?");
+        _FRIEND_INSERT = _session.prepare("INSERT INTO " + _FRIEND_TABLE + " (user_id, name, friend_user_id, friend_name, rank, timestamp) VALUES (?, ?, ?, ?, ?, ?)");
     }
     
-    public Map<Long, String> queryFriends(UserId userId) {
+    public Map<Long, String> queryFriends(UserId userId, long limit) {
         _LOGGER.info("FriendTable.queryFriends : " + userId);
         
-        ResultSet fResult = _session.execute(_FRIEND_QUERY.bind(userId));
+        ResultSet fResult = _session.execute(_FRIEND_QUERY.bind(userId, limit));
         
         _LOGGER.info("FriendTable.queryFriends fResult : " + fResult);
         Map<Long, String> friends = new HashMap<>();
@@ -79,9 +79,9 @@ public final class FriendTable implements ICassandraTable {
             
             long friendId = friendShip.getLong("friend_user_id");
             String friendName = friendShip.getString("friend_name");
-            boolean activeState = friendShip.getBool("active");
+            int rank = friendShip.getInt("rank");
             
-            _LOGGER.info("FriendTable.queryFriends : " + friendId + "/" + friendName + " - " + activeState);
+            _LOGGER.info("FriendTable.queryFriends : " + friendId + "/" + friendName + " - " + rank);
             
             friends.put(friendId, friendName);
         });
@@ -89,17 +89,29 @@ public final class FriendTable implements ICassandraTable {
         return friends;
     }
     
+    /**
+     * TODO use Spark SQL for query of whether the entry exists, since need to query all
+     * 
+     * @param userId
+     * @param friendId
+     * @return
+     */
+    public boolean areFriends(UserId userId, UserId friendId) {
+        Map<Long, String> friends = queryFriends(userId, Long.MAX_VALUE);
+        return friends.containsKey(friendId);
+    }
+    
     public void friend(UserId fId, String fName, UserId sId, String sName, long timeStamp) {
         _LOGGER.info("FriendTable.friend : " + fId + ", " + fName + " - " + sId + ", " + sName);
         
-        _session.executeAsync(_FRIEND_INSERT.bind(fId, fName, sId, sName, Boolean.TRUE, timeStamp));
-        _session.executeAsync(_FRIEND_INSERT.bind(sId, sName, fId, fName, Boolean.TRUE, timeStamp));
+        _session.executeAsync(_FRIEND_INSERT.bind(fId, fName, sId, sName, 1, timeStamp));
+        _session.executeAsync(_FRIEND_INSERT.bind(sId, sName, fId, fName, 1, timeStamp));
     }
     
     public void unfriend(UserId fId, String fName, UserId sId, String sName, long timeStamp) {
         _LOGGER.info("FriendTable.unfriend : " + fId + ", " + fName + " - " + sId + ", " + sName);
         
-        _session.executeAsync(_FRIEND_INSERT.bind(fId, fName, sId, sName, Boolean.FALSE, timeStamp));
+        _session.executeAsync(_FRIEND_INSERT.bind(fId, fName, sId, sName, -1, timeStamp));
     }
     
     @Override
