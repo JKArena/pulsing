@@ -67,7 +67,7 @@ public final class FriendTable implements ICassandraTable {
         _FRIEND_INSERT = _session.prepare("INSERT INTO " + _FRIEND_TABLE + " (user_id, name, friend_user_id, friend_name, rank, timestamp) VALUES (?, ?, ?, ?, ?, ?)");
     }
     
-    public Map<Long, String> queryFriends(UserId userId, long limit) {
+    public Map<Long, String> queryFriends(UserId userId, int limit) {
         _LOGGER.info("FriendTable.queryFriends : " + userId);
         
         ResultSet fResult = _session.execute(_FRIEND_QUERY.bind(userId, limit));
@@ -97,7 +97,7 @@ public final class FriendTable implements ICassandraTable {
      * @return
      */
     public boolean areFriends(UserId userId, UserId friendId) {
-        Map<Long, String> friends = queryFriends(userId, Long.MAX_VALUE);
+        Map<Long, String> friends = queryFriends(userId, Integer.MAX_VALUE);
         return friends.containsKey(friendId);
     }
     
