@@ -56,7 +56,9 @@ class User extends AbstractAvro {
   }
 
   clearGeoWatch() {
-    global.geolocation.clearWatch(this.watchId);
+    if(this.watchId) {
+      global.navigator.geolocation.clearWatch(this.watchId);
+    }
   }
   
   _onPosition(position) {

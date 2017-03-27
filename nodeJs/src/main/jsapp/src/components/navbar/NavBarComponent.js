@@ -43,6 +43,7 @@ class NavBarComponent extends Component {
     this.state = {loggedIn: !!Storage.user, lat: 0, lng: 0, alerts: 0};
     this.authHandler = this.onAuth.bind(this);
     this.navigationChangeHandler = this.onNavigationChange.bind(this);
+    this.alertHandler = this.onAlert.bind(this);
   }
   
   loggedOut() {
@@ -52,26 +53,44 @@ class NavBarComponent extends Component {
     
     API.publish(TOPICS.AUTH, {loggedIn: false});
     this.setState(this.state);
+    this.recycleWS();
   }
   
   onAuth(auth) {
     
     this.state.loggedIn = auth.loggedIn;
     this.setState(this.state);
-    
     browserHistory.push(Common.MAIN_NAV_PATH);
+
+    if(this.state.loggedIn) {
+      this.badgeNode = findDOMNode(this.refs.badge).querySelector(':scope .badge');
+      this.ws = new WebSockets('socket');
+      this.ws.connect()
+        .then(frame => {
+          console.debug('alert frame', frame);
+          this.sub = this.ws.subscribe('/topics/alert/' + Storage.user.id.id, this.alertHandler);
+        });
+    } else {
+      this.recycleWS();
+    }
   }
   
   componentDidMount() {
     API.subscribe(TOPICS.AUTH, this.authHandler);
     API.subscribe(TOPICS.NAVIGATION_CHANGE, this.navigationChangeHandler);
-
-    this.badgeNode = findDOMNode(this.refs.badge);
   }
   
   componentWillUnmount() {
     API.unsubscribe(TOPICS.AUTH, this.authHandler);
     API.unsubscribe(TOPICS.NAVIGATION_CHANGE, this.navigationChangeHandler);
+    this.recycleWS();
+  }
+
+  recycleWS() {
+    if(this.ws) {
+      this.ws.destroy();
+      this.ws = null;
+    }
   }
 
   onNavigationChange(newNav) {
@@ -80,6 +99,12 @@ class NavBarComponent extends Component {
     this.setState(this.state);
 
     browserHistory.push(newNav);
+  }
+
+  onAlert(alertMsg) {
+    console.debug('alertMsg', alertMsg);
+
+    this.badgeNode.innerHTML = ++this.state.alerts;
   }
   
   render() {
@@ -143,7 +168,7 @@ class NavBarComponent extends Component {
               {(() => {
                 if(this.state.loggedIn) {
                   return <Nav pullRight>
-                      <LinkContainer to='/alertListing'><NavItem>Alert <Badge ref='badge'>{this.state.alerts}</Badge></NavItem></LinkContainer>
+                      <LinkContainer to='/alertListing'><NavItem ref='badge'>Alert <Badge>{this.state.alerts}</Badge></NavItem></LinkContainer>
                     </Nav>;
                 }
               })()}
