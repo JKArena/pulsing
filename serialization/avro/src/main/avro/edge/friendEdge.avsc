@@ -23,6 +23,8 @@
   "name": "FriendEdge",
   "fields": [
     {"name": "fUserId", "type": "org.jhk.pulsing.serialization.avro.records.UserId", "default": null},
-    {"name": "sUserId", "type": "org.jhk.pulsing.serialization.avro.records.UserId", "default": null}
+    {"name": "sUserId", "type": "org.jhk.pulsing.serialization.avro.records.UserId", "default": null},
+    {"name": "action", "type": ["null", {"type": "enum", "name": "ACTION",
+        "symbols": ["CREATE", "DELETE"] }], "default": null}
   ]
 }

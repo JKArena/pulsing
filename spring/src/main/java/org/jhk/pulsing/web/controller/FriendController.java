@@ -18,8 +18,8 @@
  */
 package org.jhk.pulsing.web.controller;
 
+import java.time.Instant;
 import java.util.Optional;
-import java.util.UUID;
 
 import javax.inject.Inject;
 
@@ -37,11 +37,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * @author Ji Kim
@@ -54,8 +53,6 @@ public class FriendController {
     private static final Logger _LOGGER = LoggerFactory.getLogger(FriendController.class);
     
     private static final int FRIEND_REQUEST_INVITE_EXPIRATION = 300; // 5 minutes
-    
-    private ObjectMapper _objectMapper = new ObjectMapper();
     
     @Inject
     private IFriendService friendService;
@@ -86,10 +83,42 @@ public class FriendController {
             return new Result<>(FAILURE, null, "User " + userId + " is already friends with " + friendId);
         }
         
-        String invitationId = userService.createInvitationId(friendId.getId(), userId.getId(), RedisConstants.INVITATION_ID.FRIEND_REQUEST_INVITE_, FRIEND_REQUEST_INVITE_EXPIRATION);
+        String invitationId = userService.createInvitationId(friendId.getId(), userId.getId(), 
+                RedisConstants.INVITATION_ID.FRIEND_REQUEST_INVITE_, FRIEND_REQUEST_INVITE_EXPIRATION);
         SystemMessageUtil.sendSystemAlertMessage(template, friendId.getId(), "Friend request from " + uLight.get().getName());
         
         return new Result<>(SUCCESS, invitationId, "Sent out friend request to friend");
+    }
+    
+    @RequestMapping(value="/friend/{invitationId}/{userId}/{fromUserId}", method=RequestMethod.PUT)
+    public @ResponseBody Result<String> friend(@PathVariable String invitationId, @PathVariable UserId userId, @PathVariable UserId fromUserId) {
+        _LOGGER.debug("FriendController.friend: " + invitationId + " - " + userId);
+        
+        if(userService.removeInvitationId(userId.getId(), invitationId)) {
+            Optional<UserLight> uLight = userService.getUserLight(userId.getId());
+            Optional<UserLight> fLight = userService.getUserLight(fromUserId.getId());
+            
+            friendService.friend(userId, uLight.get().getName(), fromUserId, fLight.get().getName(), Instant.now().toEpochMilli());
+            
+            SystemMessageUtil.sendSystemAlertMessage(template, userId.getId(), "You have a new friend " + fLight.get().getName() + "!!!!");
+            SystemMessageUtil.sendSystemAlertMessage(template, fromUserId.getId(), "Friend request from " + uLight.get().getName() + "!!!!");
+            
+            return new Result<>(SUCCESS, null, "Friendship was made!!!");
+        } else {
+            return new Result<>(FAILURE, null, "Invitation Id expired");
+        }
+    }
+    
+    @RequestMapping(value="/unfriend/{userId}/{friendId}", method=RequestMethod.DELETE)
+    public @ResponseBody Result<String> unfriend(@PathVariable UserId userId, @PathVariable UserId friendId) {
+        _LOGGER.debug("FriendController.unfriend: " + userId + " - " + friendId);
+        
+        Optional<UserLight> uLight = userService.getUserLight(userId.getId());
+        Optional<UserLight> fLight = userService.getUserLight(friendId.getId());
+        
+        friendService.unfriend(userId, uLight.get().getName(), friendId, fLight.get().getName(), Instant.now().toEpochMilli());
+        
+        return null;
     }
     
 }

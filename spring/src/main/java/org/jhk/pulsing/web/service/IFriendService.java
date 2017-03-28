@@ -27,4 +27,8 @@ public interface IFriendService {
     
     boolean areFriends(UserId userId, UserId friendId);
     
+    void friend(UserId fId, String fName, UserId sId, String sName, long timeStamp);
+    
+    void unfriend(UserId fId, String fName, UserId sId, String sName, long timeStamp);
+    
 }

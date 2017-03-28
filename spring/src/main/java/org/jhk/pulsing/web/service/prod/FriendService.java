@@ -22,8 +22,11 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.jhk.pulsing.serialization.avro.records.UserId;
-import org.jhk.pulsing.web.common.Result;
+import static org.jhk.pulsing.serialization.avro.records.edge.ACTION.*;
+import org.jhk.pulsing.serialization.avro.records.edge.FriendEdge;
+import org.jhk.pulsing.shared.util.CommonConstants;
 import org.jhk.pulsing.web.dao.prod.db.cassandra.CasssandraFriendChatDao;
+import org.jhk.pulsing.web.dao.prod.db.redis.RedisUserDao;
 import org.jhk.pulsing.web.service.IFriendService;
 import org.springframework.stereotype.Service;
 
@@ -31,16 +34,35 @@ import org.springframework.stereotype.Service;
  * @author Ji Kim
  */
 @Service
-public class FriendService implements IFriendService {
+public class FriendService extends AbstractKafkaPublisher
+                            implements IFriendService {
     
     @Inject
     @Named("cassandraFriendDao")
     private CasssandraFriendChatDao cassandraFriendDao;
+    
+    @Inject
+    @Named("redisUserDao")
+    private RedisUserDao redisUserDao;
 
     @Override
     public boolean areFriends(UserId userId, UserId friendId) {
         
         return cassandraFriendDao.areFriends(userId, friendId);
+    }
+
+    @Override
+    public void friend(UserId fId, String fName, UserId sId, String sName, long timeStamp) {
+        
+        cassandraFriendDao.friend(fId, fName, sId, sName, timeStamp);
+        getKafkaPublisher().produce(CommonConstants.TOPICS.FRIEND.toString(), new FriendEdge(fId, sId, CREATE));
+    }
+
+    @Override
+    public void unfriend(UserId fId, String fName, UserId sId, String sName, long timeStamp) {
+        
+        cassandraFriendDao.unfriend(fId, fName, sId, sName, timeStamp);
+        getKafkaPublisher().produce(CommonConstants.TOPICS.FRIEND.toString(), new FriendEdge(fId, sId, DELETE));
     }
     
 }
