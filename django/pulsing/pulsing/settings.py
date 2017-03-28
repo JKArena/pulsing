@@ -40,7 +40,8 @@ INSTALLED_APPS = (
     'django.contrib.gis',
     'corsheaders',
     'location',
-    'shared'
+    'shared',
+    'tags'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -102,6 +103,11 @@ LOGGING = {
             'propagate': True,
         },
         'location': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'tags': {
             'handlers': ['file'],
             'level': 'DEBUG',
             'propagate': True,
