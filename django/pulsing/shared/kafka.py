@@ -25,25 +25,25 @@ import logging
 
 class Publisher():
 
-  def __init__(self, config={'bootstrap.servers': 'pulsing.jhk.org:9092', 'retries': 3, 'api.version.request': True}):
-    super().__init__()
-    self.__producer = Producer(config)
-    self.logger = logging.getLogger(__name__)
+    def __init__(self, config={'bootstrap.servers': 'pulsing.jhk.org:9092', 'retries': 3, 'api.version.request': True}):
+        super().__init__()
+        self.__producer = Producer(config)
+        self.logger = logging.getLogger(__name__)
 
-  def publish(self, topic, data):
-    self.logger.debug('publish ' + topic + ' - ' + data)
-    self.__producer.produce(topic, data.encode('utf-8'))
-    self.__producer.flush()
+    def publish(self, topic, data):
+        self.logger.debug('publish ' + topic + ' - ' + data)
+        self.__producer.produce(topic, data.encode('utf-8'))
+        self.__producer.flush()
 
-  @property
-  def producer(self):
-    return self.__producer
+    @property
+    def producer(self):
+        return self.__producer
 
-  def __eq__(self, other):
-    return self.__producer == other.__producer
+    def __eq__(self, other):
+        return self.__producer == other.__producer
 
-  def __str__(self):
-    return self.__producer.__str__()
+    def __str__(self):
+        return self.__producer.__str__()
 
-  def __hash__(self):
-    return self.__producer.__hash__()
+    def __hash__(self):
+        return self.__producer.__hash__()

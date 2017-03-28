@@ -23,6 +23,6 @@ from django.conf.urls import url
 from . import views
 
 urlpatterns = [
-  url(r'^add/$', views.addLocation),
-  url(r'^query/(?P<userId>[0-9]{1,64})/(?P<lat>[0-9]{1,3}\.[0-9]{1,4})/(?P<lng>[0-9]{1,3}\.[0-9]{1,4})/$', views.queryLocation)
+    url(r'^add/$', views.addLocation),
+    url(r'^query/(?P<userId>[0-9]{1,64})/(?P<lat>[0-9]{1,3}\.[0-9]{1,4})/(?P<lng>[0-9]{1,3}\.[0-9]{1,4})/$', views.queryLocation)
 ]

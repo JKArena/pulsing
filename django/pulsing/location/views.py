@@ -32,41 +32,40 @@ logger = logging.getLogger(__name__)
 publisher = Publisher()
 
 def addLocation(request):
-  logger.debug('addLocation')
-  
-  if('location' in request.POST):
-    location = request.POST['location']
+    logger.debug('addLocation')
 
-    publisher.publish(LOCATION_CREATE_TOPIC, location)
+    if('location' in request.POST):
+        location = request.POST['location']
+        publisher.publish(LOCATION_CREATE_TOPIC, location)
 
-    return JsonResponse({
-      'code': 'SUCCESS',
-      'data': [],
-      'message': ''
-    })
-  else:
-    return HttpResponseBadRequest()
+        return JsonResponse({
+          'code': 'SUCCESS',
+          'data': [],
+          'message': ''
+        })
+    else:
+        return HttpResponseBadRequest()
 
 def queryLocation(request, userId, lat, lng):
-  logger.debug('queryLocation ' + userId + ' - ' + lat + '/' + lng)
-  return JsonResponse({
-      'code': 'SUCCESS',
-      'data': [
-        {
-          'name': 'TEST',
-          'description': 'Test',
-          'lat': 55.2344,
-          'lng': 56.4900,
-          'user_id': 1,
-          'creation_date': datetime.datetime.now()
-        },
-        {
-          'name': 'ANOTHER',
-          'description': 'Another',
-          'lat': 79.2534,
-          'lng': 32.9720,
-          'user_id': 2,
-          'creation_date': datetime.datetime.now()
-        }
-      ]
+    logger.debug('queryLocation ' + userId + ' - ' + lat + '/' + lng)
+    return JsonResponse({
+        'code': 'SUCCESS',
+        'data': [
+            {
+                'name': 'TEST',
+                'description': 'Test',
+                'lat': 55.2344,
+                'lng': 56.4900,
+                'user_id': 1,
+                'creation_date': datetime.datetime.now()
+            },
+            {
+                'name': 'ANOTHER',
+                'description': 'Another',
+                'lat': 79.2534,
+                'lng': 32.9720,
+                'user_id': 2,
+                'creation_date': datetime.datetime.now()
+            }
+                 ]
     })
