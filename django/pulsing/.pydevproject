@@ -4,11 +4,14 @@
 <path>/${PROJECT_DIR_NAME}</path>
 </pydev_pathproperty>
 <pydev_property name="org.python.pydev.PYTHON_PROJECT_VERSION">python 3.6</pydev_property>
-<pydev_property name="org.python.pydev.PYTHON_PROJECT_INTERPRETER">virtual 3.6</pydev_property>
+<pydev_property name="org.python.pydev.PYTHON_PROJECT_INTERPRETER">virtual 3</pydev_property>
 <pydev_variables_property name="org.python.pydev.PROJECT_VARIABLE_SUBSTITUTION">
 <key>DJANGO_MANAGE_LOCATION</key>
 <value>manage.py</value>
 <key>DJANGO_SETTINGS_MODULE</key>
 <value>pulsing.settings</value>
 </pydev_variables_property>
+<pydev_pathproperty name="org.python.pydev.PROJECT_EXTERNAL_SOURCE_PATH">
+<path>/Library/Frameworks/Python.framework/Versions/3.6/lib/python3.6/site-packages/confluent_kafka/cimpl.cpython-36m-darwin.so</path>
+</pydev_pathproperty>
 </pydev_project>
