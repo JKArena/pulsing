@@ -49,7 +49,7 @@ import org.springframework.stereotype.Service;
  * @author Ji Kim
  */
 @Service
-public class PulseService extends AbstractStormPublisher 
+public class PulseService extends AbstractKafkaPublisher 
                             implements IPulseService {
     
     private static final Logger _LOGGER = LoggerFactory.getLogger(PulseService.class);
@@ -92,9 +92,9 @@ public class PulseService extends AbstractStormPublisher
         pulse.setTimeStamp(Instant.now().getEpochSecond());
         
         Result<Pulse> cPulse = redisPulseDao.createPulse(pulse);
-        
         if(cPulse.getCode() == SUCCESS) {
-            getStormPublisher().produce(CommonConstants.TOPICS.PULSE_CREATE.toString(), cPulse.getData());
+            _LOGGER.debug("PulseService.createPulse: Sending pulse " + cPulse.getData());
+            getKafkaPublisher().produce(CommonConstants.TOPICS.PULSE_CREATE.toString(), cPulse.getData());
             subscribePulse(pulse, pulse.getUserId());
         }
         
@@ -123,7 +123,7 @@ public class PulseService extends AbstractStormPublisher
             
             redisPulseDao.subscribePulse(pulse, userLight);
             redisUserDao.storeUserLight(userLight); //need to update it with the new subscribed pulse id
-            getStormPublisher().produce(CommonConstants.TOPICS.PULSE_SUBSCRIBE.toString(), pulse);
+            getKafkaPublisher().produce(CommonConstants.TOPICS.PULSE_SUBSCRIBE.toString(), pulse);
             result = new Result<>(SUCCESS, pulse.getId(), "Subscribed");
         }
         

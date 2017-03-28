@@ -26,23 +26,23 @@ import org.jhk.pulsing.web.publisher.Publisher;
 /**
  * @author Ji Kim
  */
-abstract class AbstractStormPublisher {
+abstract class AbstractKafkaPublisher {
     
-    private Publisher _stormPublisher;
+    private Publisher _kafkaPublisher;
     
-    protected Publisher getStormPublisher() {
-        return _stormPublisher;
+    protected Publisher getKafkaPublisher() {
+        return _kafkaPublisher;
     }
     
     @PostConstruct
     public void init() {
-        _stormPublisher = new Publisher();
+        _kafkaPublisher = new Publisher();
     }
     
     @PreDestroy
     public void destroy() {
-        if(_stormPublisher != null) {
-            _stormPublisher.close();
+        if(_kafkaPublisher != null) {
+            _kafkaPublisher.close();
         }
     }
     
