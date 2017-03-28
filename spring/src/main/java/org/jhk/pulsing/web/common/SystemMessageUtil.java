@@ -18,12 +18,12 @@
  */
 package org.jhk.pulsing.web.common;
 
+import java.time.Instant;
 import java.util.UUID;
 
 import org.jhk.pulsing.web.pojo.light.Alert;
 import org.jhk.pulsing.web.pojo.light.Chat;
 import org.jhk.pulsing.web.service.IUserService;
-import org.joda.time.Instant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
@@ -65,7 +65,7 @@ public final class SystemMessageUtil {
         
         Alert msg = new Alert();
         msg.setMessage(message);
-        msg.setTimeStamp(Instant.now().getMillis());
+        msg.setTimeStamp(Instant.now().toEpochMilli());
         
         return msg;
     }
