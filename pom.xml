@@ -499,12 +499,19 @@ descent loss of performance)
         <artifactId>transport-netty4-client</artifactId>
         <version>${elasticsearch.client}</version>
       </dependency>
+
+      <dependency>
+        <groupId>com.sksamuel.elastic4s</groupId>
+        <artifactId>elastic4s-core_2.11</artifactId>
+        <version>${elasticsearch.scala}</version>
+      </dependency>
       
     </dependencies>
   </dependencyManagement>
   
   <properties>
     <pulsing.version>0.1-SNAPSHOT</pulsing.version>
+    <elasticsearch.scala>5.2.11</elasticsearch.scala>
     <elasticsearch.client>5.2.2</elasticsearch.client>
     <esri.geometry>1.2.1</esri.geometry>
     <esri.hadoop>1.1</esri.hadoop>
