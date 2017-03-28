@@ -487,12 +487,25 @@ descent loss of performance)
         <artifactId>spark-sql_2.11</artifactId>
         <version>${spark.sql}</version>
       </dependency>
+
+      <dependency>
+        <groupId>org.elasticsearch.client</groupId>
+        <artifactId>transport</artifactId>
+        <version>${elasticsearch.client}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.elasticsearch.plugin</groupId>
+        <artifactId>transport-netty4-client</artifactId>
+        <version>${elasticsearch.client}</version>
+      </dependency>
       
     </dependencies>
   </dependencyManagement>
   
   <properties>
     <pulsing.version>0.1-SNAPSHOT</pulsing.version>
+    <elasticsearch.client>5.2.2</elasticsearch.client>
     <esri.geometry>1.2.1</esri.geometry>
     <esri.hadoop>1.1</esri.hadoop>
     <jcl>1.7.21</jcl>
