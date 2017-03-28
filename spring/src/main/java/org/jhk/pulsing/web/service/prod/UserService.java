@@ -50,7 +50,7 @@ import org.springframework.stereotype.Service;
  * @author Ji Kim
  */
 @Service
-public class UserService extends AbstractStormPublisher
+public class UserService extends AbstractKafkaPublisher
                             implements IUserService {
     
     @Inject
@@ -92,7 +92,7 @@ public class UserService extends AbstractStormPublisher
         }
         
         if(cUser.getCode() == SUCCESS) {
-            getStormPublisher().produce(CommonConstants.TOPICS.USER_CREATE.toString(), cUser.getData());
+            getKafkaPublisher().produce(CommonConstants.TOPICS.USER_CREATE.toString(), cUser.getData());
         }
         
         return cUser;
