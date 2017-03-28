@@ -20,6 +20,7 @@ package org.jhk.pulsing.web.dao.prod.db.redis;
 
 import static org.jhk.pulsing.shared.util.RedisConstants.REDIS_KEY.*;
 
+import java.time.Instant;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -33,7 +34,6 @@ import org.jhk.pulsing.shared.util.Util;
 import org.jhk.pulsing.web.dao.prod.db.AbstractRedisDao;
 import org.jhk.pulsing.web.pojo.light.Invitation;
 import org.jhk.pulsing.web.pojo.light.UserLight;
-import org.joda.time.Instant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
@@ -99,7 +99,7 @@ public class RedisUserDao extends AbstractRedisDao {
         List<String> remove = new LinkedList<>();
         
         String setKey = INVITATIONS_.toString() + userId.getId();
-        long current = Instant.now().getMillis();
+        long current = Instant.now().toEpochMilli();
         
         Set<String> invitationSet = getJedis().smembers(setKey);
         _LOGGER.debug("RedisUserDao.getAlertList: invitation size " + invitationSet.size());
@@ -143,7 +143,7 @@ public class RedisUserDao extends AbstractRedisDao {
         getJedis().setex(key, expiration, "1");
         
         try {
-            Invitation invitation = new Invitation(fromUserId, prefix, key, (expiration*1000)+Instant.now().getMillis());
+            Invitation invitation = new Invitation(fromUserId, prefix, key, (expiration*1000)+Instant.now().toEpochMilli());
             getJedis().sadd(INVITATIONS_.toString() + toUserId, getObjectMapper().writeValueAsString(invitation));
         } catch (JsonProcessingException jpException) {
             _LOGGER.error("Error writing invitation", jpException);
@@ -174,6 +174,7 @@ public class RedisUserDao extends AbstractRedisDao {
                 })
                 .findAny();
         
+        boolean removed = false;
         if(invite.isPresent()) {
             getJedis().srem(setKey, invite.get());
         }
