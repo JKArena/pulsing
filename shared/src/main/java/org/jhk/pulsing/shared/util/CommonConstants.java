@@ -47,7 +47,7 @@ public final class CommonConstants {
     public static final double DEFAULT_PULSE_RADIUS = 5.0d;
     
     public enum TOPICS {
-		PULSE_SUBSCRIBE, USER_CREATE, PULSE_CREATE, LOCATION_CREATE;
+		PULSE_SUBSCRIBE, USER_CREATE, PULSE_CREATE, LOCATION_CREATE, FRIEND;
 	};
 	
 	public enum CASSANDRA_KEYSPACE {
