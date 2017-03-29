@@ -42,14 +42,6 @@ class AbstractMapStore extends EventEmitter {
     this.emit(DATA_POINTS_EVENT, dataPoints);
   }
   
-  addDataPointsListener(callback) {
-    this.on(DATA_POINTS_EVENT, callback);
-  }
-  
-  removeDataPointsListener(callback) {
-    this.removeListener(DATA_POINTS_EVENT, callback);
-  }
-  
   fetchDataPoints(map, latLng) {
     this.clearDataPoints();
 
