@@ -52,7 +52,6 @@ class MapComponent extends Component {
     this.mapId = props.location.query.mapId;
     this.map = null;
     this.geoChangeHandler = this.onGeoChange.bind(this);
-    this.dataPointsHandler = this.onDataPoints.bind(this);
     this.pulseCreatedHandler = this.onPulseCreated.bind(this);
 
     let user = Storage.user;
@@ -66,7 +65,6 @@ class MapComponent extends Component {
   }
 
   componentDidMount() {
-    this.store.addDataPointsListener(this.dataPointsHandler);
     this.ws = new WebSockets('socket');
     this.ws.connect()
       .then(frame => {
@@ -79,11 +77,8 @@ class MapComponent extends Component {
   }
 
   componentWillUnmount() {
-    if(this.store) {
-      this.store.removeDataPointsListener(this.dataPointsHandler);
-      this.store = null;
-    }
-
+    this.store = null;
+    
     if(this.ws) {
       this.ws.destroy();
       this.ws = null;
@@ -141,11 +136,6 @@ class MapComponent extends Component {
     };
 
     this.setState(this.state);
-  }
-
-  onDataPoints(dataPoints) {
-    console.debug('fetched onDataPoints', dataPoints);
-
   }
 
   render() {
