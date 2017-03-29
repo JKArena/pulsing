@@ -273,3 +273,38 @@ The decorator for the setter may look strange at first sight. Every property tha
 
 So when we write f = Fuzzy(0.7), under the hood Python calls Fuzzy.__new__(Fuzzy, 0.7) to create a new object. Class methods are set up by using the built-in classmethod() function used as a decorato.
 
+
+Python provides two data types for handling raw bytes: bytes which is immutable and bytearray which is mutable. Whereas a slice of a bytes or bytearray returns an object of the same type, accessing a single byte using the item access operator ([]) returns an int--the value of the specified byte.
+word = b"Animal"
+x = b"A"
+word[0] == x # returns False, word[0] == 65
+word[:1] == x # returns True 
+
+In general Booleans, numbers, and strings can be picked as can instances of classes including custom classes, providing their private __dict__ is picklable. In addition, any built in collection types can be picked, providing they contain only picklable objects. Python 3.x pickle.HIGHEST_PROTOCOL is a compact binary pickle format which is the best protocol to use for data shared among Python 3 programs.
+
+pickle.dump(self, gzip.open(filename, "wb"), pickleHIGEST_PROTOCOL)
+Any file that is compressed using gzip compression begins with a particular magic number. A magic number is a sequence of one or more bytes at the beginning of a file that is used to indicate the file's type.
+
+GZIP_MAGIC = b"\x1F\x8B"
+fh = open(filename, "rb")
+magic = fh.read(len(GZIP_MAGIC))
+
+if magic == GZIP_MAGIC:
+  fh.close()
+  fh = gzip.open(filename, "rb")
+else
+  fh.seek(0)
+
+pickle.load(fh)
+
+The struct module provides struct.pack(), struct.unpack(), and some other functions, and the struct.Struct() class. However struct module can handle strings only of a specified length.
+data = struct.pack("<2h", 11, -9) # data == b'\x0b\x00\xf7\xff'
+items = struct.unpack("<2h", data) # items == (11, -9)
+Here '<' notes little-endian and 'h' notes 16-bit signed integer
+
+def export_binary(self, filename, compress=False):
+  def pack_string(string):
+    data = string.encode("utf8")
+    format = "<H{0}s".format(len(data))
+    return struct.pack(format, len(data), data)
+

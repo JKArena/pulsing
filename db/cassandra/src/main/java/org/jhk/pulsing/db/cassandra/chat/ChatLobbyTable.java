@@ -65,7 +65,7 @@ public final class ChatLobbyTable implements ICassandraTable {
                 " )" + 
                 "WITH CLUSTERING ORDER BY (rank DESC);");
         
-        _CHAT_LOBBY_QUERY = _session.prepare("SELECT name, chat_lobby_id FROM " + _CHAT_LOBBY_TABLE + " WHERE user_id=? AND rank > 0 LIMIT ?");
+        _CHAT_LOBBY_QUERY = _session.prepare("SELECT name, chat_lobby_id, rank FROM " + _CHAT_LOBBY_TABLE + " WHERE user_id=? AND rank > 0 LIMIT ?");
         _CHAT_LOBBY_INSERT = _session.prepare("INSERT INTO " + _CHAT_LOBBY_TABLE + " (chat_lobby_id, user_id, name, rank) VALUES (?, ?, ?, ?)");
     }
     
