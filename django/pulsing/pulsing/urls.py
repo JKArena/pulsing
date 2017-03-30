@@ -17,5 +17,6 @@ from django.contrib import admin
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^location/', include('location.urls', namespace='pulsing-location', app_name='location'))
+    url(r'^location/', include('location.urls', namespace='pulsing-location', app_name='location')),
+    url(r'^tags/', include('tags.urls', namespace='pulsing-tags', app_name='tags'))
 ]
