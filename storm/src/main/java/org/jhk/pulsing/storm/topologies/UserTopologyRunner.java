@@ -63,7 +63,7 @@ public final class UserTopologyRunner {
         Config config = new Config();
         config.setNumWorkers(1);
         config.setMessageTimeoutSecs(300);
-        StormSubmitter.submitTopology("user-topology", config, UserTopologyBuilder.build(true));
+        StormSubmitter.submitTopology("user-topology", config, UserTopologyBuilder.build(false));
         
     }
     
