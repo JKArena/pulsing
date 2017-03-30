@@ -57,7 +57,7 @@ public final class UserDeserializerBolt extends BaseBasicBolt {
     
     @Override
     public void declareOutputFields(OutputFieldsDeclarer fieldsDeclarer) {
-        fieldsDeclarer.declare(FieldConstants.AVRO_USER_DESERIALIZE_FIELD);
+        fieldsDeclarer.declare(FieldConstants.AVRO_DESERIALIZE_FIELD);
     }
 
 }

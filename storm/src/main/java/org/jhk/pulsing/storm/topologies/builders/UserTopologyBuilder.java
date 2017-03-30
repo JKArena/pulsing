@@ -40,6 +40,7 @@ import org.jhk.pulsing.shared.util.HadoopConstants;
 import org.jhk.pulsing.storm.bolts.converter.avroTothrift.UserConverterBolt;
 import org.jhk.pulsing.storm.bolts.deserializers.avro.UserDeserializerBolt;
 import org.jhk.pulsing.storm.bolts.persistor.PailDataPersistorBolt;
+import org.jhk.pulsing.storm.hadoop.bolt.AvroRecordFormatBolt;
 import org.jhk.pulsing.storm.hadoop.bolt.ThriftDataRecordFormatBolt;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,8 +59,8 @@ public final class UserTopologyBuilder {
         builder.setSpout("user-create-spout", buildSpout());
         
         builder.setBolt("user-avro-deserialize", new UserDeserializerBolt(), 4) //sets executors, namely threads
-                .setNumTasks(2) //num tasks is number of instances of this bolt
-                .shuffleGrouping("user-create-spout");
+            .setNumTasks(2) //num tasks is number of instances of this bolt
+            .shuffleGrouping("user-create-spout");
         
         if(isPailBuild) {
             builder.setBolt("user-avro-thrift-converter", new UserConverterBolt(), 2)
@@ -70,13 +71,13 @@ public final class UserTopologyBuilder {
                 .setNumTasks(2)
                 .shuffleGrouping("user-avro-thrift-converter");
             
-            builder.setBolt("user-hdfs-pail", hdfsBolt(), 2)
+            builder.setBolt("user-hdfs-pail", hdfsPailBolt(), 2)
                 .setNumTasks(2)
                 .shuffleGrouping("user-avro-thrift-converter");
         }else {
-            builder.setBolt("user-hdfs", hdfsBolt(), 2)
-                    .setNumTasks(2)
-                    .shuffleGrouping("user-avro-deserialize");
+            builder.setBolt("user-hdfs", avroHdfsBolt(), 2)
+                .setNumTasks(2)
+                .shuffleGrouping("user-avro-deserialize");
         }
         
         return builder.createTopology();
@@ -104,10 +105,12 @@ public final class UserTopologyBuilder {
         return hdfsBolt;
     }
     
-    private static HdfsBolt hdfsBolt() {
+    private static HdfsBolt avroHdfsBolt() {
         FileNameFormat fnFormat = new DefaultFileNameFormat()
                 .withPath(HadoopConstants.SPARK_NEW_DATA_WORKSPACE)
                 .withPrefix("UserCreate");
+        
+        RecordFormat rFormat = new AvroRecordFormatBolt();
         
         // sync the filesystem after every 1k tuples (setting to 1 for testing)
         SyncPolicy sPolicy = new CountSyncPolicy(1);
@@ -116,6 +119,7 @@ public final class UserTopologyBuilder {
         
         HdfsBolt hdfsBolt = new HdfsBolt()
             .withFileNameFormat(fnFormat)
+            .withRecordFormat(rFormat)
             .withSyncPolicy(sPolicy)
             .withRotationPolicy(rPolicy)
             .withFsUrl(HadoopConstants.HDFS_URL_PORT);

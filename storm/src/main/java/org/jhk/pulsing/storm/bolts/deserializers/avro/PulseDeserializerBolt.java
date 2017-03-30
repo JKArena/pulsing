@@ -58,7 +58,7 @@ public final class PulseDeserializerBolt extends BaseBasicBolt {
     
     @Override
     public void declareOutputFields(OutputFieldsDeclarer fieldsDeclarer) {
-        fieldsDeclarer.declare(FieldConstants.AVRO_PULSE_DESERIALIZE_FIELD);
+        fieldsDeclarer.declare(FieldConstants.AVRO_DESERIALIZE_FIELD);
     }
 
 }
