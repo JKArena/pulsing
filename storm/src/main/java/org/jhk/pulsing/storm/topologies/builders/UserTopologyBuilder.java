@@ -61,24 +61,28 @@ public final class UserTopologyBuilder {
                 .setNumTasks(2) //num tasks is number of instances of this bolt
                 .shuffleGrouping("user-create-spout");
         
-        builder.setBolt("user-avro-thrift-converter", new UserConverterBolt(), 2)
+        if(isPailBuild) {
+            builder.setBolt("user-avro-thrift-converter", new UserConverterBolt(), 2)
                 .setNumTasks(2)
                 .shuffleGrouping("user-avro-deserialize");
-        
-        if(isPailBuild) {
+            
             builder.setBolt("user-pail-data-persistor", new PailDataPersistorBolt(HadoopConstants.PAIL_NEW_DATA_PATH.USER), 2)
-                    .setNumTasks(2)
-                    .shuffleGrouping("user-avro-thrift-converter");
+                .setNumTasks(2)
+                .shuffleGrouping("user-avro-thrift-converter");
+            
+            builder.setBolt("user-hdfs-pail", hdfsBolt(), 2)
+                .setNumTasks(2)
+                .shuffleGrouping("user-avro-thrift-converter");
         }else {
             builder.setBolt("user-hdfs", hdfsBolt(), 2)
                     .setNumTasks(2)
-                    .shuffleGrouping("user-avro-thrift-converter");    
+                    .shuffleGrouping("user-avro-deserialize");
         }
         
         return builder.createTopology();
     }
     
-    private static HdfsBolt hdfsBolt() {
+    private static HdfsBolt hdfsPailBolt() {
         FileNameFormat fnFormat = new DefaultFileNameFormat()
                 .withPath(HadoopConstants.PAIL_NEW_DATA_WORKSPACE)
                 .withPrefix("UserCreate");
@@ -93,6 +97,25 @@ public final class UserTopologyBuilder {
         HdfsBolt hdfsBolt = new HdfsBolt()
             .withFileNameFormat(fnFormat)
             .withRecordFormat(rFormat)
+            .withSyncPolicy(sPolicy)
+            .withRotationPolicy(rPolicy)
+            .withFsUrl(HadoopConstants.HDFS_URL_PORT);
+
+        return hdfsBolt;
+    }
+    
+    private static HdfsBolt hdfsBolt() {
+        FileNameFormat fnFormat = new DefaultFileNameFormat()
+                .withPath(HadoopConstants.SPARK_NEW_DATA_WORKSPACE)
+                .withPrefix("UserCreate");
+        
+        // sync the filesystem after every 1k tuples (setting to 1 for testing)
+        SyncPolicy sPolicy = new CountSyncPolicy(1);
+        
+        FileRotationPolicy rPolicy = new FileSizeRotationPolicy(5.0f, Units.MB);
+        
+        HdfsBolt hdfsBolt = new HdfsBolt()
+            .withFileNameFormat(fnFormat)
             .withSyncPolicy(sPolicy)
             .withRotationPolicy(rPolicy)
             .withFsUrl(HadoopConstants.HDFS_URL_PORT);

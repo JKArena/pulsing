@@ -64,7 +64,7 @@ public final class PulseTopologyRunner {
         config.setNumWorkers(1);
         config.setMessageTimeoutSecs(60);
         
-        StormSubmitter.submitTopology("pulse-topology", config, PulseTopologyBuilder.build(true));
+        StormSubmitter.submitTopology("pulse-topology", config, PulseTopologyBuilder.build(false));
         
     }
     

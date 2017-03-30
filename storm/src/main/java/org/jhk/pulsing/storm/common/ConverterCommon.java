@@ -74,7 +74,6 @@ public final class ConverterCommon {
                    return cSequence.toString(); 
                 })
                 .collect(Collectors.toSet());
-        tags.add(pulse.getValue().toString()); //add the pulse value as a tag as well
         
         //1) create a TagGroup for these tags to group them using pulseId and coordinates
         //   (so to group additional tags if user modifies the pulse)
