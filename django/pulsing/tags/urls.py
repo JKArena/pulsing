@@ -19,6 +19,8 @@ under the License.
 @author Ji Kim
 """
 
-from django.contrib import admin
+from django.conf.urls import url
+from . import views
 
-# Register your models here.
+urlpatterns = [
+]
