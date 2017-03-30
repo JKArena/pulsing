@@ -62,7 +62,7 @@ public final class ConverterCommon {
     public static List<Data> convertPulseAvroToThriftDataList(ITuple tuple) {
         _LOGGER.info("ConverterCommon.convertPulseAvroToThriftDataList " + tuple);
         
-        Pulse pulse = (Pulse) tuple.getValueByField(AVRO_PULSE);
+        Pulse pulse = (Pulse) tuple.getValueByField(AVRO);
         
         UserId uId = UserId.id(pulse.getUserId().getId());
         double lat = pulse.getLat();
@@ -128,7 +128,7 @@ public final class ConverterCommon {
     public static Data convertUserAvroToThriftData(ITuple tuple) {
         _LOGGER.info("ConverterCommon.convertUserAvroToThriftData " + tuple);
         
-        User user = (User) tuple.getValueByField(AVRO_USER);
+        User user = (User) tuple.getValueByField(AVRO);
         
         Data data = new Data();
         data.setPedigree(new Pedigree(Instant.now().getEpochSecond()));

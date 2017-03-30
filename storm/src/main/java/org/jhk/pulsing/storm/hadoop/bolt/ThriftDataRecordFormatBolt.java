@@ -29,7 +29,7 @@ import org.slf4j.LoggerFactory;
 /**
  * @author Ji Kim
  */
-public class ThriftDataRecordFormatBolt implements RecordFormat {
+public final class ThriftDataRecordFormatBolt implements RecordFormat {
     
     private static final long serialVersionUID = 2812772078376560440L;
     private static final Logger _LOGGER = LoggerFactory.getLogger(ThriftDataRecordFormatBolt.class);

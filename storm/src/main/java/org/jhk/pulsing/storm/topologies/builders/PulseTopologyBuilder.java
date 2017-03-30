@@ -47,6 +47,7 @@ import org.jhk.pulsing.storm.bolts.converter.avroTothrift.PulseConverterBolt;
 import org.jhk.pulsing.storm.bolts.deserializers.avro.PulseDeserializerBolt;
 import org.jhk.pulsing.storm.bolts.persistor.PailDataListPersistorBolt;
 import org.jhk.pulsing.storm.common.FieldConstants;
+import org.jhk.pulsing.storm.hadoop.trident.AvroRecordFormatFunction;
 import org.jhk.pulsing.storm.hadoop.trident.ThriftDataListRecordFormatFunction;
 import org.jhk.pulsing.storm.trident.deserializers.avro.PulseDeserializerFunction;
 import org.slf4j.Logger;
@@ -112,22 +113,22 @@ public final class PulseTopologyBuilder {
             .each(
                     new Fields("str"), 
                     new PulseDeserializerFunction(), 
-                    FieldConstants.AVRO_PULSE_DESERIALIZE_FIELD
+                    FieldConstants.AVRO_DESERIALIZE_FIELD
                     );
         
-        hdfsStatePersist(stream);
+        avroHdfsStatePersist(stream);
         
         return topology.build();
     }
     
-    private static void hdfsStatePersist(Stream stream) {
+    private static void avroHdfsStatePersist(Stream stream) {
         _LOGGER.debug("PulseTopologyBuilder.hdfsPersistBolt");
         
         FileNameFormat fnFormat = new DefaultFileNameFormat()
                 .withPath(HadoopConstants.SPARK_NEW_DATA_WORKSPACE)
                 .withPrefix("PulseCreate");
         
-        RecordFormat rFormat = new ThriftDataListRecordFormatFunction();
+        RecordFormat rFormat = new AvroRecordFormatFunction();
         
         FileRotationPolicy rPolicy = new FileSizeRotationPolicy(10.0f, FileSizeRotationPolicy.Units.MB);
         
@@ -139,7 +140,7 @@ public final class PulseTopologyBuilder {
         
         StateFactory sFactory = new HdfsStateFactory().withOptions(opts);
         
-        TridentState tState = stream.partitionPersist(sFactory, FieldConstants.THRIFT_DATA_LIST_FIELD, new HdfsUpdater(), new Fields());
+        TridentState tState = stream.partitionPersist(sFactory, FieldConstants.AVRO_DESERIALIZE_FIELD, new HdfsUpdater(), new Fields());
     }
     
     private static TransactionalTridentKafkaSpout buildTridentSpout() {
