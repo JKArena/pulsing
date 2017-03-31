@@ -31,7 +31,7 @@ import org.slf4j.LoggerFactory;
 /**
  * @author Ji Kim
  */
-public class PulseSubscribeTopologyRunner {
+public final class PulseSubscribeTopologyRunner {
     
     private static final Logger _LOGGER = LoggerFactory.getLogger(PulseSubscribeTopologyRunner.class);
     

@@ -22,17 +22,19 @@
  */
 'use strict';
 
-require('./Map.scss');
+require('./InputSearch.scss');
 
 import React, {Component} from 'react';
-import {FormGroup, InputGroup, FormControl, Glyphicon} from 'react-bootstrap';
+import {findDOMNode} from 'react-dom';
+import {InputGroup, FormControl, Button} from 'react-bootstrap';
 
+import {STORE_EVENT} from './store/AbstractSearchStore';
 import ElasticSearchDjangoStore from './store/ElasticSearchDjangoStore';
 
 const KEY_STORE_MAPPER = Object.freeze(
   {
     __proto__: null,
-    'elasticSearch': () => { return GMapPulseStore; }
+    'elasticSearch': ElasticSearchDjangoStore
   }
 );
 
@@ -41,17 +43,34 @@ class InputSearchComponent extends Component {
   constructor(props) {
     super(props);
     
-    this.store = KEY_STORE_MAPPER[props.params.store](props.params.index);
+    this.store = new KEY_STORE_MAPPER[props.store](props.index);
+    this.defaultDocType = props.docType;
 
+    this.searchResultHandler = this.searchResult.bind(this);
+    this.store.on(STORE_EVENT.SEARCH, this.searchResultHandler);
   }
 
   componentDidMount() {
-    
+    this.searchInputNode = findDOMNode(this.refs.searchInput);
   }
 
   componentWillUnmount() {
-    this.store = null;
+    if(this.store !== null) {
+      this.store.removeListener(STORE_EVENT.SEARCH, this.searchResultHandler);
+    }
 
+    this.store = null;
+  }
+
+  searchResult(data) {
+    console.debug('searchResult ', data);
+
+  }
+
+  handleSearch(evt) {
+    if(!this.searchInputNode.value) return;
+
+    this.store.search(this.defaultDocType, {'query': {'term': {'name': {'boost': 3.0, 'value': this.searchInputNode.value }}}});
   }
 
   render() {
@@ -59,10 +78,10 @@ class InputSearchComponent extends Component {
     return (
       <div className='inputsearch-component'>
         <InputGroup>
-          <FormControl type="text" />
-          <InputGroup.Addon>
-            <Glyphicon glyph="globe" />
-          </InputGroup.Addon>
+          <FormControl type="text" ref='searchInput' />
+          <InputGroup.Button>
+            <Button onClick={this.handleSearch.bind(this)}>{this.props.trigger}</Button>
+          </InputGroup.Button>
         </InputGroup>
       </div>
     );

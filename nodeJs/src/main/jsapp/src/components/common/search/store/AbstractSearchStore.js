@@ -24,6 +24,13 @@
 
 import {EventEmitter} from 'events';
 
+const STORE_EVENT = Object.freeze(
+  {
+    __proto__: null,
+    'SEARCH': 'SEARCH'
+  }
+);
+
 class AbstractSearchStore extends EventEmitter {
 
   constructor(indexName) {
@@ -31,21 +38,21 @@ class AbstractSearchStore extends EventEmitter {
 
     this.indexName = indexName;
   }
-  
+
   index(typeName, id, content) {
-    throw new Error('AbstractSearchStore should not be used standalone ' + typeName + "/" + id + " - " + content);
+    throw new Error('AbstractSearchStore should not be used standalone ' + typeName + '/' + id + ' - ' + content);
   }
 
   search(typeName, query) {
-    throw new Error('AbstractSearchStore should not be used standalone ' + typeName + " - " + query);
+    throw new Error('AbstractSearchStore should not be used standalone ' + typeName + ' - ' + query);
   }
 
   get(typeName, id) {
-    throw new Error('AbstractSearchStore should not be used standalone ' + typeName + " - " + id);
+    throw new Error('AbstractSearchStore should not be used standalone ' + typeName + ' - ' + id);
   }
 
   delete(typeName, id) {
-    throw new Error('AbstractSearchStore should not be used standalone ' + typeName + " - " + id);
+    throw new Error('AbstractSearchStore should not be used standalone ' + typeName + ' - ' + id);
   }
 
   clear() {
@@ -54,4 +61,4 @@ class AbstractSearchStore extends EventEmitter {
   
 }
 
-export default AbstractSearchStore;
+export { AbstractSearchStore, STORE_EVENT };

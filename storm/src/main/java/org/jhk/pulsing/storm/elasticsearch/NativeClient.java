@@ -82,14 +82,12 @@ public final class NativeClient {
         _client = _node.client();
     }
     
-    public IndexResponse addDocument(String index, String type, String id, Map<String, String> source) {
+    public IndexResponse addDocument(String index, String type, String id, String source) {
         _LOGGER.info("NativeClient.addDocument: " + index + "/" + type + "/" + id + " - " + source);
 
         IndexRequestBuilder irBuilder = _client.prepareIndex(index, type, id);
         
-        for(String key : source.keySet()) {
-            irBuilder.setSource(key, source.get(key));
-        }
+        irBuilder.setSource(source);
         
         return irBuilder.execute().actionGet();
     }

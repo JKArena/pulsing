@@ -24,7 +24,6 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.avro.Schema;
 import org.apache.avro.io.BinaryEncoder;
 import org.apache.avro.io.EncoderFactory;
 import org.apache.avro.specific.SpecificDatumWriter;
@@ -57,16 +56,16 @@ public final class StormUtil {
     public static byte[] serializeAvro(SpecificRecord record) {
         _LOGGER.debug("Util.serializeAvro: " + record);
         
-        Schema schema = record.getSchema();
-        
+        byte[] bytes = new byte[0];
         ByteArrayOutputStream out = new ByteArrayOutputStream();
         BinaryEncoder encoder = EncoderFactory.get().directBinaryEncoder(out, null);
-        SpecificDatumWriter<SpecificRecord> writer = new SpecificDatumWriter<>(schema);
+        SpecificDatumWriter<SpecificRecord> writer = new SpecificDatumWriter<>(record.getSchema());
         
         //rip can't use java 7 since datumwriter doesn't support Autocloseable
         try {
             writer.write(record, encoder);
             encoder.flush();
+            bytes = out.toByteArray();
         } catch (IOException serializeException) {
             _LOGGER.error("Util.serializeAvro error during serialization!!!!!!", serializeException);
             serializeException.printStackTrace();
@@ -79,7 +78,6 @@ public final class StormUtil {
             }
         }
         
-        byte[] bytes = out.toByteArray();
         return bytes;
     }
     

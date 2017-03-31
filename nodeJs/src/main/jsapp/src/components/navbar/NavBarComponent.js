@@ -118,7 +118,7 @@ class NavBarComponent extends Component {
     }
 
     return (
-        <div class='navbar-component'>
+        <div className='navbar-component'>
           <Navbar inverse>
             <Navbar.Header>
               <Navbar.Brand>

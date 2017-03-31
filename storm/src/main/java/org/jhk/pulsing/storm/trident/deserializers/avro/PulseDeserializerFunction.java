@@ -29,7 +29,7 @@ import org.jhk.pulsing.serialization.avro.serializers.SerializationHelper;
 /**
  * @author Ji Kim
  */
-public class PulseDeserializerFunction extends BaseFunction {
+public final class PulseDeserializerFunction extends BaseFunction {
     
     private static final long serialVersionUID = 4863013986214675297L;
     
