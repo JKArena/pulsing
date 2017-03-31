@@ -29,37 +29,35 @@ class Search():
         super().__init__()
         self.logger = logging.getLogger(__name__)
         self.__es = Elasticsearch(['pulsing.jhk.org:9200'], sniff_on_start=True)
+        
         self.__index_name = index_name
         if self.__es.indices.exists(self.__index_name):
-            self.__es.delete(self.__index_name)
+            self.logger.debug('index exists so deleting ' + self.__index_name)
+            self.__es.indices.delete(self.__index_name)
         
         self.__es.indices.create(self.__index_name)
         self.__es.cluster.health(wait_for_status='yellow')
     
-    def map(self, type_name, mapping):
-        """
-        Refer to book+doc since the most annoying part of elastic
-        {
-            'properties': {
-                'uuid': {'type': 'keyword', 'store': 'true'},
-                ...
-            }
-        }
-        """
-        self.__es.put_mapping(self.__index_name, doc_type=type_name, body={type_name: mapping})
-    
     def index(self, type_name, id_value, content):
+        self.logger.debug('index %s/%s : %s', type_name, id_value, content)
         self.__es.index(index=self.__index_name, doc_type=type_name, id=id_value, body=content)
     
-    def search(self, type_name, q={'match_all': {}}):
-        self.__es.search(self.__index_name, type_name, {'query': q})
+    def map(self, type_name, mapping):
+        self.logger.debug('map %s', type_name)
+        self.__es.indices.put_mapping(index=self.__index_name, doc_type=type_name, body={type_name: mapping})
+    
+    def search(self, type_name, query={'match_all': {}}):
+        self.logger.debug('search %s : %s', type_name, query)
+        self.__es.search(self.__index_name, type_name, {'query': query})
     
     def get(self, type_name, id_value):
+        self.logger.debug('get %s/%s', type_name, id_value)
         document = self.__es.get(index=self.__index_name, doc_type=type_name, id=id_value)
         self.logger.debug('got document ' + document)
         return document
     
     def delete(self, type_name, id_value):
+        self.logger.debug('delete %s/%s', type_name, id_value)
         self.__es.delete(index=self.__index_name, doc_type=type_name, id=id_value)
 
     def optimize(self):

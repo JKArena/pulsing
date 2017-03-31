@@ -24,22 +24,21 @@
 
 import Fetch from '../../../../common/Fetch';
 
-const FRIEND_REQUEST_PATH = 'friend/friendRequest/';
-
-const FriendRequestAction = Object.freeze(
+const CreateDocumentAction = Object.freeze(
   {
 
-    friendRequest(userId, friendId) {
+    createDocument(path, data) {
 
       let fData = new FormData();
-      fData.append('userId', userId.serialize());
-      fData.append('friendId', friendId.serialize());
+      for(let key of Object.keys(data)) {
+        fData.append(key, data[key]);
+      }
 
       return new Promise(function(resolve, reject) {
 
-        Fetch.POST_JSON(FRIEND_REQUEST_PATH, {body: fData}, false)
+        Fetch.POST_JSON(path, {body: fData}, false)
           .then(function(result) {
-            console.debug('friendRequest', result);
+            console.debug('createDocument', result);
 
             if(result.code === 'SUCCESS') {
               resolve();
@@ -56,4 +55,4 @@ const FriendRequestAction = Object.freeze(
   }
 );
 
-export default FriendRequestAction;
+export default CreateDocumentAction;
