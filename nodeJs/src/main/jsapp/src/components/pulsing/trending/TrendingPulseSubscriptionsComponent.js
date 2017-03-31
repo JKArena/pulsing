@@ -31,6 +31,8 @@ import TrendingPulseSubscriptionsStore from './TrendingPulseSubscriptionsStore';
 import {TOPICS, API} from '../../../common/PubSub';
 import Storage from '../../../common/Storage';
 
+import InputSearchComponent from '../../common/search/InputSearchComponent';
+
 let trending = new Map();
 
 class TrendingPulseSubscriptionsComponent extends Component {
@@ -98,7 +100,7 @@ class TrendingPulseSubscriptionsComponent extends Component {
           <p>
             {(() => {
               if(loggedIn) {
-                return <Button bsStyle="primary" id={key} onClick={this.handleSubscribe.bind(this)}>Subscribe</Button>;
+                return <Button bsStyle='primary' id={key} onClick={this.handleSubscribe.bind(this)}>Subscribe</Button>;
               }
             })()}
           </p>
@@ -108,7 +110,8 @@ class TrendingPulseSubscriptionsComponent extends Component {
     
     return (
       <div class='trendingpulse-component'>
-
+        <InputSearchComponent store='elasticSearch' index='pulse' docType='pulse_tags' trigger='Search Pulse' />
+        
         {(() => {
           
           return <Grid>

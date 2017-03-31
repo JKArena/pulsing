@@ -89,16 +89,14 @@ def addPulseDocument(request):
 def searchPulseDocument(request):
     logger.debug('searchDocument')
     
-    if not 'query' in request.GET:
+    if not 'search' in request.GET:
         return HttpResponseBadRequest()
     
-    logger.debug('searchDocument got query - ' + request.GET['query'])
-    query = json.loads(request.GET['query'])
+    logger.debug('searchDocument got query - ' + request.GET['search'])
+    search = json.loads(request.GET['search'])
 
     # for now just name, later pass the field
-    result = tagSearch.search('pulse_tags', {'query': {'query': {
-            'term': {'name': {'boost': 3.0, 'value': query.value}}
-        }}})
+    result = tagSearch.search('pulse_tags', search)
 
     logger.debug('searchDocument query result - %s', result)
 

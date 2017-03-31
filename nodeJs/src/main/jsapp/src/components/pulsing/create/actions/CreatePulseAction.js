@@ -26,10 +26,8 @@ import Fetch from '../../../../common/Fetch';
 import Storage from '../../../../common/Storage';
 import Url from '../../../../common/Url';
 import Pulse from '../../../../avro/Pulse';
-import CreateDocumentAction from '../../../common/actions/documents/CreateDocumentAction';
 
 const CREATE_PULSE_PATH = 'pulse/createPulse';
-const CREATE_PULSE_DOC_PATH = Url.djangoRootUrl() + 'tags/addPulse/';
 
 const CreatePulseAction = Object.freeze(
   {
@@ -65,12 +63,6 @@ const CreatePulseAction = Object.freeze(
             if(result.code === 'SUCCESS') {
               let pulse = Pulse.deserialize(JSON.parse(result.data));
               Storage.subscribedPulseId = pulse.id.raw;
-
-              CreateDocumentAction.createDocument(CREATE_PULSE_DOC_PATH, {pulse: pulse.serialize()})
-                .then(function(cdResult) {
-                  console.debug('success in pulse doc create', cdResult);
-
-                });
 
               resolve(pulse);
             }else {

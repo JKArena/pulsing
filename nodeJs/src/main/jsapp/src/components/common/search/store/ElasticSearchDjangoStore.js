@@ -22,12 +22,16 @@
  */
 'use strict';
 
-import {render} from 'react-dom';
-import React from 'react';
-
-import AbstractSearchStore from './AbstractSearchStore';
+import {AbstractSearchStore} from './AbstractSearchStore';
+import SearchDocumentAction from '../../actions/documents/SearchDocumentAction';
 
 class ElasticSearchDjangoStore extends AbstractSearchStore {
+
+  constructor(index) {
+    super();
+    
+    this.index = index;
+  }
 
   index(typeName, id, content) {
     console.debug('index: ', typeName, id, content);
@@ -51,7 +55,7 @@ class ElasticSearchDjangoStore extends AbstractSearchStore {
 
   clear() {
     console.debug('clear');
-    
+
   }
 
 }
