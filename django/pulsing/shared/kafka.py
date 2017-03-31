@@ -31,7 +31,7 @@ class Publisher():
         self.logger = logging.getLogger(__name__)
 
     def publish(self, topic, data):
-        self.logger.debug('publish ' + topic + ' - ' + data)
+        self.logger.debug('publish %s - %s', topic, data)
         self.__producer.produce(topic, data.encode('utf-8'))
         self.__producer.flush()
 

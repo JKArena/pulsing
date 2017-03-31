@@ -47,7 +47,7 @@ def addLocation(request):
         return HttpResponseBadRequest()
 
 def queryLocation(request, userId, lat, lng):
-    logger.debug('queryLocation ' + userId + ' - ' + lat + '/' + lng)
+    logger.debug('queryLocation %s- %s/%s ', userId, lat, lng)
     return JsonResponse({
         'code': 'SUCCESS',
         'data': [
@@ -67,5 +67,5 @@ def queryLocation(request, userId, lat, lng):
                 'user_id': 2,
                 'creation_date': datetime.datetime.now()
             }
-                 ]
+        ]
     })
