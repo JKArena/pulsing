@@ -41,14 +41,16 @@ import org.apache.storm.trident.TridentState;
 import org.apache.storm.trident.TridentTopology;
 import org.apache.storm.trident.state.StateFactory;
 import org.apache.storm.tuple.Fields;
+import org.elasticsearch.node.NodeValidationException;
 import org.jhk.pulsing.shared.util.CommonConstants;
 import org.jhk.pulsing.shared.util.HadoopConstants;
 import org.jhk.pulsing.storm.bolts.converter.avroTothrift.PulseConverterBolt;
 import org.jhk.pulsing.storm.bolts.deserializers.avro.PulseDeserializerBolt;
 import org.jhk.pulsing.storm.bolts.persistor.PailDataListPersistorBolt;
 import org.jhk.pulsing.storm.common.FieldConstants;
+import org.jhk.pulsing.storm.elasticsearch.bolt.ESCreateDocumentBolt;
+import org.jhk.pulsing.storm.elasticsearch.trident.ESCreateDocumentFunction;
 import org.jhk.pulsing.storm.hadoop.trident.AvroRecordFormatFunction;
-import org.jhk.pulsing.storm.hadoop.trident.ThriftDataListRecordFormatFunction;
 import org.jhk.pulsing.storm.trident.deserializers.avro.PulseDeserializerFunction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -60,7 +62,10 @@ public final class PulseTopologyBuilder {
     
     private static final Logger _LOGGER = LoggerFactory.getLogger(PulseTopologyBuilder.class);
     
-    public static StormTopology build(boolean isPailBuild) {
+    private static final String ELASTIC_SEARCH_INDEX = "pulse";
+    private static final String ELASTIC_SEARCH_DOC_TYPE = "pulse_tags";
+    
+    public static StormTopology build(boolean isPailBuild) throws NodeValidationException {
         _LOGGER.debug("PulseTopologyBuilder.build");
         
         if(isPailBuild) {
@@ -75,23 +80,29 @@ public final class PulseTopologyBuilder {
      * Need to create PulseEdge for the tags 
      * 
      * @return
+     * @throws NodeValidationException 
+     * @throws IllegalArgumentException 
      */
-    private static StormTopology pailBuild() {
+    private static StormTopology pailBuild() throws IllegalArgumentException, NodeValidationException {
         
         TopologyBuilder builder = new TopologyBuilder();
         builder.setSpout("pulse-create-spout", buildSpout());
         
-        builder.setBolt("pulse-avro-deserialize", new PulseDeserializerBolt(), 4) //sets executors, namely threads
-                .setNumTasks(2) //num tasks is number of instances of this bolt
-                .shuffleGrouping("pulse-create-spout");
+        builder.setBolt("pulse-avro-deserialize", new PulseDeserializerBolt(true), 4) //sets executors, namely threads
+            .setNumTasks(2) //num tasks is number of instances of this bolt
+            .shuffleGrouping("pulse-create-spout");
+        
+        builder.setBolt("pulse-elasticsearch-create-doc", new ESCreateDocumentBolt(ELASTIC_SEARCH_INDEX, ELASTIC_SEARCH_DOC_TYPE), 2)
+            .setNumTasks(2)
+            .shuffleGrouping("pulse-avro-deserialize");
         
         builder.setBolt("pulse-avro-thrift-converter", new PulseConverterBolt(), 2)
-                .setNumTasks(2)
-                .shuffleGrouping("pulse-avro-deserialize");
+            .setNumTasks(2)
+            .shuffleGrouping("pulse-elasticsearch-create-doc");
         
         builder.setBolt("pulse-pail-data-persistor", new PailDataListPersistorBolt(HadoopConstants.PAIL_NEW_DATA_PATH.TAG_GROUP), 2)
-                .setNumTasks(2)
-                .shuffleGrouping("pulse-avro-thrift-converter");
+            .setNumTasks(2)
+            .shuffleGrouping("pulse-avro-thrift-converter");
         
         return builder.createTopology();
     }
@@ -106,15 +117,14 @@ public final class PulseTopologyBuilder {
         return new KafkaSpout(spoutConfig);
     }
     
-    private static StormTopology tridentBuild() {
+    private static StormTopology tridentBuild() throws NodeValidationException {
         
         TridentTopology topology = new TridentTopology();
         Stream stream = topology.newStream("pulse-create-spout", buildTridentSpout())
-            .each(
-                    new Fields("str"), 
-                    new PulseDeserializerFunction(), 
-                    FieldConstants.AVRO_DESERIALIZE_FIELD
-                    );
+                .each(new Fields("str"), new PulseDeserializerFunction(true), FieldConstants.AVRO_DESERIALIZE_WITH_ID_FIELD)
+                .shuffle()
+                .each(FieldConstants.AVRO_DESERIALIZE_FIELD, new ESCreateDocumentFunction(ELASTIC_SEARCH_INDEX, ELASTIC_SEARCH_DOC_TYPE), 
+                        FieldConstants.AVRO_DESERIALIZE_FIELD);
         
         avroHdfsStatePersist(stream);
         

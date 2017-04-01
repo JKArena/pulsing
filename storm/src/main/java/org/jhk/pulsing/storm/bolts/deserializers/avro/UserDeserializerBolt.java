@@ -39,6 +39,18 @@ public final class UserDeserializerBolt extends BaseBasicBolt {
     private static final long serialVersionUID = 204666646818722549L;
     private static final Logger _LOGGER = LoggerFactory.getLogger(UserDeserializerBolt.class);
     
+    private boolean _emitId;
+    
+    public UserDeserializerBolt() {
+        super();
+    }
+    
+    public UserDeserializerBolt(boolean emitId) {
+        super();
+        
+        _emitId = emitId;
+    }
+    
     @Override
     public void execute(Tuple tuple, BasicOutputCollector outputCollector) {
         _LOGGER.info("UserDeserializerBolt.execute: " + tuple);
@@ -48,7 +60,13 @@ public final class UserDeserializerBolt extends BaseBasicBolt {
         try {
             
             User user = SerializationHelper.deserializeFromJSONStringToAvro(User.class, User.getClassSchema(), userString);
-            outputCollector.emit(new Values(user));
+            Values values = new Values(user);
+            
+            if(_emitId) {
+                values.add(user.getId().getId());
+            }
+            
+            outputCollector.emit(values);
             
         } catch (IOException decodeException) {
             outputCollector.reportError(decodeException);
@@ -57,7 +75,7 @@ public final class UserDeserializerBolt extends BaseBasicBolt {
     
     @Override
     public void declareOutputFields(OutputFieldsDeclarer fieldsDeclarer) {
-        fieldsDeclarer.declare(FieldConstants.AVRO_DESERIALIZE_FIELD);
+        fieldsDeclarer.declare(_emitId ? FieldConstants.AVRO_DESERIALIZE_WITH_ID_FIELD : FieldConstants.AVRO_DESERIALIZE_FIELD);
     }
 
 }
