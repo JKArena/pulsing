@@ -37,6 +37,18 @@ public final class UserDeserializerFunction extends BaseFunction {
     private static final long serialVersionUID = -5222249102945206582L;
     private static final Logger _LOGGER = LoggerFactory.getLogger(UserDeserializerFunction.class);
     
+    private boolean _emitId;
+    
+    public UserDeserializerFunction() {
+        super();
+    }
+    
+    public UserDeserializerFunction(boolean emitId) {
+        super();
+        
+        _emitId = emitId;
+    }
+    
     @Override
     public void execute(TridentTuple tuple, TridentCollector collector) {
         _LOGGER.info("UserDeserializer.execute: " + tuple);
@@ -47,7 +59,14 @@ public final class UserDeserializerFunction extends BaseFunction {
             
             User user = SerializationHelper.deserializeFromJSONStringToAvro(User.class, User.getClassSchema(), userString);
             _LOGGER.info("UserDeserializer.execute deserialized to " + user);
-            collector.emit(new Values(user));
+            
+            Values values = new Values(user);
+            
+            if(_emitId) {
+                values.add(user.getId().getId());
+            }
+            
+            collector.emit(values);
             
         } catch (IOException decodeException) {
             collector.reportError(decodeException);

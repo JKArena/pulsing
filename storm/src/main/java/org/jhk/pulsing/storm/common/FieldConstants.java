@@ -45,6 +45,7 @@ public final class FieldConstants {
     public static final String AVRO = "AVRO";
     
     public static final Fields AVRO_DESERIALIZE_FIELD = new Fields(AVRO);
+    public static final Fields AVRO_DESERIALIZE_WITH_ID_FIELD = new Fields(AVRO, ID);
     
     public static final Fields THRIFT_DATA_LIST_FIELD = new Fields(THRIFT_DATA_LIST);
     public static final Fields THRIFT_DATA_FIELD = new Fields(THRIFT_DATA);

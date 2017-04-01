@@ -24,6 +24,7 @@ import org.apache.storm.StormSubmitter;
 import org.apache.storm.generated.AlreadyAliveException;
 import org.apache.storm.generated.AuthorizationException;
 import org.apache.storm.generated.InvalidTopologyException;
+import org.elasticsearch.node.NodeValidationException;
 import org.jhk.pulsing.storm.topologies.builders.PulseTopologyBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,7 +36,7 @@ public final class PulseTopologyRunner {
     
     private static final Logger _LOGGER = LoggerFactory.getLogger(PulseTopologyRunner.class);
     
-    public static void main(String[] args) throws AlreadyAliveException, InvalidTopologyException, AuthorizationException {
+    public static void main(String[] args) throws AlreadyAliveException, InvalidTopologyException, AuthorizationException, NodeValidationException {
         
         if(args == null || args.length == 0) {
             _LOGGER.debug("PulseTopologyRunner: running local");
@@ -47,7 +48,7 @@ public final class PulseTopologyRunner {
         
     }
     
-    private static void runLocalCluster() {
+    private static void runLocalCluster() throws NodeValidationException {
         
         Config config = new Config();
         config.setDebug(true);
@@ -58,7 +59,7 @@ public final class PulseTopologyRunner {
         
     }
     
-    private static void runRemoteCluster() throws AlreadyAliveException, InvalidTopologyException, AuthorizationException {
+    private static void runRemoteCluster() throws AlreadyAliveException, InvalidTopologyException, AuthorizationException, NodeValidationException {
         
         Config config = new Config();
         config.setNumWorkers(1);

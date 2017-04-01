@@ -33,6 +33,18 @@ public final class PulseDeserializerFunction extends BaseFunction {
     
     private static final long serialVersionUID = 4863013986214675297L;
     
+    private boolean _emitId;
+    
+    public PulseDeserializerFunction() {
+        super();
+    }
+    
+    public PulseDeserializerFunction(boolean emitId) {
+        super();
+        
+        _emitId = emitId;
+    }
+    
     @Override
     public void execute(TridentTuple tuple, TridentCollector collector) {
         
@@ -41,7 +53,13 @@ public final class PulseDeserializerFunction extends BaseFunction {
         try {
             
             Pulse pulse = SerializationHelper.deserializeFromJSONStringToAvro(Pulse.class, Pulse.getClassSchema(), pulseString);
-            collector.emit(new Values(pulse));
+            Values values = new Values(pulse);
+            
+            if(_emitId) {
+                values.add(pulse.getId().getId());
+            }
+            
+            collector.emit(values);
             
         } catch (IOException decodeException) {
             collector.reportError(decodeException);
