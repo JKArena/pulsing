@@ -47,6 +47,7 @@ import org.jhk.pulsing.shared.util.HadoopConstants;
 import org.jhk.pulsing.storm.bolts.converter.avroTothrift.PulseConverterBolt;
 import org.jhk.pulsing.storm.bolts.deserializers.avro.PulseDeserializerBolt;
 import org.jhk.pulsing.storm.bolts.persistor.PailDataListPersistorBolt;
+import org.jhk.pulsing.storm.common.ConverterCommon;
 import org.jhk.pulsing.storm.common.FieldConstants;
 import org.jhk.pulsing.storm.elasticsearch.bolt.ESCreateDocumentBolt;
 import org.jhk.pulsing.storm.elasticsearch.trident.ESCreateDocumentFunction;
@@ -88,20 +89,21 @@ public final class PulseTopologyBuilder {
         TopologyBuilder builder = new TopologyBuilder();
         builder.setSpout("pulse-create-spout", buildSpout());
         
-        builder.setBolt("pulse-avro-deserialize", new PulseDeserializerBolt(true), 4) //sets executors, namely threads
-            .setNumTasks(2) //num tasks is number of instances of this bolt
+        builder.setBolt("pulse-avro-deserialize", new PulseDeserializerBolt(true), 1) //sets executors, namely threads
+            .setNumTasks(1) //num tasks is number of instances of this bolt
             .shuffleGrouping("pulse-create-spout");
         
-        builder.setBolt("pulse-elasticsearch-create-doc", new ESCreateDocumentBolt(ELASTIC_SEARCH_INDEX, ELASTIC_SEARCH_DOC_TYPE), 2)
-            .setNumTasks(2)
+        builder.setBolt("pulse-elasticsearch-create-doc", new ESCreateDocumentBolt(ConverterCommon.AVRO_TO_ELASTIC_JSON.PULSE, 
+                ELASTIC_SEARCH_INDEX, ELASTIC_SEARCH_DOC_TYPE), 1)
+            .setNumTasks(1)
             .shuffleGrouping("pulse-avro-deserialize");
         
-        builder.setBolt("pulse-avro-thrift-converter", new PulseConverterBolt(), 2)
-            .setNumTasks(2)
+        builder.setBolt("pulse-avro-thrift-converter", new PulseConverterBolt(), 1)
+            .setNumTasks(1)
             .shuffleGrouping("pulse-elasticsearch-create-doc");
         
-        builder.setBolt("pulse-pail-data-persistor", new PailDataListPersistorBolt(HadoopConstants.PAIL_NEW_DATA_PATH.TAG_GROUP), 2)
-            .setNumTasks(2)
+        builder.setBolt("pulse-pail-data-persistor", new PailDataListPersistorBolt(HadoopConstants.PAIL_NEW_DATA_PATH.TAG_GROUP), 1)
+            .setNumTasks(1)
             .shuffleGrouping("pulse-avro-thrift-converter");
         
         return builder.createTopology();
@@ -123,8 +125,8 @@ public final class PulseTopologyBuilder {
         Stream stream = topology.newStream("pulse-create-spout", buildTridentSpout())
                 .each(new Fields("str"), new PulseDeserializerFunction(true), FieldConstants.AVRO_DESERIALIZE_WITH_ID_FIELD)
                 .shuffle()
-                .each(FieldConstants.AVRO_DESERIALIZE_FIELD, new ESCreateDocumentFunction(ELASTIC_SEARCH_INDEX, ELASTIC_SEARCH_DOC_TYPE), 
-                        FieldConstants.AVRO_DESERIALIZE_FIELD);
+                .each(FieldConstants.AVRO_DESERIALIZE_WITH_ID_FIELD, 
+                        new ESCreateDocumentFunction(ConverterCommon.AVRO_TO_ELASTIC_JSON.PULSE, ELASTIC_SEARCH_INDEX, ELASTIC_SEARCH_DOC_TYPE), new Fields());
         
         avroHdfsStatePersist(stream);
         
@@ -132,7 +134,6 @@ public final class PulseTopologyBuilder {
     }
     
     private static void avroHdfsStatePersist(Stream stream) {
-        _LOGGER.debug("PulseTopologyBuilder.hdfsPersistBolt");
         
         FileNameFormat fnFormat = new DefaultFileNameFormat()
                 .withPath(HadoopConstants.SPARK_NEW_DATA_WORKSPACE)

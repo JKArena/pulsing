@@ -54,21 +54,21 @@ public final class PulseSubscribeTopologyBuilder {
         TopologyBuilder builder = new TopologyBuilder();
         builder.setSpout("pulse-subscribe-spout", buildSpout());
         
-        builder.setBolt("pulse-avro-deserialize", new PulseDeserializerBolt(), 4) //sets executors, namely threads
-                .setNumTasks(4) //num tasks is number of instances of this bolt
+        builder.setBolt("pulse-avro-deserialize", new PulseDeserializerBolt(), 1) //sets executors, namely threads
+                .setNumTasks(1) //num tasks is number of instances of this bolt
                 .shuffleGrouping("pulse-subscribe-spout");
         
         builder.setBolt("pulse-avro-id-timestamp-extractor", 
-                new PulseAvroFieldExtractorBolt(EnumSet.of(EXTRACT_FIELD.TIMESTAMP, EXTRACT_FIELD.ID, EXTRACT_FIELD.VALUE)), 4)
-                .setNumTasks(2)
+                new PulseAvroFieldExtractorBolt(EnumSet.of(EXTRACT_FIELD.TIMESTAMP, EXTRACT_FIELD.ID, EXTRACT_FIELD.VALUE)), 1)
+                .setNumTasks(1)
                 .shuffleGrouping("pulse-avro-deserialize");
         
-        builder.setBolt("pulse-subscribe-interval-extractor", new TimeIntervalBolt(), 2)
-                .setNumTasks(2)
+        builder.setBolt("pulse-subscribe-interval-extractor", new TimeIntervalBolt(), 1)
+                .setNumTasks(1)
                 .shuffleGrouping("pulse-avro-id-timestamp-extractor");
         
-        builder.setBolt("pulse-subscribe-interval-builder", new TimeIntervalBuilderBolt(), 4)
-                .setNumTasks(4)
+        builder.setBolt("pulse-subscribe-interval-builder", new TimeIntervalBuilderBolt(), 1)
+                .setNumTasks(1)
                 .fieldsGrouping("pulse-subscribe-interval-extractor", 
                                 new Fields(FieldConstants.TIME_INTERVAL));
         
