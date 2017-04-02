@@ -505,6 +505,24 @@ descent loss of performance)
         <artifactId>elastic4s-core_2.11</artifactId>
         <version>${elasticsearch.scala}</version>
       </dependency>
+
+      <dependency>
+        <groupId>org.apache.logging.log4j</groupId>
+        <artifactId>log4j-core</artifactId>
+        <version>${log4j}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.apache.logging.log4j</groupId>
+        <artifactId>log4j-api</artifactId>
+        <version>${log4j}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.apache.logging.log4j</groupId>
+        <artifactId>log4j-slf4j-impl</artifactId>
+        <version>${log4j}</version>
+      </dependency>
       
     </dependencies>
   </dependencyManagement>
@@ -513,6 +531,7 @@ descent loss of performance)
     <pulsing.version>0.1-SNAPSHOT</pulsing.version>
     <elasticsearch.scala>5.2.11</elasticsearch.scala>
     <elasticsearch.client>5.2.2</elasticsearch.client>
+    <log4j>2.8.1</log4j>
     <esri.geometry>1.2.1</esri.geometry>
     <esri.hadoop>1.1</esri.hadoop>
     <jcl>1.7.21</jcl>
