@@ -40,8 +40,6 @@ import org.jhk.pulsing.serialization.avro.records.Rating;
 import org.jhk.pulsing.serialization.avro.records.RatingId;
 import org.jhk.pulsing.serialization.avro.records.User;
 import org.jhk.pulsing.serialization.avro.records.UserId;
-import org.jhk.pulsing.serialization.avro.records.edge.LocationRatingUserEdge;
-import org.jhk.pulsing.serialization.avro.records.edge.LocationUserEdge;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

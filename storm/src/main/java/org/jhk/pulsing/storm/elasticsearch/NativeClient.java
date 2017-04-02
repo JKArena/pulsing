@@ -20,7 +20,6 @@ package org.jhk.pulsing.storm.elasticsearch;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsResponse;
 import org.elasticsearch.action.delete.DeleteResponse;
@@ -89,13 +88,21 @@ public final class NativeClient {
         
         irBuilder.setSource(source);
         
-        return irBuilder.execute().actionGet();
+        IndexResponse iResponse = irBuilder.execute().actionGet();
+        
+        _LOGGER.info("NativeClient.addDocument: Response " + iResponse);
+        
+        return iResponse;
     }
     
     public GetResponse getDocument(String index, String type, String id) {
         _LOGGER.info("NativeClient.getDocument: " + index + "/" + type + "/" + id);
         
-        return _client.prepareGet(index, type, id).execute().actionGet();
+        GetResponse gResponse = _client.prepareGet(index, type, id).execute().actionGet();
+        
+        _LOGGER.info("NativeClient.getDocument: Response " + gResponse);
+        
+        return gResponse;
     }
     
     /**
@@ -113,7 +120,11 @@ public final class NativeClient {
     public SearchResponse query(String index, String type, QueryBuilder query) {
         _LOGGER.info("NativeClient.query: " + index + "/" + type + "/" + query);
         
-        return _client.prepareSearch(index).setTypes(type).setQuery(query).execute().actionGet();
+        SearchResponse sResponse = _client.prepareSearch(index).setTypes(type).setQuery(query).execute().actionGet();
+        
+        _LOGGER.info("NativeClient.query: Response " + sResponse);
+        
+        return sResponse;
     }
     
     public UpdateResponse updateDocument(String index, String type, String id, String key, String value) {
@@ -122,13 +133,21 @@ public final class NativeClient {
         UpdateRequestBuilder urBuilder = _client.prepareUpdate(index, type, id)
                 .setScript(new Script("ctx._source." + key + " = " + value));
         
-        return urBuilder.execute().actionGet();
+        UpdateResponse uResponse = urBuilder.execute().actionGet();
+        
+        _LOGGER.info("NativeClient.updateDocument: Response " + uResponse);
+        
+        return uResponse;
     }
     
     public DeleteResponse deleteDocument(String index, String type, String id) {
         _LOGGER.info("NativeClient.deleteDocument: " + index + "/" + type + "/" + id);
         
-        return _client.prepareDelete(index, type, id).execute().actionGet();
+        DeleteResponse dResponse = _client.prepareDelete(index, type, id).execute().actionGet();
+        
+        _LOGGER.info("NativeClient.deleteDocument: Response " + dResponse);
+        
+        return dResponse;
     }
     
     public boolean isIndexPresent(String name) {
