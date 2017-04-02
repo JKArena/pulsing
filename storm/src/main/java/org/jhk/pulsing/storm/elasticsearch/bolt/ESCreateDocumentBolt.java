@@ -18,18 +18,21 @@
  */
 package org.jhk.pulsing.storm.elasticsearch.bolt;
 
-import java.io.IOException;
+import java.util.Map;
+import java.util.function.Function;
 
-import org.apache.avro.specific.SpecificRecord;
+import org.apache.storm.task.TopologyContext;
 import org.apache.storm.topology.BasicOutputCollector;
 import org.apache.storm.topology.OutputFieldsDeclarer;
 import org.apache.storm.topology.base.BaseBasicBolt;
+import org.apache.storm.tuple.ITuple;
 import org.apache.storm.tuple.Tuple;
 import org.apache.storm.tuple.Values;
 import org.elasticsearch.node.NodeValidationException;
-import org.jhk.pulsing.serialization.avro.serializers.SerializationHelper;
 import org.jhk.pulsing.storm.common.FieldConstants;
+import org.jhk.pulsing.storm.common.ConverterCommon;
 import org.jhk.pulsing.storm.elasticsearch.NativeClient;
+import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,35 +45,45 @@ public final class ESCreateDocumentBolt extends BaseBasicBolt {
     private static final Logger _LOGGER = LoggerFactory.getLogger(ESCreateDocumentBolt.class);
     
     private String _index;
-    private String _type;
+    private String _docType;
     private NativeClient _nClient;
+    private ConverterCommon.AVRO_TO_ELASTIC_JSON _avroType;
+    private Function<ITuple, JSONObject> _toJsonConverter;
     
-    public ESCreateDocumentBolt(String index, String type) throws NodeValidationException {
+    public ESCreateDocumentBolt(ConverterCommon.AVRO_TO_ELASTIC_JSON avroType, String index, String docType) {
         super();
         
-        _nClient = new NativeClient();
+        _avroType = avroType;
         _index = index;
-        _type = type;
+        _docType = docType;
+    }
+    
+    @Override
+    public void prepare(Map stormConf, TopologyContext context) {
+        super.prepare(stormConf, context);
+        
+        try {
+            _nClient = new NativeClient();
+        } catch (NodeValidationException nvException) {
+            nvException.printStackTrace();
+            throw new RuntimeException(nvException);
+        }
+        
+        _toJsonConverter = ConverterCommon.getAvroToElasticJsonFunction(_avroType);
     }
 
     @Override
     public void execute(Tuple tuple, BasicOutputCollector collector) {
         _LOGGER.info("ESCreateDocumentBolt.execute: " + tuple);
         
-        SpecificRecord record = (SpecificRecord) tuple.getValueByField(FieldConstants.AVRO);
         String id = tuple.getValueByField(FieldConstants.ID).toString();
         
-        try {
-            _nClient.addDocument(_index, _type, id, SerializationHelper.serializeAvroTypeToJSONString(record));
-            collector.emit(new Values(record));
-        } catch (IOException sException) {
-            sException.printStackTrace();
-        }
+        _nClient.addDocument(_index, _docType, id, _toJsonConverter.apply(tuple).toString());
+        collector.emit(new Values(tuple.getValueByField(FieldConstants.AVRO)));
     }
 
     @Override
     public void declareOutputFields(OutputFieldsDeclarer fieldsDeclarer) {
-        fieldsDeclarer.declare(FieldConstants.AVRO_DESERIALIZE_FIELD);
     }
 
 }
