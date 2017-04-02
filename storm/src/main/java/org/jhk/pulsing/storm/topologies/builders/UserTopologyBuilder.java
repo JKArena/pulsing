@@ -53,30 +53,30 @@ public final class UserTopologyBuilder {
     private static final Logger _LOGGER = LoggerFactory.getLogger(UserTopologyBuilder.class);
     
     public static StormTopology build(boolean isPailBuild) {
-        _LOGGER.debug("UserTopologyBuilder.build");
+        _LOGGER.info("UserTopologyBuilder.build");
         
         TopologyBuilder builder = new TopologyBuilder();
         builder.setSpout("user-create-spout", buildSpout());
         
-        builder.setBolt("user-avro-deserialize", new UserDeserializerBolt(), 4) //sets executors, namely threads
-            .setNumTasks(2) //num tasks is number of instances of this bolt
+        builder.setBolt("user-avro-deserialize", new UserDeserializerBolt(), 1) //sets executors, namely threads
+            .setNumTasks(1) //num tasks is number of instances of this bolt
             .shuffleGrouping("user-create-spout");
         
         if(isPailBuild) {
-            builder.setBolt("user-avro-thrift-converter", new UserConverterBolt(), 2)
-                .setNumTasks(2)
+            builder.setBolt("user-avro-thrift-converter", new UserConverterBolt(), 1)
+                .setNumTasks(1)
                 .shuffleGrouping("user-avro-deserialize");
             
-            builder.setBolt("user-pail-data-persistor", new PailDataPersistorBolt(HadoopConstants.PAIL_NEW_DATA_PATH.USER), 2)
-                .setNumTasks(2)
+            builder.setBolt("user-pail-data-persistor", new PailDataPersistorBolt(HadoopConstants.PAIL_NEW_DATA_PATH.USER), 1)
+                .setNumTasks(1)
                 .shuffleGrouping("user-avro-thrift-converter");
             
-            builder.setBolt("user-hdfs-pail", hdfsPailBolt(), 2)
-                .setNumTasks(2)
+            builder.setBolt("user-hdfs-pail", hdfsPailBolt(), 1)
+                .setNumTasks(1)
                 .shuffleGrouping("user-avro-thrift-converter");
         }else {
-            builder.setBolt("user-hdfs", avroHdfsBolt(), 2)
-                .setNumTasks(2)
+            builder.setBolt("user-hdfs", avroHdfsBolt(), 1)
+                .setNumTasks(1)
                 .shuffleGrouping("user-avro-deserialize");
         }
         
@@ -84,6 +84,8 @@ public final class UserTopologyBuilder {
     }
     
     private static HdfsBolt hdfsPailBolt() {
+        _LOGGER.info("UserTopologyBuilder.hdfsPailBolt");
+        
         FileNameFormat fnFormat = new DefaultFileNameFormat()
                 .withPath(HadoopConstants.PAIL_NEW_DATA_WORKSPACE)
                 .withPrefix("UserCreate");
@@ -106,6 +108,8 @@ public final class UserTopologyBuilder {
     }
     
     private static HdfsBolt avroHdfsBolt() {
+        _LOGGER.info("UserTopologyBuilder.avroHdfsBolt");
+        
         FileNameFormat fnFormat = new DefaultFileNameFormat()
                 .withPath(HadoopConstants.SPARK_NEW_DATA_WORKSPACE)
                 .withPrefix("UserCreate");

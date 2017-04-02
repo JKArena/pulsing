@@ -19,8 +19,10 @@
 package org.jhk.pulsing.storm.common;
 
 import java.time.Instant;
+import java.util.EnumMap;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import static org.jhk.pulsing.storm.common.FieldConstants.*;
@@ -38,6 +40,7 @@ import org.jhk.pulsing.serialization.thrift.property.TagGroupProperty;
 import org.jhk.pulsing.serialization.thrift.property.TagGroupPropertyValue;
 import org.jhk.pulsing.serialization.thrift.property.UserProperty;
 import org.jhk.pulsing.serialization.thrift.property.UserPropertyValue;
+import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,6 +52,49 @@ import org.slf4j.LoggerFactory;
 public final class ConverterCommon {
     
     private static final Logger _LOGGER = LoggerFactory.getLogger(ConverterCommon.class);
+    
+    public static enum AVRO_TO_ELASTIC_JSON {
+        PULSE;
+    }
+    
+    private static final EnumMap<AVRO_TO_ELASTIC_JSON, Function<ITuple, JSONObject>> AVRO_TO_ELASTIC_JSON_MAPPER = new EnumMap<>(AVRO_TO_ELASTIC_JSON.class);
+    
+    static {
+        AVRO_TO_ELASTIC_JSON_MAPPER.put(AVRO_TO_ELASTIC_JSON.PULSE, ConverterCommon::convertPulseAvroToElasticJSON);
+    }
+    
+    public static Function<ITuple, JSONObject> getAvroToElasticJsonFunction(AVRO_TO_ELASTIC_JSON avroType) {
+        return AVRO_TO_ELASTIC_JSON_MAPPER.get(avroType);
+    }
+    
+    /**
+     * Simple converter from Avro Pulse to JSONObject for ElasticSearch as Avro's json string is 
+     * encryptic and causes parse errors for regular json builders. Just using jackson now but may 
+     * be swap out with gson later.
+     * 
+     * @param tuple
+     * @return
+     */
+    public static JSONObject convertPulseAvroToElasticJSON(ITuple tuple) {
+        _LOGGER.info("ConverterCommon.convertPulseAvroToElasticJSON " + tuple);
+        
+        Pulse pulse = (Pulse) tuple.getValueByField(AVRO);
+        
+        List<String> tags = pulse.getTags().stream()
+                .map(value -> value.toString())
+                .collect(Collectors.<String> toList());
+        
+        JSONObject obj = new JSONObject();
+        
+        obj.put("description", pulse.getDescription() != null ? pulse.getDescription().toString() : "");
+        obj.put("name", pulse.getValue() != null ? pulse.getValue().toString() : "");
+        obj.put("user_id", pulse.getUserId().getId());
+        obj.put("timestamp", pulse.getTimeStamp());
+        obj.put("tags", tags);
+        
+        return obj;
+    }
+    
     
     /**
      * Create multiple Data objects for the tags as well as the pulse name to create 
