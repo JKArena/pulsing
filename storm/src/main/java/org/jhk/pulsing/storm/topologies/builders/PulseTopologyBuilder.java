@@ -44,7 +44,7 @@ import org.apache.storm.tuple.Fields;
 import org.elasticsearch.node.NodeValidationException;
 import org.jhk.pulsing.shared.util.CommonConstants;
 import org.jhk.pulsing.shared.util.HadoopConstants;
-import org.jhk.pulsing.storm.bolts.converter.avroTothrift.PulseConverterBolt;
+import org.jhk.pulsing.storm.bolts.converter.avroTothrift.AvroToThriftConverterBolt;
 import org.jhk.pulsing.storm.bolts.deserializers.avro.PulseDeserializerBolt;
 import org.jhk.pulsing.storm.bolts.persistor.PailDataListPersistorBolt;
 import org.jhk.pulsing.storm.common.ConverterCommon;
@@ -98,7 +98,7 @@ public final class PulseTopologyBuilder {
             .setNumTasks(1)
             .shuffleGrouping("pulse-avro-deserialize");
         
-        builder.setBolt("pulse-avro-thrift-converter", new PulseConverterBolt(), 1)
+        builder.setBolt("pulse-avro-thrift-converter", new AvroToThriftConverterBolt(ConverterCommon.AVRO_TO_THRIFT.PULSE, FieldConstants.THRIFT_DATA_LIST_FIELD), 1)
             .setNumTasks(1)
             .shuffleGrouping("pulse-elasticsearch-create-doc");
         

@@ -57,14 +57,26 @@ public final class ConverterCommon {
         PULSE;
     }
     
+    public static enum AVRO_TO_THRIFT {
+        PULSE, USER;
+    }
+    
     private static final EnumMap<AVRO_TO_ELASTIC_JSON, Function<ITuple, JSONObject>> AVRO_TO_ELASTIC_JSON_MAPPER = new EnumMap<>(AVRO_TO_ELASTIC_JSON.class);
+    private static final EnumMap<AVRO_TO_THRIFT, Function<ITuple, Object>> AVRO_TO_THRIFT_MAPPER = new EnumMap<>(AVRO_TO_THRIFT.class);
     
     static {
         AVRO_TO_ELASTIC_JSON_MAPPER.put(AVRO_TO_ELASTIC_JSON.PULSE, ConverterCommon::convertPulseAvroToElasticJSON);
+        
+        AVRO_TO_THRIFT_MAPPER.put(AVRO_TO_THRIFT.PULSE, ConverterCommon::convertPulseAvroToThriftDataList);
+        AVRO_TO_THRIFT_MAPPER.put(AVRO_TO_THRIFT.USER, ConverterCommon::convertUserAvroToThriftData);
     }
     
     public static Function<ITuple, JSONObject> getAvroToElasticJsonFunction(AVRO_TO_ELASTIC_JSON avroType) {
         return AVRO_TO_ELASTIC_JSON_MAPPER.get(avroType);
+    }
+    
+    public static Function<ITuple, Object> getAvroToThriftFunction(AVRO_TO_THRIFT avroType) {
+        return AVRO_TO_THRIFT_MAPPER.get(avroType);
     }
     
     /**
