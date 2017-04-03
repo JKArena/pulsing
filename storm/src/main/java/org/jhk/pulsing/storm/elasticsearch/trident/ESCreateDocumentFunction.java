@@ -28,8 +28,8 @@ import org.apache.storm.trident.tuple.TridentTuple;
 import org.apache.storm.tuple.ITuple;
 import org.apache.storm.tuple.Values;
 import org.elasticsearch.node.NodeValidationException;
-import org.jhk.pulsing.storm.common.ConverterCommon;
 import org.jhk.pulsing.storm.common.FieldConstants;
+import org.jhk.pulsing.storm.converter.AvroToElasticDocumentConverter;
 import org.jhk.pulsing.storm.elasticsearch.NativeClient;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
@@ -43,13 +43,14 @@ public final class ESCreateDocumentFunction extends BaseFunction {
     private static final long serialVersionUID = 8917913390559160418L;
     private static final Logger _LOGGER = LoggerFactory.getLogger(ESCreateDocumentFunction.class);
     
+    private AvroToElasticDocumentConverter.AVRO_TO_ELASTIC_DOCUMENT _avroType;
     private String _index;
     private String _docType;
+    
     private NativeClient _nClient;
-    private ConverterCommon.AVRO_TO_ELASTIC_JSON _avroType;
     private Function<ITuple, JSONObject> _toJsonConverter;
     
-    public ESCreateDocumentFunction(ConverterCommon.AVRO_TO_ELASTIC_JSON avroType, String index, String docType) {
+    public ESCreateDocumentFunction(AvroToElasticDocumentConverter.AVRO_TO_ELASTIC_DOCUMENT avroType, String index, String docType) {
         super();
         
         _avroType = avroType;
@@ -68,7 +69,7 @@ public final class ESCreateDocumentFunction extends BaseFunction {
             throw new RuntimeException(nvException);
         }
         
-        _toJsonConverter = ConverterCommon.getAvroToElasticJsonFunction(_avroType);
+        _toJsonConverter = AvroToElasticDocumentConverter.getAvroToElasticDocFunction(_avroType);
     }
 
     @Override

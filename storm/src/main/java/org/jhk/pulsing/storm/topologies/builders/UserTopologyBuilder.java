@@ -38,10 +38,11 @@ import org.apache.storm.topology.TopologyBuilder;
 import org.jhk.pulsing.shared.util.CommonConstants;
 import org.jhk.pulsing.shared.util.HadoopConstants;
 import org.jhk.pulsing.storm.bolts.converter.avroTothrift.AvroToThriftConverterBolt;
-import org.jhk.pulsing.storm.bolts.deserializers.avro.UserDeserializerBolt;
+import org.jhk.pulsing.storm.bolts.deserializers.avro.AvroDeserializerBolt;
 import org.jhk.pulsing.storm.bolts.persistor.PailDataPersistorBolt;
-import org.jhk.pulsing.storm.common.ConverterCommon;
 import org.jhk.pulsing.storm.common.FieldConstants;
+import org.jhk.pulsing.storm.converter.AvroToThriftConverter;
+import org.jhk.pulsing.storm.deserializer.StringToAvroDeserializedValues;
 import org.jhk.pulsing.storm.hadoop.bolt.AvroRecordFormatBolt;
 import org.jhk.pulsing.storm.hadoop.bolt.ThriftDataRecordFormatBolt;
 import org.slf4j.Logger;
@@ -60,12 +61,12 @@ public final class UserTopologyBuilder {
         TopologyBuilder builder = new TopologyBuilder();
         builder.setSpout("user-create-spout", buildSpout());
         
-        builder.setBolt("user-avro-deserialize", new UserDeserializerBolt(), 1) //sets executors, namely threads
+        builder.setBolt("user-avro-deserialize", new AvroDeserializerBolt(StringToAvroDeserializedValues.STRING_TO_AVRO_VALUES.USER, false), 1) //sets executors, namely threads
             .setNumTasks(1) //num tasks is number of instances of this bolt
             .shuffleGrouping("user-create-spout");
         
         if(isPailBuild) {
-            builder.setBolt("user-avro-thrift-converter", new AvroToThriftConverterBolt(ConverterCommon.AVRO_TO_THRIFT.USER, FieldConstants.THRIFT_DATA_FIELD), 1)
+            builder.setBolt("user-avro-thrift-converter", new AvroToThriftConverterBolt(AvroToThriftConverter.AVRO_TO_THRIFT.USER, FieldConstants.THRIFT_DATA_FIELD), 1)
                 .setNumTasks(1)
                 .shuffleGrouping("user-avro-deserialize");
             

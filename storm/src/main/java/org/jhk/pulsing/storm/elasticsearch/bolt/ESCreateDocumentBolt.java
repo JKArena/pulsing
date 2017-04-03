@@ -30,7 +30,7 @@ import org.apache.storm.tuple.Tuple;
 import org.apache.storm.tuple.Values;
 import org.elasticsearch.node.NodeValidationException;
 import org.jhk.pulsing.storm.common.FieldConstants;
-import org.jhk.pulsing.storm.common.ConverterCommon;
+import org.jhk.pulsing.storm.converter.AvroToElasticDocumentConverter;
 import org.jhk.pulsing.storm.elasticsearch.NativeClient;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
@@ -44,13 +44,14 @@ public final class ESCreateDocumentBolt extends BaseBasicBolt {
     private static final long serialVersionUID = 8440784949713207825L;
     private static final Logger _LOGGER = LoggerFactory.getLogger(ESCreateDocumentBolt.class);
     
+    private AvroToElasticDocumentConverter.AVRO_TO_ELASTIC_DOCUMENT _avroType;
     private String _index;
     private String _docType;
+    
     private NativeClient _nClient;
-    private ConverterCommon.AVRO_TO_ELASTIC_JSON _avroType;
     private Function<ITuple, JSONObject> _toJsonConverter;
     
-    public ESCreateDocumentBolt(ConverterCommon.AVRO_TO_ELASTIC_JSON avroType, String index, String docType) {
+    public ESCreateDocumentBolt(AvroToElasticDocumentConverter.AVRO_TO_ELASTIC_DOCUMENT avroType, String index, String docType) {
         super();
         
         _avroType = avroType;
@@ -69,7 +70,7 @@ public final class ESCreateDocumentBolt extends BaseBasicBolt {
             throw new RuntimeException(nvException);
         }
         
-        _toJsonConverter = ConverterCommon.getAvroToElasticJsonFunction(_avroType);
+        _toJsonConverter = AvroToElasticDocumentConverter.getAvroToElasticDocFunction(_avroType);
     }
 
     @Override

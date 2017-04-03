@@ -19,64 +19,61 @@
 package org.jhk.pulsing.storm.bolts.deserializers.avro;
 
 import java.io.IOException;
+import java.util.Map;
+import java.util.function.BiFunction;
 
+import org.apache.storm.task.TopologyContext;
 import org.apache.storm.topology.BasicOutputCollector;
 import org.apache.storm.topology.OutputFieldsDeclarer;
 import org.apache.storm.topology.base.BaseBasicBolt;
+import org.apache.storm.tuple.Fields;
+import org.apache.storm.tuple.ITuple;
 import org.apache.storm.tuple.Tuple;
 import org.apache.storm.tuple.Values;
-import org.jhk.pulsing.serialization.avro.records.Pulse;
-import org.jhk.pulsing.serialization.avro.serializers.SerializationHelper;
 import org.jhk.pulsing.storm.common.FieldConstants;
+import org.jhk.pulsing.storm.deserializer.StringToAvroDeserializedValues;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * @author Ji Kim
  */
-public final class PulseDeserializerBolt extends BaseBasicBolt {
+public final class AvroDeserializerBolt extends BaseBasicBolt {
     
-    private static final long serialVersionUID = 9003236874311323612L;
-    private static final Logger _LOGGER = LoggerFactory.getLogger(PulseDeserializerBolt.class);
+    private static final long serialVersionUID = -6065528421670008189L;
+    private static final Logger _LOGGER = LoggerFactory.getLogger(AvroDeserializerBolt.class);
     
-    private boolean _emitId;
+    private StringToAvroDeserializedValues.STRING_TO_AVRO_VALUES _avroType;
+    private boolean _includeId;
+    private Fields _fields;
     
-    public PulseDeserializerBolt() {
-        super();
-    }
+    private BiFunction<ITuple, Boolean, Values> _toAvroDeserializer;
     
-    public PulseDeserializerBolt(boolean emitId) {
+    public AvroDeserializerBolt(StringToAvroDeserializedValues.STRING_TO_AVRO_VALUES avroType, boolean includeId) {
         super();
         
-        _emitId = emitId;
+        _avroType = avroType;
+        _includeId = includeId;
+        _fields = includeId ? FieldConstants.AVRO_DESERIALIZE_WITH_ID_FIELD : FieldConstants.AVRO_DESERIALIZE_FIELD;
+    }
+    
+    @Override
+    public void prepare(Map stormConf, TopologyContext context) {
+        super.prepare(stormConf, context);
+        
+        _toAvroDeserializer = StringToAvroDeserializedValues.getStringToAvroValuesBiFunction(_avroType);
     }
     
     @Override
     public void execute(Tuple tuple, BasicOutputCollector outputCollector) {
-        _LOGGER.info("PulseDeserializerBolt.execute: " + tuple);
+        _LOGGER.info("AvroDeserializerBolt.execute: " + tuple);
         
-        String pulseString = tuple.getString(0);
-        
-        try {
-            
-            Pulse pulse = SerializationHelper.deserializeFromJSONStringToAvro(Pulse.class, Pulse.getClassSchema(), pulseString);
-            Values values = new Values(pulse);
-            
-            if(_emitId) {
-                values.add(pulse.getId().getId());
-            }
-            
-            outputCollector.emit(values);
-            
-        } catch (IOException decodeException) {
-            outputCollector.reportError(decodeException);
-        }
-        
+        outputCollector.emit(_toAvroDeserializer.apply(tuple, _includeId));
     }
     
     @Override
     public void declareOutputFields(OutputFieldsDeclarer fieldsDeclarer) {
-        fieldsDeclarer.declare(_emitId ? FieldConstants.AVRO_DESERIALIZE_WITH_ID_FIELD : FieldConstants.AVRO_DESERIALIZE_FIELD);
+        fieldsDeclarer.declare(_fields);
     }
 
 }
