@@ -18,30 +18,52 @@
  */
 package org.jhk.pulsing.storm.trident.converter.avroTothrift;
 
+import java.util.Map;
+import java.util.function.Function;
+
 import org.apache.storm.trident.operation.BaseFunction;
 import org.apache.storm.trident.operation.TridentCollector;
+import org.apache.storm.trident.operation.TridentOperationContext;
 import org.apache.storm.trident.tuple.TridentTuple;
+import org.apache.storm.tuple.ITuple;
 import org.apache.storm.tuple.Values;
+import org.jhk.pulsing.storm.common.ConverterCommon;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.jhk.pulsing.serialization.thrift.data.Data;
-import org.jhk.pulsing.storm.common.ConverterCommon;
 
 /**
  * @author Ji Kim
  */
-public final class UserConverterFunction extends BaseFunction {
+public final class AvroToThriftConverterFunction extends BaseFunction {
     
-    private static final long serialVersionUID = 2492968329072034376L;
-    private static final Logger _LOGGER = LoggerFactory.getLogger(UserConverterFunction.class);
+    private static final long serialVersionUID = -6929267349873708590L;
+    private static final Logger _LOGGER = LoggerFactory.getLogger(AvroToThriftConverterFunction.class);
+    
+    private ConverterCommon.AVRO_TO_THRIFT _avroType;
+    private Function<ITuple, Object> _toThriftConverter;
+    
+    public AvroToThriftConverterFunction(ConverterCommon.AVRO_TO_THRIFT avroType) {
+        super();
+        
+        _avroType = avroType;
+    }
+    
+    @Override
+    public void prepare(Map conf, TridentOperationContext context) {
+        super.prepare(conf, context);
+        
+        _toThriftConverter = ConverterCommon.getAvroToThriftFunction(_avroType);
+    }
     
     @Override
     public void execute(TridentTuple tuple, TridentCollector collector) {
-        _LOGGER.info("UserConverter.execute " + tuple);
+        _LOGGER.info("AvroToThriftConverterFunction.execute " + tuple);
         
-        Data uData = ConverterCommon.convertUserAvroToThriftData(tuple);
+        Object data = _toThriftConverter.apply(tuple);
         
-        collector.emit(new Values(uData));
+        _LOGGER.info("Converted to thrift " + data);
+        
+        collector.emit(new Values(data));
     }
-    
+
 }

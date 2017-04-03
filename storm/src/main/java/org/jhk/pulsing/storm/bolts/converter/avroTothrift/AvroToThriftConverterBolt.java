@@ -18,40 +18,60 @@
  */
 package org.jhk.pulsing.storm.bolts.converter.avroTothrift;
 
-import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 
+import org.apache.storm.task.TopologyContext;
 import org.apache.storm.topology.BasicOutputCollector;
 import org.apache.storm.topology.OutputFieldsDeclarer;
 import org.apache.storm.topology.base.BaseBasicBolt;
+import org.apache.storm.tuple.Fields;
+import org.apache.storm.tuple.ITuple;
 import org.apache.storm.tuple.Tuple;
 import org.apache.storm.tuple.Values;
-import org.jhk.pulsing.serialization.thrift.data.Data;
 import org.jhk.pulsing.storm.common.ConverterCommon;
-import org.jhk.pulsing.storm.common.FieldConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * @author Ji Kim
  */
-public final class PulseConverterBolt extends BaseBasicBolt {
-
-    private static final long serialVersionUID = 5216255208403673287L;
-    private static final Logger _LOGGER = LoggerFactory.getLogger(PulseConverterBolt.class);
+public final class AvroToThriftConverterBolt extends BaseBasicBolt {
+    
+    private static final long serialVersionUID = -525343954401412897L;
+    private static final Logger _LOGGER = LoggerFactory.getLogger(AvroToThriftConverterBolt.class);
+    
+    private ConverterCommon.AVRO_TO_THRIFT _avroType;
+    private Function<ITuple, Object> _toThriftConverter;
+    private Fields _fields;
+    
+    public AvroToThriftConverterBolt(ConverterCommon.AVRO_TO_THRIFT avroType, Fields fields) {
+        super();
+        
+        _avroType = avroType;
+        _fields = fields;
+    }
+    
+    @Override
+    public void prepare(Map stormConf, TopologyContext context) {
+        super.prepare(stormConf, context);
+        
+        _toThriftConverter = ConverterCommon.getAvroToThriftFunction(_avroType);
+    }
     
     @Override
     public void execute(Tuple tuple, BasicOutputCollector outputCollector) {
-        _LOGGER.info("PulseConverterBolt.execute " + tuple);
+        _LOGGER.info("AvroToThriftConverter.execute " + tuple);
         
-        List<Data> pDatas = ConverterCommon.convertPulseAvroToThriftDataList(tuple);
+        Object data = _toThriftConverter.apply(tuple);
         
-        _LOGGER.info("Converted to thrift " + pDatas);
-        outputCollector.emit(new Values(pDatas));
+        _LOGGER.info("Converted to thrift " + data);
+        outputCollector.emit(new Values(data));
     }
 
     @Override
     public void declareOutputFields(OutputFieldsDeclarer fieldsDeclarer) {
-        fieldsDeclarer.declare(FieldConstants.THRIFT_DATA_LIST_FIELD);
+        fieldsDeclarer.declare(_fields);
     }
 
 }
