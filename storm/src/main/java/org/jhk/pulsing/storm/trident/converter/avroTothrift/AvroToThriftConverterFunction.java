@@ -27,7 +27,7 @@ import org.apache.storm.trident.operation.TridentOperationContext;
 import org.apache.storm.trident.tuple.TridentTuple;
 import org.apache.storm.tuple.ITuple;
 import org.apache.storm.tuple.Values;
-import org.jhk.pulsing.storm.common.ConverterCommon;
+import org.jhk.pulsing.storm.converter.AvroToThriftConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,10 +39,11 @@ public final class AvroToThriftConverterFunction extends BaseFunction {
     private static final long serialVersionUID = -6929267349873708590L;
     private static final Logger _LOGGER = LoggerFactory.getLogger(AvroToThriftConverterFunction.class);
     
-    private ConverterCommon.AVRO_TO_THRIFT _avroType;
+    private AvroToThriftConverter.AVRO_TO_THRIFT _avroType;
+    
     private Function<ITuple, Object> _toThriftConverter;
     
-    public AvroToThriftConverterFunction(ConverterCommon.AVRO_TO_THRIFT avroType) {
+    public AvroToThriftConverterFunction(AvroToThriftConverter.AVRO_TO_THRIFT avroType) {
         super();
         
         _avroType = avroType;
@@ -52,7 +53,7 @@ public final class AvroToThriftConverterFunction extends BaseFunction {
     public void prepare(Map conf, TridentOperationContext context) {
         super.prepare(conf, context);
         
-        _toThriftConverter = ConverterCommon.getAvroToThriftFunction(_avroType);
+        _toThriftConverter = AvroToThriftConverter.getAvroToThriftFunction(_avroType);
     }
     
     @Override

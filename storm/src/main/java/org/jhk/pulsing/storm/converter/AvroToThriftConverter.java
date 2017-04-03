@@ -16,7 +16,9 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.storm.common;
+package org.jhk.pulsing.storm.converter;
+
+import static org.jhk.pulsing.storm.common.FieldConstants.AVRO;
 
 import java.time.Instant;
 import java.util.EnumMap;
@@ -24,8 +26,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-
-import static org.jhk.pulsing.storm.common.FieldConstants.*;
 
 import org.apache.storm.tuple.ITuple;
 import org.jhk.pulsing.serialization.avro.records.Pulse;
@@ -40,73 +40,30 @@ import org.jhk.pulsing.serialization.thrift.property.TagGroupProperty;
 import org.jhk.pulsing.serialization.thrift.property.TagGroupPropertyValue;
 import org.jhk.pulsing.serialization.thrift.property.UserProperty;
 import org.jhk.pulsing.serialization.thrift.property.UserPropertyValue;
-import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * This is truly an overkill, but simply to play around w/ both avro + thrift
- * 
  * @author Ji Kim
  */
-public final class ConverterCommon {
+public final class AvroToThriftConverter {
     
-    private static final Logger _LOGGER = LoggerFactory.getLogger(ConverterCommon.class);
+    private static final Logger _LOGGER = LoggerFactory.getLogger(AvroToThriftConverter.class);
     
-    public static enum AVRO_TO_ELASTIC_JSON {
-        PULSE;
-    }
+    private static final EnumMap<AVRO_TO_THRIFT, Function<ITuple, Object>> _AVRO_TO_THRIFT_MAPPER = new EnumMap<>(AVRO_TO_THRIFT.class);
     
     public static enum AVRO_TO_THRIFT {
         PULSE, USER;
     }
     
-    private static final EnumMap<AVRO_TO_ELASTIC_JSON, Function<ITuple, JSONObject>> AVRO_TO_ELASTIC_JSON_MAPPER = new EnumMap<>(AVRO_TO_ELASTIC_JSON.class);
-    private static final EnumMap<AVRO_TO_THRIFT, Function<ITuple, Object>> AVRO_TO_THRIFT_MAPPER = new EnumMap<>(AVRO_TO_THRIFT.class);
-    
     static {
-        AVRO_TO_ELASTIC_JSON_MAPPER.put(AVRO_TO_ELASTIC_JSON.PULSE, ConverterCommon::convertPulseAvroToElasticJSON);
-        
-        AVRO_TO_THRIFT_MAPPER.put(AVRO_TO_THRIFT.PULSE, ConverterCommon::convertPulseAvroToThriftDataList);
-        AVRO_TO_THRIFT_MAPPER.put(AVRO_TO_THRIFT.USER, ConverterCommon::convertUserAvroToThriftData);
-    }
-    
-    public static Function<ITuple, JSONObject> getAvroToElasticJsonFunction(AVRO_TO_ELASTIC_JSON avroType) {
-        return AVRO_TO_ELASTIC_JSON_MAPPER.get(avroType);
+        _AVRO_TO_THRIFT_MAPPER.put(AVRO_TO_THRIFT.PULSE, AvroToThriftConverter::convertPulseAvroToThriftDataList);
+        _AVRO_TO_THRIFT_MAPPER.put(AVRO_TO_THRIFT.USER, AvroToThriftConverter::convertUserAvroToThriftData);
     }
     
     public static Function<ITuple, Object> getAvroToThriftFunction(AVRO_TO_THRIFT avroType) {
-        return AVRO_TO_THRIFT_MAPPER.get(avroType);
+        return _AVRO_TO_THRIFT_MAPPER.get(avroType);
     }
-    
-    /**
-     * Simple converter from Avro Pulse to JSONObject for ElasticSearch as Avro's json string is 
-     * encryptic and causes parse errors for regular json builders. Just using jackson now but may 
-     * be swap out with gson later.
-     * 
-     * @param tuple
-     * @return
-     */
-    public static JSONObject convertPulseAvroToElasticJSON(ITuple tuple) {
-        _LOGGER.info("ConverterCommon.convertPulseAvroToElasticJSON " + tuple);
-        
-        Pulse pulse = (Pulse) tuple.getValueByField(AVRO);
-        
-        List<String> tags = pulse.getTags().stream()
-                .map(value -> value.toString())
-                .collect(Collectors.<String> toList());
-        
-        JSONObject obj = new JSONObject();
-        
-        obj.put("description", pulse.getDescription() != null ? pulse.getDescription().toString() : "");
-        obj.put("name", pulse.getValue() != null ? pulse.getValue().toString() : "");
-        obj.put("user_id", pulse.getUserId().getId());
-        obj.put("timestamp", pulse.getTimeStamp());
-        obj.put("tags", tags);
-        
-        return obj;
-    }
-    
     
     /**
      * Create multiple Data objects for the tags as well as the pulse name to create 
@@ -117,8 +74,8 @@ public final class ConverterCommon {
      * @param tuple
      * @return
      */
-    public static List<Data> convertPulseAvroToThriftDataList(ITuple tuple) {
-        _LOGGER.info("ConverterCommon.convertPulseAvroToThriftDataList " + tuple);
+    private static List<Data> convertPulseAvroToThriftDataList(ITuple tuple) {
+        _LOGGER.info("AvroToThriftConverter.convertPulseAvroToThriftDataList " + tuple);
         
         Pulse pulse = (Pulse) tuple.getValueByField(AVRO);
         
@@ -183,8 +140,8 @@ public final class ConverterCommon {
         return tDatas;
     }
     
-    public static Data convertUserAvroToThriftData(ITuple tuple) {
-        _LOGGER.info("ConverterCommon.convertUserAvroToThriftData " + tuple);
+    private static Data convertUserAvroToThriftData(ITuple tuple) {
+        _LOGGER.info("AvroToThriftConverter.convertUserAvroToThriftData " + tuple);
         
         User user = (User) tuple.getValueByField(AVRO);
         
@@ -214,7 +171,7 @@ public final class ConverterCommon {
         return data;
     }
     
-    private ConverterCommon() {
+    private AvroToThriftConverter() {
         super();
     }
     

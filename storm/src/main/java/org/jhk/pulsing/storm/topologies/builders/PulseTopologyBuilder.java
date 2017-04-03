@@ -45,14 +45,16 @@ import org.elasticsearch.node.NodeValidationException;
 import org.jhk.pulsing.shared.util.CommonConstants;
 import org.jhk.pulsing.shared.util.HadoopConstants;
 import org.jhk.pulsing.storm.bolts.converter.avroTothrift.AvroToThriftConverterBolt;
-import org.jhk.pulsing.storm.bolts.deserializers.avro.PulseDeserializerBolt;
+import org.jhk.pulsing.storm.bolts.deserializers.avro.AvroDeserializerBolt;
 import org.jhk.pulsing.storm.bolts.persistor.PailDataListPersistorBolt;
-import org.jhk.pulsing.storm.common.ConverterCommon;
 import org.jhk.pulsing.storm.common.FieldConstants;
+import org.jhk.pulsing.storm.converter.AvroToElasticDocumentConverter;
+import org.jhk.pulsing.storm.converter.AvroToThriftConverter;
+import org.jhk.pulsing.storm.deserializer.StringToAvroDeserializedValues;
 import org.jhk.pulsing.storm.elasticsearch.bolt.ESCreateDocumentBolt;
 import org.jhk.pulsing.storm.elasticsearch.trident.ESCreateDocumentFunction;
 import org.jhk.pulsing.storm.hadoop.trident.AvroRecordFormatFunction;
-import org.jhk.pulsing.storm.trident.deserializers.avro.PulseDeserializerFunction;
+import org.jhk.pulsing.storm.trident.deserializers.avro.AvroDeserializerFunction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -89,16 +91,16 @@ public final class PulseTopologyBuilder {
         TopologyBuilder builder = new TopologyBuilder();
         builder.setSpout("pulse-create-spout", buildSpout());
         
-        builder.setBolt("pulse-avro-deserialize", new PulseDeserializerBolt(true), 1) //sets executors, namely threads
+        builder.setBolt("pulse-avro-deserialize", new AvroDeserializerBolt(StringToAvroDeserializedValues.STRING_TO_AVRO_VALUES.PULSE, true), 1) //sets executors, namely threads
             .setNumTasks(1) //num tasks is number of instances of this bolt
             .shuffleGrouping("pulse-create-spout");
         
-        builder.setBolt("pulse-elasticsearch-create-doc", new ESCreateDocumentBolt(ConverterCommon.AVRO_TO_ELASTIC_JSON.PULSE, 
+        builder.setBolt("pulse-elasticsearch-create-doc", new ESCreateDocumentBolt(AvroToElasticDocumentConverter.AVRO_TO_ELASTIC_DOCUMENT.PULSE, 
                 ELASTIC_SEARCH_INDEX, ELASTIC_SEARCH_DOC_TYPE), 1)
             .setNumTasks(1)
             .shuffleGrouping("pulse-avro-deserialize");
         
-        builder.setBolt("pulse-avro-thrift-converter", new AvroToThriftConverterBolt(ConverterCommon.AVRO_TO_THRIFT.PULSE, FieldConstants.THRIFT_DATA_LIST_FIELD), 1)
+        builder.setBolt("pulse-avro-thrift-converter", new AvroToThriftConverterBolt(AvroToThriftConverter.AVRO_TO_THRIFT.PULSE, FieldConstants.THRIFT_DATA_LIST_FIELD), 1)
             .setNumTasks(1)
             .shuffleGrouping("pulse-elasticsearch-create-doc");
         
@@ -123,10 +125,10 @@ public final class PulseTopologyBuilder {
         
         TridentTopology topology = new TridentTopology();
         Stream stream = topology.newStream("pulse-create-spout", buildTridentSpout())
-                .each(new Fields("str"), new PulseDeserializerFunction(true), FieldConstants.AVRO_DESERIALIZE_WITH_ID_FIELD)
+                .each(new Fields("str"), new AvroDeserializerFunction(StringToAvroDeserializedValues.STRING_TO_AVRO_VALUES.PULSE, true), FieldConstants.AVRO_DESERIALIZE_WITH_ID_FIELD)
                 .shuffle()
                 .each(FieldConstants.AVRO_DESERIALIZE_WITH_ID_FIELD, 
-                        new ESCreateDocumentFunction(ConverterCommon.AVRO_TO_ELASTIC_JSON.PULSE, ELASTIC_SEARCH_INDEX, ELASTIC_SEARCH_DOC_TYPE), new Fields());
+                        new ESCreateDocumentFunction(AvroToElasticDocumentConverter.AVRO_TO_ELASTIC_DOCUMENT.PULSE, ELASTIC_SEARCH_INDEX, ELASTIC_SEARCH_DOC_TYPE), new Fields());
         
         avroHdfsStatePersist(stream);
         

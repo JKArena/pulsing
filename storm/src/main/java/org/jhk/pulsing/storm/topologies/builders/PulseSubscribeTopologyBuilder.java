@@ -31,11 +31,12 @@ import org.apache.storm.topology.TopologyBuilder;
 import org.apache.storm.tuple.Fields;
 import org.jhk.pulsing.storm.bolts.PulseAvroFieldExtractorBolt;
 import org.jhk.pulsing.storm.bolts.PulseAvroFieldExtractorBolt.EXTRACT_FIELD;
-import org.jhk.pulsing.storm.bolts.deserializers.avro.PulseDeserializerBolt;
+import org.jhk.pulsing.storm.bolts.deserializers.avro.AvroDeserializerBolt;
 import org.jhk.pulsing.storm.bolts.persistor.TimeIntervalPersistorBolt;
 import org.jhk.pulsing.storm.bolts.time.TimeIntervalBolt;
 import org.jhk.pulsing.storm.bolts.time.TimeIntervalBuilderBolt;
 import org.jhk.pulsing.storm.common.FieldConstants;
+import org.jhk.pulsing.storm.deserializer.StringToAvroDeserializedValues;
 import org.jhk.pulsing.shared.util.CommonConstants;
 import org.jhk.pulsing.shared.util.RedisConstants;
 import org.slf4j.Logger;
@@ -54,7 +55,7 @@ public final class PulseSubscribeTopologyBuilder {
         TopologyBuilder builder = new TopologyBuilder();
         builder.setSpout("pulse-subscribe-spout", buildSpout());
         
-        builder.setBolt("pulse-avro-deserialize", new PulseDeserializerBolt(), 1) //sets executors, namely threads
+        builder.setBolt("pulse-avro-deserialize", new AvroDeserializerBolt(StringToAvroDeserializedValues.STRING_TO_AVRO_VALUES.PULSE, false), 1) //sets executors, namely threads
                 .setNumTasks(1) //num tasks is number of instances of this bolt
                 .shuffleGrouping("pulse-subscribe-spout");
         

@@ -18,53 +18,52 @@
  */
 package org.jhk.pulsing.storm.trident.deserializers.avro;
 
-import java.io.IOException;
+import java.util.Map;
+import java.util.function.BiFunction;
+
 import org.apache.storm.trident.operation.BaseFunction;
 import org.apache.storm.trident.operation.TridentCollector;
+import org.apache.storm.trident.operation.TridentOperationContext;
 import org.apache.storm.trident.tuple.TridentTuple;
+import org.apache.storm.tuple.ITuple;
 import org.apache.storm.tuple.Values;
-import org.jhk.pulsing.serialization.avro.records.Pulse;
-import org.jhk.pulsing.serialization.avro.serializers.SerializationHelper;
+import org.jhk.pulsing.storm.deserializer.StringToAvroDeserializedValues;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Ji Kim
  */
-public final class PulseDeserializerFunction extends BaseFunction {
+public final class AvroDeserializerFunction extends BaseFunction {
     
-    private static final long serialVersionUID = 4863013986214675297L;
+    private static final long serialVersionUID = 4955780336211716483L;
+    private static final Logger _LOGGER = LoggerFactory.getLogger(AvroDeserializerFunction.class);
     
-    private boolean _emitId;
+    private StringToAvroDeserializedValues.STRING_TO_AVRO_VALUES _avroType;
+    private boolean _includeId;
     
-    public PulseDeserializerFunction() {
-        super();
-    }
+    private BiFunction<ITuple, Boolean, Values> _toAvroDeserializer;
     
-    public PulseDeserializerFunction(boolean emitId) {
+    public AvroDeserializerFunction(StringToAvroDeserializedValues.STRING_TO_AVRO_VALUES avroType, boolean includeId) {
         super();
         
-        _emitId = emitId;
+        _avroType = avroType;
+        _includeId = includeId;
+    }
+    
+    @Override
+    public void prepare(Map conf, TridentOperationContext context) {
+        super.prepare(conf, context);
+        
+        _toAvroDeserializer = StringToAvroDeserializedValues.getStringToAvroValuesBiFunction(_avroType);
     }
     
     @Override
     public void execute(TridentTuple tuple, TridentCollector collector) {
+        _LOGGER.info("AvroDeserializerFunction.execute: " + tuple);
         
-        String pulseString = tuple.getString(0);
-        
-        try {
-            
-            Pulse pulse = SerializationHelper.deserializeFromJSONStringToAvro(Pulse.class, Pulse.getClassSchema(), pulseString);
-            Values values = new Values(pulse);
-            
-            if(_emitId) {
-                values.add(pulse.getId().getId());
-            }
-            
-            collector.emit(values);
-            
-        } catch (IOException decodeException) {
-            collector.reportError(decodeException);
-        }
+        collector.emit(_toAvroDeserializer.apply(tuple, _includeId));
         
     }
-    
+
 }
