@@ -44,17 +44,17 @@ import org.apache.storm.tuple.Fields;
 import org.elasticsearch.node.NodeValidationException;
 import org.jhk.pulsing.shared.util.CommonConstants;
 import org.jhk.pulsing.shared.util.HadoopConstants;
-import org.jhk.pulsing.storm.bolts.converter.avroTothrift.AvroToThriftConverterBolt;
-import org.jhk.pulsing.storm.bolts.deserializers.avro.AvroDeserializerBolt;
+import org.jhk.pulsing.storm.bolts.converter.AvroToThriftConverterBolt;
+import org.jhk.pulsing.storm.bolts.deserializers.AvroDeserializerBolt;
+import org.jhk.pulsing.storm.bolts.elasticsearch.ESCreateDocumentBolt;
 import org.jhk.pulsing.storm.bolts.persistor.PailDataListPersistorBolt;
 import org.jhk.pulsing.storm.common.FieldConstants;
 import org.jhk.pulsing.storm.converter.AvroToElasticDocumentConverter;
 import org.jhk.pulsing.storm.converter.AvroToThriftConverter;
 import org.jhk.pulsing.storm.deserializer.StringToAvroDeserializedValues;
-import org.jhk.pulsing.storm.elasticsearch.bolt.ESCreateDocumentBolt;
-import org.jhk.pulsing.storm.elasticsearch.trident.ESCreateDocumentFunction;
 import org.jhk.pulsing.storm.hadoop.trident.AvroRecordFormatFunction;
-import org.jhk.pulsing.storm.trident.deserializers.avro.AvroDeserializerFunction;
+import org.jhk.pulsing.storm.trident.deserializers.AvroDeserializerFunction;
+import org.jhk.pulsing.storm.trident.elasticsearch.ESCreateDocumentFunction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -138,7 +138,7 @@ public final class PulseTopologyBuilder {
     private static void avroHdfsStatePersist(Stream stream) {
         
         FileNameFormat fnFormat = new DefaultFileNameFormat()
-                .withPath(HadoopConstants.SPARK_NEW_DATA_WORKSPACE)
+                .withPath(HadoopConstants.SPARK_NEW_DATA_WORKSPACE + "pulse")
                 .withPrefix("PulseCreate");
         
         RecordFormat rFormat = new AvroRecordFormatFunction();

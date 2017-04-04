@@ -37,8 +37,8 @@ import org.apache.storm.spout.SchemeAsMultiScheme;
 import org.apache.storm.topology.TopologyBuilder;
 import org.jhk.pulsing.shared.util.CommonConstants;
 import org.jhk.pulsing.shared.util.HadoopConstants;
-import org.jhk.pulsing.storm.bolts.converter.avroTothrift.AvroToThriftConverterBolt;
-import org.jhk.pulsing.storm.bolts.deserializers.avro.AvroDeserializerBolt;
+import org.jhk.pulsing.storm.bolts.converter.AvroToThriftConverterBolt;
+import org.jhk.pulsing.storm.bolts.deserializers.AvroDeserializerBolt;
 import org.jhk.pulsing.storm.bolts.persistor.PailDataPersistorBolt;
 import org.jhk.pulsing.storm.common.FieldConstants;
 import org.jhk.pulsing.storm.converter.AvroToThriftConverter;
@@ -114,7 +114,7 @@ public final class UserTopologyBuilder {
         _LOGGER.info("UserTopologyBuilder.avroHdfsBolt");
         
         FileNameFormat fnFormat = new DefaultFileNameFormat()
-                .withPath(HadoopConstants.SPARK_NEW_DATA_WORKSPACE)
+                .withPath(HadoopConstants.SPARK_NEW_DATA_WORKSPACE + "user")
                 .withPrefix("UserCreate");
         
         RecordFormat rFormat = new AvroRecordFormatBolt();

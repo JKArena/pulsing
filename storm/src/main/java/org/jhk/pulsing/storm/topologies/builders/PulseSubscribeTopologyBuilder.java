@@ -31,7 +31,7 @@ import org.apache.storm.topology.TopologyBuilder;
 import org.apache.storm.tuple.Fields;
 import org.jhk.pulsing.storm.bolts.PulseAvroFieldExtractorBolt;
 import org.jhk.pulsing.storm.bolts.PulseAvroFieldExtractorBolt.EXTRACT_FIELD;
-import org.jhk.pulsing.storm.bolts.deserializers.avro.AvroDeserializerBolt;
+import org.jhk.pulsing.storm.bolts.deserializers.AvroDeserializerBolt;
 import org.jhk.pulsing.storm.bolts.persistor.TimeIntervalPersistorBolt;
 import org.jhk.pulsing.storm.bolts.time.TimeIntervalBolt;
 import org.jhk.pulsing.storm.bolts.time.TimeIntervalBuilderBolt;

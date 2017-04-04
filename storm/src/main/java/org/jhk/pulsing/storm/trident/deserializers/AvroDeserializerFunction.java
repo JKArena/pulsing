@@ -16,21 +16,17 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.storm.bolts.deserializers.avro;
+package org.jhk.pulsing.storm.trident.deserializers;
 
-import java.io.IOException;
 import java.util.Map;
 import java.util.function.BiFunction;
 
-import org.apache.storm.task.TopologyContext;
-import org.apache.storm.topology.BasicOutputCollector;
-import org.apache.storm.topology.OutputFieldsDeclarer;
-import org.apache.storm.topology.base.BaseBasicBolt;
-import org.apache.storm.tuple.Fields;
+import org.apache.storm.trident.operation.BaseFunction;
+import org.apache.storm.trident.operation.TridentCollector;
+import org.apache.storm.trident.operation.TridentOperationContext;
+import org.apache.storm.trident.tuple.TridentTuple;
 import org.apache.storm.tuple.ITuple;
-import org.apache.storm.tuple.Tuple;
 import org.apache.storm.tuple.Values;
-import org.jhk.pulsing.storm.common.FieldConstants;
 import org.jhk.pulsing.storm.deserializer.StringToAvroDeserializedValues;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,42 +34,36 @@ import org.slf4j.LoggerFactory;
 /**
  * @author Ji Kim
  */
-public final class AvroDeserializerBolt extends BaseBasicBolt {
+public final class AvroDeserializerFunction extends BaseFunction {
     
-    private static final long serialVersionUID = -6065528421670008189L;
-    private static final Logger _LOGGER = LoggerFactory.getLogger(AvroDeserializerBolt.class);
+    private static final long serialVersionUID = 4955780336211716483L;
+    private static final Logger _LOGGER = LoggerFactory.getLogger(AvroDeserializerFunction.class);
     
     private StringToAvroDeserializedValues.STRING_TO_AVRO_VALUES _avroType;
     private boolean _includeId;
-    private Fields _fields;
     
     private BiFunction<ITuple, Boolean, Values> _toAvroDeserializer;
     
-    public AvroDeserializerBolt(StringToAvroDeserializedValues.STRING_TO_AVRO_VALUES avroType, boolean includeId) {
+    public AvroDeserializerFunction(StringToAvroDeserializedValues.STRING_TO_AVRO_VALUES avroType, boolean includeId) {
         super();
         
         _avroType = avroType;
         _includeId = includeId;
-        _fields = includeId ? FieldConstants.AVRO_DESERIALIZE_WITH_ID_FIELD : FieldConstants.AVRO_DESERIALIZE_FIELD;
     }
     
     @Override
-    public void prepare(Map stormConf, TopologyContext context) {
-        super.prepare(stormConf, context);
+    public void prepare(Map conf, TridentOperationContext context) {
+        super.prepare(conf, context);
         
         _toAvroDeserializer = StringToAvroDeserializedValues.getStringToAvroValuesBiFunction(_avroType);
     }
     
     @Override
-    public void execute(Tuple tuple, BasicOutputCollector outputCollector) {
-        _LOGGER.info("AvroDeserializerBolt.execute: " + tuple);
+    public void execute(TridentTuple tuple, TridentCollector collector) {
+        _LOGGER.info("AvroDeserializerFunction.execute: " + tuple);
         
-        outputCollector.emit(_toAvroDeserializer.apply(tuple, _includeId));
-    }
-    
-    @Override
-    public void declareOutputFields(OutputFieldsDeclarer fieldsDeclarer) {
-        fieldsDeclarer.declare(_fields);
+        collector.emit(_toAvroDeserializer.apply(tuple, _includeId));
+        
     }
 
 }

@@ -19,8 +19,7 @@ under the License.
 @author Ji Kim
 """
 
-from django.shortcuts import render
-from django.http import JsonResponse, HttpResponse, HttpResponseBadRequest
+from django.http import JsonResponse, HttpResponseBadRequest
 from django import forms
 from shared.kafka import Publisher
 

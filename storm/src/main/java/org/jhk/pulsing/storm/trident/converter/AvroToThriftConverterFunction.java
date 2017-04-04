@@ -16,10 +16,10 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.storm.trident.deserializers.avro;
+package org.jhk.pulsing.storm.trident.converter;
 
 import java.util.Map;
-import java.util.function.BiFunction;
+import java.util.function.Function;
 
 import org.apache.storm.trident.operation.BaseFunction;
 import org.apache.storm.trident.operation.TridentCollector;
@@ -27,43 +27,44 @@ import org.apache.storm.trident.operation.TridentOperationContext;
 import org.apache.storm.trident.tuple.TridentTuple;
 import org.apache.storm.tuple.ITuple;
 import org.apache.storm.tuple.Values;
-import org.jhk.pulsing.storm.deserializer.StringToAvroDeserializedValues;
+import org.jhk.pulsing.storm.converter.AvroToThriftConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
  * @author Ji Kim
  */
-public final class AvroDeserializerFunction extends BaseFunction {
+public final class AvroToThriftConverterFunction extends BaseFunction {
     
-    private static final long serialVersionUID = 4955780336211716483L;
-    private static final Logger _LOGGER = LoggerFactory.getLogger(AvroDeserializerFunction.class);
+    private static final long serialVersionUID = -6929267349873708590L;
+    private static final Logger _LOGGER = LoggerFactory.getLogger(AvroToThriftConverterFunction.class);
     
-    private StringToAvroDeserializedValues.STRING_TO_AVRO_VALUES _avroType;
-    private boolean _includeId;
+    private AvroToThriftConverter.AVRO_TO_THRIFT _avroType;
     
-    private BiFunction<ITuple, Boolean, Values> _toAvroDeserializer;
+    private Function<ITuple, Object> _toThriftConverter;
     
-    public AvroDeserializerFunction(StringToAvroDeserializedValues.STRING_TO_AVRO_VALUES avroType, boolean includeId) {
+    public AvroToThriftConverterFunction(AvroToThriftConverter.AVRO_TO_THRIFT avroType) {
         super();
         
         _avroType = avroType;
-        _includeId = includeId;
     }
     
     @Override
     public void prepare(Map conf, TridentOperationContext context) {
         super.prepare(conf, context);
         
-        _toAvroDeserializer = StringToAvroDeserializedValues.getStringToAvroValuesBiFunction(_avroType);
+        _toThriftConverter = AvroToThriftConverter.getAvroToThriftFunction(_avroType);
     }
     
     @Override
     public void execute(TridentTuple tuple, TridentCollector collector) {
-        _LOGGER.info("AvroDeserializerFunction.execute: " + tuple);
+        _LOGGER.info("AvroToThriftConverterFunction.execute " + tuple);
         
-        collector.emit(_toAvroDeserializer.apply(tuple, _includeId));
+        Object data = _toThriftConverter.apply(tuple);
         
+        _LOGGER.info("Converted to thrift " + data);
+        
+        collector.emit(new Values(data));
     }
 
 }
