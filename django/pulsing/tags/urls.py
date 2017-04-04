@@ -23,6 +23,5 @@ from django.conf.urls import url
 from . import views
 
 urlpatterns = [
-    url(r'^addPulse/$', views.addPulseDocument),
-    url(r'^searchPulse/(?P<query>.+/$', views.searchPulseDocument)
+    url(r'^pulse/search/$', views.searchPulseDocument)
 ]

@@ -28,10 +28,13 @@ import {Grid, Row, Col, Thumbnail, Button, Badge} from 'react-bootstrap';
 import React, {Component} from 'react';
 
 import TrendingPulseSubscriptionsStore from './TrendingPulseSubscriptionsStore';
+import Url from '../../../common/Url';
 import {TOPICS, API} from '../../../common/PubSub';
 import Storage from '../../../common/Storage';
 
 import InputSearchComponent from '../../common/search/InputSearchComponent';
+
+const ELASTIC_PULSE_PREFIX_PATH = Url.djangoRootUrl() + 'tags/pulse/';
 
 let trending = new Map();
 
@@ -109,8 +112,9 @@ class TrendingPulseSubscriptionsComponent extends Component {
     });
     
     return (
-      <div class='trendingpulse-component'>
-        <InputSearchComponent store='elasticSearch' index='pulse' docType='pulse_tags' trigger='Search Pulse' />
+      <div className='trendingpulse-component'>
+        <InputSearchComponent store='elasticSearch' index='pulse' docType='pulse_tags' trigger='Search Pulse'
+          pathPrefix={ELASTIC_PULSE_PREFIX_PATH} />
         
         {(() => {
           

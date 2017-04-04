@@ -81,8 +81,6 @@ public final class ESCreateDocumentFunction extends BaseFunction {
         _nClient.addDocument(_index, _docType, id, _toJsonConverter.apply(tuple).toString());
         collector.emit(new Values(tuple.getValueByField(FieldConstants.AVRO)));
         
-        _LOGGER.info("ESCreateDocumentFunction.execute: ADDED" + tuple);
-        
     }
 
 }

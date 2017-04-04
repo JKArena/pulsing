@@ -48,7 +48,7 @@ class Search():
     
     def search(self, type_name, query={'match_all': {}}):
         self.logger.debug('search %s : %s', type_name, query)
-        self.__es.search(self.__index_name, type_name, {'query': query})
+        return self.__es.search(index=self.__index_name, doc_type=type_name, body={'query': query})
     
     def get(self, type_name, id_value):
         self.logger.debug('get %s/%s', type_name, id_value)

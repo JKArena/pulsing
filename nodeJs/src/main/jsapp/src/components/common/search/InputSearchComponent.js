@@ -43,7 +43,7 @@ class InputSearchComponent extends Component {
   constructor(props) {
     super(props);
     
-    this.store = new KEY_STORE_MAPPER[props.store](props.index);
+    this.store = new KEY_STORE_MAPPER[props.store](props.index, props.pathPrefix);
     this.defaultDocType = props.docType;
 
     this.searchResultHandler = this.searchResult.bind(this);
@@ -67,10 +67,11 @@ class InputSearchComponent extends Component {
 
   }
 
-  handleSearch(evt) {
+  handleSearch() {
     if(!this.searchInputNode.value) return;
 
-    this.store.search(this.defaultDocType, {'query': {'term': {'name': {'boost': 3.0, 'value': this.searchInputNode.value }}}});
+    //this.store.search(this.defaultDocType, {'term': {'name': {'boost': 3.0, 'value': this.searchInputNode.value }}});
+    this.store.search(this.defaultDocType, {"match_all": {}});
   }
 
   render() {

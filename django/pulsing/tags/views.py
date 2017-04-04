@@ -63,39 +63,18 @@ tagSearch.map('pulse_tags', {'properties':
     }
 })
 
-def addPulseDocument(request):
-    logger.debug('addPulseDocument')
-    
-    if not 'pulse' in request.POST:
-        return HttpResponseBadRequest()
-
-    logger.debug('addPulseDocument got pulse - %s', request.POST['pulse'])
-    pulse = json.loads(request.POST['pulse'])
-
-    logger.debug('addPulseDocument deserialized pulse - %s', pulse)
-    tagSearch.index('pulse_tags', pulse['id']['id']['long'],
-                    {'description': pulse['description']['string'], 
-                     'name': pulse['value']['string'],
-                     'user_id': pulse['userId']['id']['long'], 
-                     'tags': pulse['tags']['array'], 'timestamp': datetime.datetime.now()})
-
-    return JsonResponse({
-        'code': 'SUCCESS',
-        'data': {'id': pulse['id']['id']},
-        'message': ''
-    })
-
 def searchPulseDocument(request):
     logger.debug('searchDocument')
     
-    if not 'search' in request.GET:
+    if not 'search' in request.GET or not 'doc_type' in request.GET:
         return HttpResponseBadRequest()
     
     logger.debug('searchDocument got query - ' + request.GET['search'])
     search = json.loads(request.GET['search'])
+    doc_type = request.GET['doc_type']
 
     # for now just name, later pass the field
-    result = tagSearch.search('pulse_tags', search)
+    result = tagSearch.search(doc_type, search)
 
     logger.debug('searchDocument query result - %s', result)
 
