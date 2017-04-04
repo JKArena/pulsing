@@ -24,7 +24,6 @@
 
 import Fetch from '../../../../common/Fetch';
 import Storage from '../../../../common/Storage';
-import Url from '../../../../common/Url';
 import Pulse from '../../../../avro/Pulse';
 
 const CREATE_PULSE_PATH = 'pulse/createPulse';

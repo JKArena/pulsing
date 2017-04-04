@@ -71,6 +71,7 @@ class User extends AbstractAvro {
       distance = Math.sqrt(Math.pow(coords.latitude-this.lat, 2) +
         Math.pow(coords.longitude-this.lng, 2));
     }
+    this.clearGeoWatch(); //just clear watch after getting it for now, annoying
 
     let publishGeo = false;
     let publishNavChange = false;

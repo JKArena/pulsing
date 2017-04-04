@@ -27,10 +27,11 @@ import Fetch from '../../../../common/Fetch';
 const SearchDocumentAction = Object.freeze(
   {
 
-    searchDocument(path, query) {
+    searchDocument(path, doc_type, query) {
 
       let params = {__proto__: null,
-                    'search': query};
+                    'doc_type': doc_type,
+                    'search': JSON.stringify(query)};
 
       return new Promise(function(resolve, reject) {
 

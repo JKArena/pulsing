@@ -22,15 +22,16 @@
  */
 'use strict';
 
-import {AbstractSearchStore} from './AbstractSearchStore';
+import {AbstractSearchStore, STORE_EVENT} from './AbstractSearchStore';
 import SearchDocumentAction from '../../actions/documents/SearchDocumentAction';
 
 class ElasticSearchDjangoStore extends AbstractSearchStore {
 
-  constructor(index) {
+  constructor(index, pathPrefix) {
     super();
     
     this.index = index;
+    this.pathPrefix = pathPrefix;
   }
 
   index(typeName, id, content) {
@@ -41,6 +42,10 @@ class ElasticSearchDjangoStore extends AbstractSearchStore {
   search(typeName, query) {
     console.debug('search: ', typeName, query);
     
+    SearchDocumentAction.searchDocument(this.pathPrefix + 'search', typeName, query)
+      .then((searchResult) => {
+        this.emit(STORE_EVENT.SEARCH, searchResult);
+      });
   }
 
   get(typeName, id) {
