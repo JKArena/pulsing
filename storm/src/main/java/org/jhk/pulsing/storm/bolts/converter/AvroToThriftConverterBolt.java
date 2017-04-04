@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.storm.bolts.converter.avroTothrift;
+package org.jhk.pulsing.storm.bolts.converter;
 
 import java.util.Map;
 import java.util.function.Function;

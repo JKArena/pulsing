@@ -19,8 +19,7 @@ under the License.
 @author Ji Kim
 """
 
-from django.shortcuts import render
-from django.http import JsonResponse, HttpResponse, HttpResponseBadRequest
+from django.http import JsonResponse, HttpResponseBadRequest
 
 from shared.elastic import Search
 
@@ -60,7 +59,7 @@ tagSearch.map('pulse_tags', {'properties':
          },
         'user_id': {'type': 'long', 'store': 'true'},
         'timestamp': {'type': 'date', 'store': 'true'},
-        'tags': {'type': 'keyword', 'store': 'yes'}         # won't be tokenized since keyword
+        'tags': {'type': 'keyword', 'store': 'true'}         # won't be tokenized since keyword
     }
 })
 

@@ -16,17 +16,16 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.storm.elasticsearch.bolt;
+package org.jhk.pulsing.storm.trident.elasticsearch;
 
 import java.util.Map;
 import java.util.function.Function;
 
-import org.apache.storm.task.TopologyContext;
-import org.apache.storm.topology.BasicOutputCollector;
-import org.apache.storm.topology.OutputFieldsDeclarer;
-import org.apache.storm.topology.base.BaseBasicBolt;
+import org.apache.storm.trident.operation.BaseFunction;
+import org.apache.storm.trident.operation.TridentCollector;
+import org.apache.storm.trident.operation.TridentOperationContext;
+import org.apache.storm.trident.tuple.TridentTuple;
 import org.apache.storm.tuple.ITuple;
-import org.apache.storm.tuple.Tuple;
 import org.apache.storm.tuple.Values;
 import org.elasticsearch.node.NodeValidationException;
 import org.jhk.pulsing.storm.common.FieldConstants;
@@ -39,10 +38,10 @@ import org.slf4j.LoggerFactory;
 /**
  * @author Ji Kim
  */
-public final class ESCreateDocumentBolt extends BaseBasicBolt {
+public final class ESCreateDocumentFunction extends BaseFunction {
 
-    private static final long serialVersionUID = 8440784949713207825L;
-    private static final Logger _LOGGER = LoggerFactory.getLogger(ESCreateDocumentBolt.class);
+    private static final long serialVersionUID = 8917913390559160418L;
+    private static final Logger _LOGGER = LoggerFactory.getLogger(ESCreateDocumentFunction.class);
     
     private AvroToElasticDocumentConverter.AVRO_TO_ELASTIC_DOCUMENT _avroType;
     private String _index;
@@ -51,7 +50,7 @@ public final class ESCreateDocumentBolt extends BaseBasicBolt {
     private NativeClient _nClient;
     private Function<ITuple, JSONObject> _toJsonConverter;
     
-    public ESCreateDocumentBolt(AvroToElasticDocumentConverter.AVRO_TO_ELASTIC_DOCUMENT avroType, String index, String docType) {
+    public ESCreateDocumentFunction(AvroToElasticDocumentConverter.AVRO_TO_ELASTIC_DOCUMENT avroType, String index, String docType) {
         super();
         
         _avroType = avroType;
@@ -60,8 +59,8 @@ public final class ESCreateDocumentBolt extends BaseBasicBolt {
     }
     
     @Override
-    public void prepare(Map stormConf, TopologyContext context) {
-        super.prepare(stormConf, context);
+    public void prepare(Map conf, TridentOperationContext context) {
+        super.prepare(conf, context);
         
         try {
             _nClient = new NativeClient();
@@ -74,17 +73,16 @@ public final class ESCreateDocumentBolt extends BaseBasicBolt {
     }
 
     @Override
-    public void execute(Tuple tuple, BasicOutputCollector collector) {
-        _LOGGER.info("ESCreateDocumentBolt.execute: " + tuple);
+    public void execute(TridentTuple tuple, TridentCollector collector) {
+        _LOGGER.info("ESCreateDocumentFunction.execute: " + tuple);
         
         String id = tuple.getValueByField(FieldConstants.ID).toString();
         
         _nClient.addDocument(_index, _docType, id, _toJsonConverter.apply(tuple).toString());
         collector.emit(new Values(tuple.getValueByField(FieldConstants.AVRO)));
-    }
-
-    @Override
-    public void declareOutputFields(OutputFieldsDeclarer fieldsDeclarer) {
+        
+        _LOGGER.info("ESCreateDocumentFunction.execute: ADDED" + tuple);
+        
     }
 
 }
