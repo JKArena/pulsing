@@ -18,8 +18,8 @@
  */
 package org.jhk.pulsing.storm.elasticsearch;
 
-import java.util.Collections;
-import java.util.List;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsResponse;
 import org.elasticsearch.action.delete.DeleteResponse;
@@ -33,13 +33,12 @@ import org.elasticsearch.action.update.UpdateRequestBuilder;
 import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.common.settings.Settings;
+import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import org.elasticsearch.index.query.QueryBuilder;
-import org.elasticsearch.node.Node;
 import org.elasticsearch.node.NodeValidationException;
-import org.elasticsearch.node.internal.InternalSettingsPreparer;
-import org.elasticsearch.plugins.Plugin;
 import org.elasticsearch.script.Script;
-import org.elasticsearch.transport.Netty4Plugin;
+import org.elasticsearch.transport.client.PreBuiltTransportClient;
+import org.jhk.pulsing.shared.util.CommonConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -64,21 +63,16 @@ public final class NativeClient {
         SETTINGS = Settings.builder()
                 .put("path.home", "/tmp")
                 .put("client.transport.sniff", true)
-                .put("cluster.name", "pulsing")
-                .put("node.data", false)
-                .put("node.master", false)
-                .put("node.ingest", false).build();
+                .put("cluster.name", "pulsing").build();
     }
     
-    private final Node _node;
     private final Client _client;
     
-    public NativeClient() throws NodeValidationException {
+    public NativeClient() throws NodeValidationException, UnknownHostException {
         super();
         
-        _node = new PluginNode(SETTINGS, Collections.<Class<? extends Plugin>>singletonList(Netty4Plugin.class));
-        _node.start();
-        _client = _node.client();
+        _client = new PreBuiltTransportClient(SETTINGS)
+                    .addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName(CommonConstants.PROJECT_POINT), 9300));
     }
     
     public IndexResponse addDocument(String index, String type, String id, String source) {
@@ -179,12 +173,6 @@ public final class NativeClient {
         _LOGGER.info("NativeClient.openIndex: " + index);
         
         _client.admin().indices().prepareOpen(index).execute().actionGet();
-    }
-    
-    private static class PluginNode extends Node {
-        public PluginNode(Settings settings, List<Class<? extends Plugin>> plugins) {
-            super(InternalSettingsPreparer.prepareEnvironment(settings, null), plugins);
-        }
     }
     
 }

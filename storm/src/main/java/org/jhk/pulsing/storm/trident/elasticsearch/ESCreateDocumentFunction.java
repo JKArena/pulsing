@@ -18,6 +18,7 @@
  */
 package org.jhk.pulsing.storm.trident.elasticsearch;
 
+import java.net.UnknownHostException;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -64,7 +65,7 @@ public final class ESCreateDocumentFunction extends BaseFunction {
         
         try {
             _nClient = new NativeClient();
-        } catch (NodeValidationException nvException) {
+        } catch (NodeValidationException | UnknownHostException nvException) {
             nvException.printStackTrace();
             throw new RuntimeException(nvException);
         }

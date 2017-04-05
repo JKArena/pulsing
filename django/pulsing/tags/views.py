@@ -77,10 +77,12 @@ def searchPulseDocument(request):
     result = tagSearch.search(doc_type, search)
 
     logger.debug('searchDocument query result - %s', result)
-
-    return JsonResponse({
-        'code': 'SUCCESS',
-        'data': {'result': result},
-        'message': ''
-    })
     
+    if result['timed_out']:
+        return JsonResponse({'code': 'FAILURE', 'data': {}, 'message': 'Timed out in the search'})
+    else:
+        return JsonResponse({
+            'code': 'SUCCESS',
+            'data': {'result': result['hits']['hits']},
+            'message': ''
+        })

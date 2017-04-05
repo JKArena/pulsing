@@ -18,6 +18,7 @@
  */
 package org.jhk.pulsing.storm.bolts.elasticsearch;
 
+import java.net.UnknownHostException;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -65,7 +66,7 @@ public final class ESCreateDocumentBolt extends BaseBasicBolt {
         
         try {
             _nClient = new NativeClient();
-        } catch (NodeValidationException nvException) {
+        } catch (NodeValidationException | UnknownHostException nvException) {
             nvException.printStackTrace();
             throw new RuntimeException(nvException);
         }
