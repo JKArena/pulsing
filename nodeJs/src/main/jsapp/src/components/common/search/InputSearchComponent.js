@@ -70,8 +70,8 @@ class InputSearchComponent extends Component {
   handleSearch() {
     if(!this.searchInputNode.value) return;
 
-    //this.store.search(this.defaultDocType, {'term': {'name': {'boost': 3.0, 'value': this.searchInputNode.value }}});
-    this.store.search(this.defaultDocType, {"match_all": {}});
+    this.store.search(this.defaultDocType, {'term': {'name': {'boost': 3.0, 'value': this.searchInputNode.value }}});
+    //this.store.search(this.defaultDocType, {'match_all': {}});
   }
 
   render() {
