@@ -61,9 +61,9 @@ public final class ChatLobbyTable implements ICassandraTable {
                 "user_id bigint," +
                 "name text," +
                 "rank int," +
-                "PRIMARY KEY (user_id, rank)" + //user_id for partitioning and chat_lobby_id + rank for clustering (for now 1, but allow ranking of chat lobby later)
+                "PRIMARY KEY (user_id, rank, chat_lobby_id)" + //user_id for partitioning and rank + chat_lobby_id for clustering
                 " )" + 
-                "WITH CLUSTERING ORDER BY (rank DESC);");
+                "WITH CLUSTERING ORDER BY (rank DESC, chat_lobby_id DESC);");
         
         _CHAT_LOBBY_QUERY = _session.prepare("SELECT name, chat_lobby_id, rank FROM " + _CHAT_LOBBY_TABLE + " WHERE user_id=? AND rank > 0 LIMIT ?");
         _CHAT_LOBBY_INSERT = _session.prepare("INSERT INTO " + _CHAT_LOBBY_TABLE + " (chat_lobby_id, user_id, name, rank) VALUES (?, ?, ?, ?)");
