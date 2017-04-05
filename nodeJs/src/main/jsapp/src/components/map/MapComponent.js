@@ -32,7 +32,6 @@ import {TOPICS, API} from '../../common/PubSub';
 import Storage from '../../common/Storage';
 import Pulse from '../../avro/Pulse';
 import GMapPulseStore from './store/GMapPulseStore';
-import ChatComponent from '../chat/ChatComponent';
 
 const ZOOM_DEFAULT = 20;
 const API_URL = 'http://maps.googleapis.com/maps/api/js?key=AIzaSyAcUzIUuUTuOZndo3OGs2J4FV-8Ay963ug';
@@ -147,11 +146,6 @@ class MapComponent extends Component {
             <Col sm={12}>
               <div id={this.mapId} className='map-node'>
               </div>
-            </Col>
-          </Row>
-          <Row>
-            <Col sm={12}>
-              <ChatComponent />
             </Col>
           </Row>
         </Grid>

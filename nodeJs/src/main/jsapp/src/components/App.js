@@ -27,7 +27,10 @@ require('bootstrap/dist/css/bootstrap.css');
 require('./App.css');
 
 import React from 'react';
+import {Grid, Row, Col} from 'react-bootstrap';
 import NavBarComponent from './navbar/NavBarComponent';
+import ChatComponent from './chat/ChatComponent';
+import Storage from '../common/Storage';
 import {TOPICS, API} from '../common/PubSub';
 
 class AppComponent extends React.Component {
@@ -35,15 +38,25 @@ class AppComponent extends React.Component {
   constructor(props) {
     super(props);
 
+    this.state = {loggedIn: !!Storage.user};
+    this.authHandler = this.onAuth.bind(this);
     this.errorHandler = this.onError.bind(this);
   }
 
   componentDidMount() {
+    API.subscribe(TOPICS.AUTH, this.authHandler);
     API.subscribe(TOPICS.ERROR_MESSAGE, this.errorHandler);
   }
 
   componentWillUnmount() {
+    API.unsubscribe(TOPICS.AUTH, this.authHandler);
     API.unsubscribe(TOPICS.ERROR_MESSAGE, this.errorHandler);
+  }
+
+  onAuth(auth) {
+    
+    this.state.loggedIn = auth.loggedIn;
+    this.setState(this.state);
   }
 
   /*
@@ -60,6 +73,18 @@ class AppComponent extends React.Component {
         <NavBarComponent></NavBarComponent>
         
         {this.props.children}
+
+        {(() => {
+          if(this.state.loggedIn) {
+            return <Grid>
+                    <Row>
+                      <Col>
+                        <ChatComponent />
+                      </Col>
+                    </Row>
+                  </Grid>;
+          }
+        })()}
       </div>
     );
   }
