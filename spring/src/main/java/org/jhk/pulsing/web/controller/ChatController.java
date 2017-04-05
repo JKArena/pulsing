@@ -77,10 +77,10 @@ public class ChatController {
      * @return
      */
     @RequestMapping(value="/queryChatLobbyMessages", method=RequestMethod.GET)
-    public @ResponseBody Result<List<Chat>> queryChatLobbyMessages(@RequestParam UUID cLId, @RequestParam Long timeStamp) {
-        _LOGGER.debug("ChatController.queryChatLobbyMessages: " + cLId + " - " + timeStamp);
+    public @ResponseBody Result<List<Chat>> queryChatLobbyMessages(@RequestParam UUID cLId, @RequestParam UserId userId, @RequestParam Long timeStamp) {
+        _LOGGER.debug("ChatController.queryChatLobbyMessages: " + cLId + "/" + userId + " - " + timeStamp);
         
-        return chatService.queryChatLobbyMessages(cLId, timeStamp);
+        return chatService.queryChatLobbyMessages(cLId, userId, timeStamp);
     }
     
     @RequestMapping(value="/createChatLobby", method=RequestMethod.POST)

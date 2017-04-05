@@ -82,20 +82,19 @@ public final class ChatMessageTable implements ICassandraTable {
         _CHAT_MESSAGE_INSERT = _session.prepare("INSERT INTO " + _CHAT_MESSAGE_TABLE + 
                 " (chat_lobby_id, user_id, msg_id, timestamp, message) VALUES (?, ?, ?, ?, ?)");
         
-        _CHAT_MESSAGE_VIEW_COUNT_QUERY = _session.prepare("SELECT * FROM " + _CHAT_MESSAGE_VIEW_COUNT_TABLE + 
+        _CHAT_MESSAGE_VIEW_COUNT_QUERY = _session.prepare("SELECT COUNT(*) as user_views FROM " + _CHAT_MESSAGE_VIEW_COUNT_TABLE + 
                 " WHERE msg_id=?");
         _CHAT_MESSAGE_VIEW_COUNT_INSERT = _session.prepare("INSERT INTO " + _CHAT_MESSAGE_VIEW_COUNT_TABLE + 
-                " (msg_id, timestamp, user_id) VALUES (?, ?, ?)");
+                " (msg_id, user_id, timestamp) VALUES (?, ?, ?)");
     }
     
-    public void messageInsert(UUID cLId, long from, long timeStamp, String message) {
+    public void messageInsert(UUID cLId, UUID msgId, long from, long timeStamp, String message) {
         _LOGGER.info("ChatMessageTable.messageInsert : " + cLId + " - " + ";" + message);
         
-        UUID msgId = UUID.randomUUID();
         BoundStatement cLMInsert = _CHAT_MESSAGE_INSERT.bind(cLId, from, msgId, timeStamp, message);
         _session.executeAsync(cLMInsert);
         
-        messageViewCountInsert(msgId, timeStamp, from);
+        messageViewCountInsert(msgId, from, timeStamp);
     }
     
     /**
@@ -112,13 +111,13 @@ public final class ChatMessageTable implements ICassandraTable {
         return _session.execute(cLMQuery);
     }
     
-    public void messageViewCountInsert(UUID msgId, long timeStamp, long userId) {
-        _LOGGER.info("ChatMessageTable.messageViewCountInsert : " + msgId + " - " + userId + "/" + timeStamp);
+    public void messageViewCountInsert(UUID msgId, long userId, long timestamp) {
+        _LOGGER.info("ChatMessageTable.messageViewCountInsert : " + msgId + "/" + userId + " - " + timestamp);
         
-        _session.executeAsync(_CHAT_MESSAGE_VIEW_COUNT_INSERT.bind(msgId, timeStamp, userId));
+        _session.executeAsync(_CHAT_MESSAGE_VIEW_COUNT_INSERT.bind(msgId, userId, timestamp));
     }
     
-    private ResultSet messageViewCountQuery(UUID msgId) {
+    public ResultSet messageViewCountQuery(UUID msgId) {
         _LOGGER.info("ChatMessageTable.messageViewCountQuery : " + msgId);
         
         return _session.execute(_CHAT_MESSAGE_VIEW_COUNT_QUERY.bind(msgId));

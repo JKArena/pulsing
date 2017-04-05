@@ -79,12 +79,12 @@ public class CassandraChatDao extends AbstractCassandraDao {
         return true;
     }
     
-    public void chatLobbyMessageInsert(UUID cLId, long from, long timeStamp, String message) {
+    public void chatLobbyMessageInsert(UUID cLId, UUID msgId, long from, long timeStamp, String message) {
         
-        _chatMessageTable.messageInsert(cLId, from, timeStamp, message);
+        _chatMessageTable.messageInsert(cLId, msgId, from, timeStamp, message);
     }
     
-    public List<Chat> queryChatLobbyMessages(UUID cLId, Long timeStamp) {
+    public List<Chat> queryChatLobbyMessages(UUID cLId, UserId userId, Long timeStamp) {
         ResultSet cLMQResult = _chatMessageTable.messageQuery(cLId, timeStamp);
         
         List<Chat> cLMessages = new LinkedList<>();
@@ -94,6 +94,13 @@ public class CassandraChatDao extends AbstractCassandraDao {
             entry.setUserId(message.getLong("user_id"));
             entry.setTimeStamp(message.getLong("timestamp"));
             entry.setMessage(message.getString("message"));
+            
+            UUID msgId = message.getUUID("msg_id");
+            _chatMessageTable.messageViewCountInsert(msgId, userId.getId(), timeStamp);
+            
+            ResultSet mvcResult = _chatMessageTable.messageViewCountQuery(msgId);
+            
+            entry.setMessageViews(mvcResult.one().getLong("user_views"));
             
             cLMessages.add(entry);
         }

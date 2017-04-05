@@ -45,6 +45,19 @@
   padding: 5px 10px;
 }
 
+.chat-message-views {
+  display: inline-block;
+  position: absolute;
+  top: 0;
+  color: yellow;
+  font-weight: bold;
+  font-size: 10px;
+}
+
+.chat-self .chat-message-views {
+  color: orange;
+}
+
 .chat-self > .chat-content {
   background-color: #eceff1;
   color: #1a1a1a;

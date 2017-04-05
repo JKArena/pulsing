@@ -106,7 +106,7 @@ public class WebSocketController {
         msg.setTimeStamp(Instant.now().toEpochMilli());
         
         if(msg.getType() == Chat.TYPE.CHAT_LOBBY) {
-            chatService.chatLobbyMessageInsert(UUID.fromString(chatId), msg.getUserId(), msg.getTimeStamp(), msg.getMessage());
+            chatService.chatLobbyMessageInsert(UUID.fromString(chatId), UUID.randomUUID(), msg.getUserId(), msg.getTimeStamp(), msg.getMessage());
         }
         
         return msg;

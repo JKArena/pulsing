@@ -29,10 +29,11 @@ const GET_CHAT_LOBBY_MESSAGES_PATH = 'chat/queryChatLobbyMessages/';
 const GetChatLobbyMessagesAction = Object.freeze(
   {
 
-    queryChatLobbyMessages(cLId, timeStamp) {
+    queryChatLobbyMessages(cLId, userId, timeStamp) {
 
       let params = {__proto__: null,
                     'cLId': cLId,
+                    'userId': userId.serialize(),
                     'timeStamp': timeStamp};
       return new Promise(function(resolve, reject) {
 

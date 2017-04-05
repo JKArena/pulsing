@@ -37,9 +37,9 @@ public interface IChatService {
     
     Result<Map<String, UUID>> queryChatLobbies(UserId userId);
     
-    Result<List<Chat>> queryChatLobbyMessages(UUID cLId, Long timeStamp);
+    Result<List<Chat>> queryChatLobbyMessages(UUID cLId, UserId userId, Long timeStamp);
     
-    void chatLobbyMessageInsert(UUID cLId, long from, long timeStamp, String message);
+    void chatLobbyMessageInsert(UUID cLId, UUID msgId, long from, long timeStamp, String message);
     
     Result<Boolean> chatLobbySubscribe(UUID cLId, String lobbyName, UserId userId);
     
