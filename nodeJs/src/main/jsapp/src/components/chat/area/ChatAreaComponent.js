@@ -52,10 +52,18 @@ const Chat = (props) => {
   let clazz = isSelf ? CHAT_SELF : CHAT_OTHER;
 
   let chat = props.chat;
+  let msgViews = chat.messageViews > 0 ? chat.messageViews : '';
   let dateLTS = (isSelf ? new Date() : new Date(chat.timeStamp)).toLocaleTimeString();
-
-  let chatContent = [<div className='chat-content' key={dateLTS +'_msg'}>{chat.message}</div>,
+  let chatContent = [<div className='chat-content' key={dateLTS +'_msg'}>{chat.message}
+                      <span className='chat-message-views'>{msgViews}</span></div>,
                   <div className='chat-time' key={dateLTS +'_time'} data-content={dateLTS}></div>];
+
+  if(chat.messageViews > 0) {
+    //only chat lobbies has capability of messageViews
+    chatContent.push(<div className='chat-message-views'>{chat.messageViews}</div>);
+  }
+
+  chatContent.push(<div className='chat-time' key={dateLTS +'_time'} data-content={dateLTS}></div>);
   if(isSelf) {
     chatContent.reverse();
   }
@@ -140,7 +148,7 @@ class ChatAreaComponent extends Component {
       if(this.isChatLobby) {
         //need to fetch previous chat messages
         let splitted = this.subscription.split('/');
-        GetChatLobbyMessagesAction.queryChatLobbyMessages(splitted[splitted.length-1], (+new Date()))
+        GetChatLobbyMessagesAction.queryChatLobbyMessages(splitted[splitted.length-1], Storage.user.id, (+new Date()))
           .then((chatMessages) => {
             chatMessages.reverse();
 

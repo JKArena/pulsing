@@ -74,15 +74,15 @@ public class ChatService implements IChatService {
     }
 
     @Override
-    public Result<List<Chat>> queryChatLobbyMessages(UUID cLId, Long timeStamp) {
+    public Result<List<Chat>> queryChatLobbyMessages(UUID cLId, UserId userId, Long timeStamp) {
         
-        return new Result<List<Chat>>(SUCCESS, cassandraChatDao.queryChatLobbyMessages(cLId, timeStamp));
+        return new Result<List<Chat>>(SUCCESS, cassandraChatDao.queryChatLobbyMessages(cLId, userId, timeStamp));
     }
 
     @Override
-    public void chatLobbyMessageInsert(UUID cLId, long from, long timeStamp, String message) {
+    public void chatLobbyMessageInsert(UUID cLId, UUID msgId, long from, long timeStamp, String message) {
         
-        cassandraChatDao.chatLobbyMessageInsert(cLId, from, timeStamp, message);
+        cassandraChatDao.chatLobbyMessageInsert(cLId, msgId, from, timeStamp, message);
     }
     
     @Override

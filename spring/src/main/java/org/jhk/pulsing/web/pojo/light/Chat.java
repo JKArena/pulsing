@@ -20,6 +20,7 @@ package org.jhk.pulsing.web.pojo.light;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 import org.jhk.pulsing.shared.util.CommonConstants;
 
@@ -39,6 +40,8 @@ public class Chat {
     private Map<String, Object> _data;
     private long _timeStamp;
     private TYPE _type;
+    private UUID _msgId;
+    private long _messageViews;
     
     public Chat() {
         super();
@@ -99,6 +102,20 @@ public class Chat {
         _timeStamp = timeStamp;
     }
     
+    public long getMessageViews() {
+        return _messageViews;
+    }
+    public void setMessageViews(long messageViews) {
+        _messageViews = messageViews;
+    }
+    
+    public UUID getMsgId() {
+        return _msgId;
+    }
+    public void setMsgId(UUID msgId) {
+        _msgId = msgId;
+    }
+    
     @Override
     public String toString() {
         StringBuilder builder = new StringBuilder();
@@ -107,7 +124,9 @@ public class Chat {
         builder.append("name: " + _name + ", ");
         builder.append("type: " + _type + ", ");
         builder.append("message: " + _message + ", ");
-        builder.append("data: " + _data);
+        builder.append("data: " + _data + ", ");
+        builder.append("msgId: " + _msgId + ", ");
+        builder.append("messageViews: " + _messageViews);
         builder.append("}");
         return builder.toString();
     }
