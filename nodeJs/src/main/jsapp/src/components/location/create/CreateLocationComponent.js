@@ -64,14 +64,14 @@ class CreateLocationComponent extends AbstractComponent {
   render() {
     
     return (
-        <div class='createlocation-component'>
+        <div className='createlocation-component'>
           <Grid>
             <Row>
               <Col sm={12}>
                 <h1>Create Location</h1>
               </Col>
               <Col sm={12}>
-                <form class='form' id='createLocationForm' action=''>
+                <form className='form' id='createLocationForm' action=''>
                   <FormGroup controlId='name' validationState={this.getValidState('name')}>
                     <ControlLabel>Name</ControlLabel>
                     <FormControl type='text' name='name' onBlur={this.handleChange.bind(this)}

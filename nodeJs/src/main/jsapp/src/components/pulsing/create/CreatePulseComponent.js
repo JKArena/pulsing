@@ -79,7 +79,7 @@ class CreatePulseComponent extends AbstractComponent {
                 <h1>Create Pulse</h1>
               </Col>
               <Col sm={12}>
-                <form class='form' id='createPulseForm' action=''>
+                <form className='form' id='createPulseForm' action=''>
                   <FormGroup controlId='value' validationState={this.getValidState('value')}>
                     <ControlLabel>Name</ControlLabel>
                     <FormControl type='text' ref='valueInput' name='value' onBlur={this.handleChange.bind(this)} />
