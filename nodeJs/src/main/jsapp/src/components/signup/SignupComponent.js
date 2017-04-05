@@ -104,8 +104,8 @@ class SignupComponent extends AbstractComponent {
   render() {
     
     return (
-        <div class='signup-component'>
-          <form class='form' id='signupform' action=''>
+        <div className='signup-component'>
+          <form className='form' id='signupform' action=''>
             <Grid>
               <Row>
                 <Col sm={12} md={12}>

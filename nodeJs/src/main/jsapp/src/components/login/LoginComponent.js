@@ -73,14 +73,14 @@ class LoginComponent extends AbstractComponent {
   render() {
     
     return (
-        <div class='login-component'>
+        <div className='login-component'>
           <Grid>
             <Row>
               <Col sm={12}>
                 <h1>Login | Register</h1>
               </Col>
               <Col sm={12}>
-                <form class='form' id='loginform' action=''>
+                <form className='form' id='loginform' action=''>
                   <FormGroup controlId='email' validationState={this.getValidState('email')}>
                     <ControlLabel>Email</ControlLabel>
                     <FormControl type='email' name='email' onBlur={this.handleChange.bind(this)}
