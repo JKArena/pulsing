@@ -23,6 +23,9 @@ import javax.inject.Named;
 
 import org.jhk.pulsing.serialization.avro.records.UserId;
 import static org.jhk.pulsing.serialization.avro.records.edge.ACTION.*;
+
+import java.util.Map;
+
 import org.jhk.pulsing.serialization.avro.records.edge.FriendEdge;
 import org.jhk.pulsing.shared.util.CommonConstants;
 import org.jhk.pulsing.web.dao.prod.db.cassandra.CasssandraFriendChatDao;
@@ -44,7 +47,7 @@ public class FriendService extends AbstractKafkaPublisher
     @Inject
     @Named("redisUserDao")
     private RedisUserDao redisUserDao;
-
+    
     @Override
     public boolean areFriends(UserId userId, UserId friendId) {
         
@@ -63,6 +66,12 @@ public class FriendService extends AbstractKafkaPublisher
         
         cassandraFriendDao.unfriend(fId, fName, sId, sName, timeStamp);
         getKafkaPublisher().produce(CommonConstants.TOPICS.FRIEND.toString(), new FriendEdge(fId, sId, DELETE));
+    }
+
+    @Override
+    public Map<Long, String> queryFriends(UserId userId) {
+        
+        return cassandraFriendDao.queryFriends(userId);
     }
     
 }

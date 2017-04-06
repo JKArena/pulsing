@@ -23,6 +23,7 @@
 'use strict';
 
 import Fetch from '../../../common/Fetch';
+import Url from '../../../common/Url';
 
 const LOGOUT_PATH = 'user/logout';
 
@@ -30,13 +31,12 @@ const LogoutAction = Object.freeze(
   {
 
     logoutUser(userId) {
+      let url = new URL(Url.controllerUrl() + LOGOUT_PATH +
+                        userId.serialize();
       
-      let fData = new FormData();
-      fData.append('userId', userId.serialize());
-
       return new Promise(function(resolve, reject) {
 
-        Fetch.DELETE_JSON(LOGOUT_PATH, {body: fData})
+        Fetch.DELETE_JSON(url)
           .then(function(result) {
             console.debug('logoutUser', result);
 

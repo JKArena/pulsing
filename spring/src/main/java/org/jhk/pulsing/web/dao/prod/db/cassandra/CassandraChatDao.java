@@ -96,10 +96,9 @@ public class CassandraChatDao extends AbstractCassandraDao {
             entry.setMessage(message.getString("message"));
             
             UUID msgId = message.getUUID("msg_id");
-            _chatMessageTable.messageViewCountInsert(msgId, userId.getId(), timeStamp);
+            _chatMessageTable.messageViewCountInsert(msgId, userId.getId(), timeStamp); //ok with a rough estimate, so doing an insert before query
             
             ResultSet mvcResult = _chatMessageTable.messageViewCountQuery(msgId);
-            
             entry.setMessageViews(mvcResult.one().getLong("user_views"));
             
             cLMessages.add(entry);

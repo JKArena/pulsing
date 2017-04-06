@@ -18,12 +18,16 @@
  */
 package org.jhk.pulsing.web.service;
 
+import java.util.Map;
+
 import org.jhk.pulsing.serialization.avro.records.UserId;
 
 /**
  * @author Ji Kim
  */
 public interface IFriendService {
+    
+    Map<Long, String> queryFriends(UserId userId);
     
     boolean areFriends(UserId userId, UserId friendId);
     
