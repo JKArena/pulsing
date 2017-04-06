@@ -66,8 +66,8 @@ public class ChatController {
     @Inject
     private SimpMessagingTemplate template;
     
-    @RequestMapping(value="/queryChatLobbies", method=RequestMethod.GET)
-    public @ResponseBody Result<Map<String, UUID>> queryChatLobby(@RequestParam UserId userId) {
+    @RequestMapping(value="/queryChatLobbies/{userId}", method=RequestMethod.GET)
+    public @ResponseBody Result<Map<String, UUID>> queryChatLobbies(@PathVariable UserId userId) {
         _LOGGER.debug("ChatController.queryChatLobbies: " + userId);
         
         return chatService.queryChatLobbies(userId);
@@ -78,8 +78,8 @@ public class ChatController {
      * @param timeStamp held as milliseconds in back end
      * @return
      */
-    @RequestMapping(value="/queryChatLobbyMessages/{cLId}", method=RequestMethod.GET)
-    public @ResponseBody Result<PagingResult<List<Chat>>> queryChatLobbyMessages(@PathVariable UUID cLId, @RequestParam UserId userId, @RequestParam String paging) {
+    @RequestMapping(value="/queryChatLobbyMessages/{cLId}/{userId}", method=RequestMethod.GET)
+    public @ResponseBody Result<PagingResult<List<Chat>>> queryChatLobbyMessages(@PathVariable UUID cLId, @PathVariable UserId userId, @RequestParam String paging) {
         _LOGGER.debug("ChatController.queryChatLobbyMessages: " + cLId + "/" + userId + " - " + paging);
         
         return chatService.queryChatLobbyMessages(cLId, userId, CommonUtil.checkPaging(paging));

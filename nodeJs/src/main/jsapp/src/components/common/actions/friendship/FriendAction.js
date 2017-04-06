@@ -25,14 +25,14 @@
 import Fetch from '../../../../common/Fetch';
 import Url from '../../../../common/Url';
 
-const FRIEND_PATH = 'friend/friend/';
+const FRIEND_PATH = Url.controllerUrl() + 'friend/friend/';
 
 const FriendAction = Object.freeze(
   {
 
     friend(invitationId, userId, fromUserId) {
 
-      let url = new URL(Url.controllerUrl() + FRIEND_PATH + invitationId + '/' +
+      let url = new URL(FRIEND_PATH + invitationId + '/' +
                         userId.serialize() + '/' + fromUserId.serialize());
       
       return new Promise(function(resolve, reject) {

@@ -25,14 +25,13 @@
 import Fetch from '../../../common/Fetch';
 import Url from '../../../common/Url';
 
-const LOGOUT_PATH = 'user/logout';
+const LOGOUT_PATH = Url.controllerUrl() + 'user/logout/';
 
 const LogoutAction = Object.freeze(
   {
 
     logoutUser(userId) {
-      let url = new URL(Url.controllerUrl() + LOGOUT_PATH +
-                        userId.serialize();
+      let url = new URL(LOGOUT_PATH + userId.serialize();
       
       return new Promise(function(resolve, reject) {
 

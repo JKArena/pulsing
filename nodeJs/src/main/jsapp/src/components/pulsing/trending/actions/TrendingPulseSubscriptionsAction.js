@@ -23,8 +23,9 @@
 'use strict';
 
 import Fetch from '../../../../common/Fetch';
+import Url from '../../../../common/Url';
 
-const GET_TRENDING_PULSE_SUBSCRIPTIONS_PATH = 'pulse/getTrendingPulseSubscriptions';
+const GET_TRENDING_PULSE_SUBSCRIPTIONS_URL = new URL(Url.controllerUrl() + 'pulse/getTrendingPulseSubscriptions');
 
 const TrendingPulseSubscriptionsAction = Object.freeze(Object.create(null, {
 
@@ -33,7 +34,7 @@ const TrendingPulseSubscriptionsAction = Object.freeze(Object.create(null, {
 
       return new Promise(function(resolve, reject) {
 
-        Fetch.GET_JSON(GET_TRENDING_PULSE_SUBSCRIPTIONS_PATH)
+        Fetch.GET_JSON(GET_TRENDING_PULSE_SUBSCRIPTIONS_URL)
           .then(function(json) {
             console.debug('gotTrendingPulseSubscriptions', json);
             //when making subsequent rest calls for Pulse, create PulseId from the long values

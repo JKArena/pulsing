@@ -25,14 +25,14 @@
 import Fetch from '../../../common/Fetch';
 import Url from '../../../common/Url';
 
-const CHAT_LOBBY_SUBSCRIBE_PATH = 'chat/chatLobbySubscribe/';
+const CHAT_LOBBY_SUBSCRIBE_PATH = Url.controllerUrl() + 'chat/chatLobbySubscribe/';
 
 const ChatLobbySubscribeAction = Object.freeze(
   {
 
     chatLobbySubscribe(cLobby, userId) {
 
-      let url = new URL(Url.controllerUrl() + CHAT_LOBBY_SUBSCRIBE_PATH + cLobby.chatId +
+      let url = new URL(CHAT_LOBBY_SUBSCRIBE_PATH + cLobby.chatId +
                         '/' + cLobby.chatName + '/' + cLobby.invitationId + '/' + userId.serialize());
       
       return new Promise(function(resolve, reject) {

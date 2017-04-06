@@ -27,7 +27,7 @@ import Url from '../../../../common/Url';
 import Storage from '../../../../common/Storage';
 import Location from '../../../../avro/Location';
 
-const CREATE_LOCATION_PATH = Url.djangoRootUrl() + 'location/add/';
+const CREATE_LOCATION_URL = new URL(Url.djangoRootUrl() + 'location/add/');
 
 const CreateLocationAction = Object.freeze(
   {
@@ -53,7 +53,7 @@ const CreateLocationAction = Object.freeze(
 
       return new Promise(function(resolve, reject) {
 
-        Fetch.POST_JSON(CREATE_LOCATION_PATH, {body: fData}, false)
+        Fetch.POST_JSON(CREATE_LOCATION_URL, {body: fData}, false)
           .then(function(result) {
             console.debug('create location', result);
 

@@ -23,10 +23,11 @@
 'use strict';
 
 import Fetch from '../../../../common/Fetch';
+import Url from '../../../../common/Url';
 import Storage from '../../../../common/Storage';
 import Pulse from '../../../../avro/Pulse';
 
-const CREATE_PULSE_PATH = 'pulse/createPulse';
+const CREATE_PULSE_URL = new URL(Url.controllerUrl() + 'pulse/createPulse');
 
 const CreatePulseAction = Object.freeze(
   {
@@ -55,7 +56,7 @@ const CreatePulseAction = Object.freeze(
 
       return new Promise(function(resolve, reject) {
 
-        Fetch.POST_JSON(CREATE_PULSE_PATH, {body: fData}, false)
+        Fetch.POST_JSON(CREATE_PULSE_URL, {body: fData}, false)
           .then(function(result) {
             console.debug('create pulse', result);
 

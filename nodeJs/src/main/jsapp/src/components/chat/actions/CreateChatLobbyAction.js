@@ -23,8 +23,9 @@
 'use strict';
 
 import Fetch from '../../../common/Fetch';
+import Url from '../../../common/Url';
 
-const CREATE_CHAT_LOBBY_PATH = 'chat/createChatLobby/';
+const CREATE_CHAT_LOBBY_URL = new URL(Url.controllerUrl() + 'chat/createChatLobby/');
 
 const CreateChatLobbyAction = Object.freeze(
   {
@@ -37,7 +38,7 @@ const CreateChatLobbyAction = Object.freeze(
 
       return new Promise(function(resolve, reject) {
 
-        Fetch.POST_JSON(CREATE_CHAT_LOBBY_PATH, {body: fData})
+        Fetch.POST_JSON(CREATE_CHAT_LOBBY_URL, {body: fData})
           .then(function(result) {
             console.debug('create chat lobby', result);
 
