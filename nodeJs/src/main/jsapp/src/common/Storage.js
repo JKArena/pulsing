@@ -28,6 +28,7 @@ import PulseId from '../avro/PulseId';
 const PULSING_USER_KEY = 'pulsingUser';
 const PULSING_SUBSCRIBED_PULSE_ID_KEY = 'pulsingSubscribedPulseId';
 const CHAT_LOBBY_INVITATION_KEY = 'chatLobbyInvitation';
+const PAGING_KEY = 'paging';
 const MAPPER = new Map();
 
 function _getSimpleJSON(key) {
@@ -112,23 +113,34 @@ export default Object.freeze(
           enumerable: true
         },
 
+        'paging' : {
+          get: function() {
+            
+            return _getSimpleJSON(PAGING_KEY) || {};
+          },
+          set: function(pagingInfo) {
+            let jsonVal = _getSimpleJSON(PAGING_KEY) || {};
+
+            jsonVal[pagingInfo.id] = pagingInfo;
+
+            _setSimpleJSON(PAGING_KEY, jsonVal);
+          },
+          enumerable: true
+        },
+
         'chatLobbyInvitation' : {
           get: function() {
             
-            return _getSimpleJSON(CHAT_LOBBY_INVITATION_KEY);
+            return _getSimpleJSON(CHAT_LOBBY_INVITATION_KEY) || [];
           },
           set: function(json) {
-            let jsonVal = _getSimpleJSON(CHAT_LOBBY_INVITATION_KEY);
+            let jsonVal = _getSimpleJSON(CHAT_LOBBY_INVITATION_KEY) || [];
             
-            if(jsonVal) {
-              if(jsonVal.findIndex(val => { return val.invitationId === json.invitationId; }) !== -1) {
-                return;
-              }
-
-              jsonVal.push(json);
-            } else {
-              jsonVal = [json];
+            if(jsonVal.findIndex(val => { return val.invitationId === json.invitationId; }) !== -1) {
+              return;
             }
+            jsonVal.push(json);
+            
             _setSimpleJSON(CHAT_LOBBY_INVITATION_KEY, jsonVal);
           },
           enumerable: true

@@ -21,10 +21,12 @@ package org.jhk.pulsing.web.service.prod;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.jhk.pulsing.db.cassandra.PagingResult;
 import org.jhk.pulsing.serialization.avro.records.UserId;
 import static org.jhk.pulsing.serialization.avro.records.edge.ACTION.*;
 
 import java.util.Map;
+import java.util.Optional;
 
 import org.jhk.pulsing.serialization.avro.records.edge.FriendEdge;
 import org.jhk.pulsing.shared.util.CommonConstants;
@@ -69,9 +71,9 @@ public class FriendService extends AbstractKafkaPublisher
     }
 
     @Override
-    public Map<Long, String> queryFriends(UserId userId) {
+    public PagingResult<Map<Long, String>> queryFriends(UserId userId, Optional<String> pagingState) {
         
-        return cassandraFriendDao.queryFriends(userId);
+        return cassandraFriendDao.queryFriends(userId, pagingState);
     }
     
 }

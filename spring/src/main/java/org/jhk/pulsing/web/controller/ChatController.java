@@ -25,7 +25,9 @@ import java.util.UUID;
 
 import javax.inject.Inject;
 
+import org.jhk.pulsing.db.cassandra.PagingResult;
 import org.jhk.pulsing.serialization.avro.records.UserId;
+import org.jhk.pulsing.web.common.CommonUtil;
 import org.jhk.pulsing.web.common.Result;
 import org.jhk.pulsing.web.common.SystemMessageUtil;
 
@@ -76,11 +78,11 @@ public class ChatController {
      * @param timeStamp held as milliseconds in back end
      * @return
      */
-    @RequestMapping(value="/queryChatLobbyMessages", method=RequestMethod.GET)
-    public @ResponseBody Result<List<Chat>> queryChatLobbyMessages(@RequestParam UUID cLId, @RequestParam UserId userId, @RequestParam Long timeStamp) {
-        _LOGGER.debug("ChatController.queryChatLobbyMessages: " + cLId + "/" + userId + " - " + timeStamp);
+    @RequestMapping(value="/queryChatLobbyMessages/{cLId}", method=RequestMethod.GET)
+    public @ResponseBody Result<PagingResult<List<Chat>>> queryChatLobbyMessages(@PathVariable UUID cLId, @RequestParam UserId userId, @RequestParam String paging) {
+        _LOGGER.debug("ChatController.queryChatLobbyMessages: " + cLId + "/" + userId + " - " + paging);
         
-        return chatService.queryChatLobbyMessages(cLId, userId, timeStamp);
+        return chatService.queryChatLobbyMessages(cLId, userId, CommonUtil.checkPaging(paging));
     }
     
     @RequestMapping(value="/createChatLobby", method=RequestMethod.POST)
