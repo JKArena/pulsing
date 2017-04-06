@@ -16,25 +16,29 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.web.service;
+package org.jhk.pulsing.web.common;
 
-import java.util.Map;
 import java.util.Optional;
 
-import org.jhk.pulsing.db.cassandra.PagingResult;
-import org.jhk.pulsing.serialization.avro.records.UserId;
+import com.datastax.driver.core.PagingState;
+import com.datastax.driver.core.ResultSet;
 
 /**
  * @author Ji Kim
  */
-public interface IFriendService {
+public final class CommonUtil {
     
-    PagingResult<Map<Long, String>> queryFriends(UserId userId, Optional<String> pagingState);
+    public static Optional<String> checkPaging(String paging) {
+        return paging == null || paging.length() == 0 ? Optional.empty() : Optional.of(paging);
+    }
     
-    boolean areFriends(UserId userId, UserId friendId);
+    public static String getPagingState(ResultSet result) {
+        PagingState pState = result.getExecutionInfo().getPagingState();
+        return pState != null ? pState.toString() : "";
+    }
     
-    void friend(UserId fId, String fName, UserId sId, String sName, long timeStamp);
-    
-    void unfriend(UserId fId, String fName, UserId sId, String sName, long timeStamp);
+    private CommonUtil() {
+        super();
+    }
     
 }

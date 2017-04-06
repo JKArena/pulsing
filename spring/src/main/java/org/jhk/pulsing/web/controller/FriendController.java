@@ -24,8 +24,10 @@ import java.util.Optional;
 
 import javax.inject.Inject;
 
+import org.jhk.pulsing.db.cassandra.PagingResult;
 import org.jhk.pulsing.serialization.avro.records.UserId;
 import org.jhk.pulsing.shared.util.RedisConstants;
+import org.jhk.pulsing.web.common.CommonUtil;
 import org.jhk.pulsing.web.common.Result;
 import org.jhk.pulsing.web.common.SystemMessageUtil;
 import org.jhk.pulsing.web.pojo.light.UserLight;
@@ -41,6 +43,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
@@ -122,10 +125,10 @@ public class FriendController {
     }
     
     @RequestMapping(value="/queryFriends/{userId}", method=RequestMethod.GET)
-    public @ResponseBody Result<Map<Long, String>> queryFriends(@PathVariable UserId userId) {
+    public @ResponseBody Result<PagingResult<Map<Long, String>>> queryFriends(@PathVariable UserId userId, @RequestParam String paging) {
         _LOGGER.debug("FriendController.queryFriends: " + userId);
         
-        return new Result<>(SUCCESS, friendService.queryFriends((userId)));
+        return new Result<>(SUCCESS, friendService.queryFriends(userId, CommonUtil.checkPaging(paging)));
     }
     
 }

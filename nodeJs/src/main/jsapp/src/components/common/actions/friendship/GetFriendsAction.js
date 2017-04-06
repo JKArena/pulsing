@@ -22,7 +22,9 @@
  */
 'use strict';
 
+import Storage from '../../../common/Storage';
 import Fetch from '../../../common/Fetch';
+import Url from '../../../common/Url';
 
 const GET_FRIENDS_PATH = 'friend/queryFriends/';
 
@@ -30,12 +32,15 @@ const GetFriendsAction = Object.freeze(
   {
 
     queryFriends(userId) {
+      let url = new URL(Url.controllerUrl() + GET_FRIENDS_PATH +
+                        userId.serialize());
 
       let params = {__proto__: null,
-                    'userId': userId.serialize()};
+                    'paging': Storage.paging[userId.id] || ''};
+
       return new Promise(function(resolve, reject) {
 
-        Fetch.GET_JSON(GET_FRIENDS_PATH, {}, params)
+        Fetch.GET_JSON(url, {}, params)
           .then(function(result) {
             console.debug('queryFriends result', result);
             

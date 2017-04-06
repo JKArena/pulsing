@@ -18,13 +18,21 @@
  */
 package org.jhk.pulsing.web.dao.prod.db.cassandra;
 
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
+import org.jhk.pulsing.db.cassandra.PagingResult;
 import org.jhk.pulsing.db.cassandra.friend.FriendTable;
 import org.jhk.pulsing.serialization.avro.records.UserId;
 import org.jhk.pulsing.shared.util.CommonConstants;
+import org.jhk.pulsing.web.common.CommonUtil;
 import org.jhk.pulsing.web.dao.prod.db.AbstractCassandraDao;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
+
+import com.datastax.driver.core.ResultSet;
 
 /**
  * @author Ji Kim
@@ -32,7 +40,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class CasssandraFriendChatDao extends AbstractCassandraDao {
     
-    private static final int _DEFAULT_FRIEND_LISTING = 20;
+    private static final Logger _LOGGER = LoggerFactory.getLogger(CasssandraFriendChatDao.class);
     
     private FriendTable _friendTable;
     
@@ -44,9 +52,25 @@ public class CasssandraFriendChatDao extends AbstractCassandraDao {
         _friendTable.unfriend(fId, fName, sId, sName, timeStamp);
     }
     
-    public Map<Long, String> queryFriends(UserId userId) {
+    public PagingResult<Map<Long, String>> queryFriends(UserId userId, Optional<String> pagingState) {
         
-        return _friendTable.queryFriends(userId, _DEFAULT_FRIEND_LISTING);
+        ResultSet qFriendsResult = _friendTable.queryFriends(userId, pagingState);
+        
+        _LOGGER.info("CasssandraFriendChatDao.queryFriends fResult : " + qFriendsResult);
+        Map<Long, String> friends = new HashMap<>();
+        
+        qFriendsResult.forEach(friendShip -> {
+            
+            long friendId = friendShip.getLong("friend_user_id");
+            String friendName = friendShip.getString("friend_name");
+            int rank = friendShip.getInt("rank");
+            
+            _LOGGER.info("CasssandraFriendChatDao.queryFriends friend info : " + friendId + "/" + friendName + " - " + rank);
+            
+            friends.put(friendId, friendName);
+        });
+        
+        return new PagingResult<>(CommonUtil.getPagingState(qFriendsResult), friends);
     }
     
     public boolean areFriends(UserId userId, UserId friendId) {

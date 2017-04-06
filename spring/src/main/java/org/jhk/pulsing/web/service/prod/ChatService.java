@@ -28,6 +28,7 @@ import java.util.UUID;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import org.jhk.pulsing.db.cassandra.PagingResult;
 import org.jhk.pulsing.serialization.avro.records.UserId;
 import org.jhk.pulsing.web.common.Result;
 import org.jhk.pulsing.web.dao.prod.db.cassandra.CassandraChatDao;
@@ -70,13 +71,13 @@ public class ChatService implements IChatService {
     @Override
     public Result<Map<String, UUID>> queryChatLobbies(UserId userId) {
         
-        return new Result<Map<String, UUID>>(SUCCESS, cassandraChatDao.queryChatLobbies(userId));
+        return new Result<>(SUCCESS, cassandraChatDao.queryChatLobbies(userId));
     }
 
     @Override
-    public Result<List<Chat>> queryChatLobbyMessages(UUID cLId, UserId userId, Long timeStamp) {
+    public Result<PagingResult<List<Chat>>> queryChatLobbyMessages(UUID cLId, UserId userId, Optional<String> pagingState) {
         
-        return new Result<List<Chat>>(SUCCESS, cassandraChatDao.queryChatLobbyMessages(cLId, userId, timeStamp));
+        return new Result<>(SUCCESS, cassandraChatDao.queryChatLobbyMessages(cLId, userId, pagingState));
     }
 
     @Override

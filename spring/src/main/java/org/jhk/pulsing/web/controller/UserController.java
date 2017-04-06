@@ -96,7 +96,7 @@ public class UserController {
         return userService.validateUser(email, password);
     }
     
-    @RequestMapping(value="/logout", method=RequestMethod.DELETE)
+    @RequestMapping(value="/logout/{userId}", method=RequestMethod.DELETE)
     public @ResponseBody Result<String> logout(@PathVariable UserId userId) {
         _LOGGER.debug("UserController.logout: " + userId);
         

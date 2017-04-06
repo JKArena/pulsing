@@ -148,7 +148,7 @@ class ChatAreaComponent extends Component {
       if(this.isChatLobby) {
         //need to fetch previous chat messages
         let splitted = this.subscription.split('/');
-        GetChatLobbyMessagesAction.queryChatLobbyMessages(splitted[splitted.length-1], Storage.user.id, (+new Date()))
+        GetChatLobbyMessagesAction.queryChatLobbyMessages(splitted[splitted.length-1], Storage.user.id)
           .then((chatMessages) => {
             chatMessages.reverse();
 

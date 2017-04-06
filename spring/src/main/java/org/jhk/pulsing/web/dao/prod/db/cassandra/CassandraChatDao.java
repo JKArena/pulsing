@@ -18,6 +18,7 @@
  */
 package org.jhk.pulsing.web.dao.prod.db.cassandra;
 
+import java.time.Instant;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -26,10 +27,14 @@ import java.util.UUID;
 
 import org.jhk.pulsing.serialization.avro.records.UserId;
 import org.jhk.pulsing.shared.util.CommonConstants;
+import org.jhk.pulsing.web.common.CommonUtil;
 import org.jhk.pulsing.web.dao.prod.db.AbstractCassandraDao;
+import org.jhk.pulsing.db.cassandra.PagingResult;
 import org.jhk.pulsing.db.cassandra.chat.ChatLobbyTable;
 import org.jhk.pulsing.db.cassandra.chat.ChatMessageTable;
 import org.jhk.pulsing.web.pojo.light.Chat;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import com.datastax.driver.core.ResultSet;
@@ -41,14 +46,14 @@ import com.datastax.driver.core.Row;
 @Repository
 public class CassandraChatDao extends AbstractCassandraDao {
     
-    private static final int _DEFAULT_CHAT_LOBBY_LISTING = 10;
+    private static final Logger _LOGGER = LoggerFactory.getLogger(CassandraChatDao.class);
     
     private ChatLobbyTable _chatLobbyTable;
     private ChatMessageTable _chatMessageTable;
     
     public Map<String, UUID> queryChatLobbies(UserId userId) {
         
-        return _chatLobbyTable.queryChatLobbies(userId, _DEFAULT_CHAT_LOBBY_LISTING);
+        return _chatLobbyTable.queryChatLobbies(userId);
     }
     
     public boolean userHasChatLobbyId(UserId userId, UUID cLId) {
@@ -84,8 +89,8 @@ public class CassandraChatDao extends AbstractCassandraDao {
         _chatMessageTable.messageInsert(cLId, msgId, from, timeStamp, message);
     }
     
-    public List<Chat> queryChatLobbyMessages(UUID cLId, UserId userId, Long timeStamp) {
-        ResultSet cLMQResult = _chatMessageTable.messageQuery(cLId, timeStamp);
+    public PagingResult<List<Chat>> queryChatLobbyMessages(UUID cLId, UserId userId, Optional<String> pagingState) {
+        ResultSet cLMQResult = _chatMessageTable.messageQuery(cLId, pagingState);
         
         List<Chat> cLMessages = new LinkedList<>();
         
@@ -96,14 +101,15 @@ public class CassandraChatDao extends AbstractCassandraDao {
             entry.setMessage(message.getString("message"));
             
             UUID msgId = message.getUUID("msg_id");
-            _chatMessageTable.messageViewCountInsert(msgId, userId.getId(), timeStamp); //ok with a rough estimate, so doing an insert before query
+            _chatMessageTable.messageViewCountInsert(msgId, userId.getId(), Instant.now().toEpochMilli()); //ok with a rough estimate, so doing an insert before query
             
             ResultSet mvcResult = _chatMessageTable.messageViewCountQuery(msgId);
             entry.setMessageViews(mvcResult.one().getLong("user_views"));
+            _LOGGER.info("CassandraChatDao.queryChatLobbyMessages msg info : " + entry);
             
             cLMessages.add(entry);
         }
-        return cLMessages;
+        return new PagingResult<>(CommonUtil.getPagingState(cLMQResult), cLMessages);
     }
     
     public Optional<Boolean> chatLobbySubscribe(UUID cLId, String lobbyName, UserId userId) {

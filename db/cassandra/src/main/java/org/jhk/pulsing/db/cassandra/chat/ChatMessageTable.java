@@ -18,6 +18,7 @@
  */
 package org.jhk.pulsing.db.cassandra.chat;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import org.jhk.pulsing.db.cassandra.ICassandraTable;
@@ -26,6 +27,7 @@ import org.slf4j.LoggerFactory;
 
 import com.datastax.driver.core.BoundStatement;
 import com.datastax.driver.core.DataType;
+import com.datastax.driver.core.PagingState;
 import com.datastax.driver.core.PreparedStatement;
 import com.datastax.driver.core.ResultSet;
 import com.datastax.driver.core.Session;
@@ -38,6 +40,8 @@ import com.datastax.driver.core.schemabuilder.SchemaStatement;
 public final class ChatMessageTable implements ICassandraTable {
     
     private static final Logger _LOGGER = LoggerFactory.getLogger(ChatMessageTable.class);
+    
+    private static int _MESSAGE_FETCH_SIZE = 40;
     
     private static final String _CHAT_MESSAGE_TABLE = "CHAT_MESSAGE_TABLE";
     private static final String _CHAT_MESSAGE_VIEW_COUNT_TABLE = "CHAT_MESSAGE_VIEW_COUNT_TABLE";
@@ -78,7 +82,7 @@ public final class ChatMessageTable implements ICassandraTable {
         _session.execute(cmvCSchemaStatement);
         
         _CHAT_MESSAGE_QUERY = _session.prepare("SELECT * FROM " + _CHAT_MESSAGE_TABLE + 
-                " WHERE chat_lobby_id=? AND timestamp < ? LIMIT 40");
+                " WHERE chat_lobby_id=?");
         _CHAT_MESSAGE_INSERT = _session.prepare("INSERT INTO " + _CHAT_MESSAGE_TABLE + 
                 " (chat_lobby_id, user_id, msg_id, timestamp, message) VALUES (?, ?, ?, ?, ?)");
         
@@ -104,10 +108,15 @@ public final class ChatMessageTable implements ICassandraTable {
      * @param timeStamp
      * @return
      */
-    public ResultSet messageQuery(UUID cLId, Long timeStamp) {
-        _LOGGER.info("ChatMessageTable.messageQuery : " + cLId + " - " + timeStamp);
+    public ResultSet messageQuery(UUID cLId, Optional<String> pagingState) {
+        _LOGGER.info("ChatMessageTable.messageQuery : " + cLId + " - " + pagingState);
         
-        BoundStatement cLMQuery = _CHAT_MESSAGE_QUERY.bind(cLId, timeStamp);
+        BoundStatement cLMQuery = _CHAT_MESSAGE_QUERY.bind(cLId);
+        cLMQuery.setFetchSize(_MESSAGE_FETCH_SIZE);
+        if(pagingState.isPresent()) {
+            cLMQuery.setPagingState(PagingState.fromString(pagingState.get()));
+        }
+        
         return _session.execute(cLMQuery);
     }
     

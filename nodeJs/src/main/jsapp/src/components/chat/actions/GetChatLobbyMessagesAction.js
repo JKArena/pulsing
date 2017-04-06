@@ -22,26 +22,30 @@
  */
 'use strict';
 
+import Storage from '../../../common/Storage';
 import Fetch from '../../../common/Fetch';
+import Url from '../../../common/Url';
 
-const GET_CHAT_LOBBY_MESSAGES_PATH = 'chat/queryChatLobbyMessages/';
+const GET_CHAT_LOBBY_MESSAGES_PATH = Url.controllerUrl() + 'chat/queryChatLobbyMessages/';
 
 const GetChatLobbyMessagesAction = Object.freeze(
   {
 
-    queryChatLobbyMessages(cLId, userId, timeStamp) {
+    queryChatLobbyMessages(cLId, userId) {
+      let path = GET_CHAT_LOBBY_MESSAGES_PATH + cLId;
 
       let params = {__proto__: null,
-                    'cLId': cLId,
                     'userId': userId.serialize(),
-                    'timeStamp': timeStamp};
+                    'paging': Storage.paging[cLId] || ''};
+
       return new Promise(function(resolve, reject) {
 
-        Fetch.GET_JSON(GET_CHAT_LOBBY_MESSAGES_PATH, {}, params)
+        Fetch.GET_JSON(path, {}, params)
           .then(function(json) {
             console.debug('queryChatLobbyMessages result', json);
             if(json.code === 'SUCCESS') {
-              resolve(json.data);
+
+              resolve(json.data.data);
             } else {
               reject(json.message);
             }
