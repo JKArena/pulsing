@@ -107,6 +107,7 @@ public class WebSocketController {
         
         if(msg.getType() == Chat.TYPE.CHAT_LOBBY) {
             chatService.chatLobbyMessageInsert(UUID.fromString(chatId), UUID.randomUUID(), msg.getUserId(), msg.getTimeStamp(), msg.getMessage());
+            msg.setMessageViews(msg.getMessageViews()+1);
         }
         
         return msg;

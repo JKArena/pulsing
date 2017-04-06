@@ -59,7 +59,7 @@ public final class FriendTable implements ICassandraTable {
                 "friend_name text," +
                 "rank int," +
                 "timestamp bigint," +
-                "PRIMARY KEY (user_id, rank)" + //user_id for partitioning and rank for clustering
+                "PRIMARY KEY (user_id, rank, friend_user_id)" + //user_id for partitioning and rank for clustering
                 " )" + 
                 "WITH CLUSTERING ORDER BY (rank DESC);");
         
