@@ -19,6 +19,7 @@
 package org.jhk.pulsing.web.controller;
 
 import java.time.Instant;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.inject.Inject;
@@ -76,12 +77,11 @@ public class FriendController {
     public @ResponseBody Result<String> friendRequest(UserId userId, UserId friendId) {
         _LOGGER.debug("FriendController.friendRequest: " + userId + " - " + friendId);
         
-        boolean areFriends = friendService.areFriends(userId, friendId);
-        Optional<UserLight> uLight = userService.getUserLight(userId.getId());
-        
-        if(areFriends) {
+        if(friendService.areFriends(userId, friendId)) {
             return new Result<>(FAILURE, null, "User " + userId + " is already friends with " + friendId);
         }
+        
+        Optional<UserLight> uLight = userService.getUserLight(userId.getId());
         
         String invitationId = userService.createInvitationId(friendId.getId(), userId.getId(), 
                 RedisConstants.INVITATION_ID.FRIEND_REQUEST_INVITE_, FRIEND_REQUEST_INVITE_EXPIRATION);
@@ -119,6 +119,13 @@ public class FriendController {
         friendService.unfriend(userId, uLight.get().getName(), friendId, fLight.get().getName(), Instant.now().toEpochMilli());
         
         return null;
+    }
+    
+    @RequestMapping(value="/queryFriends/{userId}", method=RequestMethod.GET)
+    public @ResponseBody Result<Map<Long, String>> queryFriends(@PathVariable UserId userId) {
+        _LOGGER.debug("FriendController.queryFriends: " + userId);
+        
+        return new Result<>(SUCCESS, friendService.queryFriends((userId)));
     }
     
 }
