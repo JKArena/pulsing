@@ -75,8 +75,8 @@ public class UserController {
         return userService.createUser(user);
     }
     
-    @RequestMapping(value="/getAlertList", method=RequestMethod.GET)
-    public @ResponseBody Result<List<Invitation>> getAlertList(@RequestParam UserId userId) {
+    @RequestMapping(value="/getAlertList/{userId}", method=RequestMethod.GET)
+    public @ResponseBody Result<List<Invitation>> getAlertList(@PathVariable UserId userId) {
         _LOGGER.debug("UserController.getAlertList: " + userId);
         
         return userService.getAlertList(userId);

@@ -32,15 +32,14 @@ const GetChatLobbyMessagesAction = Object.freeze(
   {
 
     queryChatLobbyMessages(cLId, userId) {
-      let path = GET_CHAT_LOBBY_MESSAGES_PATH + cLId;
+      let path = GET_CHAT_LOBBY_MESSAGES_PATH + cLId + '/' + userId.serialize();
 
       let params = {__proto__: null,
-                    'userId': userId.serialize(),
                     'paging': Storage.paging[cLId] || ''};
 
       return new Promise(function(resolve, reject) {
 
-        Fetch.GET_JSON(path, {}, params)
+        Fetch.GET_JSON(new URL(path), {}, params)
           .then(function(json) {
             console.debug('queryChatLobbyMessages result', json);
             if(json.code === 'SUCCESS') {

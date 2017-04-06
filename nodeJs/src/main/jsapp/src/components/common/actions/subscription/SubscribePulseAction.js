@@ -23,18 +23,18 @@
 'use strict';
 
 import Fetch from '../../../../common/Fetch';
-import Url from '../../../../common/Url';
-import Storage from '../../../../common/Storage';
 import {TOPICS, API} from '../../../../common/PubSub';
+import Storage from '../../../../common/Storage';
+import Url from '../../../../common/Url';
 
-const SUBSCRIBE_PULSE_PATH = 'pulse/subscribePulse/';
+const SUBSCRIBE_PULSE_PATH = Url.controllerUrl() + 'pulse/subscribePulse/';
 
 const SubscribePulseAction = Object.freeze(
   {
 
     subscribePulse(pulseId, userId) {
 
-      let url = new URL(Url.controllerUrl() + SUBSCRIBE_PULSE_PATH +
+      let url = new URL(SUBSCRIBE_PULSE_PATH +
                         pulseId.serialize() + '/' + userId.serialize());
       
       return new Promise(function(resolve, reject) {

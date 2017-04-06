@@ -35,7 +35,7 @@ const SearchDocumentAction = Object.freeze(
 
       return new Promise(function(resolve, reject) {
 
-        Fetch.GET_JSON(path, {}, params)
+        Fetch.GET_JSON(new URL(path), {}, params)
           .then(function(result) {
             console.debug('searchDocument result', result);
             

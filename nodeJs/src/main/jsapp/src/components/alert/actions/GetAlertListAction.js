@@ -23,19 +23,18 @@
 'use strict';
 
 import Fetch from '../../../common/Fetch';
+import Url from '../../../common/Url';
 
-const GET_ALERT_LIST_PATH = 'user/getAlertList';
+const GET_ALERT_LIST_PATH = Url.controllerUrl() + 'user/getAlertList/';
 
 const GetAlertListAction = Object.freeze(
   {
 
     getAlertList(userId) {
 
-      let params = {__proto__: null,
-                    'userId': userId.serialize()};
       return new Promise(function(resolve, reject) {
 
-        Fetch.GET_JSON(GET_ALERT_LIST_PATH, {}, params)
+        Fetch.GET_JSON(new URL(GET_ALERT_LIST_PATH + userId.serialize()))
           .then(function(result) {
             console.debug('getAlertList result', result);
             

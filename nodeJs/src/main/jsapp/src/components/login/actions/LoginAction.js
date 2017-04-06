@@ -23,9 +23,10 @@
 'use strict';
 
 import Fetch from '../../../common/Fetch';
+import Url from '../../../common/Url';
 import Storage from '../../../common/Storage';
 
-const LOGIN_PATH = 'user/validateUser';
+const LOGIN_URL = new URL(Url.controllerUrl() + 'user/validateUser');
 
 const LoginAction = Object.freeze(Object.create(null, {
 
@@ -41,7 +42,7 @@ const LoginAction = Object.freeze(Object.create(null, {
         
         return new Promise(function(resolve, reject) {
 
-          Fetch.POST_JSON(LOGIN_PATH, {body: fData}, false)
+          Fetch.POST_JSON(LOGIN_URL, {body: fData}, false)
             .then(function(result) {
               console.debug('loginUser', result);
               

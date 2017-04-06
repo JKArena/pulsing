@@ -25,14 +25,14 @@
 import Fetch from '../../../common/Fetch';
 import Url from '../../../common/Url';
 
-const CHAT_LOBBY_UN_SUBSCRIBE_PATH = 'chat/chatLobbyUnSubscribe/';
+const CHAT_LOBBY_UN_SUBSCRIBE_PATH = Url.controllerUrl() + 'chat/chatLobbyUnSubscribe/';
 
 const ChatLobbyUnSubscribeAction = Object.freeze(
   {
 
     chatLobbyUnSubscribe(chatId, cLName, userId) {
 
-      let url = new URL(Url.controllerUrl() + CHAT_LOBBY_UN_SUBSCRIBE_PATH + chatId +
+      let url = new URL(CHAT_LOBBY_UN_SUBSCRIBE_PATH + chatId +
                         '/' + cLName + '/' + userId.serialize());
       
       return new Promise(function(resolve, reject) {

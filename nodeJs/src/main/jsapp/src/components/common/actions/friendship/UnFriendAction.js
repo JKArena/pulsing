@@ -25,15 +25,14 @@
 import Fetch from '../../../../common/Fetch';
 import Url from '../../../../common/Url';
 
-const UN_FRIEND_PATH = 'friend/unfriend/';
+const UN_FRIEND_PATH = Url.controllerUrl() + 'friend/unfriend/';
 
 const UnFriendAction = Object.freeze(
   {
 
     friend(userId, friendId) {
 
-      let url = new URL(Url.controllerUrl() + UN_FRIEND_PATH +
-                        userId.serialize() + '/' + friendId.serialize());
+      let url = new URL(UN_FRIEND_PATH + userId.serialize() + '/' + friendId.serialize());
       
       return new Promise(function(resolve, reject) {
 

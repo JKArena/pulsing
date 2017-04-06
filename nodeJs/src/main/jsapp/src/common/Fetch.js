@@ -22,7 +22,6 @@
  */
 'use strict';
 
-import Url from './Url';
 import {TOPICS, API} from './PubSub';
 
 const BASIC = Symbol('basic');
@@ -125,28 +124,21 @@ function fetchContent(request, hOptions, responseType, logError) {
   
 }
 
-function generatePath(path) {
-  return path.startsWith('http') ? path : Url.controllerUrl() + path;
-}
-
 export default Object.freeze(
     Object.create(null,
       {
         'GET_JSON' : {
           get: function() {
 
-
-            return (gPath, hOptions=Object.create(null), params=Object.create(null), logError=true) => {
+            return (gUrl, hOptions=Object.create(null), params=Object.create(null), logError=true) => {
               
               const DEFAULT_HEADERS = new Headers({'Accept': 'application/json'});
               const DEFAULT_OPTIONS = {method: 'GET',  mode: 'cors', headers: DEFAULT_HEADERS};
               
-              
-              let url = new URL(generatePath(gPath));
               Object.keys(params).forEach(key => {
-                url.searchParams.append(key, params[key]);
+                gUrl.searchParams.append(key, params[key]);
               });
-              let request = new Request(url);
+              let request = new Request(gUrl);
               let gOptions = Object.assign(DEFAULT_OPTIONS, hOptions);
 
               return fetchContent(request, gOptions, 'json', logError);
@@ -160,12 +152,12 @@ export default Object.freeze(
         'POST_JSON' : {
           get: function() {
 
-            return (pPath, hOptions=Object.create(null), logError=true) => {
+            return (pUrl, hOptions=Object.create(null), logError=true) => {
               
               const DEFAULT_HEADERS = new Headers({'Accept': 'application/json'});
               const DEFAULT_OPTIONS = {method: 'POST',  mode: 'cors', headers: DEFAULT_HEADERS};
 
-              let request = new Request(generatePath(pPath));
+              let request = new Request(pUrl);
               let pOptions = Object.assign(DEFAULT_OPTIONS, hOptions);
 
               return fetchContent(request, pOptions, 'json', logError);
@@ -179,12 +171,12 @@ export default Object.freeze(
         'DELETE_JSON' : {
           get: function() {
 
-            return (dPath, hOptions=Object.create(null), logError=true) => {
+            return (dUrl, hOptions=Object.create(null), logError=true) => {
               
               const DEFAULT_HEADERS = new Headers({'Accept': 'application/json'});
               const DEFAULT_OPTIONS = {method: 'DELETE',  mode: 'cors', headers: DEFAULT_HEADERS};
 
-              let request = new Request(generatePath(dPath));
+              let request = new Request(dUrl);
               let dOptions = Object.assign(DEFAULT_OPTIONS, hOptions);
 
               return fetchContent(request, dOptions, 'json', logError);
@@ -198,12 +190,12 @@ export default Object.freeze(
         'PUT_JSON' : {
           get: function() {
 
-            return (putURL, hOptions=Object.create(null), logError=true) => {
+            return (pUrl, hOptions=Object.create(null), logError=true) => {
 
               const DEFAULT_HEADERS = new Headers({'Accept': 'application/json'});
               const DEFAULT_OPTIONS = {method: 'PUT',  mode: 'cors', headers: DEFAULT_HEADERS};
 
-              let request = new Request(putURL);
+              let request = new Request(pUrl);
               let putOptions = Object.assign(DEFAULT_OPTIONS, hOptions);
 
               return fetchContent(request, putOptions, 'json', logError);
@@ -217,11 +209,11 @@ export default Object.freeze(
         'GET_RAW' : {
           get: function() {
 
-            return (path, hOptions=Object.create(null), logError=true) => {
+            return (url, hOptions=Object.create(null), logError=true) => {
               
               const DEFAULT_OPTIONS = {method: 'GET',  mode: 'cors'};
 
-              let request = new Request(path);
+              let request = new Request(url);
               let opts = Object.assign(DEFAULT_OPTIONS, hOptions);
 
               return fetchContent(request, opts, 'raw', logError);

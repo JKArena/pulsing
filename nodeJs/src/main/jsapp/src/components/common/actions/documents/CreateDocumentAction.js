@@ -36,7 +36,7 @@ const CreateDocumentAction = Object.freeze(
 
       return new Promise(function(resolve, reject) {
 
-        Fetch.POST_JSON(path, {body: fData}, false)
+        Fetch.POST_JSON(new URL(path), {body: fData}, false)
           .then(function(result) {
             console.debug('createDocument', result);
 

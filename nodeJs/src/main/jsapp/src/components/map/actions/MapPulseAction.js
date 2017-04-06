@@ -23,8 +23,9 @@
 'use strict';
 
 import Fetch from '../../../common/Fetch';
+import Url from '../../../common/Url';
 
-const GET_MAP_PULSE_DATA_POINTS_PATH = 'pulse/getMapPulseDataPoints';
+const GET_MAP_PULSE_DATA_POINTS_URL = new URL(Url.controllerUrl() + 'pulse/getMapPulseDataPoints');
 
 const MapPulseAction = Object.freeze(
   {
@@ -37,7 +38,7 @@ const MapPulseAction = Object.freeze(
                     'lng': latLng.lng};
       return new Promise(function(resolve, reject) {
 
-        Fetch.GET_JSON(GET_MAP_PULSE_DATA_POINTS_PATH, {}, params)
+        Fetch.GET_JSON(GET_MAP_PULSE_DATA_POINTS_URL, {}, params)
           .then(function(json) {
             console.debug('getMapPulseDataPoints result', json);
             

@@ -26,14 +26,13 @@ import Storage from '../../../common/Storage';
 import Fetch from '../../../common/Fetch';
 import Url from '../../../common/Url';
 
-const GET_FRIENDS_PATH = 'friend/queryFriends/';
+const GET_FRIENDS_PATH = Url.controllerUrl() + 'friend/queryFriends/';
 
 const GetFriendsAction = Object.freeze(
   {
 
     queryFriends(userId) {
-      let url = new URL(Url.controllerUrl() + GET_FRIENDS_PATH +
-                        userId.serialize());
+      let url = new URL(GET_FRIENDS_PATH + userId.serialize());
 
       let params = {__proto__: null,
                     'paging': Storage.paging[userId.id] || ''};

@@ -23,19 +23,18 @@
 'use strict';
 
 import Fetch from '../../../common/Fetch';
+import Url from '../../../common/Url';
 
-const GET_CHAT_LOBBIES_PATH = 'chat/queryChatLobbies/';
+const GET_CHAT_LOBBIES_PATH = Url.controllerUrl() + 'chat/queryChatLobbies/';
 
 const GetChatLobbiesAction = Object.freeze(
   {
 
     queryChatLobbies(userId) {
 
-      let params = {__proto__: null,
-                    'userId': userId.serialize()};
       return new Promise(function(resolve, reject) {
 
-        Fetch.GET_JSON(GET_CHAT_LOBBIES_PATH, {}, params)
+        Fetch.GET_JSON(new URL(GET_CHAT_LOBBIES_PATH + userId.serialize()))
           .then(function(result) {
             console.debug('queryChatLobbies result', result);
             

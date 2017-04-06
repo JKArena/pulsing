@@ -25,8 +25,9 @@
 import User from '../../../avro/User';
 import Fetch from '../../../common/Fetch';
 import Storage from '../../../common/Storage';
+import Url from '../../../common/Url';
 
-const LOGIN_PATH = 'user/createUser';
+const LOGIN_URL = new URL(Url.controllerUrl() + 'user/createUser');
 
 const SignupAction = Object.freeze(Object.create(null, {
 
@@ -52,7 +53,7 @@ const SignupAction = Object.freeze(Object.create(null, {
         
         return new Promise(function(resolve, reject) {
 
-          Fetch.POST_JSON(LOGIN_PATH, {body: fData}, false)
+          Fetch.POST_JSON(LOGIN_URL, {body: fData}, false)
             .then(function(result) {
               console.debug('signup', result);
               

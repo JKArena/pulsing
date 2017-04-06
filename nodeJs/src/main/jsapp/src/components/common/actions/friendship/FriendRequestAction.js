@@ -23,8 +23,9 @@
 'use strict';
 
 import Fetch from '../../../../common/Fetch';
+import Url from '../../../common/Url';
 
-const FRIEND_REQUEST_PATH = 'friend/friendRequest/';
+const FRIEND_REQUEST_URL = new URL(Url.controllerUrl() + 'friend/friendRequest/');
 
 const FriendRequestAction = Object.freeze(
   {
@@ -37,7 +38,7 @@ const FriendRequestAction = Object.freeze(
 
       return new Promise(function(resolve, reject) {
 
-        Fetch.POST_JSON(FRIEND_REQUEST_PATH, {body: fData}, false)
+        Fetch.POST_JSON(FRIEND_REQUEST_URL, {body: fData}, false)
           .then(function(result) {
             console.debug('friendRequest', result);
 
