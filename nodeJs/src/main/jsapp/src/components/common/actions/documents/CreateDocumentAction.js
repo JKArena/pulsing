@@ -27,12 +27,14 @@ import Fetch from '../../../../common/Fetch';
 const CreateDocumentAction = Object.freeze(
   {
 
-    createDocument(path, data) {
+    createDocument(path, index, doc_type, data) {
 
       let fData = new FormData();
       for(let key of Object.keys(data)) {
         fData.append(key, data[key]);
       }
+      fData.append('index', index);
+      fData.append('doc_type', doc_type);
 
       return new Promise(function(resolve, reject) {
 

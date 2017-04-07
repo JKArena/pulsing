@@ -19,6 +19,57 @@ under the License.
 @author Ji Kim
 """
 
-from django.db import models
+from shared.elastic import Search
 
-# Create your models here.
+"""
+Will be using store which marks the field to be stored in a separate index fragment for fast retrieving but of course eats up more disk.
+
+text type allows textual queries (term, match, span queries)
+keyword type is for exact term match and for aggregation and sorting
+
+Since Elasticsearch supports multivalue fieds (arrays) transparently can pass in
+{...'tags': ['foo', 'bar', 'stuff'}
+
+"""
+pulseSearch = Search('pulse')
+pulseSearch.map('pulse_tags', {'properties': 
+    {
+        'description': {'type': 'text', 'store': 'true'},   # tokenize the description
+        'name': { 
+            'type': 'keyword', 
+            'copy_to': ['suggest'],
+            'fields': {
+                'name': {'type': 'keyword'},                # will be default multifield subfield-field => 'Luigi pizza - ABC1234'
+                'token': {'type': 'text'}                   # standard analyzed (tokenized) => ['Luigi', 'pizza', 'abc1234']
+             }
+         },
+         'suggest': {
+             'type': 'completion',
+             'analyzer': 'simple',
+             'search_analyzer': 'simple'
+         },
+        'user_id': {'type': 'long', 'store': 'true'},
+        'timestamp': {'type': 'date', 'store': 'true'},
+        'tags': {'type': 'keyword', 'store': 'true'}         # won't be tokenized since keyword
+    }
+})
+
+userSearch = Search('user')
+userSearch.map('user_tags', {'properties': 
+    {
+        'email': {'type': 'keyword', 'store': 'true'},
+        'name': { 
+            'type': 'keyword', 
+            'copy_to': ['suggest'],
+            'fields': {
+                'name': {'type': 'keyword'},
+                'token': {'type': 'text'}
+             }
+         },
+         'suggest': {
+             'type': 'completion',
+             'analyzer': 'simple',
+             'search_analyzer': 'simple'
+         }
+    }
+})

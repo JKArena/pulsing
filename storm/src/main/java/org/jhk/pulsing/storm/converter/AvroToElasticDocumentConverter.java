@@ -27,6 +27,7 @@ import java.util.stream.Collectors;
 
 import org.apache.storm.tuple.ITuple;
 import org.jhk.pulsing.serialization.avro.records.Pulse;
+import org.jhk.pulsing.serialization.avro.records.User;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,11 +42,12 @@ public final class AvroToElasticDocumentConverter {
     private static final EnumMap<AVRO_TO_ELASTIC_DOCUMENT, Function<ITuple, JSONObject>> _AVRO_TO_ELASTIC_DOC_MAPPER = new EnumMap<>(AVRO_TO_ELASTIC_DOCUMENT.class);
     
     public static enum AVRO_TO_ELASTIC_DOCUMENT {
-        PULSE;
+        PULSE, USER;
     }
     
     static {
         _AVRO_TO_ELASTIC_DOC_MAPPER.put(AVRO_TO_ELASTIC_DOCUMENT.PULSE, AvroToElasticDocumentConverter::convertPulseAvroToElasticDoc);
+        _AVRO_TO_ELASTIC_DOC_MAPPER.put(AVRO_TO_ELASTIC_DOCUMENT.USER, AvroToElasticDocumentConverter::convertUserAvroToElasticDoc);
     }
     
     public static Function<ITuple, JSONObject> getAvroToElasticDocFunction(AVRO_TO_ELASTIC_DOCUMENT avroType) {
@@ -76,6 +78,19 @@ public final class AvroToElasticDocumentConverter {
         obj.put("user_id", pulse.getUserId().getId());
         obj.put("timestamp", pulse.getTimeStamp());
         obj.put("tags", tags);
+        
+        return obj;
+    }
+    
+    private static JSONObject convertUserAvroToElasticDoc(ITuple tuple) {
+        _LOGGER.info("AvroToElasticDocumentConverter.convertUserAvroToElasticDoc " + tuple);
+        
+        User user = (User) tuple.getValueByField(AVRO);
+        
+        JSONObject obj = new JSONObject();
+        
+        obj.put("name", user.getName().toString());
+        obj.put("email", user.getEmail().toString());
         
         return obj;
     }
