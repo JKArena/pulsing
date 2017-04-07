@@ -68,23 +68,26 @@ class AppComponent extends React.Component {
   }
 
   render() {
+
     return (
       <div>
         <NavBarComponent></NavBarComponent>
-        
-        {this.props.children}
-
-        {(() => {
-          if(this.state.loggedIn) {
-            return <Grid>
-                    <Row>
-                      <Col>
-                        <ChatComponent />
-                      </Col>
-                    </Row>
-                  </Grid>;
-          }
-        })()}
+        <Grid>
+          <Row>
+            <Col>
+              {this.props.children}
+            </Col>
+          </Row>
+          {(() => {
+            if(this.state.loggedIn) {
+              return  <Row>
+                        <Col>
+                          <ChatComponent />
+                        </Col>
+                      </Row>;
+            }
+          })()}
+        </Grid>
       </div>
     );
   }
