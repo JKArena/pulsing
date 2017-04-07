@@ -22,6 +22,8 @@
  */
 'use strict';
 
+import Url from '../../../../common/Url';
+
 import {AbstractSearchStore, STORE_EVENT} from './AbstractSearchStore';
 import SearchDocumentAction from '../../actions/documents/SearchDocumentAction';
 
