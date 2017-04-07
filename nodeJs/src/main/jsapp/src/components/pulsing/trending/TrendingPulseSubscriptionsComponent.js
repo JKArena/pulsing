@@ -28,7 +28,6 @@ import {Grid, Row, Col, Thumbnail, Button, Badge} from 'react-bootstrap';
 import React, {Component} from 'react';
 
 import TrendingPulseSubscriptionsStore from './TrendingPulseSubscriptionsStore';
-import Url from '../../../common/Url';
 import {TOPICS, API} from '../../../common/PubSub';
 import Storage from '../../../common/Storage';
 
