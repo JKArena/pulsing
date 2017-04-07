@@ -21,60 +21,32 @@ under the License.
 
 from django.http import JsonResponse, HttpResponseBadRequest
 
-from shared.elastic import Search
-
 import json
 import logging
 import uuid
 import datetime
 
+from .models import (pulseSearch, userSearch) 
+
 logger = logging.getLogger(__name__)
+elasticDict = dict(pulse=pulseSearch, user=userSearch)
 
-"""
-Will be using store which marks the field to be stored in a separate index fragment for fast retrieving but of course eats up more disk.
-
-text type allows textual queries (term, match, span queries)
-keyword type is for exact term match and for aggregation and sorting
-
-Since Elasticsearch supports multivalue fieds (arrays) transparently can pass in
-{...'tags': ['foo', 'bar', 'stuff'}
-
-"""
-tagSearch = Search('pulse')
-tagSearch.map('pulse_tags', {'properties': 
-    {
-        'description': {'type': 'text', 'store': 'true'},   # tokenize the description
-        'name': { 
-            'type': 'keyword', 
-            'copy_to': ['suggest'],
-            'fields': {
-                'name': {'type': 'keyword'},                # will be default multifield subfield-field => 'Luigi pizza - ABC1234'
-                'token': {'type': 'text'}                   # standard analyzed (tokenized) => ['Luigi', 'pizza', 'abc1234']
-             }
-         },
-         'suggest': {
-             'type': 'completion',
-             'analyzer': 'simple',
-             'search_analyzer': 'simple'
-         },
-        'user_id': {'type': 'long', 'store': 'true'},
-        'timestamp': {'type': 'date', 'store': 'true'},
-        'tags': {'type': 'keyword', 'store': 'true'}         # won't be tokenized since keyword
-    }
-})
-
-def searchPulseDocument(request):
+def searchDocument(request):
     logger.debug('searchDocument')
     
-    if not 'search' in request.GET or not 'doc_type' in request.GET:
+    parameters = [field for field in ['search', 'index', 'doc_type'] if not field in request.GET]
+    
+    if parameters.length > 0:
+        logger.debug('searchDocument lacking parameters - %s', parameters)
         return HttpResponseBadRequest()
     
-    logger.debug('searchDocument got query - ' + request.GET['search'])
+    logger.debug('searchDocument querying %s : %s - %s', request.GET['index'], request.GET['doc_type'], request.GET['search'])
+    
     search = json.loads(request.GET['search'])
     doc_type = request.GET['doc_type']
-
+    elastic = elasticDict[request.GET['index']]
     # for now just name, later pass the field
-    result = tagSearch.search(doc_type, search)
+    result = elastic.search(doc_type, search)
 
     logger.debug('searchDocument query result - %s', result)
     

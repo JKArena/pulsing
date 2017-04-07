@@ -65,8 +65,8 @@ public final class PulseTopologyBuilder {
     
     private static final Logger _LOGGER = LoggerFactory.getLogger(PulseTopologyBuilder.class);
     
-    private static final String ELASTIC_SEARCH_INDEX = "pulse";
-    private static final String ELASTIC_SEARCH_DOC_TYPE = "pulse_tags";
+    private static final String ELASTIC_SEARCH_PULSE_INDEX = "pulse";
+    private static final String ELASTIC_SEARCH_PULSE_DOC_TYPE = "pulse_tags";
     
     public static StormTopology build(boolean isPailBuild) throws NodeValidationException {
         _LOGGER.debug("PulseTopologyBuilder.build");
@@ -96,7 +96,7 @@ public final class PulseTopologyBuilder {
             .shuffleGrouping("pulse-create-spout");
         
         builder.setBolt("pulse-elasticsearch-create-doc", new ESCreateDocumentBolt(AvroToElasticDocumentConverter.AVRO_TO_ELASTIC_DOCUMENT.PULSE, 
-                ELASTIC_SEARCH_INDEX, ELASTIC_SEARCH_DOC_TYPE), 1)
+                ELASTIC_SEARCH_PULSE_INDEX, ELASTIC_SEARCH_PULSE_DOC_TYPE), 1)
             .setNumTasks(1)
             .shuffleGrouping("pulse-avro-deserialize");
         
@@ -128,7 +128,7 @@ public final class PulseTopologyBuilder {
                 .each(new Fields("str"), new AvroDeserializerFunction(StringToAvroDeserializedValues.STRING_TO_AVRO_VALUES.PULSE, true), FieldConstants.AVRO_DESERIALIZE_WITH_ID_FIELD)
                 .shuffle()
                 .each(FieldConstants.AVRO_DESERIALIZE_WITH_ID_FIELD, 
-                        new ESCreateDocumentFunction(AvroToElasticDocumentConverter.AVRO_TO_ELASTIC_DOCUMENT.PULSE, ELASTIC_SEARCH_INDEX, ELASTIC_SEARCH_DOC_TYPE), new Fields());
+                        new ESCreateDocumentFunction(AvroToElasticDocumentConverter.AVRO_TO_ELASTIC_DOCUMENT.PULSE, ELASTIC_SEARCH_PULSE_INDEX, ELASTIC_SEARCH_PULSE_DOC_TYPE), new Fields());
         
         avroHdfsStatePersist(stream);
         

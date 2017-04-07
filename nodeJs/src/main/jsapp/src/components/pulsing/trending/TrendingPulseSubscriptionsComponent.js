@@ -34,8 +34,6 @@ import Storage from '../../../common/Storage';
 
 import InputSearchComponent from '../../common/search/InputSearchComponent';
 
-const ELASTIC_PULSE_PREFIX_PATH = Url.djangoRootUrl() + 'tags/pulse/';
-
 let trending = new Map();
 
 class TrendingPulseSubscriptionsComponent extends Component {
@@ -64,11 +62,6 @@ class TrendingPulseSubscriptionsComponent extends Component {
       this.store = null;
     }
 
-    if(this.sub){
-      this.sub.unsubscribe();
-      this.sub = null;
-    }
-    
     API.unsubscribe(TOPICS.AUTH, this.authHandler);
   }
   
@@ -113,8 +106,7 @@ class TrendingPulseSubscriptionsComponent extends Component {
     
     return (
       <div className='trendingpulse-component'>
-        <InputSearchComponent store='elasticSearch' index='pulse' docType='pulse_tags' trigger='Search Pulse'
-          pathPrefix={ELASTIC_PULSE_PREFIX_PATH} />
+        <InputSearchComponent store='elasticSearch' index='pulse' docType='pulse_tags' trigger='Search Pulse' />
         
         {(() => {
           

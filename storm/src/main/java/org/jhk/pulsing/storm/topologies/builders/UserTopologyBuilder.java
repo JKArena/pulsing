@@ -39,8 +39,10 @@ import org.jhk.pulsing.shared.util.CommonConstants;
 import org.jhk.pulsing.shared.util.HadoopConstants;
 import org.jhk.pulsing.storm.bolts.converter.AvroToThriftConverterBolt;
 import org.jhk.pulsing.storm.bolts.deserializers.AvroDeserializerBolt;
+import org.jhk.pulsing.storm.bolts.elasticsearch.ESCreateDocumentBolt;
 import org.jhk.pulsing.storm.bolts.persistor.PailDataPersistorBolt;
 import org.jhk.pulsing.storm.common.FieldConstants;
+import org.jhk.pulsing.storm.converter.AvroToElasticDocumentConverter;
 import org.jhk.pulsing.storm.converter.AvroToThriftConverter;
 import org.jhk.pulsing.storm.deserializer.StringToAvroDeserializedValues;
 import org.jhk.pulsing.storm.hadoop.bolt.AvroRecordFormatBolt;
@@ -54,6 +56,9 @@ import org.slf4j.LoggerFactory;
 public final class UserTopologyBuilder {
     
     private static final Logger _LOGGER = LoggerFactory.getLogger(UserTopologyBuilder.class);
+    
+    private static final String ELASTIC_SEARCH_USER_INDEX = "user";
+    private static final String ELASTIC_SEARCH_USER_DOC_TYPE = "user_tags";
     
     public static StormTopology build(boolean isPailBuild) {
         _LOGGER.info("UserTopologyBuilder.build");
@@ -78,9 +83,14 @@ public final class UserTopologyBuilder {
                 .setNumTasks(1)
                 .shuffleGrouping("user-avro-thrift-converter");
         }else {
-            builder.setBolt("user-hdfs", avroHdfsBolt(), 1)
+            builder.setBolt("user-elasticsearch-create-doc", new ESCreateDocumentBolt(AvroToElasticDocumentConverter.AVRO_TO_ELASTIC_DOCUMENT.USER, 
+                    ELASTIC_SEARCH_USER_INDEX, ELASTIC_SEARCH_USER_DOC_TYPE), 1)
                 .setNumTasks(1)
                 .shuffleGrouping("user-avro-deserialize");
+            
+            builder.setBolt("user-hdfs", avroHdfsBolt(), 1)
+                .setNumTasks(1)
+                .shuffleGrouping("user-elasticsearch-create-doc");
         }
         
         return builder.createTopology();
