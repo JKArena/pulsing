@@ -31,16 +31,16 @@ from .models import (pulseSearch, userSearch)
 logger = logging.getLogger(__name__)
 elasticDict = dict(pulse=pulseSearch, user=userSearch)
 
-def searchDocument(request):
-    logger.debug('searchDocument')
+def queryDocument(request):
+    logger.debug('queryDocument')
     
     parameters = [field for field in ['search', 'index', 'doc_type'] if not field in request.GET]
     
-    if parameters.length > 0:
-        logger.debug('searchDocument lacking parameters - %s', parameters)
+    if len(parameters) > 0:
+        logger.debug('queryDocument lacking parameters - %s', parameters)
         return HttpResponseBadRequest()
     
-    logger.debug('searchDocument querying %s : %s - %s', request.GET['index'], request.GET['doc_type'], request.GET['search'])
+    logger.debug('queryDocument %s : %s - %s', request.GET['index'], request.GET['doc_type'], request.GET['search'])
     
     search = json.loads(request.GET['search'])
     doc_type = request.GET['doc_type']
@@ -48,7 +48,7 @@ def searchDocument(request):
     # for now just name, later pass the field
     result = elastic.search(doc_type, search)
 
-    logger.debug('searchDocument query result - %s', result)
+    logger.debug('queryDocument query result - %s', result)
     
     if result['timed_out']:
         return JsonResponse({'code': 'FAILURE', 'data': {}, 'message': 'Timed out in the search'})

@@ -27,7 +27,7 @@ import Url from '../../../../common/Url';
 import {AbstractSearchStore, STORE_EVENT} from './AbstractSearchStore';
 import SearchDocumentAction from '../../actions/documents/SearchDocumentAction';
 
-const ELASTIC_PULSE_PREFIX_PATH = Url.djangoRootUrl() + 'tags/search/';
+const ELASTIC_SEARCH_QUERY_PREFIX_PATH = Url.djangoRootUrl() + 'search/query';
 
 class ElasticSearchDjangoStore extends AbstractSearchStore {
 
@@ -46,7 +46,7 @@ class ElasticSearchDjangoStore extends AbstractSearchStore {
   search(typeName, query) {
     console.debug('search: ', typeName, query);
     
-    SearchDocumentAction.searchDocument(ELASTIC_PULSE_PREFIX_PATH, this.index, typeName, query)
+    SearchDocumentAction.searchDocument(ELASTIC_SEARCH_QUERY_PREFIX_PATH, this.index, typeName, query)
       .then((searchResult) => {
         this.emit(STORE_EVENT.SEARCH, searchResult);
       });
