@@ -3,4 +3,4 @@ function finish {
 }
 trap finish EXIT
 
-python3 ./manage.py runserver pulsing.jhk.org:9051
+stunnel dev_https & stunnel_pid=$! &
