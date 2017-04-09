@@ -46,7 +46,7 @@ export default Object.freeze(
       DEFAULT_PICTURE_PATH: '/images/defaultPicture.png',
 
       getPicturePath(path) {
-        return path ? this.rootUrl() + path : this.DEFAULT_PICTURE_PATH;
+        return path ? this.springRootUrl() + path : this.DEFAULT_PICTURE_PATH;
       },
 
       djangoRootUrl() {
