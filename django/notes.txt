@@ -47,3 +47,5 @@ from django.views.decorators.cache import cache_control
 So to control privacy of data and where data should be stored in a cascade of caches
 
 mySQLClient driver for the DB
+
+stunnel for https on dev

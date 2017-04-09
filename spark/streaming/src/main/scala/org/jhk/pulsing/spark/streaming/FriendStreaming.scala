@@ -31,48 +31,40 @@ import org.apache.spark.streaming.kafka010.LocationStrategies.PreferConsistent
 import org.apache.spark.streaming.kafka010.ConsumerStrategies.Subscribe
 import org.apache.spark.sql.SparkSession
 
-import com.google.maps.GeoApiContext
-import com.google.maps.GeocodingApi
-import com.google.maps.model.GeocodingResult
-
 import org.jhk.pulsing.shared.util.CommonConstants._
 import org.jhk.pulsing.shared.util.HadoopConstants
-import org.jhk.pulsing.serialization.avro.records.Location
+import org.jhk.pulsing.serialization.avro.records.edge.FriendEdge
 import org.jhk.pulsing.serialization.avro.serializers.SerializationHelper
 
 /**
  * @author Ji Kim
  */
-object LocationStreaming {
-  val CHECKPOINT = HadoopConstants.getWorkingDirectory(HadoopConstants.DIRECTORIES.SPARK_LOCATION_CREATE)
+object FriendStreaming {
+  val CHECKPOINT = HadoopConstants.getWorkingDirectory(HadoopConstants.DIRECTORIES.SPARK_FRIEND)
   
   def createStreamingContext() = {
-    val configuration = new SparkConf().setMaster(SPARK_YARN_CLUSTER_MASTER).setAppName("location-create")
+    val configuration = new SparkConf().setMaster(SPARK_YARN_CLUSTER_MASTER).setAppName("friend")
     val streamingContext = new StreamingContext(configuration, Seconds(10))
     
-    //streamingContext.checkpoint(CHECKPOINT)
     streamingContext
   }
   
   def main(args: Array[String]): Unit = {
     
-    //val streamingContext = StreamingContext.getOrCreate(CHECKPOINT, createStreamingContext _) Spark 13316 Bug
     val streamingContext = createStreamingContext
     val logger = LogManager.getRootLogger
-    logger.info("Starting Location Streaming...")
+    logger.info("Starting Friend Streaming...")
     
     val kafkaParameters = Map[String, Object](
       "bootstrap.servers" -> DEFAULT_BOOTSTRAP_URL,
       "key.deserializer" -> classOf[StringDeserializer],
       "value.deserializer" -> classOf[StringDeserializer],
-      //The cache is keyed by topicpartition and group.id, so use a separate group.id
-      //for each call to createDirectStream.
-      "group.id" -> "location_create_stream", 
+      "group.id" -> "friend_stream", 
       "auto.offset.reset" -> "latest",
       "enable.auto.commit" -> (false: java.lang.Boolean)
     )
     
-    val topics = List(TOPICS.LOCATION_CREATE.toString()).toSet
+    val topics = List(TOPICS.FRIEND.toString()).toSet
     val stream = KafkaUtils.createDirectStream[String, String](
       streamingContext, 
       PreferConsistent,
@@ -83,31 +75,23 @@ object LocationStreaming {
       rdd.foreachPartition { records =>
         
         val context = TaskContext.get
-        val geoContext = new GeoApiContext().setApiKey(MAP_API_KEY)
         
         val sparkSession = SparkSession.builder.master(SPARK_YARN_CLUSTER_MASTER)
-          .appName("Location Create Hive")
+          .appName("Friend Hive")
           .enableHiveSupport()
           .getOrCreate()
 
-        val partitionLogger = LogManager.getLogger("Location")
-        partitionLogger.info(s"Location Create for partition: ${context.partitionId}")
+        val partitionLogger = LogManager.getLogger("Friend")
+        partitionLogger.info(s"Friend for partition: ${context.partitionId}")
         
         records.foreach(record => {
           //perform avro deserialization + geo api call
           
           partitionLogger.info("Processing record - " + record)
           
-          val deserialized = SerializationHelper.deserializeFromJSONStringToAvro(classOf[Location], Location.getClassSchema(), record.value)
-          val result:Array[GeocodingResult] = GeocodingApi.geocode(geoContext, deserialized.getAddress().toString()).await()
-          
-          partitionLogger.info("GeocodingResult - " + result.length)
-          
-          val geoLoc = result(0).geometry.location;
-          deserialized.setLat(geoLoc.lat)
-          deserialized.setLng(geoLoc.lng)
-          
+          val deserialized = SerializationHelper.deserializeFromJSONStringToAvro(classOf[FriendEdge], FriendEdge.getClassSchema(), record.value)
           partitionLogger.info("Deserialized - " + deserialized)
+          
         })
       
       }

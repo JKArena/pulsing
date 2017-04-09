@@ -1,0 +1,10 @@
+pid=
+cert=stunnel.pem
+foreground=yes
+debug=7
+output=stunnel.log
+
+[https]
+accept=9050
+connect=9051
+TIMEOUTclose=1

@@ -27,7 +27,7 @@ import Url from '../../../../common/Url';
 import {AbstractSearchStore, STORE_EVENT} from './AbstractSearchStore';
 import SearchDocumentAction from '../../actions/documents/SearchDocumentAction';
 
-const ELASTIC_PULSE_PREFIX_PATH = Url.djangoRootUrl() + 'tags/search';
+const ELASTIC_PULSE_PREFIX_PATH = Url.djangoRootUrl() + 'tags/search/';
 
 class ElasticSearchDjangoStore extends AbstractSearchStore {
 
