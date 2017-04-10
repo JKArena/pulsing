@@ -76,7 +76,7 @@
   </property>
   <property>
     <name>javax.jdo.option.ConnectionURL</name>
-    <value>jdbc:mysql://pulsing.jhk.org/pulsing?createDatabaseIfNotExist=true</value>
+    <value>jdbc:mysql://pulsing.jhk.org:3306/pulsingHive?createDatabaseIfNotExist=true</value>
     <description>
       MySQL for standalone metastore. Default is Derby embedded metastore, but only one embedded Derby database can 
       access the database files on disk at any one time, which means you can have only one Hive session open at a time 
