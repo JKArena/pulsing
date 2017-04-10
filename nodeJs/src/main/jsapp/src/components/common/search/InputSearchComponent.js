@@ -28,6 +28,7 @@ import React, {Component} from 'react';
 import {findDOMNode} from 'react-dom';
 import {InputGroup, FormControl, Button} from 'react-bootstrap';
 
+import DropDownButtonComponent from '../dropDownButton/DropDownButtonComponent';
 import {STORE_EVENT} from './store/AbstractSearchStore';
 import ElasticSearchDjangoStore from './store/ElasticSearchDjangoStore';
 
@@ -38,13 +39,22 @@ const KEY_STORE_MAPPER = Object.freeze(
   }
 );
 
+const DOC_TYPE = Object.freeze(
+  {
+    __proto__: null,
+    'PULSE': {'docType': 'pulse_tags', 'text': 'Pulse'},
+    'USER': {'docType': 'user_tags', 'text': 'User'}
+  }
+);
+
 class InputSearchComponent extends Component {
 
   constructor(props) {
     super(props);
     
     this.store = new KEY_STORE_MAPPER[props.store](props.index, props.pathPrefix);
-    this.defaultDocType = props.docType;
+    this.docTypes = props.docTypes || [];
+    this.state = {selectedType: this.docTypes[0]};
 
     this.searchResultHandler = this.searchResult.bind(this);
     this.store.on(STORE_EVENT.SEARCH, this.searchResultHandler);
@@ -67,18 +77,34 @@ class InputSearchComponent extends Component {
 
   }
 
+  handleDataTypeSelect(eventKey) {
+    console.debug('handleDataTypeSelect', eventKey);
+    
+    this.state.selectedType = eventKey;
+  }
+
   handleSearch() {
     if(!this.searchInputNode.value) return;
 
-    this.store.search(this.defaultDocType, {'term': {'name': {'boost': 3.0, 'value': this.searchInputNode.value }}});
-    //this.store.search(this.defaultDocType, {'match_all': {}});
+    this.store.search(this.state.selectedType, {'term': {'name': {'boost': 3.0, 'value': this.searchInputNode.value }}});
+    //this.store.search(this.state.selectedType, {'match_all': {}});
   }
 
   render() {
     
+    var menus = {};
+    this.docTypes.forEach(function(ele) {
+      menus[ele.docType] = ele.title;
+    });
+
     return (
       <div className='inputsearch-component'>
         <InputGroup>
+          <InputGroup.Button>
+            <DropDownButtonComponent title={DOC_TYPE[this.state.selectedType]} menus={menus}
+              onSelect={this.handleDataTypeSelect.bind(this)}/>
+            }
+          </InputGroup.Button>
           <FormControl type="text" ref='searchInput' />
           <InputGroup.Button>
             <Button onClick={this.handleSearch.bind(this)}>{this.props.trigger}</Button>
@@ -91,4 +117,4 @@ class InputSearchComponent extends Component {
 
 InputSearchComponent.displayName = 'InputSearchComponent';
 
-export default InputSearchComponent;
+export {InputSearchComponent, DOC_TYPE};
