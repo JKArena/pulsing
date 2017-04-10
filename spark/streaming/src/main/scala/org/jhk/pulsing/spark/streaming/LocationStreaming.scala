@@ -54,7 +54,7 @@ import org.jhk.pulsing.serialization.avro.serializers.SerializationHelper
  */
 object LocationStreaming {
   val SPARK_LOCATION_CREATE = HadoopConstants.HDFS_URL_PORT + HadoopConstants.SPARK_NEW_DATA_WORKSPACE + "location"
-  val CHECKPOINT = HadoopConstants.getWorkingDirectory(HadoopConstants.DIRECTORIES.SPARK_LOCATION_CREATE)
+  val CHECKPOINT = HadoopConstants.getWorkingDirectory(HadoopConstants.WORKING_DIRECTORIES.SPARK_CHECK_PT_LOCATION)
   
   def createStreamingContext() = {
     val configuration = new SparkConf().setMaster(SPARK_YARN_CLUSTER_MASTER).setAppName("location-create")

@@ -32,7 +32,7 @@ import com.backtype.hadoop.pail.Pail;
 import com.backtype.hadoop.pail.Pail.TypedRecordOutputStream;
 
 import org.jhk.pulsing.shared.util.HadoopConstants;
-import static org.jhk.pulsing.shared.util.HadoopConstants.DIRECTORIES.*;
+import static org.jhk.pulsing.shared.util.HadoopConstants.WORKING_DIRECTORIES.*;
 
 import org.jhk.pulsing.pail.thrift.AbstractThriftPailStructure;
 

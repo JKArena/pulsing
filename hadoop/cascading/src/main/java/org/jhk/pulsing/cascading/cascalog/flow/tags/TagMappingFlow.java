@@ -18,7 +18,7 @@
  */
 package org.jhk.pulsing.cascading.cascalog.flow.tags;
 
-import static org.jhk.pulsing.shared.util.HadoopConstants.DIRECTORIES.*;
+import static org.jhk.pulsing.shared.util.HadoopConstants.WORKING_DIRECTORIES.*;
 
 import java.io.IOException;
 import java.util.Map;
