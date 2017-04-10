@@ -477,6 +477,12 @@ descent loss of performance)
       </dependency>
 
       <dependency>
+        <groupId>org.apache.avro</groupId>
+        <artifactId>avro-mapred</artifactId>
+        <version>${avro.mapred}</version>
+      </dependency>
+
+      <dependency>
         <groupId>org.apache.spark</groupId>
         <artifactId>spark-hive_2.11</artifactId>
         <version>${spark.sql}</version>
@@ -529,6 +535,7 @@ descent loss of performance)
   
   <properties>
     <pulsing.version>0.1-SNAPSHOT</pulsing.version>
+    <avro.mapred>1.8.1</avro.mapred>
     <elasticsearch.scala>5.2.11</elasticsearch.scala>
     <elasticsearch.client>5.2.2</elasticsearch.client>
     <log4j>2.8.1</log4j>
