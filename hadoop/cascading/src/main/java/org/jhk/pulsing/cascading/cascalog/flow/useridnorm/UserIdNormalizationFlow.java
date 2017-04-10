@@ -30,7 +30,7 @@ import org.jhk.pulsing.pail.thrift.structures.SplitDataPailStructure;
 import org.jhk.pulsing.serialization.thrift.data.DataUnit;
 import org.jhk.pulsing.shared.util.HadoopConstants;
 
-import static org.jhk.pulsing.shared.util.HadoopConstants.DIRECTORIES.*;
+import static org.jhk.pulsing.shared.util.HadoopConstants.WORKING_DIRECTORIES.*;
 
 import cascading.flow.FlowProcess;
 import cascading.flow.hadoop.HadoopFlowProcess;

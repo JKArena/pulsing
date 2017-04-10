@@ -40,7 +40,7 @@ import org.jhk.pulsing.serialization.avro.serializers.SerializationHelper
  * @author Ji Kim
  */
 object FriendStreaming {
-  val CHECKPOINT = HadoopConstants.getWorkingDirectory(HadoopConstants.DIRECTORIES.SPARK_FRIEND)
+  val CHECKPOINT = HadoopConstants.getWorkingDirectory(HadoopConstants.WORKING_DIRECTORIES.SPARK_CHECK_PT_FRIEND)
   
   def createStreamingContext() = {
     val configuration = new SparkConf().setMaster(SPARK_YARN_CLUSTER_MASTER).setAppName("friend")

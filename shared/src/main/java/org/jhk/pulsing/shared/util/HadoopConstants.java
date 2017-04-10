@@ -55,8 +55,8 @@ public final class HadoopConstants {
         USER, TAG_GROUP;
     }
     
-    public enum DIRECTORIES {
-        TEMP, SNAPSHOT, SHREDDED, TAG_GROUP_MAPPING, EQUIVS_ITERATE, SPARK_LOCATION_CREATE, SPARK_FRIEND;
+    public enum WORKING_DIRECTORIES {
+        TEMP, SNAPSHOT, SHREDDED, TAG_GROUP_MAPPING, EQUIVS_ITERATE, SPARK_CHECK_PT_LOCATION, SPARK_CHECK_PT_FRIEND;
     };
     
     private static final String HADOOP_CONFIG_XML = "hadoop_config.xml";
@@ -84,14 +84,14 @@ public final class HadoopConstants {
         HDFS_URL_PORT = tempParseMap.get("url.port");
     }
     
-    public static String getWorkingDirectory(DIRECTORIES... paths) {
+    public static String getWorkingDirectory(WORKING_DIRECTORIES... paths) {
         if(paths == null || paths.length == 0) {
             throw new IllegalArgumentException("Can't pass null or empty");
         }
         
         StringBuilder wDirectory = new StringBuilder(TEMP_DATA_WORKSPACE);
         
-        for(DIRECTORIES dir : paths) {
+        for(WORKING_DIRECTORIES dir : paths) {
             wDirectory.append(dir);
             wDirectory.append(File.separator);
         }
