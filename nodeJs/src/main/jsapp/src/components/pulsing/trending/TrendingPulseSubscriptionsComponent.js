@@ -31,8 +31,9 @@ import TrendingPulseSubscriptionsStore from './TrendingPulseSubscriptionsStore';
 import {TOPICS, API} from '../../../common/PubSub';
 import Storage from '../../../common/Storage';
 
-import InputSearchComponent from '../../common/search/InputSearchComponent';
+import {DOC_TYPE, InputSearchComponent} from '../../common/search/InputSearchComponent';
 
+const ES_DOC_TYPES = [DOC_TYPE.PULSE, DOC_TYPE.USER]; 
 let trending = new Map();
 
 class TrendingPulseSubscriptionsComponent extends Component {
@@ -102,10 +103,11 @@ class TrendingPulseSubscriptionsComponent extends Component {
         </Thumbnail>
       </Col>);
     });
-    
+
     return (
       <div className='trendingpulse-component'>
-        <InputSearchComponent store='elasticSearch' index='pulse' docType='pulse_tags' trigger='Search Pulse' />
+        <InputSearchComponent store='elasticSearch' index='pulse' docTypes={ES_DOC_TYPES}
+          trigger='Search Pulse' />
         
         {(() => {
           

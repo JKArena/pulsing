@@ -38,7 +38,7 @@ class DropDownButtonComponent extends Component {
       title: (props.title || 'General')
     };
     this.id = 'dDButton' + dDButtonId++;
-    this.menus = {};
+    this.menus = props.menus || {};
   }
 
   addChatMenuItem(menuItem) {
