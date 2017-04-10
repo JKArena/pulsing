@@ -1,6 +1,1 @@
-function finish {
-  kill $stunnel_pid
-}
-trap finish EXIT
-
-stunnel dev_https & stunnel_pid=$! &
+stunnel /Users/jikim/repository/pulsing/django/stunnel/dev_https & stunnel_pid=$! &

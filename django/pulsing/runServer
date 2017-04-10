@@ -1,6 +1,3 @@
-function finish {
-  kill $stunnel_pid
-}
-trap finish EXIT
-
+kill $(ps aux | grep '[s]tunnel dev_https' | awk '{print $2}');
+../stunnel/stunnelServer &
 python3 ./manage.py runserver pulsing.jhk.org:9051

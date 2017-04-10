@@ -1,8 +1,8 @@
 pid=
-cert=stunnel.pem
+cert=/Users/jikim/repository/pulsing/django/stunnel/stunnel.pem
 foreground=yes
 debug=7
-output=stunnel.log
+output=/Users/jikim/repository/pulsing/django/stunnel/stunnel.log
 
 [https]
 accept=9050
