@@ -1,0 +1,17 @@
+Added spatial functions =>
+
+create function st_geomfromtext as 'com.esri.hadoop.hive.ST_GeomFromText';
+create function st_geometrytype as 'com.esri.hadoop.hive.ST_GeometryType';
+create function st_point as 'com.esri.hadoop.hive.ST_Point';
+create function st_asjson as 'com.esri.hadoop.hive.ST_AsJson';
+create function st_asbinary as 'com.esri.hadoop.hive.ST_AsBinary';
+create function st_astext as 'com.esri.hadoop.hive.ST_AsText';
+create function st_intersects as 'com.esri.hadoop.hive.ST_Intersects';
+create function st_x as 'com.esri.hadoop.hive.ST_X';
+create function st_y as 'com.esri.hadoop.hive.ST_Y';
+create function st_srid as 'com.esri.hadoop.hive.ST_SRID';
+create function st_linestring as 'com.esri.hadoop.hive.ST_LineString';
+create function st_pointn as 'com.esri.hadoop.hive.ST_PointN';
+create function st_startpoint as 'com.esri.hadoop.hive.ST_StartPoint';
+create function st_endpoint as 'com.esri.hadoop.hive.ST_EndPoint';
+create function st_numpoints as 'com.esri.hadoop.hive.ST_NumPoints';
