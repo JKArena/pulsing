@@ -33,7 +33,7 @@ import Storage from '../../../common/Storage';
 
 import {DOC_TYPE, InputSearchComponent} from '../../common/search/InputSearchComponent';
 
-const ES_DOC_TYPES = [DOC_TYPE.PULSE, DOC_TYPE.USER]; 
+const ES_DOC_TYPES = [DOC_TYPE.PULSE, DOC_TYPE.USER];
 let trending = new Map();
 
 class TrendingPulseSubscriptionsComponent extends Component {

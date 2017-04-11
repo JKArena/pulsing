@@ -1,0 +1,1 @@
+$SPARK_HOME/bin/spark-submit --verbose --master yarn --jars $SPARK_JARS --deploy-mode cluster --class org.jhk.pulsing.spark.streaming.LocationStreaming --name "Location Create" ~/test/pulsing-spark-streaming-0.1-SNAPSHOT.jar;
