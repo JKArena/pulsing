@@ -15,3 +15,11 @@ create function st_pointn as 'com.esri.hadoop.hive.ST_PointN';
 create function st_startpoint as 'com.esri.hadoop.hive.ST_StartPoint';
 create function st_endpoint as 'com.esri.hadoop.hive.ST_EndPoint';
 create function st_numpoints as 'com.esri.hadoop.hive.ST_NumPoints';
+
+CREATE DATABASE pulsing;
+use pulsing;
+
+Added tables =>
+create external table pulse (id struct<id:bigint>, userId struct<id:bigint>, lat double, lng double, tags array<string>, `timeStamp` bigint, value string, description string, action string) PARTITIONED BY (ds string) CLUSTERED BY (userId) INTO 4 BUCKETS STORED AS AVRO;
+	
+LOAD DATA INPATH 'hdfs://pulsing.jhk.org/data/sparknewdata/pulse/PulseCreate-0-1-1491355054760.txt' INTO TABLE pulse PARTITION (ds='2017-04-11');
