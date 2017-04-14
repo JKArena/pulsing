@@ -26,6 +26,7 @@ import logging
 import uuid
 import datetime
 
+from django.core.cache import cache
 from .models import (pulseSearch, userSearch) 
 
 logger = logging.getLogger(__name__)
@@ -41,6 +42,10 @@ def queryDocument(request):
         return HttpResponseBadRequest()
     
     logger.debug('queryDocument %s : %s - %s', request.GET['index'], request.GET['doc_type'], request.GET['search'])
+    key = ".".join((request.GET['index'], request.GET['doc_type'], request.GET['search']))
+    
+    if cache.get(key) is not None:
+        return cache.get(key)
     
     search = json.loads(request.GET['search'])
     doc_type = request.GET['doc_type']
@@ -53,6 +58,7 @@ def queryDocument(request):
     if result['timed_out']:
         return JsonResponse({'code': 'FAILURE', 'data': {}, 'message': 'Timed out in the search'})
     else:
+        cache.set(key, result['hits']['hits'], 300)
         return JsonResponse({
             'code': 'SUCCESS',
             'data': {'result': result['hits']['hits']},

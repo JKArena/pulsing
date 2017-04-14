@@ -30,11 +30,13 @@ keyword type is for exact term match and for aggregation and sorting
 Since Elasticsearch supports multivalue fieds (arrays) transparently can pass in
 {...'tags': ['foo', 'bar', 'stuff'}
 
+store = when value is stored the original String in its entirety is recorded in the index and may be retrieved
+
 """
 pulseSearch = Search('pulse')
 pulseSearch.map('pulse_tags', {'properties': 
     {
-        'description': {'type': 'text', 'store': 'true'},   # tokenize the description
+        'description': {'type': 'text', 'store': 'false'},   # tokenize the description
         'name': { 
             'type': 'keyword', 
             'copy_to': ['suggest'],
@@ -50,14 +52,14 @@ pulseSearch.map('pulse_tags', {'properties':
          },
         'user_id': {'type': 'long', 'store': 'true'},
         'timestamp': {'type': 'date', 'store': 'true'},
-        'tags': {'type': 'keyword', 'store': 'true'}         # won't be tokenized since keyword
+        'tags': {'type': 'keyword', 'store': 'false'}         # won't be tokenized since keyword
     }
 })
 
 userSearch = Search('user')
 userSearch.map('user_tags', {'properties': 
     {
-        'email': {'type': 'keyword', 'store': 'true'},
+        'email': {'type': '', 'store': 'true'},
         'name': { 
             'type': 'keyword', 
             'copy_to': ['suggest'],

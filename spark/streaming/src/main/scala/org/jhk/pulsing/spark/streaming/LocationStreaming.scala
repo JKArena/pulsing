@@ -58,6 +58,7 @@ object LocationStreaming {
   
   def createStreamingContext() = {
     val configuration = new SparkConf().setMaster(SPARK_YARN_CLUSTER_MASTER).setAppName("location-create")
+    configuration.registerAvroSchemas(Location.getClassSchema)
     val streamingContext = new StreamingContext(configuration, Seconds(10))
     
     //streamingContext.checkpoint(CHECKPOINT)
@@ -93,7 +94,7 @@ object LocationStreaming {
       
       var job = new Job(streamingContext.sparkContext.hadoopConfiguration)
       AvroJob.setOutputKeySchema(job, Location.getClassSchema)
-          
+
       rdd.mapPartitions{ partition =>
   
         val context = TaskContext.get
@@ -124,7 +125,6 @@ object LocationStreaming {
           classOf[NullWritable], 
           classOf[AvroKeyOutputFormat[Location]], 
           job.getConfiguration)
-
       }
     }
     
