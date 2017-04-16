@@ -55,6 +55,8 @@ import org.jhk.pulsing.storm.deserializer.StringToAvroDeserializedValues;
 import org.jhk.pulsing.storm.hadoop.trident.AvroRecordFormatFunction;
 import org.jhk.pulsing.storm.trident.deserializers.AvroDeserializerFunction;
 import org.jhk.pulsing.storm.trident.elasticsearch.ESCreateDocumentFunction;
+import org.joda.time.Instant;
+import org.joda.time.LocalDate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -138,7 +140,7 @@ public final class PulseTopologyBuilder {
     private static void avroHdfsStatePersist(Stream stream) {
         
         FileNameFormat fnFormat = new DefaultFileNameFormat()
-                .withPath(HadoopConstants.SPARK_NEW_DATA_WORKSPACE + "pulse")
+                .withPath(HadoopConstants.SPARK_NEW_DATA_WORKSPACE + "pulse/" + LocalDate.now().getYear())
                 .withPrefix("PulseCreate");
         
         RecordFormat rFormat = new AvroRecordFormatFunction();

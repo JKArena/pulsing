@@ -513,6 +513,12 @@ descent loss of performance)
       </dependency>
 
       <dependency>
+        <groupId>com.databricks</groupId>
+        <artifactId>spark-avro_2.11</artifactId>
+        <version>${spark.avro}</version>
+      </dependency>
+
+      <dependency>
         <groupId>org.apache.logging.log4j</groupId>
         <artifactId>log4j-core</artifactId>
         <version>${log4j}</version>
@@ -535,6 +541,7 @@ descent loss of performance)
   
   <properties>
     <pulsing.version>0.1-SNAPSHOT</pulsing.version>
+    <spark.avro>3.2.0</spark.avro>
     <avro.mapred>1.8.1</avro.mapred>
     <elasticsearch.scala>5.2.11</elasticsearch.scala>
     <elasticsearch.client>5.2.2</elasticsearch.client>

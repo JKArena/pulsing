@@ -47,6 +47,7 @@ import org.jhk.pulsing.storm.converter.AvroToThriftConverter;
 import org.jhk.pulsing.storm.deserializer.StringToAvroDeserializedValues;
 import org.jhk.pulsing.storm.hadoop.bolt.AvroRecordFormatBolt;
 import org.jhk.pulsing.storm.hadoop.bolt.ThriftDataRecordFormatBolt;
+import org.joda.time.LocalDate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -124,7 +125,7 @@ public final class UserTopologyBuilder {
         _LOGGER.info("UserTopologyBuilder.avroHdfsBolt");
         
         FileNameFormat fnFormat = new DefaultFileNameFormat()
-                .withPath(HadoopConstants.SPARK_NEW_DATA_WORKSPACE + "user")
+                .withPath(HadoopConstants.SPARK_NEW_DATA_WORKSPACE + "user/" + LocalDate.now().getYear())
                 .withPrefix("UserCreate");
         
         RecordFormat rFormat = new AvroRecordFormatBolt();
