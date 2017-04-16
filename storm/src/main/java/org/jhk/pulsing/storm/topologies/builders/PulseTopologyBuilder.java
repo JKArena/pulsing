@@ -55,8 +55,7 @@ import org.jhk.pulsing.storm.deserializer.StringToAvroDeserializedValues;
 import org.jhk.pulsing.storm.hadoop.trident.AvroRecordFormatFunction;
 import org.jhk.pulsing.storm.trident.deserializers.AvroDeserializerFunction;
 import org.jhk.pulsing.storm.trident.elasticsearch.ESCreateDocumentFunction;
-import org.joda.time.Instant;
-import org.joda.time.LocalDate;
+import java.time.LocalDate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

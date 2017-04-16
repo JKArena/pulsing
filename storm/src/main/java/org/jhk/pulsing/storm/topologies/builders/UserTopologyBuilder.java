@@ -18,6 +18,8 @@
  */
 package org.jhk.pulsing.storm.topologies.builders;
 
+import java.time.LocalDate;
+
 import org.apache.storm.generated.StormTopology;
 import org.apache.storm.hdfs.bolt.HdfsBolt;
 import org.apache.storm.hdfs.bolt.format.DefaultFileNameFormat;
@@ -47,7 +49,6 @@ import org.jhk.pulsing.storm.converter.AvroToThriftConverter;
 import org.jhk.pulsing.storm.deserializer.StringToAvroDeserializedValues;
 import org.jhk.pulsing.storm.hadoop.bolt.AvroRecordFormatBolt;
 import org.jhk.pulsing.storm.hadoop.bolt.ThriftDataRecordFormatBolt;
-import org.joda.time.LocalDate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
