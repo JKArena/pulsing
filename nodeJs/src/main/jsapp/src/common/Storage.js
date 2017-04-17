@@ -27,7 +27,7 @@ import PulseId from '../avro/PulseId';
 
 const PULSING_USER_KEY = 'pulsingUser';
 const PULSING_SUBSCRIBED_PULSE_ID_KEY = 'pulsingSubscribedPulseId';
-const CHAT_LOBBY_INVITATION_KEY = 'chatLobbyInvitation';
+const INVITATION_KEY = 'invitation';
 const PAGING_KEY = 'paging';
 const MAPPER = new Map();
 
@@ -128,20 +128,20 @@ export default Object.freeze(
           enumerable: true
         },
 
-        'chatLobbyInvitation' : {
+        'invitation' : {
           get: function() {
             
-            return _getSimpleJSON(CHAT_LOBBY_INVITATION_KEY) || [];
+            return _getSimpleJSON(INVITATION_KEY) || [];
           },
           set: function(json) {
-            let jsonVal = _getSimpleJSON(CHAT_LOBBY_INVITATION_KEY) || [];
+            let jsonVal = _getSimpleJSON(INVITATION_KEY) || [];
             
             if(jsonVal.findIndex(val => { return val.invitationId === json.invitationId; }) !== -1) {
               return;
             }
             jsonVal.push(json);
             
-            _setSimpleJSON(CHAT_LOBBY_INVITATION_KEY, jsonVal);
+            _setSimpleJSON(INVITATION_KEY, jsonVal);
           },
           enumerable: true
         }

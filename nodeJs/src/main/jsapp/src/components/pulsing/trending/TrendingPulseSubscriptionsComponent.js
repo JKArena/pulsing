@@ -87,6 +87,7 @@ class TrendingPulseSubscriptionsComponent extends Component {
   render() {
     let cols = [];
     let loggedIn = this.state.loggedIn;
+    let subbedPId = Storage.subscribedPulseId;
     
     trending.forEach((value, key) => {
       
@@ -95,7 +96,7 @@ class TrendingPulseSubscriptionsComponent extends Component {
           <h3>{value} <span><Badge>1</Badge></span></h3>
           <p>
             {(() => {
-              if(loggedIn) {
+              if(loggedIn && subbedPId !== key) {
                 return <Button bsStyle='primary' id={key} onClick={this.handleSubscribe.bind(this)}>Subscribe</Button>;
               }
             })()}
