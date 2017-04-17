@@ -77,7 +77,7 @@ object PulseInspect {
     val categories = model.transform(testData)
     categories.show
     
-    categories.select(hour($"timeStamp").alias("hour"), $"prediction")
+    categories.select(hour(from_unixtime($"timeStamp")).alias("hour"), $"prediction")
       .groupBy("hour", "prediction").agg(count("prediction").alias("count")).orderBy(desc( "count" )).show
     categories.groupBy("prediction").count().show()
   }

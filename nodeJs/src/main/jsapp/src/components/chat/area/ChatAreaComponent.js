@@ -213,7 +213,7 @@ class ChatAreaComponent extends Component {
    */
   processChatData(chat) {
     if(chat.type === 'CHAT_LOBBY_INVITE') {
-      Storage.chatLobbyInvitation = chat.data;
+      Storage.invitation = chat.data;
     }
   }
   

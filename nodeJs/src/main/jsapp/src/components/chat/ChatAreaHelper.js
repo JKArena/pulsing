@@ -109,7 +109,8 @@ function handleChatAction(user) {
   } else if(split[0] === '/chatLobbyJoin' && split.length === 2) {
 
     //will be an Array of chatName, chatId, and invitationId (maybe Map later)
-    let chatLobby = Storage.chatLobbyInvitation.filter(entry => {
+    let chatLobby = Storage.invitation.filter(entry => {
+      //if different invitation then entry.chatName would be undefined so ok
       return entry.chatName === split[1];
     });
 
