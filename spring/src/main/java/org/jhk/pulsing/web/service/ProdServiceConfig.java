@@ -25,12 +25,10 @@ import javax.inject.Inject;
 import javax.sql.DataSource;
 
 import org.jhk.pulsing.web.dao.prod.db.cassandra.CassandraChatDao;
-import org.jhk.pulsing.web.dao.prod.db.cassandra.CasssandraFriendChatDao;
 import org.jhk.pulsing.web.dao.prod.db.redis.RedisPulseDao;
 import org.jhk.pulsing.web.dao.prod.db.redis.RedisUserDao;
 import org.jhk.pulsing.web.dao.prod.db.sql.MySqlUserDao;
 import org.jhk.pulsing.web.service.prod.ChatService;
-import org.jhk.pulsing.web.service.prod.FriendService;
 import org.jhk.pulsing.web.service.prod.PulseService;
 import org.jhk.pulsing.web.service.prod.UserService;
 import org.springframework.context.annotation.Bean;
@@ -60,12 +58,6 @@ public class ProdServiceConfig implements IServiceConfig {
     
     @Inject
     private Environment env;
-    
-    @Bean
-    @Override
-    public FriendService getFriendService() {
-        return new FriendService();
-    }
     
     @Bean
     @Override
@@ -103,11 +95,6 @@ public class ProdServiceConfig implements IServiceConfig {
     @Bean(name="cassandraChatDao")
     public CassandraChatDao getCassandraChatDao() {
         return new CassandraChatDao();
-    }
-    
-    @Bean(name="cassandraFriendDao")
-    public CasssandraFriendChatDao getCassandraFriendDao() {
-        return new CasssandraFriendChatDao();
     }
     
     @Bean
