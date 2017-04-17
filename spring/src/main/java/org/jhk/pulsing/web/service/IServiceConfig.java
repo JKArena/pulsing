@@ -23,8 +23,6 @@ package org.jhk.pulsing.web.service;
  */
 public interface IServiceConfig {
     
-    IFriendService getFriendService();
-    
     IUserService getUserService();
     
     IPulseService getPulseService();
