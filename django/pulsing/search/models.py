@@ -59,7 +59,7 @@ pulseSearch.map('pulse_tags', {'properties':
 userSearch = Search('user')
 userSearch.map('user_tags', {'properties': 
     {
-        'email': {'type': '', 'store': 'true'},
+        'email': {'type': 'keyword', 'store': 'true'},
         'name': { 
             'type': 'keyword', 
             'copy_to': ['suggest'],
