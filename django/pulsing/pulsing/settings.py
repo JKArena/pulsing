@@ -42,6 +42,7 @@ INSTALLED_APPS = (
     'location',
     'shared',
     'search'
+    'user'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -113,6 +114,11 @@ LOGGING = {
             'propagate': True,
         },
         'shared': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+        'user': {
             'handlers': ['file'],
             'level': 'DEBUG',
             'propagate': True,
