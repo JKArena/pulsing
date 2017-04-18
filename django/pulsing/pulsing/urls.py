@@ -18,5 +18,6 @@ from django.contrib import admin
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^location/', include('location.urls', namespace='pulsing-location', app_name='location')),
-    url(r'^search/', include('search.urls', namespace='pulsing-search', app_name='search'))
+    url(r'^search/', include('search.urls', namespace='pulsing-search', app_name='search')),
+    url(r'^friend/', include('friend.urls', namespace='pulsing-friend', app_name='friend'))
 ]
