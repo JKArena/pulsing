@@ -41,9 +41,8 @@ INSTALLED_APPS = (
     'corsheaders',
     'location',
     'shared',
-    'search'
-    'user',
-    'friend'
+    'search',
+    'friend',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -115,11 +114,6 @@ LOGGING = {
             'propagate': True,
         },
         'shared': {
-            'handlers': ['file'],
-            'level': 'DEBUG',
-            'propagate': True,
-        },
-        'user': {
             'handlers': ['file'],
             'level': 'DEBUG',
             'propagate': True,
