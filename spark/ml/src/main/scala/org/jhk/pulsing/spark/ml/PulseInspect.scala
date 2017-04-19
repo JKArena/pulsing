@@ -39,7 +39,7 @@ import org.jhk.pulsing.shared.util.HadoopConstants
 object PulseInspect {
   
   def createSparkContext() = {
-    val configuration = new SparkConf().setMaster(PROJECT_POINT).setAppName("spam-bot")
+    val configuration = new SparkConf().setMaster(PROJECT_POINT).setAppName("pulse-inspect")
     val sparkContext = new SparkContext(configuration);
     
     sparkContext
