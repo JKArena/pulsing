@@ -20,3 +20,16 @@ under the License.
 """
 
 from django.db import models
+
+class User(models.Model):
+    id = models.BigIntegerField(primary_key=True)
+    email = models.CharField(db_column='EMAIL', max_length=255)  # Field name made lowercase.
+    name = models.CharField(db_column='NAME', max_length=255)  # Field name made lowercase.
+    password = models.CharField(db_column='PASSWORD', max_length=255)  # Field name made lowercase.
+    imagecontent = models.TextField(db_column='imageContent', blank=True, null=True)  # Field name made lowercase.
+    imagename = models.CharField(db_column='imageName', max_length=255, blank=True, null=True)  # Field name made lowercase.
+    last_modified = models.DateTimeField(db_column='LAST_MODIFIED', blank=True, null=True)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'USER'
