@@ -19,9 +19,27 @@ under the License.
 @author Ji Kim
 """
 
+from django.core.cache import cache
 from django.db import models
 
+class UserManager(models.Manager):
+    
+    
+    def get_user(self, id):
+        """ 
+        not sure if this is an overkill, but I guess can help as reference
+        """
+        userKey = User.cache_key + id
+        if cache.get(userKey) is not None:
+            return cache.get(userKey)
+        
+        user = self.get(id=id)
+        cache.set(userKey, user, 300)
+        return user
+
 class User(models.Model):
+    cache_key = 'user_'
+    
     id = models.BigIntegerField(primary_key=True)
     email = models.CharField(db_column='EMAIL', max_length=255)  # Field name made lowercase.
     name = models.CharField(db_column='NAME', max_length=255)  # Field name made lowercase.
@@ -29,7 +47,16 @@ class User(models.Model):
     imagecontent = models.TextField(db_column='imageContent', blank=True, null=True)  # Field name made lowercase.
     imagename = models.CharField(db_column='imageName', max_length=255, blank=True, null=True)  # Field name made lowercase.
     last_modified = models.DateTimeField(db_column='LAST_MODIFIED', blank=True, null=True)  # Field name made lowercase.
-
+    objects = UserManager()
+    
+    def save(self, *args, **kwargs):
+        super(User, self).save(*args, **kwargs)
+        cache.set(User.cache_key + self.id, User.objects.get(id=self.id), 300)
+    
+    def update(self, *args, **kwargs):
+        super(User, self).update(*args, **kwargs)
+        cache.set(User.cache_key + self.id, User.objects.get(id=self.id), 300)
+        
     class Meta:
         managed = False
         db_table = 'USER'
