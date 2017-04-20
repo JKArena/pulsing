@@ -25,7 +25,7 @@
 import Fetch from '../../../../common/Fetch';
 import Url from '../../../common/Url';
 
-const FRIEND_REQUEST_URL = new URL(Url.controllerUrl() + 'friend/friendRequest/');
+const FRIEND_REQUEST_URL = new URL(Url.djangoRootUrl() + 'friend/friendRequest/');
 
 const FriendRequestAction = Object.freeze(
   {
@@ -33,8 +33,8 @@ const FriendRequestAction = Object.freeze(
     friendRequest(userId, friendId) {
 
       let fData = new FormData();
-      fData.append('userId', userId.serialize());
-      fData.append('friendId', friendId.serialize());
+      fData.append('userId', userId.id);
+      fData.append('friendId', friendId.id);
 
       return new Promise(function(resolve, reject) {
 
