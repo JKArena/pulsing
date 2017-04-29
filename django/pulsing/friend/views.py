@@ -21,7 +21,7 @@ under the License.
 
 import logging
 
-from django.core.cache import cache
+from django.core.cache import get_cache, cache
 from django.shortcuts import render
 
 from shared.models import User
@@ -30,11 +30,14 @@ logger = logging.getLogger(__name__)
 
 def friendRequest(request, userId, friendId):
     logger.debug('friendRequest %s- %s/%s ', userId, friendId)
+    
     userKey = 'user_' + userId
     friendKey = 'user_' + friendId
     
     user = User.objects.get_user(id=userId)
     friend = User.objects.get(id=friendId)
+    
+    redis_cache = get_cache('redis')
     
     
     
