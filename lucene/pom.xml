@@ -19,6 +19,31 @@
       <groupId>org.apache.lucene</groupId>
       <artifactId>lucene-core</artifactId>
     </dependency>
+
+    <dependency>
+      <groupId>org.apache.lucene</groupId>
+      <artifactId>lucene-analyzers-common</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.lucene</groupId>
+      <artifactId>lucene-queryparser</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.lucene</groupId>
+      <artifactId>lucene-highlighter</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.lucene</groupId>
+      <artifactId>lucene-spatial</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.lucene</groupId>
+      <artifactId>lucene-test-framework</artifactId>
+    </dependency>
     
     <dependency>
       <groupId>junit</groupId>
