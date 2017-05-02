@@ -33,9 +33,9 @@ class AbstractComponent extends Component {
   handleChange(evt) {
     console.debug('handleChange ', evt);
     
-    let target = evt.target;
-    let eleId = target.id;
-    let oldState = this.state.validity[eleId];
+    const target = evt.target;
+    const eleId = target.id;
+    const oldState = this.state.validity[eleId];
     
     this.state.validity[eleId] = target.value.trim().length > 0 ? 1 : -1;
     if(oldState !== this.state.validity[eleId]) {
@@ -46,14 +46,14 @@ class AbstractComponent extends Component {
   handleSubmit() {
     console.debug('checking validity');
     
-    let validity = this.state.validity;
+    const validity = this.state.validity;
     if(!validity) {
       return true;
     }
     
     //just to remember "of" loop, guess only time to use this loop
     //is when one wishes to break + return from (otherwise forEach)
-    let msg = [];
+    const msg = [];
     for(let key of Object.keys(validity)) {
       if(validity[key] !== 1) {
         msg.push(key);

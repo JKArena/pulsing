@@ -33,7 +33,7 @@ let PREFIX;
 
 function url(suffix) {
   if(!PREFIX) {
-    let location = global.location;
+    const location = global.location;
     PREFIX = location.protocol + '//' + location.hostname
   }
   return PREFIX + suffix;

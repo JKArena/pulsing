@@ -34,12 +34,12 @@ import FriendRequestAction from '../../common/actions/friendship/FriendRequestAc
 export default function (split, user) {
   if(split[0] === '/friendRequest' && split.length === 2) {
 
-    let friendId = UserId(avrojson['UserId']);
+    const friendId = UserId(avrojson['UserId']);
     friendId.id = split[1];
 
     FriendRequestAction.friendRequest(user.id, friendId)
       .then((data) => {
-        let cMessage = `Friend Request from: ${user.name}. Type /friendJoin ${user.name}`;
+        const cMessage = `Friend Request from: ${user.name}. Type /friendJoin ${user.name}`;
 
         this.ws.send('/pulsing/privateChat/' + friendId.id, {},
               JSON.stringify({message: cMessage, userId: user.id.id, type: CHAT_TYPE.FRIEND_INVITE,

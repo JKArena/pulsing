@@ -36,9 +36,9 @@ class GMapPulseStore extends AbstractMapStore {
   subscribeUnSubscribe(actionParam) {
     console.debug('subscribeUnSubscribe ', arguments, actionParam);
 
-    let userId = Storage.user.id;
-    let pulseId = actionParam.pulseId;
-    let Action = actionParam.type === SUBSCRIBE_ACTION ? SubscribePulseAction.subscribePulse :
+    const userId = Storage.user.id;
+    const pulseId = actionParam.pulseId;
+    const Action = actionParam.type === SUBSCRIBE_ACTION ? SubscribePulseAction.subscribePulse :
       UnSubscribePulseAction.unSubscribePulse;
 
     Action(pulseId, userId)
@@ -48,17 +48,16 @@ class GMapPulseStore extends AbstractMapStore {
 
         this.fetchDataPoints(this.map, this.prevLatLng);
       });
-
   }
 
   getInfoNode(pulse, userId, userLights) {
-    let iNode = document.createElement('div');
-    let isSubscribed = userLights.filter(uLight => {
+    const iNode = document.createElement('div');
+    const isSubscribed = userLights.filter(uLight => {
       return uLight.id === userId.id;
     });
     
-    let type = isSubscribed.length > 0 ? UN_SUBSCRIBE_ACTION : SUBSCRIBE_ACTION;
-    let actionParam = {pulseId: pulse.id, type: type};
+    const type = isSubscribed.length > 0 ? UN_SUBSCRIBE_ACTION : SUBSCRIBE_ACTION;
+    const actionParam = {pulseId: pulse.id, type: type};
 
     render((<InfoNodeStateLess pulse={pulse} userLights={userLights} actionType={type}
         clickHandler={this.subscribeUnSubscribe.bind(this, actionParam)} />), iNode);
@@ -69,14 +68,14 @@ class GMapPulseStore extends AbstractMapStore {
   addDataPoint(map, pulse, userLights) {
     console.debug('addDataPoint', pulse, userLights);
 
-    let user = Storage.user;
-    let marker = new global.google.maps.Marker({
+    const user = Storage.user;
+    const marker = new global.google.maps.Marker({
       position: {lat: pulse.lat, lng: pulse.lng},
       map: map,
       title: pulse.value
     });
 
-    let iWindow = new global.google.maps.InfoWindow({
+    const iWindow = new global.google.maps.InfoWindow({
       content: this.getInfoNode(pulse, user.id, userLights)
     });
 

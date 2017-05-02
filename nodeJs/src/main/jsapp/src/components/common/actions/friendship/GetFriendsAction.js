@@ -32,9 +32,8 @@ const GetFriendsAction = Object.freeze(
   {
 
     queryFriends(userId) {
-      let url = new URL(GET_FRIENDS_PATH + userId.id);
-
-      let params = {__proto__: null,
+      const url = new URL(GET_FRIENDS_PATH + userId.id);
+      const params = {__proto__: null,
                     'paging': Storage.paging[userId.id] || ''};
 
       return new Promise(function(resolve, reject) {

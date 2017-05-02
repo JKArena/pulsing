@@ -53,7 +53,7 @@ class PillsComponent extends Component {
   }
 
   handleAdd() {
-    let val = this.tagInputNode.value;
+    const val = this.tagInputNode.value;
     if(val.length === 0 || this.data.has(val)) {
       return;
     }
@@ -83,8 +83,8 @@ class PillsComponent extends Component {
   }
 
   addTag(val) {
-    let ele = document.createElement('span');
-    let removeIndex = this.nextDataIndex++;
+    const ele = document.createElement('span');
+    const removeIndex = this.nextDataIndex++;
 
     this.tagPanelNode.appendChild(ele);
     this.dataNodes[removeIndex] = ele;

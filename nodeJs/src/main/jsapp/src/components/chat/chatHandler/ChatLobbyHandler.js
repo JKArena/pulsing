@@ -34,7 +34,7 @@ import ChatLobbyUnSubscribeAction from '../actions/ChatLobbyUnSubscribeAction';
 export default function (split, user) {
   if(split[0] === '/createChatLobby' && split.length === 2) {
 
-    let cLName = split[1];
+    const cLName = split[1];
     CreateChatLobbyAction.createChatLobby(user.id, cLName)
       .then((chatId) => {
 
@@ -46,11 +46,11 @@ export default function (split, user) {
 
     //ChatArea's popover will allow easy access for id, but for /chatInvite perhaps store in Redis
     //the mapping of userId => {name: userId} from the chatLobbyMessages + friends (TODO)
-    let uId = split[1]; //temp for now, assume knows the uId
-    let cInfo = this.getChatLobbyInfo(split[2]);
+    const uId = split[1]; //temp for now, assume knows the uId
+    const cInfo = this.getChatLobbyInfo(split[2]);
 
     if(cInfo) {
-      let cMessage = `Chat Lobby Invite from: ${user.name}. Type /chatLobbyJoin ${cInfo.text}`;
+      const cMessage = `Chat Lobby Invite from: ${user.name}. Type /chatLobbyJoin ${cInfo.text}`;
 
       this.ws.send('/pulsing/privateChat/' + uId, {},
               JSON.stringify({message: cMessage, userId: user.id.id, type: CHAT_TYPE.CHAT_LOBBY_INVITE,
@@ -60,7 +60,7 @@ export default function (split, user) {
   } else if(split[0] === '/chatLobbyJoin' && split.length === 2) {
 
     //will be an Array of chatName, chatId, and invitationId (maybe Map later)
-    let chatLobby = Storage.invitation.filter(entry => {
+    const chatLobby = Storage.invitation.filter(entry => {
       //if different invitation then entry.chatName would be undefined so ok
       return entry.chatName === split[1];
     });
@@ -74,11 +74,11 @@ export default function (split, user) {
     }
   } else if(split[0] === '/chatLobbyLeave' && split.length === 2) {
 
-    let cLName = split[1];
-    let cInfo = this.getChatLobbyInfo(cLName);
+    const cLName = split[1];
+    const cInfo = this.getChatLobbyInfo(cLName);
 
     if(cInfo) {
-      let chatId = cInfo.eventKey;
+      const chatId = cInfo.eventKey;
 
       ChatLobbyUnSubscribeAction.chatLobbyUnSubscribe(chatId, cLName, Storage.user.id)
         .then(() => {

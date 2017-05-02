@@ -108,8 +108,7 @@ class NavBarComponent extends Component {
   }
   
   render() {
-
-    let user = Storage.user;
+    const user = Storage.user;
 
     this.state.loggedIn = !!user;
     if(this.state.loggedIn) {

@@ -32,9 +32,8 @@ const GetChatLobbyMessagesAction = Object.freeze(
   {
 
     queryChatLobbyMessages(cLId, userId) {
-      let path = GET_CHAT_LOBBY_MESSAGES_PATH + cLId + '/' + userId.serialize();
-
-      let params = {__proto__: null,
+      const path = GET_CHAT_LOBBY_MESSAGES_PATH + cLId + '/' + userId.serialize();
+      const params = {__proto__: null,
                     'paging': Storage.paging[cLId] || ''};
 
       return new Promise(function(resolve, reject) {

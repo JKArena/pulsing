@@ -35,10 +35,10 @@ const LoginAction = Object.freeze(Object.create(null, {
       
       return (btnId, formId) => {
         
-        let btn = document.getElementById(btnId);
+        const btn = document.getElementById(btnId);
         btn.setAttribute('disabled', 'disabled');
         
-        let fData = new FormData(document.getElementById(formId));
+        const fData = new FormData(document.getElementById(formId));
         
         return new Promise(function(resolve, reject) {
 

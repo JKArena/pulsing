@@ -76,7 +76,7 @@ const CHAT_TYPE = {
  * Must be invoked with bind
  */
 function handleChatAction(user) {
-  let split = this.chatInputNode.value.split(' ');
+  const split = this.chatInputNode.value.split(' ');
 
   if(split[0].indexOf('chat') > -1) {
 

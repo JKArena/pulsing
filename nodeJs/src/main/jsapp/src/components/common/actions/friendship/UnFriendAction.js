@@ -31,8 +31,7 @@ const UnFriendAction = Object.freeze(
   {
 
     friend(userId, friendId) {
-
-      let url = new URL(UN_FRIEND_PATH + userId.id + '/' + friendId.id);
+      const url = new URL(UN_FRIEND_PATH + userId.id + '/' + friendId.id);
       
       return new Promise(function(resolve, reject) {
 

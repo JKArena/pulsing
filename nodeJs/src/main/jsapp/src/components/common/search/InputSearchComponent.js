@@ -92,7 +92,7 @@ class InputSearchComponent extends Component {
 
   render() {
     
-    var menus = {};
+    const menus = {};
     this.docTypes.forEach(function(ele) {
       menus[ele.docType] = ele.title;
     });

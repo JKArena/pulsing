@@ -32,7 +32,7 @@ const ChatLobbyUnSubscribeAction = Object.freeze(
 
     chatLobbyUnSubscribe(chatId, cLName, userId) {
 
-      let url = new URL(CHAT_LOBBY_UN_SUBSCRIBE_PATH + chatId +
+      const url = new URL(CHAT_LOBBY_UN_SUBSCRIBE_PATH + chatId +
                         '/' + cLName + '/' + userId.serialize());
       
       return new Promise(function(resolve, reject) {

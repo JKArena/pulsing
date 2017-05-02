@@ -33,8 +33,7 @@ const UnSubscribePulseAction = Object.freeze(
   {
 
     unSubscribePulse(pulseId, userId) {
-      
-      let url = new URL(UN_SUBSCRIBE_PULSE_PATH +
+      const url = new URL(UN_SUBSCRIBE_PULSE_PATH +
                         pulseId.serialize() + '/' + userId.serialize());
 
       return new Promise(function(resolve, reject) {

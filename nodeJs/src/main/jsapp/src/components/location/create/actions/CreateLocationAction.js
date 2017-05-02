@@ -34,17 +34,17 @@ const CreateLocationAction = Object.freeze(
 
     createLocation(btnId, formId, tags) {
 
-      let btn = document.getElementById(btnId);
+      const btn = document.getElementById(btnId);
       btn.setAttribute('disabled', 'disabled');
 
-      let tagsArray = [];
+      const tagsArray = [];
       tags.forEach(val => {
         tagsArray.push(val);
       });
 
-      let fData = new FormData();
-      let loc = new Location();
-      let user = Storage.user;
+      const fData = new FormData();
+      const loc = new Location();
+      const user = Storage.user;
       loc.formMap(document.getElementById(formId));
       loc.userId = user.id.raw;
       loc.tags = tagsArray;

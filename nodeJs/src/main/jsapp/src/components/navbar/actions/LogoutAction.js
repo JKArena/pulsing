@@ -31,7 +31,7 @@ const LogoutAction = Object.freeze(
   {
 
     logoutUser(userId) {
-      let url = new URL(LOGOUT_PATH + userId.serialize();
+      const url = new URL(LOGOUT_PATH + userId.serialize();
       
       return new Promise(function(resolve, reject) {
 

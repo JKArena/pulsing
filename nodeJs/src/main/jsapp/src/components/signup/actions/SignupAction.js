@@ -36,17 +36,17 @@ const SignupAction = Object.freeze(Object.create(null, {
       
       return (btnId, formId, pictureId) => {
         
-        let btn = document.getElementById(btnId);
+        const btn = document.getElementById(btnId);
         btn.setAttribute('disabled', 'disabled');
         
-        let fData = new FormData();
-        let picture = document.getElementById(pictureId).file;
+        const fData = new FormData();
+        const picture = document.getElementById(pictureId).file;
         
         if(picture) {
           fData.append('picture', picture);
         }
         
-        let user = new User();
+        const user = new User();
         user.formMap(document.getElementById(formId));
         
         fData.append('user', user.serialize());

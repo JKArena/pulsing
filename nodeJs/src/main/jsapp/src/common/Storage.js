@@ -36,7 +36,7 @@ function _getSimpleJSON(key) {
     return MAPPER.get(key);
   }
 
-  let jsonStr = sessionStorage.getItem(key);
+  const jsonStr = sessionStorage.getItem(key);
   let obj = null;
   if(jsonStr !== null) {
     obj = JSON.parse(jsonStr);
@@ -62,7 +62,7 @@ function _get(key, AvroClazz) {
     return MAPPER.get(key);
   }
 
-  let jsonStr = sessionStorage.getItem(key);
+  const jsonStr = sessionStorage.getItem(key);
   let obj = null;
 
   if(jsonStr !== null) {
@@ -80,7 +80,7 @@ function _set(key, json, AvroClazz) {
     return;
   }
 
-  let obj = AvroClazz.deserialize(json);
+  const obj = AvroClazz.deserialize(json);
 
   MAPPER.set(key, obj);
   sessionStorage.setItem(key, obj.serialize());
@@ -119,7 +119,7 @@ export default Object.freeze(
             return _getSimpleJSON(PAGING_KEY) || {};
           },
           set: function(pagingInfo) {
-            let jsonVal = _getSimpleJSON(PAGING_KEY) || {};
+            const jsonVal = _getSimpleJSON(PAGING_KEY) || {};
 
             jsonVal[pagingInfo.id] = pagingInfo;
 
@@ -134,7 +134,7 @@ export default Object.freeze(
             return _getSimpleJSON(INVITATION_KEY) || [];
           },
           set: function(json) {
-            let jsonVal = _getSimpleJSON(INVITATION_KEY) || [];
+            const jsonVal = _getSimpleJSON(INVITATION_KEY) || [];
             
             if(jsonVal.findIndex(val => { return val.invitationId === json.invitationId; }) !== -1) {
               return;

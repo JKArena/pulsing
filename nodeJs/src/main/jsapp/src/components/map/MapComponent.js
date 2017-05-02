@@ -53,7 +53,7 @@ class MapComponent extends Component {
     this.geoChangeHandler = this.onGeoChange.bind(this);
     this.pulseCreatedHandler = this.onPulseCreated.bind(this);
 
-    let user = Storage.user;
+    const user = Storage.user;
 
     this.state = {
       lat: user.lat,
@@ -90,7 +90,7 @@ class MapComponent extends Component {
     console.debug('fetching map api');
 
     if(!global.google) {
-      let script = document.createElement('script');
+      const script = document.createElement('script');
       script.src = API_URL;
       script.onload = () => {
         this.setState(this.state);
@@ -118,7 +118,7 @@ class MapComponent extends Component {
     console.debug('onPulseCreated', mPulseCreate);
     
     if(mPulseCreate && mPulseCreate.body) {
-      let parsed = JSON.parse(mPulseCreate.body);
+      const parsed = JSON.parse(mPulseCreate.body);
 
       this.store.addDataPoint(this.map, Pulse.deserialize(JSON.parse(parsed.pulse)), [parsed.userLight]);
     }
