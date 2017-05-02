@@ -25,6 +25,8 @@
 import Storage from '../../../common/Storage';
 import {TOPICS, API} from '../../../common/PubSub';
 
+import {CHAT_TYPE} from '../ChatAreaHelper';
+
 import CreateChatLobbyAction from '../actions/CreateChatLobbyAction';
 import ChatLobbySubscribeAction from '../actions/ChatLobbySubscribeAction';
 import ChatLobbyUnSubscribeAction from '../actions/ChatLobbyUnSubscribeAction';

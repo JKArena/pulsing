@@ -43,7 +43,7 @@ const FriendRequestAction = Object.freeze(
             console.debug('friendRequest', result);
 
             if(result.code === 'SUCCESS') {
-              resolve();
+              resolve(result.data);
             } else {
               reject(result.message);
             }
