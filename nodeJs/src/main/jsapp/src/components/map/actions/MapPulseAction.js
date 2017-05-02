@@ -33,7 +33,7 @@ const MapPulseAction = Object.freeze(
 
     getMapPulseDataPoints(latLng) {
       console.debug('getMapPulseDataPoints', latLng);
-      let params = {__proto__: null,
+      const params = {__proto__: null,
                     'lat': latLng.lat,
                     'lng': latLng.lng};
       return new Promise(function(resolve, reject) {

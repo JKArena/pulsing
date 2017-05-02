@@ -48,13 +48,13 @@ const CHAT_ACTIONS = (
 );
 
 const Chat = (props) => {
-  let isSelf = props.isSelf;
-  let clazz = isSelf ? CHAT_SELF : CHAT_OTHER;
+  const isSelf = props.isSelf;
+  const clazz = isSelf ? CHAT_SELF : CHAT_OTHER;
 
-  let chat = props.chat;
-  let msgViews = chat.messageViews > 0 ? chat.messageViews : '';
-  let dateLTS = (isSelf ? new Date() : new Date(chat.timeStamp)).toLocaleTimeString();
-  let chatContent = [<div className='chat-content' key={dateLTS +'_msg'}>{chat.message}
+  const chat = props.chat;
+  const msgViews = chat.messageViews > 0 ? chat.messageViews : '';
+  const dateLTS = (isSelf ? new Date() : new Date(chat.timeStamp)).toLocaleTimeString();
+  const chatContent = [<div className='chat-content' key={dateLTS +'_msg'}>{chat.message}
                       <span className='chat-message-views'>{msgViews}</span></div>,
                   <div className='chat-time' key={dateLTS +'_time'} data-content={dateLTS}></div>];
 
@@ -92,12 +92,11 @@ const Chat = (props) => {
 };
 
 const SystemMessage = (props) => {
-  let msg = props.msg;
   
   return (
     <div className='chat-system-message'>
       <div className='chat-smessage-content'>
-        {msg}
+        {props.msg}
       </div>
     </div>
   );
@@ -147,7 +146,7 @@ class ChatAreaComponent extends Component {
 
       if(this.isChatLobby) {
         //need to fetch previous chat messages
-        let splitted = this.subscription.split('/');
+        const splitted = this.subscription.split('/');
         GetChatLobbyMessagesAction.queryChatLobbyMessages(splitted[splitted.length-1], Storage.user.id)
           .then((chatMessages) => {
             chatMessages.reverse();
@@ -164,7 +163,7 @@ class ChatAreaComponent extends Component {
     console.debug('chat notification ', data);
     if(this.id !== data.id) return;
 
-    let action = data.action;
+    const action = data.action;
     if(action === 'chatConnect' && this.subscription) {
       this.connectWS();
     } else if(action === 'systemMessage') {
@@ -178,7 +177,7 @@ class ChatAreaComponent extends Component {
     console.debug('onChat', mChat);
 
     if(mChat && mChat.body) {
-      let chat = JSON.parse(mChat.body);
+      const chat = JSON.parse(mChat.body);
 
       if(chat.type === SYSTEM_MESSAGE_CHAT_TYPE) {
         this.addSystemMessage(chat.message);
@@ -190,7 +189,7 @@ class ChatAreaComponent extends Component {
   }
 
   addSystemMessage(message) {
-    let sMEle = document.createElement('div');
+    const sMEle = document.createElement('div');
     this.chatAreaNode.appendChild(sMEle);
 
     render((<SystemMessage msg={message}></SystemMessage>), sMEle);
@@ -198,9 +197,9 @@ class ChatAreaComponent extends Component {
 
   addChat(chat) {
 
-    let user = Storage.user;
-    let isSelf = chat.userId === user.id.id;
-    let cEle = document.createElement('div');
+    const user = Storage.user;
+    const isSelf = chat.userId === user.id.id;
+    const cEle = document.createElement('div');
 
     this.chatAreaNode.appendChild(cEle);
     

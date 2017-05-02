@@ -65,7 +65,7 @@ class User extends AbstractAvro {
     console.debug('position ', position, this.lat, this.lng);
     
     let distance = 0;
-    let coords = position.coords;
+    const coords = position.coords;
     if(this.lat) {
       //compare to see if the threshold is met to notify the geolocation changes
       distance = Math.sqrt(Math.pow(coords.latitude-this.lat, 2) +

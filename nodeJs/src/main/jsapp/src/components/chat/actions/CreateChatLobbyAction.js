@@ -32,7 +32,7 @@ const CreateChatLobbyAction = Object.freeze(
 
     createChatLobby(userId, lobbyName) {
 
-      let fData = new FormData();
+      const fData = new FormData();
       fData.append('userId', userId.serialize());
       fData.append('lobbyName', lobbyName);
 

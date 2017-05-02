@@ -48,7 +48,7 @@ class SignupComponent extends AbstractComponent {
   }
   
   componentDidMount() {
-    let dropcontainer = document.getElementById('avatar');
+    const dropcontainer = document.getElementById('avatar');
     
     dropcontainer.addEventListener('dragenter', Common.eventCanceller, false);
     dropcontainer.addEventListener('dragover', Common.eventCanceller, false);
@@ -56,7 +56,7 @@ class SignupComponent extends AbstractComponent {
   }
   
   componentWillUnmount() {
-    let dropcontainer = document.getElementById('avatar');
+    const dropcontainer = document.getElementById('avatar');
     
     dropcontainer.removeEventListener('dragenter', Common.eventCanceller);
     dropcontainer.removeEventListener('dragover', Common.eventCanceller);
@@ -66,18 +66,18 @@ class SignupComponent extends AbstractComponent {
   handleDrop(evt) {
     Common.eventCanceller(evt);
     
-    let dt = evt.dataTransfer;
-    let file = dt.files[0];
+    const dt = evt.dataTransfer;
+    const file = dt.files[0];
 
     if(!/^image\//.test(file.type)) {
       this.state.avatar.state = -1;
       return;
     }
     
-    let preview = document.getElementById('avatar');
+    const preview = document.getElementById('avatar');
     preview.file = file;
     
-    let reader = new FileReader();
+    const reader = new FileReader();
     reader.onload = e => {preview.src = e.target.result};
     reader.readAsDataURL(file);
   }

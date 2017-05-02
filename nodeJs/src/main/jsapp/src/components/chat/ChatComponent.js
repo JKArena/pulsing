@@ -71,7 +71,7 @@ class ChatComponent extends Component {
     API.subscribe(TOPICS.PULSE_SUBSCRIBED, this.pulseSubscribedHandler);
     API.subscribe(TOPICS.PULSE_UN_SUBSCRIBED, this.pulseUnSubscribedHandler);
 
-    let subscribedPulseId = Storage.subscribedPulseId;
+    const subscribedPulseId = Storage.subscribedPulseId;
     if(subscribedPulseId) {
       this.pulseSubscribed({pulseId: subscribedPulseId});
     }
@@ -110,7 +110,7 @@ class ChatComponent extends Component {
   }
 
   mountChatAreaComponent(id, dropDownText) {
-    let caEle = document.createElement('div');
+    const caEle = document.createElement('div');
     let subscription = '';
     let eagerConnect = false;
 
@@ -137,7 +137,7 @@ class ChatComponent extends Component {
   }
 
   unmountChatAreaComponent(id) {
-    let node = this.nodeMaps.get(id);
+    const node = this.nodeMaps.get(id);
     this.nodeMaps.delete(id);
 
     unmountComponentAtNode(node);
@@ -153,7 +153,7 @@ class ChatComponent extends Component {
 
     API.publish(TOPICS.CHAT_AREA, {action: 'chatConnect', id: this.state.chatId});
     
-    let node = this.nodeMaps.get(eventKey);
+    const node = this.nodeMaps.get(eventKey);
     this.switchToNewChatAreaNode(node);
   }
 
@@ -194,7 +194,7 @@ class ChatComponent extends Component {
       return;
     }
 
-    let user = Storage.user;
+    const user = Storage.user;
 
     if(this.chatInputNode.value[0] === '/') {
       //means an action

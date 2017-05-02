@@ -64,7 +64,7 @@ class DropDownButtonComponent extends Component {
   }
 
   render() {
-    let menuItems = [];
+    const menuItems = [];
 
     Object.keys(this.menus).forEach((key, indx) => {
       let text = this.menus[key];

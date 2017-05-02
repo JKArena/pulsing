@@ -32,7 +32,7 @@ const ChatLobbySubscribeAction = Object.freeze(
 
     chatLobbySubscribe(cLobby, userId) {
 
-      let url = new URL(CHAT_LOBBY_SUBSCRIBE_PATH + cLobby.chatId +
+      const url = new URL(CHAT_LOBBY_SUBSCRIBE_PATH + cLobby.chatId +
                         '/' + cLobby.chatName + '/' + cLobby.invitationId + '/' + userId.serialize());
       
       return new Promise(function(resolve, reject) {

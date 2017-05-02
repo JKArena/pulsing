@@ -32,7 +32,7 @@ const FriendRequestAction = Object.freeze(
 
     friendRequest(userId, friendId) {
 
-      let fData = new FormData();
+      const fData = new FormData();
       fData.append('userId', userId.id);
       fData.append('friendId', friendId.id);
 

@@ -38,7 +38,7 @@ const TrendingPulseSubscriptionsAction = Object.freeze(Object.create(null, {
           .then(function(json) {
             console.debug('gotTrendingPulseSubscriptions', json);
             //when making subsequent rest calls for Pulse, create PulseId from the long values
-            let trending = new Map();
+            const trending = new Map();
 
             Object.keys(json).forEach(id => {
               trending.set(id, json[id]);

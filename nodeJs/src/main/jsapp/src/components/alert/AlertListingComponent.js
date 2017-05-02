@@ -49,7 +49,7 @@ class AlertListingComponent extends Component {
   }
 
   render() {
-    let rows = [];
+    const rows = [];
 
     this.alertEntries.forEach((value, key) => {
       

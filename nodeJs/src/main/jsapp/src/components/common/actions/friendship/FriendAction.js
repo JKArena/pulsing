@@ -32,7 +32,7 @@ const FriendAction = Object.freeze(
 
     friend(invitationId, userId, fromUserId) {
 
-      let url = new URL(FRIEND_PATH + invitationId + '/' +
+      const url = new URL(FRIEND_PATH + invitationId + '/' +
                         userId.id + '/' + fromUserId.id);
       
       return new Promise(function(resolve, reject) {

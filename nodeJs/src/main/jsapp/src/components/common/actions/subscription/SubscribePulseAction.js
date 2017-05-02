@@ -33,8 +33,7 @@ const SubscribePulseAction = Object.freeze(
   {
 
     subscribePulse(pulseId, userId) {
-
-      let url = new URL(SUBSCRIBE_PULSE_PATH +
+      const url = new URL(SUBSCRIBE_PULSE_PATH +
                         pulseId.serialize() + '/' + userId.serialize());
       
       return new Promise(function(resolve, reject) {
@@ -45,7 +44,7 @@ const SubscribePulseAction = Object.freeze(
 
             if(result.code === 'SUCCESS') {
               Storage.subscribedPulseId = JSON.parse(result.data);
-              let subscribedPulseId = Storage.subscribedPulseId;
+              const subscribedPulseId = Storage.subscribedPulseId;
               
               API.publish(TOPICS.PULSE_SUBSCRIBED, {pulseId: subscribedPulseId});
               resolve(subscribedPulseId);

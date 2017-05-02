@@ -29,7 +29,7 @@ const CreateDocumentAction = Object.freeze(
 
     createDocument(path, index, doc_type, data) {
 
-      let fData = new FormData();
+      const fData = new FormData();
       for(let key of Object.keys(data)) {
         fData.append(key, data[key]);
       }

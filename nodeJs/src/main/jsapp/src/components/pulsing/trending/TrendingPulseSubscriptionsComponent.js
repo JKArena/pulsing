@@ -66,7 +66,7 @@ class TrendingPulseSubscriptionsComponent extends Component {
   }
   
   handleSubscribe(evt) {
-    let user = Storage.user;
+    const user = Storage.user;
 
     console.debug('handleSubscribe', evt.target.id, user.id);
     
@@ -85,9 +85,9 @@ class TrendingPulseSubscriptionsComponent extends Component {
   }
   
   render() {
-    let cols = [];
-    let loggedIn = this.state.loggedIn;
-    let subbedPId = Storage.subscribedPulseId;
+    const cols = [];
+    const loggedIn = this.state.loggedIn;
+    const subbedPId = Storage.subscribedPulseId;
     
     trending.forEach((value, key) => {
       

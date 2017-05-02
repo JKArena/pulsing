@@ -8,15 +8,14 @@ import Url from '../../../common/Url';
 const SUBSCRIBE_ACTION = 'subscribe';
 const UN_SUBSCRIBE_ACTION = 'unSubscribe';
 
-let InfoNodeStateLess = (props) => {
-  let pulse = props.pulse;
-  let userLights = props.userLights;
-  let desc = new Date(pulse.timeStamp*1000).toLocaleString(); //since held as seconds on server
-  let subscribed = [];
-  let actionText = props.actionType === SUBSCRIBE_ACTION ? 'Subscribe' : 'UnSubscribe';
+const InfoNodeStateLess = (props) => {
+  const {pulse, userLights} = props;
+  const desc = new Date(pulse.timeStamp*1000).toLocaleString(); //since held as seconds on server
+  const subscribed = [];
+  const actionText = props.actionType === SUBSCRIBE_ACTION ? 'Subscribe' : 'UnSubscribe';
 
   userLights.forEach(uLight => {
-    let pPath = Url.getPicturePath(uLight.picturePath);
+    const pPath = Url.getPicturePath(uLight.picturePath);
 
     subscribed.push(<li className='map-subscribed-entry' key={uLight.id}>
         <img src={pPath} className='map-subscribed-img'></img>

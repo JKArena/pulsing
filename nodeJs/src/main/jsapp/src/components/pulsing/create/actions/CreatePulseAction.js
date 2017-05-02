@@ -35,17 +35,17 @@ const CreatePulseAction = Object.freeze(
 
     createPulse(btnId, formId, tags) {
 
-      let btn = document.getElementById(btnId);
+      const btn = document.getElementById(btnId);
       btn.setAttribute('disabled', 'disabled');
 
-      let tagsArray = [];
+      const tagsArray = [];
       tags.forEach(val => {
         tagsArray.push(val);
       });
 
-      let fData = new FormData();
-      let pulse = new Pulse();
-      let user = Storage.user;
+      const fData = new FormData();
+      const pulse = new Pulse();
+      const user = Storage.user;
       pulse.formMap(document.getElementById(formId));
       pulse.userId = user.id.raw;
       pulse.tags = tagsArray;
@@ -61,7 +61,7 @@ const CreatePulseAction = Object.freeze(
             console.debug('create pulse', result);
 
             if(result.code === 'SUCCESS') {
-              let pulse = Pulse.deserialize(JSON.parse(result.data));
+              const pulse = Pulse.deserialize(JSON.parse(result.data));
               Storage.subscribedPulseId = pulse.id.raw;
 
               resolve(pulse);
