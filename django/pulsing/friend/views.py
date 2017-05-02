@@ -20,15 +20,22 @@ under the License.
 """
 
 import logging
+import uuid
 
+from django.http import JsonResponse, HttpResponseBadRequest
 from django.core.cache import get_cache, cache
-from django.shortcuts import render
 
 from shared.models import User
 
 logger = logging.getLogger(__name__)
 
 def friendRequest(request, userId, friendId):
+    """ 
+    technically does not have to perform the round trip as can pass off
+    to websocket on the spring side; however to play around with redis initially
+    with django am sending the request here with websocket controller only sending
+    out the system alert
+    """
     logger.debug('friendRequest %s- %s/%s ', userId, friendId)
     
     userKey = 'user_' + userId
@@ -36,8 +43,15 @@ def friendRequest(request, userId, friendId):
     
     user = User.objects.get_user(id=userId)
     friend = User.objects.get(id=friendId)
+    # TODO need to check if they are friends or not
     
     redis_cache = get_cache('redis')
+    # TODO push the invitation id to the redis cache to sync with Spring
+    invitation_id = uuid.uuid4()
     
-    
+    return JsonResponse({
+        'code': 'SUCCESS',
+        'data': {'invitationId': invitation_id},
+        'message': ''
+    })
     

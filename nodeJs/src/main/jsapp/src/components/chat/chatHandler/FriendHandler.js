@@ -27,6 +27,8 @@ import UserId from '../../../avro/UserId';
 import Storage from '../../../common/Storage';
 import {TOPICS, API} from '../../../common/PubSub';
 
+import {CHAT_TYPE} from '../ChatAreaHelper';
+
 import FriendRequestAction from '../../common/actions/friendship/FriendRequestAction';
 
 export default function (split, user) {
@@ -36,8 +38,12 @@ export default function (split, user) {
     friendId.id = split[1];
 
     FriendRequestAction.friendRequest(user.id, friendId)
-      .then((invitationId) => {
-        
+      .then((data) => {
+        let cMessage = `Friend Request from: ${user.name}. Type /friendJoin ${user.name}`;
+
+        this.ws.send('/pulsing/privateChat/' + friendId.id, {},
+              JSON.stringify({message: cMessage, userId: user.id.id, type: CHAT_TYPE.FRIEND_INVITE,
+                              data: {invitationId: data.invitationId}, name: user.name}));
       });
   }
 };

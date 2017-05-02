@@ -90,6 +90,11 @@ public class WebSocketController {
             SystemMessageUtil.sendSystemAlertMessage(template, toUserId, msg.getMessage());
         }
         
+        if(msg.getType() == Chat.TYPE.FRIEND_REQUEST) {
+            
+            SystemMessageUtil.sendSystemAlertMessage(template, toUserId, msg.getMessage());
+        }
+        
         return msg;
     }
     
