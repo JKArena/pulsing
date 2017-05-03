@@ -49,3 +49,5 @@ So to control privacy of data and where data should be stored in a cascade of ca
 mySQLClient driver for the DB
 
 stunnel for https on dev
+
+pip3 install python3-memcached

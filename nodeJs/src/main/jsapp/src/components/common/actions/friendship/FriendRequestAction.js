@@ -23,7 +23,7 @@
 'use strict';
 
 import Fetch from '../../../../common/Fetch';
-import Url from '../../../common/Url';
+import Url from '../../../../common/Url';
 
 const FRIEND_REQUEST_URL = new URL(Url.djangoRootUrl() + 'friend/friendRequest/');
 
@@ -33,8 +33,8 @@ const FriendRequestAction = Object.freeze(
     friendRequest(userId, friendId) {
 
       const fData = new FormData();
-      fData.append('userId', userId.id);
-      fData.append('friendId', friendId.id);
+      fData.append('userId', userId);
+      fData.append('friendId', friendId);
 
       return new Promise(function(resolve, reject) {
 

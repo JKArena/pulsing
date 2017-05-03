@@ -22,11 +22,6 @@
  */
 'use strict';
 
-import avrojson from '../../../avro/avrojson';
-import UserId from '../../../avro/UserId';
-import Storage from '../../../common/Storage';
-import {TOPICS, API} from '../../../common/PubSub';
-
 import {CHAT_TYPE} from '../ChatAreaHelper';
 
 import FriendRequestAction from '../../common/actions/friendship/FriendRequestAction';
@@ -34,16 +29,15 @@ import FriendRequestAction from '../../common/actions/friendship/FriendRequestAc
 export default function (split, user) {
   if(split[0] === '/friendRequest' && split.length === 2) {
 
-    const friendId = UserId(avrojson['UserId']);
-    friendId.id = split[1];
+    const friendId = split[1];
 
-    FriendRequestAction.friendRequest(user.id, friendId)
+    FriendRequestAction.friendRequest(user.id.id, friendId)
       .then((data) => {
         const cMessage = `Friend Request from: ${user.name}. Type /friendJoin ${user.name}`;
 
-        this.ws.send('/pulsing/privateChat/' + friendId.id, {},
-              JSON.stringify({message: cMessage, userId: user.id.id, type: CHAT_TYPE.FRIEND_INVITE,
+        this.ws.send('/pulsing/privateChat/' + friendId, {},
+              JSON.stringify({message: cMessage, userId: user.id.id, type: CHAT_TYPE.FRIEND_REQUEST,
                               data: {invitationId: data.invitationId}, name: user.name}));
       });
   }
-};
+}

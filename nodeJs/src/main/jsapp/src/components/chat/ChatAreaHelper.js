@@ -67,7 +67,7 @@ const CHAT_TYPE = {
   'PULSE': 'PULSE',
   'CHAT_LOBBY': 'CHAT_LOBBY',
   'CHAT_LOBBY_INVITE': 'CHAT_LOBBY_INVITE',
-  'FRIEND_INVITE': 'FRIEND_INVITE',
+  'FRIEND_REQUEST': 'FRIEND_REQUEST',
   'GENERAL': 'GENERAL',
   'WHISPER': 'WHISPER'
 };
@@ -77,11 +77,12 @@ const CHAT_TYPE = {
  */
 function handleChatAction(user) {
   const split = this.chatInputNode.value.split(' ');
+  const handler = split[0].toLowerCase();
 
-  if(split[0].indexOf('chat') > -1) {
+  if(handler.indexOf('chat') > -1) {
 
     chatLobbyHandler.call(this, split, user);
-  } else if(split[0].indexOf('friend') > -1) {
+  } else if(handler.indexOf('friend') > -1) {
     
     friendHandler.call(this, split, user);
   }

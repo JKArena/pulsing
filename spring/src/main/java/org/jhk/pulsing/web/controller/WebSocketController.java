@@ -82,7 +82,7 @@ public class WebSocketController {
         msg.setTimeStamp(Instant.now().toEpochMilli());
         
         if(msg.getType() == Chat.TYPE.CHAT_LOBBY_INVITE) {
-            String invitationId = userService.createInvitationId(toUserId, msg.getUserId(), RedisConstants.INVITATION_ID.CHAT_LOBBY_INVITE_, 
+            String invitationId = userService.createInvitationId(toUserId, msg.getUserId(), RedisConstants.INVITATION_ID.CHAT_LOBBY_INVITE, 
                     CHAT_LOBBY_INVITE_EXPIRATION);
             
             msg.addData("invitationId", invitationId);
