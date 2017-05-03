@@ -137,9 +137,9 @@ export default Object.freeze(
               Object.keys(params).forEach(key => {
                 gUrl.searchParams.append(key, params[key]);
               });
-              
+
               const request = new Request(gUrl);
-              const gOptions = {...DEFAULT_OPTIONS, hOptions};
+              const gOptions = Object.assign(DEFAULT_OPTIONS, hOptions);
 
               return fetchContent(request, gOptions, 'json', logError);
             }
@@ -158,7 +158,7 @@ export default Object.freeze(
               const DEFAULT_OPTIONS = {method: 'POST',  mode: 'cors', headers: DEFAULT_HEADERS};
 
               const request = new Request(pUrl);
-              const pOptions = {...DEFAULT_OPTIONS, hOptions};
+              const pOptions = Object.assign(DEFAULT_OPTIONS, hOptions);
 
               return fetchContent(request, pOptions, 'json', logError);
             }
@@ -177,7 +177,7 @@ export default Object.freeze(
               const DEFAULT_OPTIONS = {method: 'DELETE',  mode: 'cors', headers: DEFAULT_HEADERS};
 
               const request = new Request(dUrl);
-              const dOptions = {...DEFAULT_OPTIONS, hOptions};
+              const dOptions = Object.assign(DEFAULT_OPTIONS, hOptions);
 
               return fetchContent(request, dOptions, 'json', logError);
             }
@@ -196,7 +196,7 @@ export default Object.freeze(
               const DEFAULT_OPTIONS = {method: 'PUT',  mode: 'cors', headers: DEFAULT_HEADERS};
 
               const request = new Request(pUrl);
-              const putOptions = {...DEFAULT_OPTIONS, hOptions};
+              const putOptions = Object.assign(DEFAULT_OPTIONS, hOptions);
 
               return fetchContent(request, putOptions, 'json', logError);
             }
@@ -214,7 +214,7 @@ export default Object.freeze(
               const DEFAULT_OPTIONS = {method: 'GET',  mode: 'cors'};
 
               const request = new Request(url);
-              const opts = {...DEFAULT_OPTIONS, hOptions};
+              const opts = Object.assign(DEFAULT_OPTIONS, hOptions);
 
               return fetchContent(request, opts, 'raw', logError);
             }

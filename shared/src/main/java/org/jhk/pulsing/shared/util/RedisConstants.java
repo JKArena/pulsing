@@ -40,7 +40,7 @@ public final class RedisConstants {
     }
     
     public enum INVITATION_ID {
-        CHAT_LOBBY_INVITE_, FRIEND_REQUEST_INVITE_;
+        CHAT_LOBBY_INVITE, FRIEND_REQUEST_INVITE;
     }
     
     static {
