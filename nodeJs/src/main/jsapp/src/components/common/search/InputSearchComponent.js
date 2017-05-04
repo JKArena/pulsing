@@ -26,6 +26,7 @@ require('./InputSearch.scss');
 
 import React, {Component} from 'react';
 import {findDOMNode} from 'react-dom';
+import PropTypes from 'prop-types';
 import {InputGroup, FormControl, Button} from 'react-bootstrap';
 
 import DropDownButtonComponent from '../dropDownButton/DropDownButtonComponent';
@@ -53,9 +54,10 @@ class InputSearchComponent extends Component {
     super(props);
     
     this.store = new KEY_STORE_MAPPER[props.store](props.index, props.pathPrefix);
-    this.docTypes = props.docTypes || [];
+    this.docTypes = props.docTypes;
     this.state = {selectedType: this.docTypes[0]};
 
+    this.searchQueryHandle = props.searchQueryHandle;
     this.searchResultHandler = this.searchResult.bind(this);
     this.store.on(STORE_EVENT.SEARCH, this.searchResultHandler);
   }
@@ -84,10 +86,9 @@ class InputSearchComponent extends Component {
   }
 
   handleSearch() {
-    if(!this.searchInputNode.value) return;
+    if(this.searchInputNode.value.length === 0) return;
 
-    this.store.search(this.state.selectedType, {'term': {'name': {'boost': 3.0, 'value': this.searchInputNode.value }}});
-    //this.store.search(this.state.selectedType, {'match_all': {}});
+    this.store.search(this.state.selectedType, this.searchQueryHandle(this.searchInputNode.value));
   }
 
   render() {
@@ -116,5 +117,12 @@ class InputSearchComponent extends Component {
 }
 
 InputSearchComponent.displayName = 'InputSearchComponent';
+InputSearchComponent.propTypes = {
+  store: PropTypes.string.isRequired,
+  index: PropTypes.string.isRequired,
+  pathPrefix: PropTypes.string.isRequired,
+  docTypes: PropTypes.arrayOf(PropTypes.object).isRequired,
+  searchQueryHandle: PropTypes.func.isRequired,
+};
 
 export {InputSearchComponent, DOC_TYPE};
