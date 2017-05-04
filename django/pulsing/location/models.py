@@ -12,6 +12,7 @@ from __future__ import unicode_literals
 from django.contrib.gis.db import models
 from django.db import connection
 
+"""
 class DjangoMigrations(models.Model):
     app = models.CharField(max_length=255)
     name = models.CharField(max_length=255)
@@ -181,3 +182,4 @@ class Tl2013UsZcta510(models.Model):
     class Meta:
         managed = False
         db_table = 'tl_2013_us_zcta510'
+"""
