@@ -83,6 +83,11 @@ class TrendingPulseSubscriptionsComponent extends Component {
     trending = fetched;
     this.setState({});
   }
+
+  searchQueryHandle(inputValue) {
+    //TODO: Improve later
+    return {'term': {'name': {'value': inputValue }}};
+  }
   
   render() {
     const cols = [];
@@ -108,6 +113,7 @@ class TrendingPulseSubscriptionsComponent extends Component {
     return (
       <div className='trendingpulse-component'>
         <InputSearchComponent store='elasticSearch' index='pulse' docTypes={ES_DOC_TYPES}
+          searchQueryHandle={this.searchQueryHandle}
           trigger='Search Pulse' />
         
         {(() => {

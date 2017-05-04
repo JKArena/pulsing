@@ -63,7 +63,7 @@ def friendRequest(request):
     
     invitations = redis.client.smembers('INVITATIONS_'+friendId) 
     
-    logger.debug('Previous invitations %s', invitations)
+    logger.debug('Invitations %s', invitations)
     
     return JsonResponse({
         'code': 'SUCCESS',
