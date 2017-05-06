@@ -16,9 +16,9 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.spark.streaming
+package org.jhk.pulsing.spark.streaming.job
 
-import org.apache.log4j.{Level, LogManager, PropertyConfigurator}
+import org.apache.log4j.LogManager
 import org.apache.spark.SparkConf
 import org.apache.spark._
 import org.apache.spark.SparkContext._
@@ -26,28 +26,24 @@ import org.apache.spark.rdd._
 import org.apache.spark.streaming._
 import org.apache.spark.streaming.StreamingContext._
 import org.apache.spark.TaskContext
-
-import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.apache.kafka.common.serialization.StringDeserializer
 import org.apache.spark.streaming.kafka010._
 import org.apache.spark.streaming.kafka010.LocationStrategies.PreferConsistent
 import org.apache.spark.streaming.kafka010.ConsumerStrategies.Subscribe
-
 import org.apache.hadoop.mapreduce.Job
 import org.apache.hadoop.io.NullWritable
-import org.apache.avro.specific.SpecificRecord;
-import org.apache.avro.Schema
-import org.apache.avro.mapred.{AvroValue, AvroKey}
-import org.apache.avro.mapreduce.{AvroKeyOutputFormat, AvroKeyValueOutputFormat, AvroJob}
-
+import org.apache.avro.mapred.AvroKey
+import org.apache.avro.mapreduce.{AvroKeyOutputFormat, AvroJob}
 import com.google.maps.GeoApiContext
 import com.google.maps.GeocodingApi
 import com.google.maps.model.GeocodingResult
-
 import org.jhk.pulsing.shared.util.CommonConstants._
 import org.jhk.pulsing.shared.util.HadoopConstants
 import org.jhk.pulsing.serialization.avro.records.Location
 import org.jhk.pulsing.serialization.avro.serializers.SerializationHelper
+import org.apache.avro.mapreduce.{AvroKeyOutputFormat => AvroKeyOutputFormat}
+import org.apache.kafka.common.serialization.StringDeserializer
+import org.apache.spark.rdd.RDD.rddToPairRDDFunctions
 
 /**
  * @author Ji Kim

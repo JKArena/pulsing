@@ -16,25 +16,24 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.spark.streaming
+package org.jhk.pulsing.spark.streaming.job
 
-import org.apache.log4j.{Level, LogManager, PropertyConfigurator}
+import org.apache.log4j.LogManager
 import org.apache.spark.SparkConf
 import org.apache.spark.streaming._
 import org.apache.spark.streaming.StreamingContext._
 import org.apache.spark.TaskContext
-
-import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.apache.kafka.common.serialization.StringDeserializer
 import org.apache.spark.streaming.kafka010._
 import org.apache.spark.streaming.kafka010.LocationStrategies.PreferConsistent
 import org.apache.spark.streaming.kafka010.ConsumerStrategies.Subscribe
 import org.apache.spark.sql.SparkSession
-
 import org.jhk.pulsing.shared.util.CommonConstants._
 import org.jhk.pulsing.shared.util.HadoopConstants
 import org.jhk.pulsing.serialization.avro.records.edge.FriendEdge
 import org.jhk.pulsing.serialization.avro.serializers.SerializationHelper
+import org.apache.kafka.common.serialization.StringDeserializer
+import org.jhk.pulsing.serialization.avro.records.edge.FriendEdge
 
 /**
  * @author Ji Kim
@@ -44,6 +43,7 @@ object FriendStreaming {
   
   def createStreamingContext() = {
     val configuration = new SparkConf().setMaster(SPARK_YARN_CLUSTER_MASTER).setAppName("friend")
+    configuration.registerAvroSchemas(FriendEdge.getClassSchema)
     val streamingContext = new StreamingContext(configuration, Seconds(10))
     
     streamingContext

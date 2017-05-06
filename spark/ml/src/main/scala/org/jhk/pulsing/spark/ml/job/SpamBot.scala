@@ -16,37 +16,30 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.spark.ml
+package org.jhk.pulsing.spark.ml.job
 
 import org.apache.spark.SparkConf
 import org.apache.spark.SparkContext
 import org.apache.spark.SparkContext._
-
 import org.apache.spark.mllib.regression.LabeledPoint
 import org.apache.spark.mllib.feature.HashingTF
 import org.apache.spark.mllib.classification.LogisticRegressionWithSGD
 
+import org.jhk.pulsing.spark.ml.common.Common
 import org.jhk.pulsing.shared.util.CommonConstants._
 import org.jhk.pulsing.shared.util.HadoopConstants
 
 /**
  * @author Ji Kim
  */
-class SpamBot {
+object SpamBot {
   
   val SPAM_WORDS_PATH = HadoopConstants.HDFS_URL_PORT + HadoopConstants.TRAINING_DATA_WORKSPACE + "spamWords.txt";
   val NORMAL_WORDS_PATH = HadoopConstants.HDFS_URL_PORT + HadoopConstants.TRAINING_DATA_WORKSPACE + "normalWords.txt";
   
-  def createSparkContext() = {
-    val configuration = new SparkConf().setMaster(PROJECT_POINT).setAppName("spam-bot")
-    val sparkContext = new SparkContext(configuration);
-    
-    sparkContext
-  }
-  
   def main(args: Array[String]): Unit = {
     
-    val sparkContext = createSparkContext
+    val sparkContext = Common.createSparkContext("spam-bot")
     val spamWords = sparkContext.textFile(SPAM_WORDS_PATH)
     val normalWords = sparkContext.textFile(NORMAL_WORDS_PATH)
     
