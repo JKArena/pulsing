@@ -16,10 +16,9 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.spark.ml
+package org.jhk.pulsing.spark.ml.job
 
-import java.time.LocalDate;
-
+import java.time.LocalDate
 import org.apache.spark._
 import org.apache.spark.sql.SQLContext
 import org.apache.spark.sql.types._
@@ -27,9 +26,9 @@ import org.apache.spark.sql.functions._
 import org.apache.spark.sql._
 import org.apache.spark.ml.feature.VectorAssembler
 import org.apache.spark.ml.clustering.KMeans
-
 import com.databricks.spark.avro._
 
+import org.jhk.pulsing.spark.ml.common.Common
 import org.jhk.pulsing.shared.util.CommonConstants._
 import org.jhk.pulsing.shared.util.HadoopConstants
 
@@ -38,16 +37,9 @@ import org.jhk.pulsing.shared.util.HadoopConstants
  */
 object PulseInspect {
   
-  def createSparkContext() = {
-    val configuration = new SparkConf().setMaster(PROJECT_POINT).setAppName("pulse-inspect")
-    val sparkContext = new SparkContext(configuration);
-    
-    sparkContext
-  }
-  
   def main(args: Array[String]): Unit = {
     
-    val sparkContext = createSparkContext
+    val sparkContext = Common.createSparkContext("pulse-inspect")
     val sqlContext = new SQLContext(sparkContext)
     import sqlContext.implicits._
     import sqlContext._
