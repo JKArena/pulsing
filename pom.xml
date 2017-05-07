@@ -641,6 +641,7 @@ descent loss of performance)
     <module>storm</module>
     <module>spark</module>
     <module>spring</module>
+    <module>lucene</module>
   </modules>
   
   <build>
