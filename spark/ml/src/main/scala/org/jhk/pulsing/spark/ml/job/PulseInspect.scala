@@ -38,6 +38,10 @@ import org.jhk.pulsing.shared.util.HadoopConstants
 object PulseInspect {
   
   def main(args: Array[String]): Unit = {
+    startup
+  }
+  
+  def startup(): Unit = {
     
     val sparkContext = Common.createSparkContext("pulse-inspect")
     val sqlContext = new SQLContext(sparkContext)

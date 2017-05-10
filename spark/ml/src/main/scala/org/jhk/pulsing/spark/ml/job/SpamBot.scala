@@ -38,6 +38,10 @@ object SpamBot {
   val NORMAL_WORDS_PATH = HadoopConstants.HDFS_URL_PORT + HadoopConstants.TRAINING_DATA_WORKSPACE + "normalWords.txt";
   
   def main(args: Array[String]): Unit = {
+    startup
+  }
+  
+  def startup(): Unit = {
     
     val sparkContext = Common.createSparkContext("spam-bot")
     val spamWords = sparkContext.textFile(SPAM_WORDS_PATH)
