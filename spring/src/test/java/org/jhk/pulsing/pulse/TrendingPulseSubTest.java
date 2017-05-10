@@ -20,16 +20,18 @@ package org.jhk.pulsing.pulse;
 
 import static org.junit.Assert.assertTrue;
 
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
 import java.util.Set;
 
+import org.jhk.pulsing.shared.processor.PulseProcessor;
 import org.jhk.pulsing.shared.util.CommonConstants;
-import org.jhk.pulsing.web.service.prod.helper.PulseServiceUtil;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -65,7 +67,15 @@ public class TrendingPulseSubTest {
             
             testData.add(_objectMapper.writeValueAsString(createTempMap()));
             
-            Map<Long, String> tpSubscriptions = PulseServiceUtil.processTrendingPulseSubscribe(testData);
+            Map<String, Integer> count = PulseProcessor.countTrendingPulseSubscribe(testData);
+            Map<Long, String> tpSubscriptions = count.entrySet().stream()
+                    .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+                    .collect(Collectors.toMap(
+                            entry -> Long.parseLong(entry.getKey().split(CommonConstants.TIME_INTERVAL_ID_VALUE_DELIM)[0]),
+                            entry -> entry.getKey().split(CommonConstants.TIME_INTERVAL_ID_VALUE_DELIM)[1],
+                            (x, y) -> {throw new AssertionError();},
+                            LinkedHashMap::new
+                            ));
             
             assertTrue("Size equal?", tpSubscriptions.size() == _validResult.size());
             

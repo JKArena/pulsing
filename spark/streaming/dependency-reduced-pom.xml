@@ -219,10 +219,6 @@
           <groupId>org.slf4j</groupId>
         </exclusion>
         <exclusion>
-          <artifactId>jcl-over-slf4j</artifactId>
-          <groupId>org.slf4j</groupId>
-        </exclusion>
-        <exclusion>
           <artifactId>compress-lzf</artifactId>
           <groupId>com.ning</groupId>
         </exclusion>
