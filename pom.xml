@@ -520,12 +520,6 @@ descent loss of performance)
 
       <dependency>
         <groupId>org.apache.lucene</groupId>
-        <artifactId>lucene-core</artifactId>
-        <version>${lucene}</version>
-      </dependency>
-
-      <dependency>
-        <groupId>org.apache.lucene</groupId>
         <artifactId>lucene-analyzers-common</artifactId>
         <version>${lucene}</version>
       </dependency>
@@ -533,6 +527,12 @@ descent loss of performance)
       <dependency>
         <groupId>org.apache.lucene</groupId>
         <artifactId>lucene-queryparser</artifactId>
+        <version>${lucene}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.apache.lucene</groupId>
+        <artifactId>lucene-queries</artifactId>
         <version>${lucene}</version>
       </dependency>
 

@@ -22,8 +22,11 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Map;
 import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -32,6 +35,7 @@ import org.jhk.pulsing.serialization.avro.records.ACTION;
 import org.jhk.pulsing.serialization.avro.records.Pulse;
 import org.jhk.pulsing.serialization.avro.records.PulseId;
 import org.jhk.pulsing.serialization.avro.records.UserId;
+import org.jhk.pulsing.shared.processor.PulseProcessor;
 import org.jhk.pulsing.shared.util.CommonConstants;
 import org.jhk.pulsing.shared.util.Util;
 import org.jhk.pulsing.web.common.Result;
@@ -40,7 +44,6 @@ import org.jhk.pulsing.web.dao.prod.db.redis.RedisPulseDao;
 import org.jhk.pulsing.web.dao.prod.db.redis.RedisUserDao;
 import org.jhk.pulsing.web.pojo.light.UserLight;
 import org.jhk.pulsing.web.service.IPulseService;
-import org.jhk.pulsing.web.service.prod.helper.PulseServiceUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -161,13 +164,26 @@ public class PulseService extends AbstractKafkaPublisher
         Instant current = Instant.now();
         Instant beforeRange = current.minus(numMinutes, ChronoUnit.MINUTES);
         
-        Optional<Set<String>> optTps = redisPulseDao.getTrendingPulseSubscriptions(beforeRange.getEpochSecond(), current.getEpochSecond());
+        Optional<Set<String>> optTpSubscribe = redisPulseDao.getTrendingPulseSubscriptions(beforeRange.getEpochSecond(), current.getEpochSecond());
         
         @SuppressWarnings("unchecked")
         Map<Long, String> tpSubscriptions = Collections.EMPTY_MAP;
         
-        if(optTps.isPresent()) {
-            tpSubscriptions = PulseServiceUtil.processTrendingPulseSubscribe(optTps.get());
+        if(optTpSubscribe.isPresent()) {
+            
+            Map<String, Integer> count = PulseProcessor.countTrendingPulseSubscribe(optTpSubscribe.get());
+            
+            if(count.size() > 0) {
+                tpSubscriptions = count.entrySet().stream()
+                        .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+                        .collect(Collectors.toMap(
+                                entry -> Long.parseLong(entry.getKey().split(CommonConstants.TIME_INTERVAL_ID_VALUE_DELIM)[0]),
+                                entry -> entry.getKey().split(CommonConstants.TIME_INTERVAL_ID_VALUE_DELIM)[1],
+                                (x, y) -> {throw new AssertionError();},
+                                LinkedHashMap::new
+                                ));
+            }
+            
         };
         
         return tpSubscriptions;

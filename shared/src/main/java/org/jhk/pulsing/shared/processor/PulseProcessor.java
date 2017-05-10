@@ -16,16 +16,12 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.web.service.prod.helper;
+package org.jhk.pulsing.shared.processor;
 
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
-import java.util.stream.Collectors;
 
 import org.jhk.pulsing.shared.util.CommonConstants;
 import org.slf4j.Logger;
@@ -37,29 +33,26 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 /**
  * @author Ji Kim
  */
-public class PulseServiceUtil {
+public final class PulseProcessor {
     
-    private static final Logger _LOGGER = LoggerFactory.getLogger(PulseServiceUtil.class);
+    private static final Logger _LOGGER = LoggerFactory.getLogger(PulseProcessor.class);
     
-    private static ObjectMapper _OBJECT_MAPPER = new ObjectMapper();
+    private static final ObjectMapper _OBJECT_MAPPER = new ObjectMapper();
     
-    private static final TypeReference<HashMap<String, Integer>> _TRENDING_PULSE_SUBSCRIPTION_TYPE_REF = 
-            new TypeReference<HashMap<String, Integer>>(){};
+    private static final TypeReference<HashMap<String, Integer>> _TRENDING_PULSE_SUBSCRIPTION_TYPE_REF = new TypeReference<HashMap<String, Integer>>(){};
     
-    public static Map<Long, String> processTrendingPulseSubscribe(Set<String> tps) {
+    public static Map<String, Integer> countTrendingPulseSubscribe(Set<String> tpSubscribe) {
         
-        @SuppressWarnings("unchecked")
-        Map<Long, String> tpSubscriptions = Collections.EMPTY_MAP;
         final Map<String, Integer> count = new HashMap<>();
         
-        tps.parallelStream().forEach(tpsIdValueCounts -> {
+        tpSubscribe.parallelStream().forEach(tpsIdValueCounts -> {
             
             try {
-                _LOGGER.debug("PulseServiceUtil.processTrendingPulseSubscribe: trying to convert " + tpsIdValueCounts);
+                _LOGGER.debug("PulseProcessor.processTrendingPulseSubscribe: trying to convert " + tpsIdValueCounts);
                 
                 Map<String, Integer> converted = _OBJECT_MAPPER.readValue(tpsIdValueCounts, _TRENDING_PULSE_SUBSCRIPTION_TYPE_REF);
                 
-                _LOGGER.debug("PulseServiceUtil.processTrendingPulseSubscribe: sucessfully converted " + converted.size());
+                _LOGGER.debug("PulseProcessor.processTrendingPulseSubscribe: sucessfully converted " + converted.size());
                 
                 //Structure is <id>0x07<value>0x13<timestamp> -> count; i.e. {"10020x07Mocked 10020x13<timestamp>" -> 1}
                 //Need to split the String content, gather the count for the searched interval
@@ -67,7 +60,7 @@ public class PulseServiceUtil {
                 //TODO impl better
                 
                 Map<String, Integer> computed = converted.entrySet().stream()
-                    .reduce(
+                        .reduce(
                             new HashMap<String, Integer>(),
                             (Map<String, Integer> mapped, Entry<String, Integer> entry) -> {
                                 String[] split = entry.getKey().split(CommonConstants.TIME_INTERVAL_PERSIST_TIMESTAMP_DELIM);
@@ -99,21 +92,10 @@ public class PulseServiceUtil {
             }
         });
         
-        if(count.size() > 0) {
-            tpSubscriptions = count.entrySet().stream()
-                                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
-                                .collect(Collectors.toMap(
-                                        entry -> Long.parseLong(entry.getKey().split(CommonConstants.TIME_INTERVAL_ID_VALUE_DELIM)[0]),
-                                        entry -> entry.getKey().split(CommonConstants.TIME_INTERVAL_ID_VALUE_DELIM)[1],
-                                        (x, y) -> {throw new AssertionError();},
-                                        LinkedHashMap::new
-                                        ));
-        }
-        
-        return tpSubscriptions;
+        return count;
     }
     
-    private PulseServiceUtil() {
+    private PulseProcessor() {
         super();
     }
     
