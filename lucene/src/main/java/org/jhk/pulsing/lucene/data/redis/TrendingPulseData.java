@@ -37,7 +37,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Fetch trending pulse from Redis that is pushed from Storm for special searching in Lucene
+ * Fetch trending pulse from Redis that is pushed from Storm for boosting the search in Lucene
  * 
  * @author Ji Kim
  */
