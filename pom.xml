@@ -309,7 +309,7 @@
       <dependency>
         <groupId>org.apache.spark</groupId>
         <artifactId>spark-streaming-kafka-0-10_2.11</artifactId>
-        <version>${spark.kafka}</version>
+        <version>${spark}</version>
       </dependency>
 
       <dependency>
@@ -485,13 +485,19 @@ descent loss of performance)
       <dependency>
         <groupId>org.apache.spark</groupId>
         <artifactId>spark-hive_2.11</artifactId>
-        <version>${spark.sql}</version>
+        <version>${spark}</version>
       </dependency>
 
       <dependency>
         <groupId>org.apache.spark</groupId>
         <artifactId>spark-sql_2.11</artifactId>
-        <version>${spark.sql}</version>
+        <version>${spark}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.apache.spark</groupId>
+        <artifactId>spark-graphx_2.11</artifactId>
+        <version>${spark}</version>
       </dependency>
 
       <dependency>
@@ -600,8 +606,6 @@ descent loss of performance)
     <kryo>4.0.0</kryo>
     <spark>2.1.0</spark>
     <spark.cassandra>1.6.3</spark.cassandra>
-    <spark.kafka>2.1.0</spark.kafka>
-    <spark.sql>2.1.0</spark.sql>
     <dfs-datastores>1.3.6</dfs-datastores>
     <scala>2.11.8</scala>
     <cascalog>2.1.1</cascalog> <!-- 3.0.0 -->
