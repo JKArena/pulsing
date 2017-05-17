@@ -22,6 +22,7 @@ import static org.jhk.pulsing.shared.util.RedisConstants.REDIS_KEY.PULSE_TRENDIN
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Map;
@@ -57,7 +58,7 @@ public final class TrendingPulseData implements IData<Long>{
     }
 
     @Override
-    public Set<Long> getData() {
+    public Collection<Long> getData() {
         Instant current = Instant.now();
         Instant beforeRange = current.minus(_PAST_MINUTES, ChronoUnit.MINUTES);
         
