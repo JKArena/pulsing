@@ -18,13 +18,13 @@
  */
 package org.jhk.pulsing.lucene.data.redis;
 
-import java.util.Set;
+import java.util.Collection;
 
 /**
  * @author Ji Kim
  */
 public interface IData<E> {
     
-    Set<E> getData();
+    Collection<E> getData();
     
 }
