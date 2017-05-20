@@ -25,7 +25,6 @@ import uuid
 from django.http import JsonResponse, HttpResponseBadRequest
 from django.core.cache import cache
 
-from shared.models import User
 from shared.redis import Redis
 
 logger = logging.getLogger(__name__)
@@ -34,8 +33,17 @@ redis = Redis()
 def friendInvitationId(friendId):
     return '_'.join(['FRIEND_REQUEST_INVITE', friendId, str(uuid.uuid4())])
 
-#{"expiration":1493846911462,"invitationId":"CHAT_LOBBY_INVITE__2_40372843577401","fromUserId":1,"invitationType":"CHAT_LOBBY_INVITE_"}
+#{"expiration":1493846911462,"invitationId":"CHAT_LOBBY_INVITE_2_40372843577401","fromUserId":1,"invitationType":"CHAT_LOBBY_INVITE_"}
 
+def friend(request, invitationId, userId):
+    logger.debug('friend %s- %s ', invitationId, userId)
+    """
+    1) check the invitationId did not expire
+    2) send a message to kafka of the friend
+    3) on the client side notify the friendId a friend has joined
+    """
+    
+    
 def friendRequest(request):
     """ 
     technically does not have to perform the round trip as can pass off
@@ -55,10 +63,10 @@ def friendRequest(request):
     logger.debug('friendRequest %s- %s ', userId, friendId)
     
     # TODO need to check if they are already friends or not
-    user = User.objects.get_user(id=userId)
-    friend = User.objects.get(id=friendId)
+    # user = User.objects.get_user(id=userId)
+    # friend = User.objects.get_user(id=friendId)
     
-    invitation_id = friendInvitationId(friendId)
+    invitation_id = friendInvitationId(userId)
     redis.storeInvitation(friendId, invitation_id, 'FRIEND_REQUEST_INVITE')
     
     invitations = redis.client.smembers('INVITATIONS_'+friendId) 

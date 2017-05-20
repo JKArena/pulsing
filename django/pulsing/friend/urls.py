@@ -23,5 +23,6 @@ from django.conf.urls import url
 from . import views
 
 urlpatterns = [
-    url(r'^friendRequest/$', views.friendRequest)
+    url(r'^friendRequest/$', views.friendRequest),
+    url(r'^friend/(?P<invitationId>[0-9a-f-]+)/(?P<userId>[0-9]{1,64})/$', views.friend)
 ]

@@ -24,9 +24,8 @@
 
 require('./InputSearch.scss');
 
-import React, {Component} from 'react';
+import React, {PropTypes, Component} from 'react';
 import {findDOMNode} from 'react-dom';
-import PropTypes from 'prop-types';
 import {InputGroup, FormControl, Button} from 'react-bootstrap';
 
 import DropDownButtonComponent from '../dropDownButton/DropDownButtonComponent';
@@ -122,7 +121,7 @@ InputSearchComponent.propTypes = {
   index: PropTypes.string.isRequired,
   pathPrefix: PropTypes.string.isRequired,
   docTypes: PropTypes.arrayOf(PropTypes.object).isRequired,
-  searchQueryHandle: PropTypes.func.isRequired,
+  searchQueryHandle: PropTypes.func.isRequired
 };
 
 export {InputSearchComponent, DOC_TYPE};

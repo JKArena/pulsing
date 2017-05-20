@@ -22,8 +22,10 @@
  */
 'use strict';
 
+import Storage from '../../../common/Storage';
 import {CHAT_TYPE} from '../ChatAreaHelper';
 
+import FriendAction from '../../common/actions/friendship/FriendAction';
 import FriendRequestAction from '../../common/actions/friendship/FriendRequestAction';
 
 export default function (split, user) {
@@ -37,7 +39,20 @@ export default function (split, user) {
 
         this.ws.send('/pulsing/privateChat/' + friendId, {},
               JSON.stringify({message: cMessage, userId: user.id.id, type: CHAT_TYPE.FRIEND_REQUEST,
-                              data: {invitationId: data.invitationId}, name: user.name}));
+                              data: {invitationId: data.invitationId, fName: user.name}, name: user.name}));
       });
+  } else if(split[0] === '/friendJoin' && split.length === 2) {
+
+    const friendRequest = Storage.invitation.filter(entry => {
+      return entry.fName === split[1];
+    });
+
+    if(friendRequest.length === 1) {
+
+      FriendAction.friend(friendRequest[0].invitationId, Storage.user.id)
+        .then(() => {
+
+        });
+    }
   }
 }
