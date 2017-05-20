@@ -174,7 +174,6 @@ public class RedisUserDao extends AbstractRedisDao {
                 })
                 .findAny();
         
-        boolean removed = false;
         if(invite.isPresent()) {
             getJedis().srem(setKey, invite.get());
         }

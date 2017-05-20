@@ -208,10 +208,10 @@ class ChatAreaComponent extends Component {
 
   /*
    * This function is to process any data that is sent for specific actions
-   * (i.e. /chatLobbyInvite)
+   * (i.e. /chatLobbyInvite, /friendRequest)
    */
   processChatData(chat) {
-    if(chat.type === 'CHAT_LOBBY_INVITE') {
+    if(chat.type === 'CHAT_LOBBY_INVITE' || chat.type === 'FRIEND_REQUEST') {
       Storage.invitation = chat.data;
     }
   }
