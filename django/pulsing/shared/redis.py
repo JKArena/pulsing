@@ -21,6 +21,7 @@ under the License.
 
 from redis import StrictRedis
 
+import json
 import logging
 from datetime import timedelta, datetime
 
@@ -35,11 +36,23 @@ class Redis():
         self.logger = logging.getLogger(__name__)
         self.__client = StrictRedis(host=host, port=port, password=password, db=0, **kwargs)
     
-    def storeInvitation(self, user_id, invitation_id, invitationType):
+    def storeInvitation(self, to_user_id, from_user_id, invitation_id, invitationType):
         expiration = datetime.utcnow() + timedelta(seconds=Redis.INVITE_EXPIRATION)
         self.__client.setex(invitation_id, '1', Redis.INVITE_EXPIRATION)
-        self.__client.sadd('INVITATIONS_'+user_id,
-                           getInvitation(user_id, invitationType, invitation_id, expiration.timestamp() * 1000.0))
+        self.__client.sadd('INVITATIONS_'+to_user_id,
+                           getInvitation(from_user_id, invitationType, invitation_id, expiration.timestamp() * 1000.0))
+
+    def removeInvitation(self, user_id, invitation_id):
+        s_invitations = self.__client.smembers('INVITATIONS_'+user_id)
+        self.logger.debug('removeInvitation fetched - %s ', s_invitations)
+        
+        invitations = json.loads(s_invitations)
+        self.logger.debug('removeInvitation parsed - %s ', invitations)
+        
+        invitation = [invite for invite in invitations if (invite['invitationId'] == invitation_id)]
+        self.__client.delete(invitation_id)
+        
+        return invitation
         
     @property
     def client(self):

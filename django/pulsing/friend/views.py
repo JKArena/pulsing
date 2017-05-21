@@ -19,21 +19,24 @@ under the License.
 @author Ji Kim
 """
 
+import json
 import logging
 import uuid
 
 from django.http import JsonResponse, HttpResponseBadRequest
-from django.core.cache import cache
 
+from shared.kafka import Publisher
 from shared.redis import Redis
 
+FRIEND_TOPIC = 'FRIEND'
 logger = logging.getLogger(__name__)
 redis = Redis()
+publisher = Publisher()
 
 def friendInvitationId(friendId):
     return '_'.join(['FRIEND_REQUEST_INVITE', friendId, str(uuid.uuid4())])
 
-#{"expiration":1493846911462,"invitationId":"CHAT_LOBBY_INVITE_2_40372843577401","fromUserId":1,"invitationType":"CHAT_LOBBY_INVITE_"}
+#{"expiration":1493846911462,"invitationId":"CHAT_LOBBY_INVITE_2_40372843577401","fromUserId":1,"invitationType":"CHAT_LOBBY_INVITE"}
 
 def friend(request, invitationId, userId):
     logger.debug('friend %s- %s ', invitationId, userId)
@@ -42,7 +45,23 @@ def friend(request, invitationId, userId):
     2) send a message to kafka of the friend
     3) on the client side notify the friendId a friend has joined
     """
+    invitation = redis.removeInvitation(userId, invitationId)
     
+    logger.debug('friend.invitation %d ', len(invitation))
+    # publisher.publish(FRIEND_TOPIC, json.dumps())
+    
+    if len(invitation) == 1:
+        return JsonResponse({
+            'code': 'SUCCESS',
+            'data': [],
+            'message': ''
+        })
+    else:
+        return JsonResponse({
+            'code': 'FAILURE',
+            'data': [],
+            'message': ''
+        })
     
 def friendRequest(request):
     """ 
@@ -66,8 +85,8 @@ def friendRequest(request):
     # user = User.objects.get_user(id=userId)
     # friend = User.objects.get_user(id=friendId)
     
-    invitation_id = friendInvitationId(userId)
-    redis.storeInvitation(friendId, invitation_id, 'FRIEND_REQUEST_INVITE')
+    invitation_id = friendInvitationId(friendId)
+    redis.storeInvitation(friendId, userId, invitation_id, 'FRIEND_REQUEST_INVITE')
     
     invitations = redis.client.smembers('INVITATIONS_'+friendId) 
     

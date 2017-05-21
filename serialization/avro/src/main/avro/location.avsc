@@ -32,6 +32,6 @@
     {"name": "name", "type": ["null", "string"], "default": null},
     {"name": "description", "type": ["null", "string"], "default": null},
     {"name": "action", "type": ["null", {"type": "enum", "name": "LOCATION_ACTION",
-        "symbols": ["CREATE", "IMPLICIT", "EXPLICIT", "DELETE"] }], "default": null}
+        "symbols": ["CREATE", "DELETE"] }], "default": null}
   ]
 }

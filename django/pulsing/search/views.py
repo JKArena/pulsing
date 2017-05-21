@@ -23,8 +23,6 @@ from django.http import JsonResponse, HttpResponseBadRequest
 
 import json
 import logging
-import uuid
-import datetime
 
 from django.core.cache import cache
 from .models import (pulseSearch, userSearch) 

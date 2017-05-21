@@ -23,6 +23,10 @@ import org.apache.spark.SparkConf
 import org.apache.spark.streaming._
 import org.apache.spark.streaming.StreamingContext._
 import org.apache.spark.TaskContext
+import org.apache.hadoop.mapreduce.Job
+import org.apache.hadoop.io.NullWritable
+import org.apache.avro.mapred.AvroKey
+import org.apache.avro.mapreduce.{AvroKeyOutputFormat, AvroJob}
 import org.apache.kafka.common.serialization.StringDeserializer
 import org.apache.spark.streaming.kafka010._
 import org.apache.spark.streaming.kafka010.LocationStrategies.PreferConsistent
@@ -32,13 +36,12 @@ import org.jhk.pulsing.shared.util.CommonConstants._
 import org.jhk.pulsing.shared.util.HadoopConstants
 import org.jhk.pulsing.serialization.avro.records.edge.FriendEdge
 import org.jhk.pulsing.serialization.avro.serializers.SerializationHelper
-import org.apache.kafka.common.serialization.StringDeserializer
-import org.jhk.pulsing.serialization.avro.records.edge.FriendEdge
 
 /**
  * @author Ji Kim
  */
 object FriendStreaming {
+  val SPARK_FRIEND = HadoopConstants.HDFS_URL_PORT + HadoopConstants.SPARK_NEW_DATA_WORKSPACE + "friend"
   val CHECKPOINT = HadoopConstants.getWorkingDirectory(HadoopConstants.WORKING_DIRECTORIES.SPARK_CHECK_PT_FRIEND)
   
   def createStreamingContext() = {
@@ -71,9 +74,13 @@ object FriendStreaming {
       Subscribe[String, String](topics, kafkaParameters)
     )
     
-    stream.foreachRDD{ rdd =>
-      rdd.foreachPartition { records =>
-        
+    stream.foreachRDD{ rdd => {
+      
+      var job = new Job(streamingContext.sparkContext.hadoopConfiguration)
+      AvroJob.setOutputKeySchema(job, FriendEdge.getClassSchema)
+      
+      rdd.mapPartitions{ partition =>
+  
         val context = TaskContext.get
         
         val sparkSession = SparkSession.builder.master(SPARK_YARN_CLUSTER_MASTER)
@@ -84,16 +91,22 @@ object FriendStreaming {
         val partitionLogger = LogManager.getLogger("Friend")
         partitionLogger.info(s"Friend for partition: ${context.partitionId}")
         
-        records.foreach(record => {
-          //perform avro deserialization + geo api call
-          
-          partitionLogger.info("Processing record - " + record)
-          
+        var data = partition.map({ record => 
+          //perform avro deserialization
+          partitionLogger.info("Processing friend record - " + record)
+
           val deserialized = SerializationHelper.deserializeFromJSONStringToAvro(classOf[FriendEdge], FriendEdge.getClassSchema(), record.value)
-          partitionLogger.info("Deserialized - " + deserialized)
+          partitionLogger.info("Deserialized friend - " + deserialized)
           
-        })
-      
+          (new AvroKey(deserialized), NullWritable.get())
+        }).toList
+
+        data.iterator
+      }.saveAsNewAPIHadoopFile(SPARK_FRIEND, 
+          classOf[AvroKey[FriendEdge]], 
+          classOf[NullWritable], 
+          classOf[AvroKeyOutputFormat[FriendEdge]], 
+          job.getConfiguration)
       }
     }
     
