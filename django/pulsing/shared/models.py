@@ -24,15 +24,15 @@ from django.db import models
 
 class UserManager(models.Manager):
     
-    def get_user(self, id):
+    def get_user(self, user_id):
         """ 
         not sure if this is an overkill, but I guess can help as reference
         """
-        userKey = User.cache_key + id
+        userKey = User.cache_key + user_id
         if cache.get(userKey) is not None:
             return cache.get(userKey)
         
-        user = self.get(id=id)
+        user = self.get(id=user_id)
         cache.set(userKey, user, 300)
         return user
 

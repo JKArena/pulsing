@@ -23,6 +23,7 @@ place the *-site.xml configuration files there and set the HADOOP_CONF_DIR envir
 
 hadoop fs -mkdir hdfs://localhost/data/pailnewdata/TAG
 hadoop fs -mkdir hdfs://localhost/data/pailnewdata/USER
+hadoop fs -getmerge hdfs://localhost/data/sparknewdata/friend
 
 hadoop jar pulsing-hadoop-0.1-SNAPSHOT.jar org.jhk.pulsing.hadoop.job.NewDataIngestorJob -libjars ${LIBJARS} 
 

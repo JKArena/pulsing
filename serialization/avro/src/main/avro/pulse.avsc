@@ -31,6 +31,6 @@
     {"name": "value", "type": ["null", "string"], "default": null},
     {"name": "description", "type": ["null", "string"], "default": null},
     {"name": "action", "type": ["null", {"type": "enum", "name": "ACTION",
-        "symbols": ["CREATE", "SUBSCRIBE", "UNSUBSCRIBE", "DELETE"] }], "default": null}
+        "symbols": ["CREATE", "SUBSCRIBE"] }], "default": null}
   ]
 }
