@@ -38,13 +38,23 @@ def friendInvitationId(friendId):
 
 #{"expiration":1493846911462,"invitationId":"CHAT_LOBBY_INVITE_2_40372843577401","fromUserId":1,"invitationType":"CHAT_LOBBY_INVITE"}
 
-def friendJoin(request, invitationId, userId):
-    logger.debug('friendJoin %s- %s ', invitationId, userId)
+def friendJoin(request):
     """
     1) check the invitationId did not expire
     2) send a message to kafka of the friend
     3) on the client side notify the friendId a friend has joined
     """
+    parameters = [field for field in ['userId', 'invitationId'] if not field in request.POST]
+    
+    if len(parameters) > 0:
+        logger.debug('friendJoin lacking parameters - %s', parameters)
+        return HttpResponseBadRequest()
+    
+    userId = request.POST['userId']
+    invitationId = request.POST['invitationId']
+    
+    logger.debug('friendJoin %s - %s ', invitationId, userId)
+    
     invitation = redis.removeInvitation(userId, invitationId)
     
     logger.debug('friendJoin.invitation %d ', len(invitation))
@@ -73,13 +83,13 @@ def friendRequest(request):
     parameters = [field for field in ['userId', 'friendId'] if not field in request.POST]
     
     if len(parameters) > 0:
-        logger.debug('queryDocument lacking parameters - %s', parameters)
+        logger.debug('friendRequest lacking parameters - %s', parameters)
         return HttpResponseBadRequest()
     
     userId = request.POST['userId']
     friendId = request.POST['friendId']
     
-    logger.debug('friendRequest %s- %s ', userId, friendId)
+    logger.debug('friendRequest %s - %s ', userId, friendId)
     
     # TODO need to check if they are already friends or not
     # user = User.objects.get_user(id=userId)
