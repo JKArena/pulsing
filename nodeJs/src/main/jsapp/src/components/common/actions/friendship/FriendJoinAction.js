@@ -25,19 +25,20 @@
 import Fetch from '../../../../common/Fetch';
 import Url from '../../../../common/Url';
 
-const FRIEND_JOIN_PATH = Url.djangoRootUrl() + 'friend/friendJoin/';
+const FRIEND_JOIN_URL = new URL(Url.djangoRootUrl() + 'friend/friendJoin/');
 
 const FriendJoinAction = Object.freeze(
   {
 
     friendJoin(invitationId, userId) {
 
-      const url = new URL(FRIEND_JOIN_PATH + invitationId + '/' +
-                        userId.id);
+      const fData = new FormData();
+      fData.append('userId', userId);
+      fData.append('invitationId', invitationId);
       
       return new Promise(function(resolve, reject) {
 
-        Fetch.PUT_JSON(url)
+        Fetch.POST_JSON(FRIEND_JOIN_URL, {body: fData}, false)
           .then(function(result) {
             console.debug('friendJoin', result);
 

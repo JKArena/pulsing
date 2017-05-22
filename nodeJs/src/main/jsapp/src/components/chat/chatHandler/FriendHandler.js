@@ -49,7 +49,7 @@ export default function (split, user) {
 
     if(friendRequest.length === 1) {
 
-      FriendJoinAction.friendJoin(friendRequest[0].invitationId, user.id)
+      FriendJoinAction.friendJoin(friendRequest[0].invitationId, user.id.id)
         .then(() => {
 
         });

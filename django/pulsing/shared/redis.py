@@ -40,7 +40,7 @@ class Redis():
         expiration = datetime.utcnow() + timedelta(seconds=Redis.INVITE_EXPIRATION)
         self.__client.setex(invitation_id, '1', Redis.INVITE_EXPIRATION)
         self.__client.sadd('INVITATIONS_'+to_user_id,
-                           getInvitation(from_user_id, invitationType, invitation_id, expiration.timestamp() * 1000.0))
+                           json.dumps(getInvitation(from_user_id, invitationType, invitation_id, expiration.timestamp() * 1000.0)))
 
     def removeInvitation(self, user_id, invitation_id):
         s_invitations = self.__client.smembers('INVITATIONS_'+user_id)
