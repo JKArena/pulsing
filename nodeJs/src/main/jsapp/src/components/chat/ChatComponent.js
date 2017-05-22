@@ -24,7 +24,7 @@
 
 require('./Chat.scss');
 
-import {OverlayTrigger, Grid, Row, Col, FormGroup, FormControl, InputGroup, Button, Panel} from 'react-bootstrap';
+import {Grid, Row, Col, FormGroup, FormControl, InputGroup, Button, Panel} from 'react-bootstrap';
 import {render, findDOMNode, unmountComponentAtNode} from 'react-dom';
 import React, {Component} from 'react';
 import {TOPICS, API} from '../../common/PubSub';
@@ -33,7 +33,7 @@ import WebSockets from '../../common/WebSockets';
 import DropDownButtonComponent from '../common/dropDownButton/DropDownButtonComponent';
 import GetChatLobbiesAction from './actions/GetChatLobbiesAction';
 import ChatAreaComponent from './area/ChatAreaComponent';
-import {handleChatAction, CHAT_ACTION_HELP, CHAT_TYPE} from './ChatAreaHelper';
+import {handleChatAction, CHAT_TYPE} from './ChatAreaHelper';
 
 //below would have key as the identifier of the chatArea and values being a JSON object of text to display
 //and other necessary information
@@ -237,9 +237,7 @@ class ChatComponent extends Component {
                       <DropDownButtonComponent ref='chatDropDownButton' title='Chat'
                         onSelect={this.handleChatSelect.bind(this)} />
                     </InputGroup.Button>
-                    <OverlayTrigger trigger={['hover', 'focus']} placement='bottom' overlay={CHAT_ACTION_HELP}>
-                      <FormControl type='text' ref='chatInput' />
-                    </OverlayTrigger>
+                    <FormControl type='text' ref='chatInput' />
                     <InputGroup.Button>
                       <Button onClick={this.handleChat.bind(this)}>Send</Button>
                     </InputGroup.Button>
