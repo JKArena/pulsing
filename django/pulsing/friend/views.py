@@ -38,8 +38,8 @@ def friendInvitationId(friendId):
 
 #{"expiration":1493846911462,"invitationId":"CHAT_LOBBY_INVITE_2_40372843577401","fromUserId":1,"invitationType":"CHAT_LOBBY_INVITE"}
 
-def friend(request, invitationId, userId):
-    logger.debug('friend %s- %s ', invitationId, userId)
+def friendJoin(request, invitationId, userId):
+    logger.debug('friendJoin %s- %s ', invitationId, userId)
     """
     1) check the invitationId did not expire
     2) send a message to kafka of the friend
@@ -47,7 +47,7 @@ def friend(request, invitationId, userId):
     """
     invitation = redis.removeInvitation(userId, invitationId)
     
-    logger.debug('friend.invitation %d ', len(invitation))
+    logger.debug('friendJoin.invitation %d ', len(invitation))
     # publisher.publish(FRIEND_TOPIC, json.dumps())
     
     if len(invitation) == 1:

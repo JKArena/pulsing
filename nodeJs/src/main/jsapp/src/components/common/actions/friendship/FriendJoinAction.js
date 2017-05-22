@@ -25,21 +25,21 @@
 import Fetch from '../../../../common/Fetch';
 import Url from '../../../../common/Url';
 
-const FRIEND_PATH = Url.djangoRootUrl() + 'friend/friend/';
+const FRIEND_JOIN_PATH = Url.djangoRootUrl() + 'friend/friendJoin/';
 
-const FriendAction = Object.freeze(
+const FriendJoinAction = Object.freeze(
   {
 
-    friend(invitationId, userId, fromUserId) {
+    friendJoin(invitationId, userId) {
 
-      const url = new URL(FRIEND_PATH + invitationId + '/' +
-                        userId.id + '/' + fromUserId.id);
+      const url = new URL(FRIEND_JOIN_PATH + invitationId + '/' +
+                        userId.id);
       
       return new Promise(function(resolve, reject) {
 
         Fetch.PUT_JSON(url)
           .then(function(result) {
-            console.debug('friend', result);
+            console.debug('friendJoin', result);
 
             if(result.code === 'SUCCESS') {
               resolve(result.data);
@@ -56,4 +56,4 @@ const FriendAction = Object.freeze(
   }
 );
 
-export default FriendAction;
+export default FriendJoinAction;
