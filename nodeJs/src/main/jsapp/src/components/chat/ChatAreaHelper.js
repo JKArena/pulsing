@@ -22,44 +22,8 @@
  */
 'use strict';
 
-import React from 'react';
-import {Popover, Table} from 'react-bootstrap';
-
 import chatLobbyHandler from './chatHandler/ChatLobbyHandler';
 import friendHandler from './chatHandler/FriendHandler';
-
-const CHAT_ACTION_HELP = (
-  <div className='chat-action-help'>
-    <Popover title='Chat Actions' id='chatActionHelp'>
-      <Table responsive>
-        <thead>
-          <tr>
-            <th>Command</th>
-            <th>Description</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>/createChatLobby chatLobbyName</td>
-            <td>Creates a chat lobby of chatLobbyName</td>
-          </tr>
-          <tr>
-            <td>/chatLobbyInvite userId chatLobbyName</td>
-            <td>Invites userId to chatLobbyName</td>
-          </tr>
-          <tr>
-            <td>/chatLobbyJoin chatLobbyName</td>
-            <td>Joins chatLobbyName</td>
-          </tr>
-          <tr>
-            <td>/chatLobbyLeave chatLobbyName</td>
-            <td>Leave chatLobbyName</td>
-          </tr>
-        </tbody>
-      </Table>
-    </Popover>
-  </div>
-);
 
 //types for the Chat message, so to be handled appropriately from the client+server side
 const CHAT_TYPE = {
@@ -88,4 +52,4 @@ function handleChatAction(user) {
   }
 }
 
-export { handleChatAction, CHAT_ACTION_HELP, CHAT_TYPE };
+export { handleChatAction, CHAT_TYPE };
