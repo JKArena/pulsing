@@ -25,7 +25,7 @@
 import Storage from '../../../common/Storage';
 import {CHAT_TYPE} from '../ChatAreaHelper';
 
-import FriendAction from '../../common/actions/friendship/FriendAction';
+import FriendJoinAction from '../../common/actions/friendship/FriendJoinAction';
 import FriendRequestAction from '../../common/actions/friendship/FriendRequestAction';
 
 export default function (split, user) {
@@ -49,7 +49,7 @@ export default function (split, user) {
 
     if(friendRequest.length === 1) {
 
-      FriendAction.friend(friendRequest[0].invitationId, Storage.user.id)
+      FriendJoinAction.friendJoin(friendRequest[0].invitationId, user.id)
         .then(() => {
 
         });
