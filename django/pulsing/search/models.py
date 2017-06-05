@@ -45,6 +45,11 @@ pulseSearch.map('pulse_tags', {'properties':
                 'token': {'type': 'text'}                   # standard analyzed (tokenized) => ['Luigi', 'pizza', 'abc1234']
              }
          },
+         'location': {
+             'type': 'geo_shape',
+             'tree': 'quadtree',                            # geohash (default) and quadtree
+             'precision': '1km'
+         },
          'suggest': {
              'type': 'completion',
              'analyzer': 'simple',
@@ -67,6 +72,11 @@ userSearch.map('user_tags', {'properties':
                 'name': {'type': 'keyword'},
                 'token': {'type': 'text'}
              }
+         },
+         'location': {
+             'type': 'geo_shape',
+             'tree': 'quadtree',                            # geohash (default) and quadtree
+             'precision': '1km'
          },
          'suggest': {
              'type': 'completion',

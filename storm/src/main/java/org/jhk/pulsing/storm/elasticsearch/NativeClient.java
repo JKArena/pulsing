@@ -200,6 +200,12 @@ public final class NativeClient {
         _client.admin().indices().prepareOpen(index).execute().actionGet();
     }
     
+    public void refresIndices(String...indices) {
+        _LOGGER.info("NativeClient.refresIndices: " + indices);
+        
+        _client.admin().indices().prepareRefresh(indices).execute().actionGet();
+    }
+    
     public BulkResponse bulkAdd(List<NativeClientDocument> documents) {
         _LOGGER.info("NativeClient.bulkAdd: " + documents);
         BulkRequestBuilder bulker = _client.prepareBulk();
