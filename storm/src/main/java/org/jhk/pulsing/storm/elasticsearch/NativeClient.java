@@ -20,9 +20,15 @@ package org.jhk.pulsing.storm.elasticsearch;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.List;
+import java.util.Map;
 
 import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsResponse;
+import org.elasticsearch.action.bulk.BulkRequestBuilder;
+import org.elasticsearch.action.bulk.BulkResponse;
+import org.elasticsearch.action.delete.DeleteRequestBuilder;
 import org.elasticsearch.action.delete.DeleteResponse;
+import org.elasticsearch.action.get.GetRequestBuilder;
 import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.index.IndexRequestBuilder;
 import org.elasticsearch.action.index.IndexResponse;
@@ -75,13 +81,10 @@ public final class NativeClient {
                     .addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName(CommonConstants.PROJECT_POINT), 9300));
     }
     
-    public IndexResponse addDocument(String index, String type, String id, String source) {
-        _LOGGER.info("NativeClient.addDocument: " + index + "/" + type + "/" + id + " - " + source);
+    public IndexResponse addDocument(NativeClientDocument document) {
+        _LOGGER.info("NativeClient.addDocument: " + document);
 
-        IndexRequestBuilder irBuilder = _client.prepareIndex(index, type, id);
-        
-        irBuilder.setSource(source);
-        
+        IndexRequestBuilder irBuilder = addDocumentBuilder(document);
         IndexResponse iResponse = irBuilder.execute().actionGet();
         
         _LOGGER.info("NativeClient.addDocument: Response " + iResponse);
@@ -89,14 +92,22 @@ public final class NativeClient {
         return iResponse;
     }
     
-    public GetResponse getDocument(String index, String type, String id) {
-        _LOGGER.info("NativeClient.getDocument: " + index + "/" + type + "/" + id);
+    private IndexRequestBuilder addDocumentBuilder(NativeClientDocument document) {
+        return _client.prepareIndex(document._index, document._type, document._id).setSource(document._source);
+    }
+    
+    public GetResponse getDocument(NativeClientDocument document) {
+        _LOGGER.info("NativeClient.getDocument: " + document);
         
-        GetResponse gResponse = _client.prepareGet(index, type, id).execute().actionGet();
+        GetResponse gResponse = getDocumentBuilder(document).execute().actionGet();
         
         _LOGGER.info("NativeClient.getDocument: Response " + gResponse);
         
         return gResponse;
+    }
+    
+    private GetRequestBuilder getDocumentBuilder(NativeClientDocument document) {
+        return _client.prepareGet(document._index, document._type, document._id);
     }
     
     /**
@@ -111,22 +122,20 @@ public final class NativeClient {
      * @param query
      * @return
      */
-    public SearchResponse query(String index, String type, QueryBuilder query) {
-        _LOGGER.info("NativeClient.query: " + index + "/" + type + "/" + query);
+    public SearchResponse query(NativeClientDocument document, QueryBuilder query) {
+        _LOGGER.info("NativeClient.query: " + document + "/" + query);
         
-        SearchResponse sResponse = _client.prepareSearch(index).setTypes(type).setQuery(query).execute().actionGet();
+        SearchResponse sResponse = _client.prepareSearch(document._index).setTypes(document._type).setQuery(query).execute().actionGet();
         
         _LOGGER.info("NativeClient.query: Response " + sResponse);
         
         return sResponse;
     }
     
-    public UpdateResponse updateDocument(String index, String type, String id, String key, String value) {
-        _LOGGER.info("NativeClient.updateDocument: " + index + "/" + type + "/" + id + " - " + key + "/" + value);
+    public UpdateResponse updateDocument(NativeClientDocument document) {
+        _LOGGER.info("NativeClient.updateDocument: " + document);
         
-        UpdateRequestBuilder urBuilder = _client.prepareUpdate(index, type, id)
-                .setScript(new Script("ctx._source." + key + " = " + value));
-        
+        UpdateRequestBuilder urBuilder = updateDocumentBuilder(document);
         UpdateResponse uResponse = urBuilder.execute().actionGet();
         
         _LOGGER.info("NativeClient.updateDocument: Response " + uResponse);
@@ -134,14 +143,30 @@ public final class NativeClient {
         return uResponse;
     }
     
-    public DeleteResponse deleteDocument(String index, String type, String id) {
-        _LOGGER.info("NativeClient.deleteDocument: " + index + "/" + type + "/" + id);
+    private UpdateRequestBuilder updateDocumentBuilder(NativeClientDocument document) {
+        UpdateRequestBuilder urBuilder = _client.prepareUpdate(document._index, document._type, document._id);
         
-        DeleteResponse dResponse = _client.prepareDelete(index, type, id).execute().actionGet();
+        StringBuilder updateScript = new StringBuilder();
+        for(String field : document._updateValues.keySet()) {
+            updateScript.append("ctx._source." + field + " = " + document._updateValues.get(field));
+        }
+        
+        urBuilder.setScript(new Script(updateScript.toString()));
+        return urBuilder;
+    }
+    
+    public DeleteResponse deleteDocument(NativeClientDocument document) {
+        _LOGGER.info("NativeClient.deleteDocument: " + document);
+        
+        DeleteResponse dResponse = deleteDocumentBuilder(document).execute().actionGet();
         
         _LOGGER.info("NativeClient.deleteDocument: Response " + dResponse);
         
         return dResponse;
+    }
+    
+    private DeleteRequestBuilder deleteDocumentBuilder(NativeClientDocument document) {
+        return _client.prepareDelete(document._index, document._type, document._id);
     }
     
     public boolean isIndexPresent(String name) {
@@ -173,6 +198,99 @@ public final class NativeClient {
         _LOGGER.info("NativeClient.openIndex: " + index);
         
         _client.admin().indices().prepareOpen(index).execute().actionGet();
+    }
+    
+    public BulkResponse bulkAdd(List<NativeClientDocument> documents) {
+        _LOGGER.info("NativeClient.bulkAdd: " + documents);
+        BulkRequestBuilder bulker = _client.prepareBulk();
+        
+        documents.stream().forEach(document -> {
+            bulker.add(addDocumentBuilder(document));
+        });
+        
+        _LOGGER.info("NativeClient.bulkAdd - numberOfActions: " + bulker.numberOfActions());
+        return bulker.execute().actionGet();
+    }
+    
+    public BulkResponse bulkUpdate(List<NativeClientDocument> documents) {
+        _LOGGER.info("NativeClient.bulkUpdate: " + documents);
+        BulkRequestBuilder bulker = _client.prepareBulk();
+        
+        documents.stream().forEach(document -> {
+            bulker.add(updateDocumentBuilder(document));
+        });
+        
+        _LOGGER.info("NativeClient.bulkUpdate - numberOfActions: " + bulker.numberOfActions());
+        return bulker.execute().actionGet();
+    }
+    
+    public BulkResponse bulkDelete(List<NativeClientDocument> documents) {
+        _LOGGER.info("NativeClient.bulkDelete: " + documents);
+        BulkRequestBuilder bulker = _client.prepareBulk();
+        
+        documents.stream().forEach(document -> {
+            bulker.add(deleteDocumentBuilder(document));
+        });
+        
+        _LOGGER.info("NativeClient.bulkDelete - numberOfActions: " + bulker.numberOfActions());
+        return bulker.execute().actionGet();
+    }
+    
+    public static class NativeClientDocument {
+        
+        private String _index;
+        private String _type;
+        private String _id;
+        private String _source;
+        private Map<String, String> _updateValues;
+        
+        public NativeClientDocument(String index, String type, String id, String source) {
+            super();
+            
+            _index = index;
+            _type = type;
+            _id = id;
+            _source = source;
+        }
+        
+        public NativeClientDocument() {
+            super();
+        }
+        
+        public NativeClientDocument setIndex(String index) {
+            _index = index;
+            return this;
+        }
+        public NativeClientDocument setType(String type) {
+            _type = type;
+            return this;
+        }
+        public NativeClientDocument setId(String id) {
+            _id = id;
+            return this;
+        }
+        public NativeClientDocument setSource(String source) {
+            _source = source;
+            return this;
+        }
+        public NativeClientDocument setUpdateMap(Map<String, String> updateValues) {
+            _updateValues = updateValues;
+            return this;
+        }
+        
+        @Override
+        public String toString() {
+            StringBuilder builder = new StringBuilder();
+            builder.append("{");
+            builder.append("index: " + _index + ", ");
+            builder.append("type: " + _type + ", ");
+            builder.append("id: " + _id + ", ");
+            builder.append("source: " + _source + ", ");
+            builder.append("updateValues: " + _updateValues + ", ");
+            builder.append("}");
+            return builder.toString();
+        }
+        
     }
     
 }

@@ -18,14 +18,12 @@
  */
 package org.jhk.pulsing.storm.converter;
 
-import static org.jhk.pulsing.storm.common.FieldConstants.AVRO;
-
 import java.util.EnumMap;
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import org.apache.storm.tuple.ITuple;
+import org.apache.avro.specific.SpecificRecord;
 import org.jhk.pulsing.serialization.avro.records.Pulse;
 import org.jhk.pulsing.serialization.avro.records.User;
 import org.json.simple.JSONObject;
@@ -39,7 +37,7 @@ public final class AvroToElasticDocumentConverter {
     
     private static final Logger _LOGGER = LoggerFactory.getLogger(AvroToElasticDocumentConverter.class);
     
-    private static final EnumMap<AVRO_TO_ELASTIC_DOCUMENT, Function<ITuple, JSONObject>> _AVRO_TO_ELASTIC_DOC_MAPPER = new EnumMap<>(AVRO_TO_ELASTIC_DOCUMENT.class);
+    private static final EnumMap<AVRO_TO_ELASTIC_DOCUMENT, Function<SpecificRecord, JSONObject>> _AVRO_TO_ELASTIC_DOC_MAPPER = new EnumMap<>(AVRO_TO_ELASTIC_DOCUMENT.class);
     
     public static enum AVRO_TO_ELASTIC_DOCUMENT {
         PULSE, USER;
@@ -50,7 +48,7 @@ public final class AvroToElasticDocumentConverter {
         _AVRO_TO_ELASTIC_DOC_MAPPER.put(AVRO_TO_ELASTIC_DOCUMENT.USER, AvroToElasticDocumentConverter::convertUserAvroToElasticDoc);
     }
     
-    public static Function<ITuple, JSONObject> getAvroToElasticDocFunction(AVRO_TO_ELASTIC_DOCUMENT avroType) {
+    public static Function<SpecificRecord, JSONObject> getAvroToElasticDocFunction(AVRO_TO_ELASTIC_DOCUMENT avroType) {
         return _AVRO_TO_ELASTIC_DOC_MAPPER.get(avroType);
     }
     
@@ -62,10 +60,10 @@ public final class AvroToElasticDocumentConverter {
      * @param tuple
      * @return
      */
-    private static JSONObject convertPulseAvroToElasticDoc(ITuple tuple) {
-        _LOGGER.info("AvroToElasticDocumentConverter.convertPulseAvroToElasticDoc " + tuple);
+    private static JSONObject convertPulseAvroToElasticDoc(SpecificRecord record) {
+        _LOGGER.info("AvroToElasticDocumentConverter.convertPulseAvroToElasticDoc " + record);
         
-        Pulse pulse = (Pulse) tuple.getValueByField(AVRO);
+        Pulse pulse = (Pulse) record;
         
         List<String> tags = pulse.getTags().stream()
                 .map(value -> value.toString())
@@ -82,10 +80,10 @@ public final class AvroToElasticDocumentConverter {
         return obj;
     }
     
-    private static JSONObject convertUserAvroToElasticDoc(ITuple tuple) {
-        _LOGGER.info("AvroToElasticDocumentConverter.convertUserAvroToElasticDoc " + tuple);
+    private static JSONObject convertUserAvroToElasticDoc(SpecificRecord record) {
+        _LOGGER.info("AvroToElasticDocumentConverter.convertUserAvroToElasticDoc " + record);
         
-        User user = (User) tuple.getValueByField(AVRO);
+        User user = (User) record;
         
         JSONObject obj = new JSONObject();
         

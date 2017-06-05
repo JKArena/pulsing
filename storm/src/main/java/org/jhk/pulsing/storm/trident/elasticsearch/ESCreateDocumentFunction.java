@@ -18,20 +18,23 @@
  */
 package org.jhk.pulsing.storm.trident.elasticsearch;
 
+import static org.jhk.pulsing.storm.common.FieldConstants.AVRO;
+
 import java.net.UnknownHostException;
 import java.util.Map;
 import java.util.function.Function;
 
+import org.apache.avro.specific.SpecificRecord;
 import org.apache.storm.trident.operation.BaseFunction;
 import org.apache.storm.trident.operation.TridentCollector;
 import org.apache.storm.trident.operation.TridentOperationContext;
 import org.apache.storm.trident.tuple.TridentTuple;
-import org.apache.storm.tuple.ITuple;
 import org.apache.storm.tuple.Values;
 import org.elasticsearch.node.NodeValidationException;
 import org.jhk.pulsing.storm.common.FieldConstants;
 import org.jhk.pulsing.storm.converter.AvroToElasticDocumentConverter;
 import org.jhk.pulsing.storm.elasticsearch.NativeClient;
+import org.jhk.pulsing.storm.elasticsearch.NativeClient.NativeClientDocument;
 import org.json.simple.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,7 +52,7 @@ public final class ESCreateDocumentFunction extends BaseFunction {
     private String _docType;
     
     private NativeClient _nClient;
-    private Function<ITuple, JSONObject> _toJsonConverter;
+    private Function<SpecificRecord, JSONObject> _toJsonConverter;
     
     public ESCreateDocumentFunction(AvroToElasticDocumentConverter.AVRO_TO_ELASTIC_DOCUMENT avroType, String index, String docType) {
         super();
@@ -79,7 +82,7 @@ public final class ESCreateDocumentFunction extends BaseFunction {
         
         String id = tuple.getValueByField(FieldConstants.ID).toString();
         
-        _nClient.addDocument(_index, _docType, id, _toJsonConverter.apply(tuple).toString());
+        _nClient.addDocument(new NativeClientDocument(_index, _docType, id, _toJsonConverter.apply((SpecificRecord) tuple.getValueByField(AVRO)).toString()));
         collector.emit(new Values(tuple.getValueByField(FieldConstants.AVRO)));
         
     }
