@@ -1,0 +1,186 @@
+
+Improving the performances on Linux system
+1) Change the current limit for user that runs the ES server. (i.e. elasticsearch user)
+2) For allowing ES to manage a large number of files, you need to increment the number of file descriptors (number of files) that a user can manage. To do so, you must edit your /etc/security/limits.conf and add these lines at the end:
+elasticsearch - nofile 65536
+elasticsearch - memlock unlimited
+3) Machine restart
+4) The new version of Ubuntu could skip the /etc/security/limits.conf in init.d scripts; in these cases you need to edit  /etc/pam.d/su and uncomment the following line:
+# session required pam_limits.so
+5) To fix the memory usage size of ES server, we need to set up up to the same value ES_MIN_MEM and ES_MAX_MEM in $ES_HOME/bin/elasticsearch.in.sh. YOu can otherwise setup ES_HEAP_SIZE that automatically initialized the min and max values to the server.
+
+master nodes - able to process REST responses and all other operations of search. During every action execution, ES generally executes actions using a MapReduce approach: the non data node is responsible for distributing the actions to the underlying shards (map) and collecting/aggregating the shard results (reduce) to send a final response. They may use a huge amount of RAM due to operations such as aggregations, collecting hits, and caching (that is, scan/scroll queries)
+data nodes - stores data in them. They contain the indices shards that store the indexed documents as Lucene indexes.
+ingest nodes - able to process ingestion pipeline.
+client nodes - (no master and no data) that are used to do processing in a way; if something bad happens (out of memory or bad queries), they are able to be killed/restarted without data loss or reduced cluster stability. Using the standard configuration, a node is both master, data container and ingest node.
+
+ES-Type
+keyword - Text not tokenizable
+text - text to be tokenized
+integer/long/float/double/boolean
+date/datetime
+bytes/binary
+
+Standard analyzer
+standard, simple, whitespace, stop, keyword, pattern, snowball
+
+In ES, we have different ways to manage relations between objects:
+* Embedding with type=object: This is implicitly managed by ES and it consideres the embedded as part of the main document. It's fast, but you need to reindex the main document for changing a value of the embedded object.
+* Nesting with type=nested: This allows more accurate search and filtering of the parent using nested query on children. Everything works as for embedded object except for query.
+* External children documents: Here, the children are the external document, with a property _parent to bind them to the parent. They must be indexed in the same shard of the parent. The join with the parent is a bit slower than the nested one, because the nested objects are in the same data block of the parent in Lucene index and they are loaded with the parent, otherwise the child document requires more read operations.
+
+bin/elasticsearch-plugin install ingest-attachment
+
+‎37.773972, -122.431297
+
+
+DOCKER BEGIN------
+For vanilla server start
+docker pull docker.elastic.co/elasticsearch/elasticsearch:5.1.1
+
+Start develop instance
+docker run -p 9200:9200 -p 9300:9300 -e "http.host=0.0.0.0" -e "transport.host=0.0.0.0" docker.elastic.co/elasticsearch/elasticsearch:5.1.1
+
+To check if ES is running
+docker ps
+
+The default installation can be tuned into in several ways
+
+docker run -d docker.elastic.co/elasticsearch/elasticsearch:5.1.1 elasticsearch -e "node.name=NodeName"
+
+Customize the default settings of the environment providing custom ES configuration providing a volume mount point at /usr/share/elasticsearch/config
+
+docker run -d -v "$PWD/config":/usr/share/elasticsearch/config docker.elastic.co/elasticsearch/elasticsearch:5.1.1
+
+You can persist the data between docker reboots configuring a local data mount point to store index data. The path to be used as mount point is /usr/share/elasticsearch/config.
+
+docker run -d -v "$PWD/esdata":/usr/share/elasticsearch/data docker.elastic.co/elasticsearch/elasticsearch:5.1.1
+
+DOCKER END--------
+
+Basic APIs
+Generally the best time to call the refresh is after having indexed a lot of data to be sure that your records are searchable instantly.
+
+Get
+http://server/index_name/type_name/id/_source
+
+Multi-Get (POST with body that contains a list of documents IDs)
+http://.../index_name/_mget
+http://.../index_name/type_name/_mget
+
+Search
+http://.../index/type/_search {"query": {...}}
+Some parameters: query, from, sort, post_filter, _source, fielddata_fields, stored_fields, aggregations, index_boost, highlighting, version, rescore, min_score, explain, script_fields, suggest, search_type, scroll, _name, search_after, preference
+
+ES standard pagination using from and size performs very poorly on large datasets because for every query you need to compute and discard all the results before the from value. The scrolling doesn't have this problem, but it consumes a lot, due to memory search contexts, so it cannot be used for frequent user queries. To bypass this problem, ES 5.x provides the search_after functionality that provides a fast skipping for scrolling results.
+
+.../_search?
+{
+  "size": 1,
+  "query": { "match_all" : {}},
+  "sort": [{"price": "asc"}, {"_uid": "desc"}]
+}
+
+To use the search_after functionality you need to keep track of your last sort result.
+
+.../_search?
+{
+  "query": {
+    "match_phrase_prefix": {
+      "field_name": "foo ba"
+    }
+  }
+}
+
+.../_search?
+{
+  "query": {
+    "geo_bounding_box": {
+      "location": {
+        "bottom_right": {
+          "lat": 40.03,
+          "lon": 72.0
+        },
+        "top_left": {
+          "lat": 40.717
+          "lon": 70.99
+        }
+      }
+    }
+  }
+}
+
+.../_search?
+{
+  "query": {
+    "geo_distance_range": {
+      "location": {
+        "lat": 40,
+        "lon": 70
+      },
+      "from": "100km",
+      "to": "200km"
+    }
+  }
+}
+
+It's possible to execute only aggregation calculation, without returns search results to reduce the bandwidth passing the search size parameter to 0
+.../_search?size=0
+{
+  "query": { "match_all": {}},
+  "aggs": {
+    "tag": {
+      "terms": {
+        "field": "tag",
+        "size": 10
+      }
+    }
+  }
+}
+
+.../_search?size=0
+{
+  "query": { "match_all": {}},
+  "aggs": {
+    "prices": {
+      "range": {
+        "field": "price",
+        "ranges": [
+          {"to": 10},
+          {"from": 10, "to": 20}
+          {"from": 20}
+        ]
+      }
+    }
+  }
+}
+
+.../_search?size=0
+{
+  "query": { "match_all": {}},
+  "aggregations": {
+    "age": {
+      "histogram": {
+        "field": "age",
+        "interval": 5
+      }
+    }
+  }
+}
+
+Cerebro is the evolution of the previous ES plugin kopf.
+wget https://github.com/lmenezes/cerebro/releases/download/v0.4.2/cerebro-0.4.2.tgz
+cerebro-0.4.2/bin/cerebro and http://0.0.0.0:9000/
+
+brew install kibana
+https://www.elastic.co/downloads/past-releases
+
+Install xpack on ES
+bin/elasticsearch-plugin install x-pack
+
+Start ES
+bin/kibana-plugin install x-pack
+
+http://localhost:5601
+elastic/changeme
+kibana/changeme
