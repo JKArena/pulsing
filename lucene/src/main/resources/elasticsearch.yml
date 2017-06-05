@@ -1,0 +1,116 @@
+# ======================== Elasticsearch Configuration =========================
+#
+# NOTE: Elasticsearch comes with reasonable defaults for most settings.
+#       Before you set out to tweak and tune the configuration, make sure you
+#       understand what are you trying to accomplish and the consequences.
+#
+# The primary way of configuring a node is via this file. This template lists
+# the most important settings you may want to configure for a production cluster.
+#
+# Please consult the documentation for further information on configuration options:
+# https://www.elastic.co/guide/en/elasticsearch/reference/index.html
+#
+# ./bin/elasticsearch-plugin install lang-python
+#
+# ---------------------------------- Cluster -----------------------------------
+#
+# Use a descriptive name for your cluster:
+#
+cluster.name: pulsing
+#
+# ------------------------------------ Node ------------------------------------
+#
+# Use a descriptive name for the node:
+#
+node.name: pulsing-mac
+#
+# Add custom attributes to the node:
+#
+#node.attr.rack: r1
+node.master: true
+node.data: true
+
+# It's best practice to disable ingest in master and data noe to prevent ingestion error issues
+# and to protect the cluster. The client node is the best candidate to be also ingest ones
+node.ingest: true
+#
+# ----------------------------------- Paths ------------------------------------
+#
+# Path to directory where to store the data (separate multiple locations by comma):
+# When multiple for path.data they are managed a la RAID 0 (their space is sum up), favoring
+# locations with most free space
+path.data: ./data
+
+# location when Elasticsearch stores temporary files
+#path.work: ./work
+#
+# Path to log files:
+#
+path.logs: ./logs
+
+# override the plugins path (default is $ES_HOME/plugins)
+#path.plugins: ./plugins
+#
+# ----------------------------------- Memory -----------------------------------
+#
+# Lock the memory on startup:
+# To control memory swapping
+# The other settings for memory prevent ES swapping memory and give a performance boost in a production environment
+# This setting is required because during indexing and searching ES creates and destroys a lot of objects in memory.
+# This large number of create/destroy actions fragments the memory reducing performances: the memory becomes full 
+# of holes and when the system needs to allocate more memory it suffers an overhead to find compacted memory. 
+# If you don't set boostrap.memory_lock: true, ES dumps the whole process memory on disk and defragments it back 
+# in memory, freezing the system. With this setting, the defragmentation step is done all in memory, with a huge 
+# performance boost.
+#
+bootstrap.memory_lock: true
+#
+# Make sure that the heap size is set to about half the memory available
+# on the system and that the owner of the process is allowed to use this
+# limit.
+#
+# Elasticsearch performs poorly when the system is swapping the memory.
+#
+# ---------------------------------- Network -----------------------------------
+#
+# Set the bind address to a specific IP (IPv4 or IPv6):
+# Defines the IP of your machine to be used in bind the node. If your server is on different 
+# LANs or you want to limit the bind on only a LAN, you must set this value with your server IP.
+#
+network.host: 127.0.0.1
+#
+# Set a custom port for HTTP:
+#
+#http.port: 9200
+#
+# For more information, consult the network module documentation.
+#
+# --------------------------------- Discovery ----------------------------------
+#
+# Pass an initial list of hosts to perform discovery when new node is started:
+# The default list of hosts is ["127.0.0.1", "[::1]"]
+# Your node is configured to bind on all your machine interfaces and does discovery broadcasting 
+# events to the nodes listed in discovery...hosts. This means that it sends signals to the machine 
+# in unicast list and waits for a response. If a node responds to it, they can join in a cluster.
+#
+discovery.zen.ping.unicast.hosts: ["pulsing.jhk.org", "127.0.0.1"]
+#
+# Prevent the "split brain" by configuring the majority of nodes (total number of master-eligible nodes / 2 + 1):
+#
+#discovery.zen.minimum_master_nodes: 3
+#
+# For more information, consult the zen discovery module documentation.
+#
+# ---------------------------------- Gateway -----------------------------------
+#
+# Block initial recovery after a full cluster restart until N nodes are started:
+#
+#gateway.recover_after_nodes: 3
+#
+# For more information, consult the gateway module documentation.
+#
+# ---------------------------------- Various -----------------------------------
+#
+# Require explicit names when deleting indices:
+#
+#action.destructive_requires_name: true
