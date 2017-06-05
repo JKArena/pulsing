@@ -75,6 +75,7 @@ public final class AvroToElasticDocumentConverter {
         obj.put("name", pulse.getValue() != null ? pulse.getValue().toString() : "");
         obj.put("user_id", pulse.getUserId().getId());
         obj.put("timestamp", pulse.getTimeStamp());
+        obj.put("location", pulse.getLat() + "," + pulse.getLng());
         obj.put("tags", tags);
         
         return obj;
@@ -89,6 +90,7 @@ public final class AvroToElasticDocumentConverter {
         
         obj.put("name", user.getName().toString());
         obj.put("email", user.getEmail().toString());
+        obj.put("location", user.getLat() + "," + user.getLng());
         
         return obj;
     }

@@ -68,8 +68,10 @@ public class NativeClientTest {
             private long userId;
             private long timeStamp;
             private List<CharSequence> tags;
+            private double lat;
+            private double lon;
             
-            private PulseTest(String description, String name, long userId, long timeStamp, List<CharSequence> tags) {
+            private PulseTest(String description, String name, long userId, long timeStamp, List<CharSequence> tags, double lat, double lon) {
                 super();
                 
                 this.description = description;
@@ -77,6 +79,8 @@ public class NativeClientTest {
                 this.userId = userId;
                 this.timeStamp = timeStamp;
                 this.tags = tags;
+                this.lat = lat;
+                this.lon = lon;
             }
         }
         
@@ -85,25 +89,25 @@ public class NativeClientTest {
                     add("basketball");
                     add("sport");
                     add("bayarea");
-                }}),
+                }}, 37.773972, -122.431297),
                 new PulseTest("Pizza @Pizza Suprema", "Pizza Eat", Util.uniqueId(), Instant.now().getEpochSecond(), new LinkedList<CharSequence>(){{
                     add("pizza");
                     add("eat");
                     add("food");
                     add("eastside");
-                }}),
+                }}, 40.7128, 74.0059),
                 new PulseTest("Overwatch @6PM PST", "Overwatch", Util.uniqueId(), Instant.now().getEpochSecond(), new LinkedList<CharSequence>(){{
                     add("overwatch");
                     add("game");
-                }}),
+                }}, 40.7128, 74.0059),
                 new PulseTest("Study @9PM PST Starbucks", "Reading", Util.uniqueId(), Instant.now().getEpochSecond(), new LinkedList<CharSequence>(){{
                     add("study");
                     add("coffee");
-                }}),
+                }}, 40.7128, 74.0059),
                 new PulseTest("Big bang theory @8PM PST", "TV - Big bang theory", Util.uniqueId(), Instant.now().getEpochSecond(), new LinkedList<CharSequence>(){{
                     add("bigbangtheory");
                     add("tv");
-                }})
+                }}, 37.773972, -122.431297)
         };
         
         Function<SpecificRecord, JSONObject> _toJsonConverter = AvroToElasticDocumentConverter.getAvroToElasticDocFunction(AvroToElasticDocumentConverter.AVRO_TO_ELASTIC_DOCUMENT.PULSE);
@@ -112,6 +116,7 @@ public class NativeClientTest {
         Arrays.asList(pulseData).forEach(pData -> {
             Pulse user = Pulse.newBuilder().setDescription(pData.description).setValue(pData.name)
                     .setTimeStamp(pData.timeStamp).setTags(pData.tags)
+                    .setLat(pData.lat).setLng(pData.lon)
                     .setUserId(UserId.newBuilder().setId(pData.userId).build())
                     .build();
             
@@ -119,18 +124,19 @@ public class NativeClientTest {
         });
         
         _nClient.bulkAdd(documents);
+        _nClient.refresIndices("pulse");
     }
     
     @Test
     public void testCreateUsers() {
         final String[][] userData = new String[][] {
-            new String[]{"Issac Newton", "iNewton@mathPhysics.com"},
-            new String[]{"Euclid of Alexandria", "eAlexandria@mathPhysics.com"},
-            new String[]{"Archimedes", "archimedes@mathPhysics.com"},
-            new String[]{"Pascal", "pascal@mathPhysics.com"},
-            new String[]{"James Clerk Maxwell", "jcMaxwell@mathPhysics.com"},
-            new String[]{"Socrates", "socrates@philosophy.com"},
-            new String[]{"Plato", "plato@philosophy.com"}
+            new String[]{"Isaac Newton", "iNewton@mathPhysics.com", "52.809167", "-0.630556"},
+            new String[]{"Euclid of Alexandria", "eAlexandria@mathPhysics.com", "31.2", "29.916667"},
+            new String[]{"Archimedes", "archimedes@mathPhysics.com", "37.083333", "15.283333"},
+            new String[]{"Pascal", "pascal@mathPhysics.com", "45.7831", "3.0824"},
+            new String[]{"James Clerk Maxwell", "jcMaxwell@mathPhysics.com", "55.953056", "-3.188889"},
+            new String[]{"Socrates", "socrates@philosophy.com", "37.9667", "23.7167"},
+            new String[]{"Plato", "plato@philosophy.com", "37.9667", "23.7167"}
         };
         
         Function<SpecificRecord, JSONObject> _toJsonConverter = AvroToElasticDocumentConverter.getAvroToElasticDocFunction(AvroToElasticDocumentConverter.AVRO_TO_ELASTIC_DOCUMENT.USER);
@@ -138,12 +144,15 @@ public class NativeClientTest {
         
         Arrays.asList(userData).forEach(uData -> {
             long id = Util.uniqueId();
-            User user = User.newBuilder().setName(uData[0]).setEmail(uData[1]).setId(UserId.newBuilder().setId(id).build()).build();
+            User user = User.newBuilder().setName(uData[0]).setEmail(uData[1]).setId(UserId.newBuilder().setId(id).build())
+                    .setLat(Double.parseDouble(uData[2])).setLng(Double.parseDouble(uData[3]))
+                    .build();
             
             documents.add(new NativeClientDocument("user", "user_tags", id + "", _toJsonConverter.apply(user).toString()));
         });
         
         _nClient.bulkAdd(documents);
+        _nClient.refresIndices("user");
     }
     
 }
