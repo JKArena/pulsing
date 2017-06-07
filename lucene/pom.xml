@@ -11,13 +11,27 @@
   <groupId>org.jhk.pulsing.lucene</groupId>
   <artifactId>pulsing-lucene</artifactId>
   <name>pulsing-lucene</name>
+  <packaging>jar</packaging>
   <url>https://github.com/JHKTruth/pulsing/lucene</url>
   
   <dependencies>
-  
     <dependency>
       <groupId>org.jhk.pulsing.shared</groupId>
       <artifactId>pulsing-shared</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>com.fasterxml.jackson.core</groupId>
+          <artifactId>jackson-core</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>com.fasterxml.jackson.core</groupId>
+          <artifactId>jackson-databind</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>com.fasterxml.jackson.core</groupId>
+          <artifactId>jackson-annotations</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
     
     <dependency>
@@ -79,6 +93,7 @@
     <dependency>
       <groupId>org.apache.lucene</groupId>
       <artifactId>lucene-test-framework</artifactId>
+      <scope>test</scope>
     </dependency>
     
     <dependency>
@@ -93,7 +108,7 @@
     <plugins>
       <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
-        <version>3.0</version>
+        <version>3.0.0</version>
         <configuration>
           <appendAssemblyId>false</appendAssemblyId>
           <outputDirectory>${project.build.directory}/releases/</outputDirectory>
@@ -114,12 +129,5 @@
       </plugin>
     </plugins>
   </build>
-  
-  <properties>
-    <es.assembly.descriptor>${project.basedir}/src/main/assemblies/plugin.xml</es.assembly.descriptor>
-    <es.plugin.name>encryptor</es.plugin.name>
-    <es.plugin.classname>org.jhk.pulsing.lucene.plugin.EncryptPlugin</es.plugin.classname>
-    <es.plugin.jvm>true</es.plugin.jvm>
-  </properties>
   
 </project>

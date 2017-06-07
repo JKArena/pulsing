@@ -184,3 +184,5 @@ bin/kibana-plugin install x-pack
 http://localhost:5601
 elastic/changeme
 kibana/changeme
+
+xpack.security.enabled: false
