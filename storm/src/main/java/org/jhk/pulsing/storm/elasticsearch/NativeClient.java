@@ -78,7 +78,7 @@ public final class NativeClient {
         super();
         
         _client = new PreBuiltTransportClient(SETTINGS)
-                    .addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName(CommonConstants.PROJECT_POINT), 9300));
+                    .addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName(CommonConstants.PROJECT_POINT), CommonConstants.ELASTICSEARCH_NODE_PORT));
     }
     
     public IndexResponse addDocument(NativeClientDocument document) {

@@ -46,6 +46,9 @@ public final class CommonConstants {
     
     public static final double DEFAULT_PULSE_RADIUS = 5.0d;
     
+    public static final int ELASTICSEARCH_REST_PORT;
+    public static final int ELASTICSEARCH_NODE_PORT;
+    
     public enum TOPICS {
 		PULSE_SUBSCRIBE, USER_CREATE, PULSE_CREATE, LOCATION_CREATE, FRIEND;
 	};
@@ -73,6 +76,9 @@ public final class CommonConstants {
             APP_NAME = props.getProperty("app_name");
             MAP_API_KEY = props.getProperty("map_api_key");
             SPARK_YARN_CLUSTER_MASTER = props.getProperty("spark_yarn_cluster_master");
+            
+            ELASTICSEARCH_REST_PORT = Integer.parseInt(props.getProperty("elasticsearch_rest_port"));
+            ELASTICSEARCH_NODE_PORT = Integer.parseInt(props.getProperty("elasticsearch_node_port"));
         } catch (IOException ioExcept) {
             throw new RuntimeException("Error while reading common.properties", ioExcept);
         }
