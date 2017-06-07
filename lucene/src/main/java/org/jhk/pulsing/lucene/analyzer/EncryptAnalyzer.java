@@ -16,30 +16,30 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.lucene.plugin;
-
-import java.util.HashMap;
-import java.util.Map;
+package org.jhk.pulsing.lucene.analyzer;
 
 import org.apache.lucene.analysis.Analyzer;
-import org.elasticsearch.index.analysis.AnalyzerProvider;
-import org.elasticsearch.indices.analysis.AnalysisModule.AnalysisProvider;
-import org.elasticsearch.plugins.AnalysisPlugin;
-import org.elasticsearch.plugins.Plugin;
+import org.apache.lucene.analysis.TokenStream;
+import org.apache.lucene.analysis.Tokenizer;
+import org.apache.lucene.analysis.standard.StandardFilter;
+import org.jhk.pulsing.lucene.tokenizer.EncryptTokenizer;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author Ji Kim
  */
-public final class EncryptAnalysisPlugin extends Plugin
-                                    implements AnalysisPlugin {
+public final class EncryptAnalyzer extends Analyzer {
     
+    private static final Logger _LOGGER = LoggerFactory.getLogger(EncryptAnalyzer.class);
+
     @Override
-    public Map<String, AnalysisProvider<AnalyzerProvider<? extends Analyzer>>> getAnalyzers() {
+    protected TokenStreamComponents createComponents(String field) {
+        _LOGGER.info("EncryptAnalyzer.createComponents: " + field);
         
-        Map<String, AnalysisProvider<AnalyzerProvider<? extends Analyzer>>> analyzers = new HashMap<>();
-        
-        analyzers.put(EncryptAnalyzerProvider.NAME, EncryptAnalyzerProvider::getEncryptAnalyzerProvider);
-        return analyzers;
+        Tokenizer source = new EncryptTokenizer();
+        TokenStream filter = new StandardFilter(source);
+        return new TokenStreamComponents(source, filter);
     }
 
 }

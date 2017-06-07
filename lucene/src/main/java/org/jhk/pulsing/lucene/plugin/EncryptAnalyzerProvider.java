@@ -22,21 +22,21 @@ import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.env.Environment;
 import org.elasticsearch.index.IndexSettings;
 import org.elasticsearch.index.analysis.AbstractIndexAnalyzerProvider;
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.jhk.pulsing.lucene.analyzer.EncryptAnalyzer;
 
 /**
  * @author Ji Kim
  */
-public class EncryptAnalyzerProvider extends AbstractIndexAnalyzerProvider<StandardAnalyzer> {
+public final class EncryptAnalyzerProvider extends AbstractIndexAnalyzerProvider<EncryptAnalyzer> {
     
     public static final String NAME = "encryptor";
     
-    private final StandardAnalyzer analyzer;
+    private final EncryptAnalyzer analyzer;
     
     public EncryptAnalyzerProvider(IndexSettings indexSettings, Environment env, String name, Settings settings) {
         super(indexSettings, name, settings);
         
-        analyzer = new StandardAnalyzer();
+        analyzer = new EncryptAnalyzer();
     }
     
     public static EncryptAnalyzerProvider getEncryptAnalyzerProvider(IndexSettings indexSettings, Environment env, String name, Settings settings) {
@@ -44,7 +44,7 @@ public class EncryptAnalyzerProvider extends AbstractIndexAnalyzerProvider<Stand
     }
 
     @Override
-    public StandardAnalyzer get() {
+    public EncryptAnalyzer get() {
         return analyzer;
     }
 
