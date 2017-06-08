@@ -30,7 +30,7 @@ import org.jhk.pulsing.shared.util.CommonConstants;
 public class Chat {
     
     public enum TYPE {
-        PULSE, CHAT_LOBBY, CHAT_LOBBY_INVITE, CHAT_LOBBY_JOIN, FRIEND_REQUEST, SYSTEM_MESSAGE;
+        PULSE, CHAT_LOBBY, CHAT_LOBBY_INVITE, CHAT_LOBBY_JOIN, FRIEND_REQUEST, SYSTEM_MESSAGE, SECRET_MESSAGE;
     }
     
     private String _message;

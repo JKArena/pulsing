@@ -20,20 +20,32 @@ package org.jhk.pulsing.web.service.prod;
 
 import static org.jhk.pulsing.web.common.Result.CODE.*;
 
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.jhk.pulsing.db.cassandra.PagingResult;
 import org.jhk.pulsing.serialization.avro.records.UserId;
+import org.jhk.pulsing.shared.util.AesCipher;
+import org.jhk.pulsing.shared.util.Util;
 import org.jhk.pulsing.web.common.Result;
 import org.jhk.pulsing.web.dao.prod.db.cassandra.CassandraChatDao;
+import org.jhk.pulsing.web.elasticsearch.ESRestClient;
 import org.jhk.pulsing.web.pojo.light.Chat;
 import org.jhk.pulsing.web.service.IChatService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 /**
@@ -41,6 +53,14 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class ChatService implements IChatService {
+    
+    private static final Logger _LOGGER = LoggerFactory.getLogger(ChatService.class);
+    
+    private static final String SECRETS_INDEX = "secrets";
+    private static final String SECRET_MESSAGE_TYPE = "secretMessage";
+    
+    private final AesCipher aCipher = new AesCipher();
+    private final ESRestClient esRClient = new ESRestClient();
     
     @Inject
     @Named("cassandraChatDao")
@@ -92,6 +112,26 @@ public class ChatService implements IChatService {
         Optional<Boolean> chatSubscribe = cassandraChatDao.chatLobbySubscribe(cLId, lobbyName, userId);
         
         return chatSubscribe.isPresent() ? new Result<>(SUCCESS, chatSubscribe.get()) : new Result<>(FAILURE, false, "Unable to subscribe to chatLobby " + lobbyName);
+    }
+    
+    @Override
+    public void sendSecretMessage(long toUserId, Chat message) {
+        _LOGGER.info("ChatService.sendSecretMessage: " + toUserId + " > " + message);
+        
+        try {
+            Map<String, String> sMessage = new HashMap<>();
+            sMessage.put("to_user_id", toUserId + "");
+            sMessage.put("timestamp", message.getTimeStamp() + "");
+            sMessage.put("from_user_id", message.getUserId() + "");
+            sMessage.put("message", aCipher.encrypt(message.getMessage()));
+            
+            esRClient.putDocument(SECRETS_INDEX, SECRET_MESSAGE_TYPE, Util.uniqueId(), sMessage);
+        } catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException
+                | InvalidAlgorithmParameterException | IllegalBlockSizeException | BadPaddingException encryptException) {
+            encryptException.printStackTrace();
+            _LOGGER.error("ChatService.sendSecretMessage: encryption error");
+        }
+        
     }
 
 }

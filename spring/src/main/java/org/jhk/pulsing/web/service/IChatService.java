@@ -45,4 +45,6 @@ public interface IChatService {
     
     Result<Boolean> chatLobbySubscribe(UUID cLId, String lobbyName, UserId userId);
     
+    void sendSecretMessage(long to, Chat message);
+    
 }

@@ -19,6 +19,7 @@
 package org.jhk.pulsing.web.elasticsearch;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 import java.util.StringJoiner;
@@ -27,6 +28,7 @@ import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHost;
 import org.apache.http.HttpStatus;
+import org.apache.http.nio.entity.NStringEntity;
 import org.apache.http.util.EntityUtils;
 import org.elasticsearch.client.Response;
 import org.elasticsearch.client.RestClient;
@@ -34,12 +36,17 @@ import org.jhk.pulsing.shared.util.CommonConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 /**
  * @author Ji Kim
  */
 public class ESRestClient {
     
     private static final Logger _LOGGER = LoggerFactory.getLogger(ESRestClient.class);
+    
+    private final ObjectMapper _objectMapper = new ObjectMapper();
+    private final Header[] EMPTY_HEADER = new Header[0];
     
     private final String _host;
     private final int _port;
@@ -52,9 +59,17 @@ public class ESRestClient {
         
         _host = CommonConstants.PROJECT_POINT;
         _port = CommonConstants.ELASTICSEARCH_REST_PORT;
-        _protocol = "https";
+        _protocol = "http";
         
         init();
+    }
+    
+    public ESRestClient(String protocol, String host, int port) {
+        super();
+        
+        _protocol = protocol;
+        _host = host;
+        _port = port;
     }
     
     private void init() {
@@ -64,16 +79,13 @@ public class ESRestClient {
     public Optional<String> getDocument(String index, String type, String id) {
         String endpoint = new StringJoiner("/").add(index).add(type).add(id).toString();
         
-        _LOGGER.debug("ESRestClient.getDocument: " + endpoint);
         try {
-            Response response = _client.performRequest("GET", endpoint);
-            if(response.getStatusLine().getStatusCode() != HttpStatus.SC_OK) {
-                _LOGGER.warn("ESRestClient.getDocument: Failed in retrieving document - " + response.getStatusLine());
-            }else {
-                HttpEntity hEntity = response.getEntity();
+            Optional<Response> response = performRequest("GET", endpoint, Collections.EMPTY_MAP, null, EMPTY_HEADER);
+            if(response.isPresent()) {
+                HttpEntity hEntity = response.get().getEntity();
                 String result = EntityUtils.toString(hEntity);
                 
-                _LOGGER.debug("ESRestClient.getDocument: Got - " + result);
+                _LOGGER.debug("ESRestClient.getDocument: result - " + result);
                 return Optional.of(result);
             }
         } catch (IOException iException) {
@@ -83,21 +95,37 @@ public class ESRestClient {
         return Optional.empty();
     }
     
-    public Optional<String> performRequest(String method, String endpoint, Map<String, String> params, HttpEntity entity, Header... headers) {
-        _LOGGER.debug("ESRestClient.performRequest: " + method + "-" + endpoint + ": " + params + " > " + entity);
+    public Optional<String> putDocument(String index, String type, long id, Map<String, String> jsonObject) {
+        String endpoint = new StringJoiner("/").add(index).add(type).add(id + "").toString();
+        
+        _LOGGER.debug("ESRestClient.putDocument: " + endpoint + " - " + jsonObject);
         try {
-            Response response = _client.performRequest(method, endpoint, params, entity, headers);
-            if(response.getStatusLine().getStatusCode() != HttpStatus.SC_OK) {
-                _LOGGER.warn("ESRestClient.performRequest: Failed - " + response.getStatusLine());
-            }else {
-                HttpEntity hEntity = response.getEntity();
+            Optional<Response> response = performRequest("PUT", endpoint, Collections.EMPTY_MAP,
+                    new NStringEntity(_objectMapper.writeValueAsString(jsonObject)), EMPTY_HEADER);
+            
+            if(response.isPresent()) {
+                HttpEntity hEntity = response.get().getEntity();
                 String result = EntityUtils.toString(hEntity);
                 
-                _LOGGER.debug("ESRestClient.performRequest: result - " + result);
+                _LOGGER.debug("ESRestClient.putDocument: result - " + result);
                 return Optional.of(result);
             }
         } catch (IOException iException) {
             iException.printStackTrace();
+        }
+        
+        return Optional.empty();
+    }
+    
+    public Optional<Response> performRequest(String method, String endpoint, Map<String, String> params, HttpEntity entity, Header... headers) throws IOException {
+        _LOGGER.debug("ESRestClient.performRequest: " + method + "-" + endpoint + ": " + params + " > " + entity);
+        
+        Response response = _client.performRequest(method, endpoint, params, entity, headers);
+        if(response.getStatusLine().getStatusCode() != HttpStatus.SC_OK) {
+            _LOGGER.warn("ESRestClient.performRequest: Failed - " + response.getStatusLine());
+        }else {
+            _LOGGER.debug("ESRestClient.performRequest: response - " + response);
+            return Optional.of(response);
         }
         
         return Optional.empty();
