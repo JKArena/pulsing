@@ -85,3 +85,14 @@ userSearch.map('user_tags', {'properties':
          }
     }
 })
+
+# TODO move to Spring later since part of chat
+secretSearch = Search('secrets')
+secretSearch.map('secretMessage', {'properties': 
+    {
+        'message': {'type': 'text', 'analyzer': 'encryptor', 'store': 'true'},
+        'from_user_id': {'type': 'long', 'store': 'true'},
+        'timestamp': {'type': 'date', 'store': 'true'},
+        'to_user_id': {'type': 'long', 'store': 'true'}
+    }
+})
