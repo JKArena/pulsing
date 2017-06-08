@@ -88,11 +88,12 @@ public class WebSocketController {
             msg.addData("invitationId", invitationId);
             
             SystemMessageUtil.sendSystemAlertMessage(template, toUserId, msg.getMessage());
-        }
-        
-        if(msg.getType() == Chat.TYPE.FRIEND_REQUEST) {
+        }else if(msg.getType() == Chat.TYPE.FRIEND_REQUEST) {
             
             SystemMessageUtil.sendSystemAlertMessage(template, toUserId, msg.getMessage());
+        }else if(msg.getType() == Chat.TYPE.SECRET_MESSAGE) {
+            
+            chatService.sendSecretMessage(toUserId, msg);
         }
         
         return msg;
