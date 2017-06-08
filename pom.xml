@@ -508,6 +508,12 @@ descent loss of performance)
 
       <dependency>
         <groupId>org.elasticsearch.client</groupId>
+        <artifactId>rest</artifactId>
+        <version>${elasticsearch}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.elasticsearch.client</groupId>
         <artifactId>transport</artifactId>
         <version>${elasticsearch}</version>
       </dependency>
