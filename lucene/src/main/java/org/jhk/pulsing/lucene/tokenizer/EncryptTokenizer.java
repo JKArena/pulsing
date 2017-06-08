@@ -20,78 +20,89 @@ package org.jhk.pulsing.lucene.tokenizer;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.StringReader;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.crypto.BadPaddingException;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
 import org.apache.lucene.analysis.Tokenizer;
-import org.apache.lucene.analysis.standard.StandardTokenizer;
+import org.apache.lucene.analysis.tokenattributes.CharTermAttribute;
 import org.jhk.pulsing.shared.util.AesCipher;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- * Initial try using StandardTokenizer in composition pattern
- * 
  * @author Ji Kim
  */
 public final class EncryptTokenizer extends Tokenizer {
     
-    private StandardTokenizer _sTokenizer = new StandardTokenizer();
+    private static final Logger _LOGGER = LoggerFactory.getLogger(EncryptTokenizer.class);
+    
+    private final CharTermAttribute termAttribute = addAttribute(CharTermAttribute.class);
+    
     private AesCipher _aCipher = new AesCipher();
-    private StringReader _sReader;
-    private boolean _started;
+    private boolean _decrypted;
+    private int _position;
+    private List<String> _values;
     
     @Override
     public boolean incrementToken() throws IOException {
-        if(!_started) {
+        if(!_decrypted) {
             decrypt();
-            _sTokenizer.setReader(_sReader);
+            _decrypted = true;
         }
         
-        return _sTokenizer.incrementToken();
+        if(_position == _values.size()) {
+            return false;
+        }
+        
+        termAttribute.setEmpty();
+        String token = _values.get(_position++);
+        
+        _LOGGER.info("EncryptTokenizer.incrementToken: token - " + _position + " / " + token);
+        termAttribute.append(token);
+        
+        return true;
     }
     
     @Override
     public void reset() throws IOException {
         super.reset();
         
-        _started = false;
-        _sTokenizer.reset();
+        _position = 0;
     }
     
-    @Override
-    public void close() throws IOException {
-        super.close();
+    private void decrypt() throws IOException {
+        _LOGGER.info("EncryptTokenizer.decrypt: Setting up...");
         
-        _started = false;
-        _sTokenizer.close();
-    }
-    
-    @Override
-    public void end() throws IOException {
-        super.end();
-        
-        _started = false;
-        _sTokenizer.end();
-    }
-    
-    private void decrypt() {
-        
-        StringBuilder builder = new StringBuilder();
+        StringBuilder encrypted = new StringBuilder();
         
         try(BufferedReader bReader = new BufferedReader(input)) {
-            builder.append(new String(_aCipher.decrypt(bReader.readLine().getBytes())));
+            String read = bReader.readLine();
+            encrypted.append(read);
         }
-        catch(IOException | InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException 
-                | InvalidAlgorithmParameterException | IllegalBlockSizeException | BadPaddingException iException) {
+        catch(IOException iException) {
             iException.printStackTrace();
         }
         
-        _sReader = new StringReader(builder.toString());
+        _LOGGER.info("EncryptTokenizer.decrypt: encrypted value > " + encrypted.toString());
+        try {
+            
+            String decrypted = _aCipher.decrypt(encrypted.toString());
+            
+            _LOGGER.info("EncryptTokenizer.decrypt: decrypted value > " + decrypted);
+            
+            _values = Arrays.asList(decrypted.split(" "));
+        } catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException
+                | InvalidAlgorithmParameterException | IllegalBlockSizeException | BadPaddingException dException) {
+            dException.printStackTrace();
+        }
+        
     }
     
 }
