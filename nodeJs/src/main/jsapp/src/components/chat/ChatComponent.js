@@ -173,7 +173,7 @@ class ChatComponent extends Component {
    * note CHAT_LOBBY_INVITE, WHISPER types should not use this function
    * as it should be set manually during the actions
    */
-  getChatType(chatId) {
+  getRegularChatType(chatId) {
     if(this.isChatLobby(chatId)) {
       return CHAT_TYPE.CHAT_LOBBY;
     } else if(CHAT_MAPPER[chatId].text === 'Pulse') {
@@ -204,7 +204,7 @@ class ChatComponent extends Component {
       
       this.ws.send('/pulsing/chat/' + this.state.chatId, {},
                   JSON.stringify({message: this.chatInputNode.value,
-                                  type: this.getChatType(this.state.chatId),
+                                  type: this.getRegularChatType(this.state.chatId),
                                   userId: user.id.id, name: user.name}));
     }
     
