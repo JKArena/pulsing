@@ -21,78 +21,40 @@ package org.jhk.pulsing.shared.util;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
+import java.util.Base64;
 
 import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.KeyGenerator;
 import javax.crypto.NoSuchPaddingException;
-import javax.crypto.SecretKey;
-import javax.crypto.spec.GCMParameterSpec;
 
 /**
+ * TODO: Use javax.crypto.Cipher
+ * 
  * @author Ji Kim
  */
 public final class AesCipher {
     
-    public static final String DEFAULT_TRANSFORMATION = "AES/GCM/PKCS5Padding" ;
-    public static final String DEFAULT_TAG = "pulsing.jhk.org";
-    public static final int KEY_SIZE = 128;
-    public static final int INITIAL_VECTOR_SIZE = 96;
-    public static final int TAG_BIT_LENGTH = 128;
-    
-    private final String _transformation;
-    private final String _tag;
-    private final SecretKey _sKey;
-    private final GCMParameterSpec _gpSpec;
+    private final Base64.Encoder _encoder = Base64.getEncoder();
+    private final Base64.Decoder _decoder = Base64.getDecoder();
     
     public AesCipher(String transformation, String tag) {
         super();
-        
-        _transformation = transformation;
-        _tag = tag;
     }
     
     public AesCipher() {
         super();
-        
-        _transformation = DEFAULT_TRANSFORMATION;
-        _tag = DEFAULT_TAG;
     }
     
-    {
-        KeyGenerator keygen;
-        try {
-            keygen = KeyGenerator.getInstance("AES");
-        } catch (NoSuchAlgorithmException nsaException) {
-            nsaException.printStackTrace();
-            throw new RuntimeException(nsaException);
-        } 
-        keygen.init(KEY_SIZE); 
-        _sKey = keygen.generateKey();
-        
-        byte iVector[] = new byte[INITIAL_VECTOR_SIZE];
-        new SecureRandom().nextBytes(iVector);
-        _gpSpec = new GCMParameterSpec(TAG_BIT_LENGTH, iVector);
-    }
-    
-    public byte[] encrypt(String message) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, 
+    public String encrypt(String message) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, 
                                             InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException {
-        Cipher eCipher = Cipher.getInstance(_transformation);
-        eCipher.init(Cipher.ENCRYPT_MODE, _sKey, _gpSpec, new SecureRandom());
-        eCipher.updateAAD(_tag.getBytes());
-        
-        return eCipher.doFinal(message.getBytes());
+        return _encoder.encodeToString(message.getBytes());
     }
     
-    public byte[] decrypt(byte[] encrypted) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, 
+    public String decrypt(String encrypted) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, 
                                             InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException {
-        Cipher dCipher = Cipher.getInstance(_transformation);
-        dCipher.init(Cipher.DECRYPT_MODE, _sKey, _gpSpec, new SecureRandom());
-        dCipher.updateAAD(_tag.getBytes());
+        byte[] decoded = _decoder.decode(encrypted);
         
-        return dCipher.doFinal(encrypted);
+        return new String(decoded);
     }
     
 }

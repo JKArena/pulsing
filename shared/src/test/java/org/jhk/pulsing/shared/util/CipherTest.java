@@ -45,14 +45,18 @@ public class CipherTest {
         
         Arrays.asList(eTest).forEach(value -> {
             try {
-                byte[] fEncrypted = first.encrypt(value);
-                byte[] sEncrypted = second.encrypt(value);
+                String fEncrypted = first.encrypt(value);
+                String sEncrypted = second.encrypt(value);
                 
-                byte[] fDecrypted = first.decrypt(fEncrypted);
-                byte[] sDecrypted = second.decrypt(sEncrypted);
+                String fDecrypted = first.decrypt(fEncrypted);
+                String sDecrypted = second.decrypt(sEncrypted);
                 
-                assertTrue("Compare decryption values for " + value, new String(fDecrypted).equals(new String(sDecrypted)));
+                assertTrue("Compare decryption values for " + value, fDecrypted.equals(sDecrypted));
                 
+                fDecrypted = first.decrypt(sEncrypted);
+                sDecrypted = second.decrypt(fEncrypted);
+                
+                assertTrue("Compare decryption same when swapped (since don't want to expose as service atm) " + value, fDecrypted.equals(sDecrypted));
             } catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException
                     | InvalidAlgorithmParameterException | IllegalBlockSizeException | BadPaddingException eException) {
                 assertTrue("Failed encryption...", false);
