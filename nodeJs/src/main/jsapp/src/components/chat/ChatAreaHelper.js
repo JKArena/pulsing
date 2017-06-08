@@ -24,6 +24,7 @@
 
 import chatLobbyHandler from './chatHandler/ChatLobbyHandler';
 import friendHandler from './chatHandler/FriendHandler';
+import secretHandler from './chatHandler/SecretHandler';
 
 //types for the Chat message, so to be handled appropriately from the client+server side
 const CHAT_TYPE = {
@@ -33,7 +34,8 @@ const CHAT_TYPE = {
   'CHAT_LOBBY_INVITE': 'CHAT_LOBBY_INVITE',
   'FRIEND_REQUEST': 'FRIEND_REQUEST',
   'GENERAL': 'GENERAL',
-  'WHISPER': 'WHISPER'
+  'WHISPER': 'WHISPER',
+  'SECRET_MESSAGE': 'SECRET_MESSAGE'
 };
 
 /**
@@ -49,6 +51,9 @@ function handleChatAction(user) {
   } else if(handler.indexOf('friend') > -1) {
     
     friendHandler.call(this, split, user);
+  } else if(handler.indexOf('secret') > -1) {
+
+    secretHandler.call(this, split, user);
   }
 }
 
