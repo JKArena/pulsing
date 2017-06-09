@@ -57,7 +57,7 @@ public class ChatService implements IChatService {
     private static final Logger _LOGGER = LoggerFactory.getLogger(ChatService.class);
     
     private static final String SECRETS_INDEX = "secrets";
-    private static final String SECRET_MESSAGE_TYPE = "secretMessage";
+    private static final String SECRET_MESSAGE_TYPE = "message";
     
     private final AesCipher aCipher = new AesCipher();
     private final ESRestClient esRClient = new ESRestClient();
@@ -123,7 +123,7 @@ public class ChatService implements IChatService {
             sMessage.put("to_user_id", toUserId + "");
             sMessage.put("timestamp", message.getTimeStamp() + "");
             sMessage.put("from_user_id", message.getUserId() + "");
-            sMessage.put("message", aCipher.encrypt(message.getMessage()));
+            sMessage.put("content", aCipher.encrypt(message.getMessage()));
             
             esRClient.putDocument(SECRETS_INDEX, SECRET_MESSAGE_TYPE, Util.uniqueId(), sMessage);
         } catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException
