@@ -24,3 +24,5 @@ collation-server = utf8mb4_unicode_ci
 
 ogr2ogr -overwrite -progress -f "MySQL" MYSQL:pulsing,user=pulsing,password=wsad north-america-latest.osm.pbf
 ogr2ogr -overwrite -progress -f "MySQL" MYSQL:pulsing,user=pulsing,password=wsad tl_2013_us_zcta510.shp
+
+Maxwell or Debezium CDC for MySQL

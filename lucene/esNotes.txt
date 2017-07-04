@@ -192,3 +192,20 @@ kibana/changeme
 xpack.security.enabled: false
 
 ./bin/elasticsearch-plugin remove encryptor
+
+Use Packetbeat or Metricbeat to send event data to Logstash
+Logstash+Filebeat
+
+bin/logstash -e 'input { stdin { } } output { stdout {} }'
+Ctrl+D to kill (prob using ruby)
+
+bin/logstash -f logstash.conf --config.test_and_exit # parses the config and reports any errors
+bin/logstash -f logstash.conf --config.reload.automatic # so to enable modification to config w/o restarting
+
+Each input stage in the Logstash pipeline runs in its own thread. Inputs write events to a common Java SynchronousQueue. This queue holds no events, instead transferring each pushed event to a free worker, blocking if all workers are busy. Each pipeline worker thread takes a batch of events off this queue, creating a buffer per worker, runs the batch of events through the configured filters, then runs the filtered events through any outputs. The size of the batch and number of pipeline worker threads are configurable (see Tuning and Profiling Logstash Performance).
+
+By default, Logstash uses in-memory bounded queues between pipeline stages (input → filter and filter → output) to buffer events. If Logstash terminates unsafely, any events that are stored in memory will be lost. To prevent data loss, you can enable Logstash to persist in-flight events to disk. 
+
+Start ES
+Start FileBeat
+Start LogStash
