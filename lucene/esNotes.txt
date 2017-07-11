@@ -209,3 +209,7 @@ By default, Logstash uses in-memory bounded queues between pipeline stages (inpu
 Start ES
 Start FileBeat
 Start LogStash
+
+Replace $DATE with the current date, in YYYY.MM.DD format
+curl -XGET 'localhost:9200/logstash-$DATE/_search?pretty&q=response=200'
+
