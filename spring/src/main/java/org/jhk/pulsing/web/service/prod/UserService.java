@@ -26,7 +26,6 @@ import javax.inject.Named;
 
 import org.jhk.pulsing.serialization.avro.records.User;
 import org.jhk.pulsing.serialization.avro.records.UserId;
-import org.jhk.pulsing.shared.util.CommonConstants;
 import org.jhk.pulsing.shared.util.RedisConstants.INVITATION_ID;
 import org.jhk.pulsing.web.common.Result;
 import static org.jhk.pulsing.web.common.Result.CODE.*;
@@ -50,8 +49,7 @@ import org.springframework.stereotype.Service;
  * @author Ji Kim
  */
 @Service
-public class UserService extends AbstractKafkaPublisher
-                            implements IUserService {
+public class UserService implements IUserService {
     
     @Inject
     @Named("mySqlUserDao")
@@ -89,10 +87,6 @@ public class UserService extends AbstractKafkaPublisher
         try {
             cUser = mySqlUserDao.createUser(user);
         } catch(RuntimeException eException) {
-        }
-        
-        if(cUser.getCode() == SUCCESS) {
-            getKafkaPublisher().produce(CommonConstants.TOPICS.USER_CREATE.toString(), cUser.getData());
         }
         
         return cUser;
