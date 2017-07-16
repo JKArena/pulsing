@@ -24,7 +24,7 @@
 
 import * as sTypes from '../common/StoreTypes';
 
-export default function AuthReducer(state={}, action) {
+export default function authReducer(state={}, action) {
   switch(action.type) {
     case sTypes.AUTH_CHANGED: {
       return {...state, ...action.payload};
