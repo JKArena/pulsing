@@ -27,7 +27,8 @@ import * as sTypes from '../common/StoreTypes';
 export default function authReducer(state={}, action) {
   switch(action.type) {
     case sTypes.AUTH_CHANGED: {
-      return {...state, ...action.payload};
+      Storage.user = JSON.parse(result.data); //store as json, but get as Avros (and store in Map as Avros)
+      return {...state, user: Storage.user};
     }
     default:
       return state;
