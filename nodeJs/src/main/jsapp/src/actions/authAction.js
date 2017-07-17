@@ -39,11 +39,9 @@ const LOGIN_URL = new URL(Url.controllerUrl() + 'user/validateUser');
         console.debug('loginUser', result);
         
         if(result.code === 'SUCCESS') {
-          Storage.user = JSON.parse(result.data); //store as json, but get as Avros (and store in Map as Avros)
-          
           dispatch({
             type: types.AUTH_CHANGED,
-            payload: { Storage.user },
+            payload: { user: JSON.parse(result.data) },
           });
         }
 
@@ -55,4 +53,3 @@ const LOGIN_URL = new URL(Url.controllerUrl() + 'user/validateUser');
     }
   }
  }
- 

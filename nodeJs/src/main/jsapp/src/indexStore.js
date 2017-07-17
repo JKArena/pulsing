@@ -20,9 +20,8 @@
 /**
  * @author Ji Kim
  */
-'use strict';
 
-import {createStore, combineReducers} from 'redux';
+import { createStore, combineReducers } from 'redux';
 import AuthReducer from './reducers/AuthReducer';
 
 const indexReducers = combineReducers({

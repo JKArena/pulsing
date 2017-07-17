@@ -20,25 +20,23 @@
 /**
  * @author Ji Kim
  */
-'use strict';
+import React from 'react';
+import { Grid, Row, Col } from 'react-bootstrap';
+import NavBarComponent from './navbar/NavBarComponent';
+import ChatComponent from './chat/ChatComponent';
+import Storage from '../common/Storage';
+import { TOPICS, API } from '../common/PubSub';
 
 require('normalize.css/normalize.css');
 require('bootstrap/dist/css/bootstrap.css');
 require('./App.css');
-
-import React from 'react';
-import {Grid, Row, Col} from 'react-bootstrap';
-import NavBarComponent from './navbar/NavBarComponent';
-import ChatComponent from './chat/ChatComponent';
-import Storage from '../common/Storage';
-import {TOPICS, API} from '../common/PubSub';
 
 class AppComponent extends React.Component {
 
   constructor(props) {
     super(props);
 
-    this.state = {loggedIn: !!Storage.user};
+    this.state = { loggedIn: !!Storage.user };
     this.authHandler = this.onAuth.bind(this);
     this.errorHandler = this.onError.bind(this);
   }
@@ -54,21 +52,19 @@ class AppComponent extends React.Component {
   }
 
   onAuth(auth) {
-    
     this.state.loggedIn = auth.loggedIn;
     this.setState(this.state);
   }
 
   /*
-   * @param errorData json object with {error: err, additional : {msg: '', serverLog: false, args: []}
+   * @param errorData json object with {error: err,
+   * additional : {msg: '', serverLog: false, args: []}
    */
   onError(errorData) {
     console.error('Error', errorData);
-
   }
 
   render() {
-
     return (
       <div>
         <NavBarComponent></NavBarComponent>
@@ -79,7 +75,7 @@ class AppComponent extends React.Component {
             </Col>
           </Row>
           {(() => {
-            if(this.state.loggedIn) {
+            if (this.state.loggedIn) {
               return  <Row>
                         <Col>
                           <ChatComponent />

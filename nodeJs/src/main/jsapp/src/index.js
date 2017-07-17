@@ -20,13 +20,12 @@
 /**
  * @author Ji Kim
  */
-'use strict';
 
 import 'core-js/fn/object/assign';
 import React from 'react';
-import {render} from 'react-dom';
-import {Router, Route, IndexRoute, browserHistory} from 'react-router';
-import {Provider} from 'react-redux';
+import { render } from 'react-dom';
+import { Router, Route, IndexRoute, browserHistory } from 'react-router';
+import { Provider } from 'react-redux';
 
 import App from './components/App';
 import indexStore from './indexStore';
@@ -42,14 +41,14 @@ import LoginComponent from './components/login/LoginComponent';
 render((
   <Provider store={indexStore}>
     <Router history={browserHistory}>
-      <Route path='/' component={App}>
+      <Route path="/" component={App}>
         <IndexRoute component={TrendingPulseSubscriptionsComponent} />
-        <Route path='map/:store' component={MapComponent} />
-        <Route path='createPulse' component={CreatePulseComponent} />
-        <Route path='createLocation' component={CreateLocationComponent} />
-        <Route path='alertListing' component={AlertListingComponent} />
-        <Route path='signup' component={SignupComponent} />
-        <Route path='login' component={LoginComponent} />
+        <Route path="map/:store" component={MapComponent} />
+        <Route path="createPulse" component={CreatePulseComponent} />
+        <Route path="createLocation" component={CreateLocationComponent} />
+        <Route path="alertListing" component={AlertListingComponent} />
+        <Route path="signup" component={SignupComponent} />
+        <Route path="login" component={LoginComponent} />
       </Route>
     </Router>
   </Provider>

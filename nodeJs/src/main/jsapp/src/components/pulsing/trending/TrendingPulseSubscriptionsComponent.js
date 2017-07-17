@@ -20,18 +20,14 @@
 /**
  * @author Ji Kim
  */
-'use strict';
+import { Grid, Row, Col, Thumbnail, Button, Badge } from 'react-bootstrap';
+import React, { Component } from 'react';
+import TrendingPulseSubscriptionsStore from './TrendingPulseSubscriptionsStore';
+import { TOPICS, API } from '../../../common/PubSub';
+import Storage from '../../../common/Storage';
+import { DOC_TYPE, InputSearchComponent } from '../../common/search/InputSearchComponent';
 
 require('./TrendingPulseSubscriptions.scss');
-
-import {Grid, Row, Col, Thumbnail, Button, Badge} from 'react-bootstrap';
-import React, {Component} from 'react';
-
-import TrendingPulseSubscriptionsStore from './TrendingPulseSubscriptionsStore';
-import {TOPICS, API} from '../../../common/PubSub';
-import Storage from '../../../common/Storage';
-
-import {DOC_TYPE, InputSearchComponent} from '../../common/search/InputSearchComponent';
 
 const ES_DOC_TYPES = [DOC_TYPE.PULSE, DOC_TYPE.USER];
 let trending = new Map();
