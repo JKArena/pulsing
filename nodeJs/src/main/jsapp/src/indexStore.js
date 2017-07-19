@@ -22,10 +22,9 @@
  */
 
 import { createStore, combineReducers } from 'redux';
-import AuthReducer from './reducers/AuthReducer';
 
 const indexReducers = combineReducers({
-  AuthReducer
+
 });
 
 export default createStore(indexReducers);
