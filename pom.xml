@@ -312,6 +312,13 @@
         <version>${spark}</version>
       </dependency>
 
+      <!-- structured streaming -->
+      <dependency>
+        <groupId>org.apache.spark</groupId>
+        <artifactId>spark-sql-kafka-0-10_2.11</artifactId>
+        <version>${spark}</version>
+      </dependency>
+
       <dependency>
         <groupId>com.datastax.spark</groupId>
         <artifactId>spark-cassandra-connector_2.11</artifactId>
