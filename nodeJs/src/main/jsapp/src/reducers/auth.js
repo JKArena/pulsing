@@ -21,11 +21,18 @@
  * @author Ji Kim
  */
 
-import { createStore, combineReducers } from 'redux';
-import auth from './reducers/auth'
+import * as types from '../common/storageTypes';
 
-const indexReducers = combineReducers({
-  auth,
-});
+const STATE = {
+  loggedIn: false,
+};
 
-export default createStore(indexReducers);
+export default function auth(state = STATE, action) {
+  switch(action.type) {
+    case types.AUTH_CHANGED: {
+      return { ...state, ...action.payload };
+    }
+    default:
+      return state;
+  }
+}

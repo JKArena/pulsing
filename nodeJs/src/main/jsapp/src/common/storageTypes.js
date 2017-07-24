@@ -20,17 +20,5 @@
 /**
  * @author Ji Kim
  */
-import React from 'react';
-import { Grid, Row, Col } from 'react-bootstrap';
 
-class AppComponent extends React.Component {
-
-  render() {
-    return (
-      <div>
-      </div>
-    );
-  }
-}
-
-export default AppComponent;
+export const AUTH_CHANGED = 'AUTH_CHANGED';
