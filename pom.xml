@@ -155,6 +155,12 @@
         <artifactId>avro</artifactId>
         <version>${avro}</version>
       </dependency>
+
+      <dependency>
+        <groupId>org.apache.parquet</groupId>
+        <artifactId>parquet-avro</artifactId>
+        <version>${parquet.avro}</version>
+      </dependency>
       
       <dependency>
         <groupId>org.apache.kafka</groupId>
@@ -620,6 +626,7 @@ descent loss of performance)
     <logback>1.1.8</logback>
     <storm>1.0.3-SNAPSHOT</storm> <!-- Replace with version from main repository later; there currently is a bug STORM-1907 in 1.0.x artifact that fails it in starting a worker -->
     <thrift>0.9.3</thrift>
+    <parquet.avro>1.8.2</parquet.avro>
     <avro>1.8.0</avro>
     <hadoop>2.7.2</hadoop>
     <clojure>1.8.0</clojure>
