@@ -8,7 +8,7 @@ Allows creation of Pulse which others around the area can subscribe to and when 
    * Cascading+JCascade+Pail
    * Spark ml for machine learning
    * Hive+Spark SQL for submitted location data using ESRI
-   * Spark graphx
+   * Spark graphx (might swap as dead project)
 4. MySQL/Hibernate for user data and possibly location (GIS) data using Spark SQL
 5. Cassandra for chatLobby messages which are created by users
 6. Avro+Thrift for serializations (both to compare)
