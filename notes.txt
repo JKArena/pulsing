@@ -26,3 +26,6 @@ ogr2ogr -overwrite -progress -f "MySQL" MYSQL:pulsing,user=pulsing,password=wsad
 ogr2ogr -overwrite -progress -f "MySQL" MYSQL:pulsing,user=pulsing,password=wsad tl_2013_us_zcta510.shp
 
 Maxwell or Debezium CDC for MySQL
+
+pip2 install <package>
+pip3 install <package>
