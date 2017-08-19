@@ -90,7 +90,7 @@
     
     <dependency>
       <groupId>org.apache.kafka</groupId>
-      <artifactId>kafka_2.10</artifactId>
+      <artifactId>kafka_2.11</artifactId>
     </dependency>
     
     <dependency>
@@ -123,6 +123,12 @@
       <artifactId>javax.servlet-api</artifactId>
       <version>${javax.servlet.api}</version>
       <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
     </dependency>
     
   </dependencies>
