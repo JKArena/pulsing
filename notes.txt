@@ -32,3 +32,6 @@ pip3 install <package>
 https://github.com/libevent/libevent/issues/465
 
 ./configure CPPFLAGS='-I/usr/lib/openssl/openssl-1.0.2l/include'
+
+mysql -u root -p with root
+
