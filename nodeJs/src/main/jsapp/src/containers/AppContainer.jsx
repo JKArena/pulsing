@@ -20,41 +20,50 @@
 /**
  * @author Ji Kim
  */
- 
+
 import React from 'react';
-import { Grid, Row, Col } from 'react-bootstrap';
 import HTML5Backend from 'react-dnd-html5-backend';
 import { DragDropContext } from 'react-dnd';
 import { connect } from 'react-redux';
 import * as types from '../common/storageTypes';
 import * as authActions from './actions/auth';
 
+import AppView from '../views/AppView';
+
 class AppContainer extends React.Component {
   render() {
     return (
-      <div>
-      </div>
+      <AppView user={this.props.user} onCreateUser={this.props.onCreateUser} onLogOut={this.props.onLogOut}
+        onLogIn={this.props.onLogIn} />
     );
   }
 }
 
 export function mapStateToProps(state) {
   return {
-    loggedIn: state.loggedIn,
+    user: state.auth.user,
   };
 }
 
 export function mapDispatchToProps(dispatch) {
   return {
-    toggleAuth: (btnId, formId) => {
-      dispatch(authActions.toggleAuth(btnId, formId));
+    onCreateUser: (btnId, formId) => {
+      dispatch(authActions.createUser(btnId, formId));
+    },
+    onLogIn: (btnId, formId) => {
+      dispatch(authActions.logIn(btnId, formId));
+    },
+    onLogOut: (btnId, formId) => {
+      dispatch(authActions.logOut(btnId, formId));
     },
   };
 }
 
 AppContainer.propTypes = {
-  loggedIn: React.PropTypes.boolean,
-  toggleAuth: React.PropTypes.func,
+  user: React.PropTypes.object,
+  onCreateUser: React.PropTypes.func,
+  onLogIn: React.PropTypes.func,
+  onLogOut: React.PropTypes.func,
 };
 
 export default DragDropContext(HTML5Backend)(

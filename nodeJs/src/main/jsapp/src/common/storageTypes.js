@@ -21,4 +21,6 @@
  * @author Ji Kim
  */
 
-export const AUTH_CHANGED = 'AUTH_CHANGED';
+export const CREATE_USER = 'CREATE_USER';
+export const USER_LOGGED_IN = 'USER_LOGGED_IN';
+export const USER_LOGGED_OUT = 'USER_LOGGED_OUT';

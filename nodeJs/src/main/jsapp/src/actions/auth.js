@@ -27,7 +27,7 @@ import * as types from '../common/storageTypes';
 
 const LOGIN_URL = new URL(urls.controllerUrl() + 'user/validateUser');
 
-export function toggleAuth(btnId, formId) {
+export function logIn(btnId, formId) {
   return (dispatch, getState) => {
     console.info('state', getState());
     const btn = document.getElementById(btnId);
@@ -41,7 +41,7 @@ export function toggleAuth(btnId, formId) {
 
         if(result.code === 'SUCCESS') {
           dispatch({
-            type: types.AUTH_CHANGED,
+            type: types.USER_LOGGED_IN,
             payload: { user: JSON.parse(result.data) },
           });
         }
@@ -55,3 +55,58 @@ export function toggleAuth(btnId, formId) {
   }
 }
 
+export function logOut(btnId, formId) {
+  return (dispatch, getState) => {
+    console.info('state', getState());
+    const btn = document.getElementById(btnId);
+    const fData = new FormData(document.getElementById(formId));
+
+    btn.setAttribute('disabled', 'disabled');
+
+    fetchHelper.POST_JSON(LOGIN_URL, {body: fData}, false)
+      .then(function(result) {
+        console.debug('loginUser', result);
+
+        if(result.code === 'SUCCESS') {
+          dispatch({
+            type: types.USER_LOGGED_IN,
+            payload: { user: JSON.parse(result.data) },
+          });
+        }
+
+        btn.removeAttribute('disabled');
+      })
+      .catch(function(err) {
+        btn.removeAttribute('disabled');
+      });
+    }
+  }
+}
+
+export function createUser(btnId, formId) {
+  return (dispatch, getState) => {
+    console.info('state', getState());
+    const btn = document.getElementById(btnId);
+    const fData = new FormData(document.getElementById(formId));
+
+    btn.setAttribute('disabled', 'disabled');
+
+    fetchHelper.POST_JSON(LOGIN_URL, {body: fData}, false)
+      .then(function(result) {
+        console.debug('loginUser', result);
+
+        if(result.code === 'SUCCESS') {
+          dispatch({
+            type: types.USER_LOGGED_IN,
+            payload: { user: JSON.parse(result.data) },
+          });
+        }
+
+        btn.removeAttribute('disabled');
+      })
+      .catch(function(err) {
+        btn.removeAttribute('disabled');
+      });
+    }
+  }
+}
