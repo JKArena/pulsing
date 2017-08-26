@@ -21,23 +21,4 @@
  * @author Ji Kim
  */
 
-import 'core-js/fn/object/assign';
-import React from 'react';
-import { render } from 'react-dom';
-import { Router, Route, IndexRoute, browserHistory } from 'react-router';
-import { Provider } from 'react-redux';
 
-import AppContainer from './containers/AppContainer';
-import TrendingPulseSubscriptionsContainer from './containers/TrendingPulseSubscriptionsContainer';
-import indexStore from './indexStore';
-
-// Render the app component into the dom
-render((
-  <Provider store={indexStore}>
-    <Router history={browserHistory}>
-      <Route path="/" component={AppContainer}>
-        <IndexRoute component={TrendingPulseSubscriptionsContainer} />
-      </Route>
-    </Router>
-  </Provider>
-), document.getElementById('app'));

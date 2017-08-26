@@ -24,12 +24,15 @@
 import * as types from '../common/storageTypes';
 
 const STATE = {
-  loggedIn: false,
+  user: null,
 };
 
 export default function auth(state = STATE, action) {
   switch(action.type) {
-    case types.AUTH_CHANGED: {
+    case types.USER_LOGGED_IN: {
+      return { ...state, ...action.payload };
+    }
+    case types.USER_LOGGED_OUT: {
       return { ...state, ...action.payload };
     }
     default:
