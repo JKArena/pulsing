@@ -21,15 +21,27 @@
  * @author Ji Kim
  */
 
-import { createStore, combineReducers } from 'redux';
-import app from './reducers/app';
-import auth from './reducers/auth';
-import geo from './reducers/geo';
+import AvroJson from './avrojson';
+import AbstractAvro from './AbstractAvro';
 
-const indexReducers = combineReducers({
-  app,
-  auth,
-  geo,
-});
+class PulseId extends AbstractAvro {
+  
+  constructor(json) {
+    super(json);
+    
+    this.json = json || AvroJson('PulseId');
+  }
+  
+  get id() {
+    return this.json['id']['long'];
+  }
+  
+  static deserialize(json) {
+    console.debug('PulseId.deserialize', json);
+    
+    return new PulseId(json);
+  }
+  
+}
 
-export default createStore(indexReducers);
+export default PulseId;

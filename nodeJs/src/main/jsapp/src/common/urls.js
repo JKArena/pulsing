@@ -31,41 +31,36 @@ const NGINX_SUFFIX = ':8080/';
 let PREFIX;
 
 function url(suffix) {
-  if(!PREFIX) {
+  if (!PREFIX) {
     const location = global.location;
-    PREFIX = location.protocol + '//' + location.hostname
+    PREFIX = [location.protocol, '//', location.hostname].join('');
   }
   return PREFIX + suffix;
 }
 
 export default Object.freeze(
-    {
-      __proto__: null,
+  {
+    __proto__: null,
 
-      DEFAULT_PICTURE_PATH: '/images/defaultPicture.png',
+    DEFAULT_PICTURE_PATH: '/images/defaultPicture.png',
 
-      getPicturePath(path) {
-        return path ? this.springRootUrl() + path : this.DEFAULT_PICTURE_PATH;
-      },
-
-      djangoRootUrl() {
-        return url(DJANGO_SUFFIX);
-      },
-
-      elasticSearchRootUrl() {
-        return url(ELASTIC_SEARCH_SUFFIX);
-      },
-
-      nginxRootUrl() {
-        return url(NGINX_SUFFIX);
-      },
-      
-      springRootUrl() {
-        return url(SPRING_ROOT_SUFFIX);
-      },
-
-      controllerUrl() {
-        return url(SPRING_CONTROLLER_SUFFIX);
-      }
-    }
+    getPicturePath(path) {
+      return path ? this.springRootUrl() + path : this.DEFAULT_PICTURE_PATH;
+    },
+    djangoRootUrl() {
+      return url(DJANGO_SUFFIX);
+    },
+    elasticSearchRootUrl() {
+      return url(ELASTIC_SEARCH_SUFFIX);
+    },
+    nginxRootUrl() {
+      return url(NGINX_SUFFIX);
+    },
+    springRootUrl() {
+      return url(SPRING_ROOT_SUFFIX);
+    },
+    controllerUrl() {
+      return url(SPRING_CONTROLLER_SUFFIX);
+    },
+  },
 );

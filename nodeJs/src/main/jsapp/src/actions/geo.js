@@ -21,15 +21,14 @@
  * @author Ji Kim
  */
 
-import { createStore, combineReducers } from 'redux';
-import app from './reducers/app';
-import auth from './reducers/auth';
-import geo from './reducers/geo';
+import * as types from '../common/eventTypes';
 
-const indexReducers = combineReducers({
-  app,
-  auth,
-  geo,
-});
-
-export default createStore(indexReducers);
+export function updateGeoUser(geo) {
+  return (dispatch, getState) => {
+    console.info('state', getState());
+    dispatch({
+      type: types.GEO_USER_UPDATED,
+      payload: { geo },
+    });
+  }
+}

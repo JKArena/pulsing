@@ -21,15 +21,10 @@
  * @author Ji Kim
  */
 
-import { createStore, combineReducers } from 'redux';
-import app from './reducers/app';
-import auth from './reducers/auth';
-import geo from './reducers/geo';
+export const USER_CREATED = 'USER_CREATED';
+export const USER_LOGGED_IN = 'USER_LOGGED_IN';
+export const USER_LOGGED_OUT = 'USER_LOGGED_OUT';
 
-const indexReducers = combineReducers({
-  app,
-  auth,
-  geo,
-});
+export const GEO_USER_UPDATED = 'GEO_USER_UPDATED';
 
-export default createStore(indexReducers);
+export const ERROR_MESSAGE = 'ERROR_MESSAGE';

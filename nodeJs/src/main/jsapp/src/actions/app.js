@@ -21,15 +21,14 @@
  * @author Ji Kim
  */
 
-import { createStore, combineReducers } from 'redux';
-import app from './reducers/app';
-import auth from './reducers/auth';
-import geo from './reducers/geo';
+import * as types from '../common/eventTypes';
 
-const indexReducers = combineReducers({
-  app,
-  auth,
-  geo,
-});
-
-export default createStore(indexReducers);
+export function errorMessage(error) {
+  return (dispatch) => {
+    console.error('Error message', error);
+    dispatch({
+      type: types.ERROR_MESSAGE,
+      payload: { error },
+    });
+  }
+}
