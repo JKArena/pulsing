@@ -21,15 +21,24 @@
  * @author Ji Kim
  */
 
-import { createStore, combineReducers } from 'redux';
-import app from './reducers/app';
-import auth from './reducers/auth';
-import geo from './reducers/geo';
+import * as types from '../common/eventTypes';
 
-const indexReducers = combineReducers({
-  app,
-  auth,
-  geo,
-});
+const ERROR_MESSAGE_CAP = 20;
+const STATE = {
+  errorMessages: [],
+};
 
-export default createStore(indexReducers);
+export default function app(state = STATE, action) {
+  switch (action.type) {
+    case types.ERROR_MESSAGE: {
+      if (state.errorMessages.length === ERROR_MESSAGE_CAP) {
+        state.errorMessages.splice(0, 1);
+      }
+      state.errorMessages.push(action.payload.error);
+      const errorMessages = state.errorMessages;
+      return { ...state, ...errorMessages };
+    }
+    default:
+      return state;
+  }
+}

@@ -21,15 +21,35 @@
  * @author Ji Kim
  */
 
-import { createStore, combineReducers } from 'redux';
-import app from './reducers/app';
-import auth from './reducers/auth';
-import geo from './reducers/geo';
+import AvroJson from './avrojson';
+import AbstractAvro from './AbstractAvro';
 
-const indexReducers = combineReducers({
-  app,
-  auth,
-  geo,
-});
+class UserId extends AbstractAvro {
+  
+  constructor(json) {
+    super(json);
+    
+    this.json = json || AvroJson('UserId');
+  }
+  
+  get id() {
+    return this.json['id']['long'];
+  }
+  
+  get cookie() {
+    return this.json['cookie'];
+  }
+  
+  set cookie(cookie) {
+    this.json.cookie = cookie;
+  }
+  
+  static deserialize(json) {
+    console.debug('UserId.deserialize', json);
+    
+    return new UserId(json);
+  }
+  
+}
 
-export default createStore(indexReducers);
+export default UserId;

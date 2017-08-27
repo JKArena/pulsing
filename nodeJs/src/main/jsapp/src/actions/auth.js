@@ -23,9 +23,11 @@
 
 import fetchHelper from '../common/fetchHelper';
 import urls from '../common/urls';
-import * as types from '../common/storageTypes';
+import * as types from '../common/eventTypes';
 
-const LOGIN_URL = new URL(urls.controllerUrl() + 'user/validateUser');
+const LOGIN_URL = new URL([urls.controllerUrl(), 'user/validateUser'].join(''));
+const CREATE_USER_URL = new URL([urls.controllerUrl(), 'user/createUser'].join(''));
+const LOGOUT_PATH = [urls.controllerUrl(), 'user/logout/'].join('');
 
 export function logIn(btnId, formId) {
   return (dispatch, getState) => {
@@ -51,62 +53,68 @@ export function logIn(btnId, formId) {
       .catch(function(err) {
         btn.removeAttribute('disabled');
       });
-    }
   }
 }
 
-export function logOut(btnId, formId) {
+export function logOut() {
   return (dispatch, getState) => {
     console.info('state', getState());
-    const btn = document.getElementById(btnId);
-    const fData = new FormData(document.getElementById(formId));
+    const url = new URL(LOGOUT_PATH + getState().auth.user.id.serialize());
 
-    btn.setAttribute('disabled', 'disabled');
-
-    fetchHelper.POST_JSON(LOGIN_URL, {body: fData}, false)
+    fetchHelper.DELETE_JSON(url)
       .then(function(result) {
-        console.debug('loginUser', result);
+        console.debug('logoutUser', result);
 
         if(result.code === 'SUCCESS') {
           dispatch({
-            type: types.USER_LOGGED_IN,
-            payload: { user: JSON.parse(result.data) },
+            type: types.USER_LOGGED_OUT,
+            payload: { user: null },
           });
         }
 
-        btn.removeAttribute('disabled');
-      })
-      .catch(function(err) {
-        btn.removeAttribute('disabled');
       });
-    }
   }
 }
 
-export function createUser(btnId, formId) {
+export function createUser(btnId, formId, pictureId) {
   return (dispatch, getState) => {
     console.info('state', getState());
     const btn = document.getElementById(btnId);
-    const fData = new FormData(document.getElementById(formId));
-
     btn.setAttribute('disabled', 'disabled');
 
-    fetchHelper.POST_JSON(LOGIN_URL, {body: fData}, false)
-      .then(function(result) {
-        console.debug('loginUser', result);
+    const fData = new FormData();
+    const picture = document.getElementById(pictureId).file;
 
-        if(result.code === 'SUCCESS') {
-          dispatch({
-            type: types.USER_LOGGED_IN,
-            payload: { user: JSON.parse(result.data) },
-          });
-        }
-
-        btn.removeAttribute('disabled');
-      })
-      .catch(function(err) {
-        btn.removeAttribute('disabled');
-      });
+    if(picture) {
+      fData.append('picture', picture);
     }
+
+    const user = new User();
+    user.formMap(document.getElementById(formId));
+    fData.append('user', user.serialize());
+
+    return new Promise(function(resolve, reject) {
+
+      fetchHelper.POST_JSON(CREATE_USER_URL, {body: fData}, false)
+        .then(function(result) {
+          console.debug('createUser', result);
+
+          if(result.code === 'SUCCESS') {
+            dispatch({
+              type: types.USER_CREATED,
+              payload: { user: JSON.parse(result.data) },
+            });
+          }else {
+            reject(result.message);
+          }
+          
+          btn.removeAttribute('disabled');
+        })
+        .catch(function(err) {
+          btn.removeAttribute('disabled');
+          reject(err.message || err);
+        });
+
+      });
   }
 }

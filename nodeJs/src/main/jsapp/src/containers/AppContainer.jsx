@@ -25,18 +25,20 @@ import React from 'react';
 import HTML5Backend from 'react-dnd-html5-backend';
 import { DragDropContext } from 'react-dnd';
 import { connect } from 'react-redux';
-import * as types from '../common/storageTypes';
-import * as authActions from './actions/auth';
 
+import * as authActions from '../actions/auth';
+import User from '../avro/User';
 import AppView from '../views/AppView';
 
-class AppContainer extends React.Component {
-  render() {
-    return (
-      <AppView user={this.props.user} onCreateUser={this.props.onCreateUser} onLogOut={this.props.onLogOut}
-        onLogIn={this.props.onLogIn} />
-    );
-  }
+const AppContainer = function(props) {
+  return (
+    <AppView
+      user={this.props.user}
+      onCreateUser={this.props.onCreateUser}
+      onLogOut={this.props.onLogOut}
+      onLogIn={this.props.onLogIn}
+    />
+  )
 }
 
 export function mapStateToProps(state) {
@@ -47,23 +49,23 @@ export function mapStateToProps(state) {
 
 export function mapDispatchToProps(dispatch) {
   return {
-    onCreateUser: (btnId, formId) => {
-      dispatch(authActions.createUser(btnId, formId));
+    onCreateUser: (btnId, formId, pictureId) => {
+      dispatch(authActions.createUser(btnId, formId, pictureId));
     },
     onLogIn: (btnId, formId) => {
       dispatch(authActions.logIn(btnId, formId));
     },
-    onLogOut: (btnId, formId) => {
-      dispatch(authActions.logOut(btnId, formId));
+    onLogOut: () => {
+      dispatch(authActions.logOut());
     },
   };
 }
 
 AppContainer.propTypes = {
-  user: React.PropTypes.object,
-  onCreateUser: React.PropTypes.func,
-  onLogIn: React.PropTypes.func,
-  onLogOut: React.PropTypes.func,
+  user: React.PropTypes.objectOf(User).isRequired,
+  onCreateUser: React.PropTypes.func.isRequired,
+  onLogIn: React.PropTypes.func.isRequired,
+  onLogOut: React.PropTypes.func.isRequired,
 };
 
 export default DragDropContext(HTML5Backend)(

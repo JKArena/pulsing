@@ -21,18 +21,22 @@
  * @author Ji Kim
  */
 
-import * as types from '../common/storageTypes';
+import * as types from '../common/eventTypes';
 
 const STATE = {
   user: null,
 };
 
 export default function auth(state = STATE, action) {
-  switch(action.type) {
+  switch (action.type) {
+    case types.USER_CREATED: {
+      return { ...state, ...action.payload };
+    }
     case types.USER_LOGGED_IN: {
       return { ...state, ...action.payload };
     }
     case types.USER_LOGGED_OUT: {
+      state.user.clearGeoWatch();
       return { ...state, ...action.payload };
     }
     default:

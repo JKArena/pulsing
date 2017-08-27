@@ -21,7 +21,10 @@
  * @author Ji Kim
  */
 
+import React from 'react';
 import { Grid, Row, Col } from 'react-bootstrap';
+
+import User from '../avro/User';
 
 import NavContainer from '../containers/NavContainer';
 import ChatContainer from '../containers/ChatContainer';
@@ -30,7 +33,10 @@ class AppView extends React.Component {
   render() {
     return (
       <div>
-        <NavContainer user={this.props.user} onCreateUser={this.props.onCreateUser} onLogOut={this.props.onLogOut}
+        <NavContainer
+          user={this.props.user}
+          onCreateUser={this.props.onCreateUser}
+          onLogOut={this.props.onLogOut}
           onLogIn={this.props.onLogIn} />
 
         <Grid>
@@ -51,10 +57,10 @@ class AppView extends React.Component {
 }
 
 AppView.propTypes = {
-  user: React.PropTypes.object,
-  onCreateUser: React.PropTypes.func,
-  onLogIn: React.PropTypes.func,
-  onLogOut: React.PropTypes.func,
+  user: React.PropTypes.objectOf(User).isRequired,
+  onCreateUser: React.PropTypes.func.isRequired,
+  onLogIn: React.PropTypes.func.isRequired,
+  onLogOut: React.PropTypes.func.isRequired,
 };
 
 export default AppView;
