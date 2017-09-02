@@ -29,16 +29,16 @@ class AbstractAvro {
 
   formMap(form) {
     this.formMapper
-      .forEach(elementInfo => {
+      .forEach((elementInfo) => {
         const field = elementInfo.field;
         // so strange how they are absolute and need :scope
-        const element = AbstractAvro.scopedElementQuery(form, field); 
+        const element = AbstractAvro.scopedElementQuery(form, field);
 
         this[field] = element[elementInfo.fieldValueAttr || 'value'];
       });
   }
 
-  getProperty(jsonProperty, unionType, defaultEmpty='') {
+  getProperty(jsonProperty, unionType, defaultEmpty = '') {
     const property = this.json[jsonProperty];
     return (property && property[unionType]) || property || defaultEmpty;
   }
@@ -46,7 +46,7 @@ class AbstractAvro {
   serialize() {
     const serialization = JSON.stringify(this.json);
     console.debug('serialization', serialization);
-    
+
     return serialization;
   }
 

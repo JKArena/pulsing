@@ -28,7 +28,7 @@ class UserId extends AbstractAvro {
 
   constructor(json) {
     super(json);
-    
+
     this.json = json || AvroJson('UserId');
   }
 
@@ -43,10 +43,10 @@ class UserId extends AbstractAvro {
   set cookie(cookie) {
     this.json.cookie = cookie;
   }
- 
+
   static deserialize(json) {
     console.debug('UserId.deserialize', json);
-    
+
     return new UserId(json);
   }
 

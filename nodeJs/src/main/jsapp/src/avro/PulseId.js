@@ -25,23 +25,23 @@ import AvroJson from './avrojson';
 import AbstractAvro from './AbstractAvro';
 
 class PulseId extends AbstractAvro {
-  
+
   constructor(json) {
     super(json);
-    
+
     this.json = json || AvroJson('PulseId');
   }
-  
+
   get id() {
-    return this.json['id']['long'];
+    return this.json.id.long;
   }
-  
+
   static deserialize(json) {
     console.debug('PulseId.deserialize', json);
-    
+
     return new PulseId(json);
   }
-  
+
 }
 
 export default PulseId;

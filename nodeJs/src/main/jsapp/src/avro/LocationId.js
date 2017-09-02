@@ -25,23 +25,23 @@ import AvroJson from './avrojson';
 import AbstractAvro from './AbstractAvro';
 
 class LocationId extends AbstractAvro {
-  
+
   constructor(json) {
     super(json);
-    
+
     this.json = json || AvroJson('LocationId');
   }
-  
+
   get id() {
-    return this.json['id']['long'];
+    return this.json.id.long;
   }
-  
+
   static deserialize(json) {
     console.debug('LocationId.deserialize', json);
-    
+
     return new LocationId(json);
   }
-  
+
 }
 
 export default LocationId;

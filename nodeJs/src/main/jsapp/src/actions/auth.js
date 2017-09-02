@@ -30,7 +30,7 @@ const LOGIN_URL = new URL([urls.controllerUrl(), 'user/validateUser'].join(''));
 const CREATE_USER_URL = new URL([urls.controllerUrl(), 'user/createUser'].join(''));
 const LOGOUT_PATH = [urls.controllerUrl(), 'user/logout/'].join('');
 
-export function logIn(btnId, formId) {
+export default function logIn(btnId, formId) {
   return (dispatch, getState) => {
     console.info('state', getState());
     const btn = document.getElementById(btnId);

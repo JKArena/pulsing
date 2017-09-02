@@ -32,17 +32,17 @@ class Pulse extends AbstractAvro {
   
   constructor(json) {
     super();
-    
+
     this.json = json || AvroJson('Pulse');
     this.formMapper = Pulse[FORM_MAPPER];
   }
 
   get id() {
-    return new PulseId(this.json['id']);
+    return new PulseId(this.json.id);
   }
 
   get userId() {
-    return new UserId(this.json['userId']);
+    return new UserId(this.json.userId);
   }
 
   set userId(userId) {
@@ -58,9 +58,9 @@ class Pulse extends AbstractAvro {
   }
 
   set description(description) {
-    this.json.description = {'string' : description};
+    this.json.description = { string: description };
   }
-  
+
   get lat() {
     return this.json.lat;
   }
@@ -82,35 +82,34 @@ class Pulse extends AbstractAvro {
   }
 
   set tags(tags) {
-    this.json.tags = {'array': tags};
+    this.json.tags = { array: tags };
   }
-  
+
   set value(val) {
-    this.json.value = {'string' : val};
+    this.json.value = { string: val };
   }
-  
+
   get value() {
     return this.getProperty('value', 'string');
   }
-  
+
   static get [FORM_MAPPER]() {
-    
     return Object.freeze([
-                          {
-                            field: 'value'
-                          },
-                          {
-                            field: 'description'
-                          }
-                         ]);
+      {
+        field: 'value',
+      },
+      {
+        field: 'description',
+      }
+    ]);
   }
-  
+
   static deserialize(json) {
     console.debug('Pulse.deserialize', json);
-    
+
     return new Pulse(json);
   }
-  
+
 }
 
 export default Pulse;
