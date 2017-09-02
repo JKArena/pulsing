@@ -26,32 +26,32 @@ class AbstractAvro {
   get raw() {
     return this.json;
   }
-  
+
   formMap(form) {
-    
     this.formMapper
       .forEach(elementInfo => {
         const field = elementInfo.field;
-        const element = this.scopedElementQuery(form, field); //so strange how they are absolute and need :scope
-        
+        // so strange how they are absolute and need :scope
+        const element = AbstractAvro.scopedElementQuery(form, field); 
+
         this[field] = element[elementInfo.fieldValueAttr || 'value'];
       });
   }
-  
+
   getProperty(jsonProperty, unionType, defaultEmpty='') {
     const property = this.json[jsonProperty];
     return (property && property[unionType]) || property || defaultEmpty;
   }
-  
+
   serialize() {
     const serialization = JSON.stringify(this.json);
     console.debug('serialization', serialization);
     
     return serialization;
   }
-  
-  scopedElementQuery(element, elementId) {
-    return element.querySelector(':scope #' + elementId);
+
+  static scopedElementQuery(element, elementId) {
+    return element.querySelector([':scope #', elementId].join(''));
   }
 }
 

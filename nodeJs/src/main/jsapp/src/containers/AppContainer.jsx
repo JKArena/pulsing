@@ -30,16 +30,13 @@ import * as authActions from '../actions/auth';
 import User from '../avro/User';
 import AppView from '../views/AppView';
 
-const AppContainer = function(props) {
-  return (
-    <AppView
-      user={this.props.user}
-      onCreateUser={this.props.onCreateUser}
-      onLogOut={this.props.onLogOut}
-      onLogIn={this.props.onLogIn}
-    />
-  )
-}
+const AppContainer = props =>
+  (<AppView
+    user={props.user}
+    onCreateUser={props.onCreateUser}
+    onLogOut={props.onLogOut}
+    onLogIn={props.onLogIn}
+  />);
 
 export function mapStateToProps(state) {
   return {

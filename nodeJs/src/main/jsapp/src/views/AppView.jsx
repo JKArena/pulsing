@@ -29,38 +29,35 @@ import User from '../avro/User';
 import NavContainer from '../containers/NavContainer';
 import ChatContainer from '../containers/ChatContainer';
 
-class AppView extends React.Component {
-  render() {
-    return (
-      <div>
-        <NavContainer
-          user={this.props.user}
-          onCreateUser={this.props.onCreateUser}
-          onLogOut={this.props.onLogOut}
-          onLogIn={this.props.onLogIn} />
+const AppView = props =>
+  (<div>
+    <NavContainer
+      user={props.user}
+      onCreateUser={props.onCreateUser}
+      onLogOut={props.onLogOut}
+      onLogIn={props.onLogIn}
+    />
 
-        <Grid>
-          <Row>
-            <Col>
-              {this.props.children}
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              <ChatContainer user={this.props.user} />
-            </Col>
-          </Row>
-        </Grid>
-      </div>
-    );
-  }
-}
+    <Grid>
+      <Row>
+        <Col>
+          {props.children}
+        </Col>
+      </Row>
+      <Row>
+        <Col>
+          <ChatContainer user={props.user} />
+        </Col>
+      </Row>
+    </Grid>
+  </div>);
 
 AppView.propTypes = {
   user: React.PropTypes.objectOf(User).isRequired,
   onCreateUser: React.PropTypes.func.isRequired,
   onLogIn: React.PropTypes.func.isRequired,
   onLogOut: React.PropTypes.func.isRequired,
+  children: React.PropTypes.element.isRequired,
 };
 
 export default AppView;

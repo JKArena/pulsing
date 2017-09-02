@@ -23,6 +23,7 @@
 
 import fetchHelper from '../common/fetchHelper';
 import urls from '../common/urls';
+import User from '../avro/User';
 import * as types from '../common/eventTypes';
 
 const LOGIN_URL = new URL([urls.controllerUrl(), 'user/validateUser'].join(''));
@@ -37,11 +38,11 @@ export function logIn(btnId, formId) {
 
     btn.setAttribute('disabled', 'disabled');
 
-    fetchHelper.POST_JSON(LOGIN_URL, {body: fData}, false)
-      .then(function(result) {
+    fetchHelper.POST_JSON(LOGIN_URL, { body: fData }, false)
+      .then((result) => {
         console.debug('loginUser', result);
 
-        if(result.code === 'SUCCESS') {
+        if (result.code === 'SUCCESS') {
           dispatch({
             type: types.USER_LOGGED_IN,
             payload: { user: JSON.parse(result.data) },
@@ -50,10 +51,11 @@ export function logIn(btnId, formId) {
 
         btn.removeAttribute('disabled');
       })
-      .catch(function(err) {
+      .catch((err) => {
+        console.error(`error: ${err}`);
         btn.removeAttribute('disabled');
       });
-  }
+  };
 }
 
 export function logOut() {
@@ -62,18 +64,17 @@ export function logOut() {
     const url = new URL(LOGOUT_PATH + getState().auth.user.id.serialize());
 
     fetchHelper.DELETE_JSON(url)
-      .then(function(result) {
+      .then((result) => {
         console.debug('logoutUser', result);
 
-        if(result.code === 'SUCCESS') {
+        if (result.code === 'SUCCESS') {
           dispatch({
             type: types.USER_LOGGED_OUT,
             payload: { user: null },
           });
         }
-
       });
-  }
+  };
 }
 
 export function createUser(btnId, formId, pictureId) {
@@ -85,7 +86,7 @@ export function createUser(btnId, formId, pictureId) {
     const fData = new FormData();
     const picture = document.getElementById(pictureId).file;
 
-    if(picture) {
+    if (picture) {
       fData.append('picture', picture);
     }
 
@@ -93,28 +94,27 @@ export function createUser(btnId, formId, pictureId) {
     user.formMap(document.getElementById(formId));
     fData.append('user', user.serialize());
 
-    return new Promise(function(resolve, reject) {
-
-      fetchHelper.POST_JSON(CREATE_USER_URL, {body: fData}, false)
-        .then(function(result) {
+    return new Promise((resolve, reject) => {
+      fetchHelper.POST_JSON(CREATE_USER_URL, { body: fData }, false)
+        .then((result) => {
           console.debug('createUser', result);
 
-          if(result.code === 'SUCCESS') {
+          if (result.code === 'SUCCESS') {
             dispatch({
               type: types.USER_CREATED,
               payload: { user: JSON.parse(result.data) },
             });
-          }else {
+          } else {
             reject(result.message);
           }
-          
+
           btn.removeAttribute('disabled');
         })
-        .catch(function(err) {
+        .catch((err) => {
+          console.error(`error: ${err}`);
           btn.removeAttribute('disabled');
           reject(err.message || err);
         });
-
-      });
-  }
+    });
+  };
 }

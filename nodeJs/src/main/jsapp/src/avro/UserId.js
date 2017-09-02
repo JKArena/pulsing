@@ -25,31 +25,31 @@ import AvroJson from './avrojson';
 import AbstractAvro from './AbstractAvro';
 
 class UserId extends AbstractAvro {
-  
+
   constructor(json) {
     super(json);
     
     this.json = json || AvroJson('UserId');
   }
-  
+
   get id() {
-    return this.json['id']['long'];
+    return this.json.id.long;
   }
-  
+
   get cookie() {
-    return this.json['cookie'];
+    return this.json.cookie;
   }
-  
+
   set cookie(cookie) {
     this.json.cookie = cookie;
   }
-  
+ 
   static deserialize(json) {
     console.debug('UserId.deserialize', json);
     
     return new UserId(json);
   }
-  
+
 }
 
 export default UserId;
