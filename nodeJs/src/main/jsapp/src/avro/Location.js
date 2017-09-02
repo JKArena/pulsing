@@ -29,20 +29,20 @@ import UserId from './UserId';
 const FORM_MAPPER = Symbol('FORM_MAPPER');
 
 class Location extends AbstractAvro {
-  
+
   constructor(json) {
     super();
-    
+
     this.json = json || AvroJson('Location');
     this.formMapper = Location[FORM_MAPPER];
   }
 
   get id() {
-    return new LocationId(this.json['id']);
+    return new LocationId(this.json.id);
   }
 
   get userId() {
-    return new UserId(this.json['userId']);
+    return new UserId(this.json.userId);
   }
 
   set userId(userId) {
@@ -58,15 +58,15 @@ class Location extends AbstractAvro {
   }
 
   set description(description) {
-    this.json.description = {'string' : description};
+    this.json.description = { string: description };
   }
-  
+
   get address() {
     return this.getProperty('address', 'string');
   }
 
   set address(address) {
-    this.json.address = {'string' : address};
+    this.json.address = { string: address };
   }
 
   get tags() {
@@ -74,38 +74,37 @@ class Location extends AbstractAvro {
   }
 
   set tags(tags) {
-    this.json.tags = {'array': tags};
+    this.json.tags = { array: tags };
   }
-  
+
   set name(val) {
-    this.json.name = {'string' : val};
+    this.json.name = { string: val };
   }
-  
+
   get name() {
     return this.getProperty('name', 'string');
   }
-  
+
   static get [FORM_MAPPER]() {
-    
     return Object.freeze([
-                          {
-                            field: 'name'
-                          },
-                          {
-                            field: 'description'
-                          },
-                          {
-                            field: 'address'
-                          }
-                         ]);
+      {
+        field: 'name',
+      },
+      {
+        field: 'description',
+      },
+      {
+        field: 'address',
+      }
+    ]);
   }
-  
+
   static deserialize(json) {
     console.debug('Location.deserialize', json);
-    
+
     return new Location(json);
   }
-  
+
 }
 
 export default Location;

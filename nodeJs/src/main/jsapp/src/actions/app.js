@@ -23,7 +23,7 @@
 
 import * as types from '../common/eventTypes';
 
-export function errorMessage(error) {
+export default function errorMessage(error) {
   return (dispatch) => {
     console.error('Error message', error);
     dispatch({

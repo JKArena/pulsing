@@ -23,7 +23,7 @@
 
 import * as types from '../common/eventTypes';
 
-export function updateGeoUser(geo) {
+export default function updateGeoUser(geo) {
   return (dispatch, getState) => {
     console.info('state', getState());
     dispatch({
