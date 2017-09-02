@@ -3,8 +3,7 @@
  */
 
 function getAvroClassSkeleton(avroclass) {
-  
-  switch(avroclass) {
+  switch (avroclass) {
   <#list classinfos as cInfo>
   case '${cInfo.clazz}': return JSON.stringify(${cInfo.skeleton});
   </#list>

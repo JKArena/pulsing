@@ -30,5 +30,5 @@ export function errorMessage(error) {
       type: types.ERROR_MESSAGE,
       payload: { error },
     });
-  }
+  };
 }

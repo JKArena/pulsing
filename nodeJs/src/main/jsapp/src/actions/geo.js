@@ -30,5 +30,5 @@ export function updateGeoUser(geo) {
       type: types.GEO_USER_UPDATED,
       payload: { geo },
     });
-  }
+  };
 }
