@@ -21,10 +21,13 @@
  * @author Ji Kim
  */
 
+import * as types from '../common/eventTypes';
 import fetchHelper from '../common/fetchHelper';
 import urls from '../common/urls';
+
 import User from '../avro/User';
-import * as types from '../common/eventTypes';
+
+import * as appActions from './app';
 
 const LOGIN_URL = new URL([urls.controllerUrl(), 'user/validateUser'].join(''));
 const CREATE_USER_URL = new URL([urls.controllerUrl(), 'user/createUser'].join(''));
@@ -32,7 +35,7 @@ const LOGOUT_PATH = [urls.controllerUrl(), 'user/logout/'].join('');
 
 export default function logIn(btnId, formId) {
   return (dispatch, getState) => {
-    console.info('state', getState());
+    console.debug('state', getState());
     const btn = document.getElementById(btnId);
     const fData = new FormData(document.getElementById(formId));
 
@@ -43,16 +46,18 @@ export default function logIn(btnId, formId) {
         console.debug('loginUser', result);
 
         if (result.code === 'SUCCESS') {
+          const user = User.deserialize(JSON.parse(result.data), dispatch);
+
           dispatch({
             type: types.USER_LOGGED_IN,
-            payload: { user: JSON.parse(result.data) },
+            payload: { user },
           });
         }
 
         btn.removeAttribute('disabled');
       })
-      .catch((err) => {
-        console.error(`error: ${err}`);
+      .catch((error) => {
+        appActions.errorMessage(error)(dispatch);
         btn.removeAttribute('disabled');
       });
   };
@@ -60,7 +65,7 @@ export default function logIn(btnId, formId) {
 
 export function logOut() {
   return (dispatch, getState) => {
-    console.info('state', getState());
+    console.debug('state', getState());
     const url = new URL(LOGOUT_PATH + getState().auth.user.id.serialize());
 
     fetchHelper.DELETE_JSON(url)
@@ -79,7 +84,7 @@ export function logOut() {
 
 export function createUser(btnId, formId, pictureId) {
   return (dispatch, getState) => {
-    console.info('state', getState());
+    console.debug('state', getState());
     const btn = document.getElementById(btnId);
     btn.setAttribute('disabled', 'disabled');
 
@@ -90,31 +95,28 @@ export function createUser(btnId, formId, pictureId) {
       fData.append('picture', picture);
     }
 
-    const user = new User();
-    user.formMap(document.getElementById(formId));
-    fData.append('user', user.serialize());
+    const cUser = new User();
+    cUser.formMap(document.getElementById(formId));
+    fData.append('user', cUser.serialize());
 
-    return new Promise((resolve, reject) => {
-      fetchHelper.POST_JSON(CREATE_USER_URL, { body: fData }, false)
-        .then((result) => {
-          console.debug('createUser', result);
+    fetchHelper.POST_JSON(CREATE_USER_URL, { body: fData }, false)
+      .then((result) => {
+        console.debug('createUser', result);
 
-          if (result.code === 'SUCCESS') {
-            dispatch({
-              type: types.USER_CREATED,
-              payload: { user: JSON.parse(result.data) },
-            });
-          } else {
-            reject(result.message);
-          }
+        if (result.code === 'SUCCESS') {
+          const user = User.deserialize(JSON.parse(result.data), dispatch);
+
+          dispatch({
+            type: types.USER_CREATED,
+            payload: { user },
+          });
 
           btn.removeAttribute('disabled');
-        })
-        .catch((err) => {
-          console.error(`error: ${err}`);
-          btn.removeAttribute('disabled');
-          reject(err.message || err);
-        });
-    });
+        }
+      })
+      .catch((error) => {
+        appActions.errorMessage(error)(dispatch);
+        btn.removeAttribute('disabled');
+      });
   };
 }

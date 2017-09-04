@@ -25,6 +25,7 @@ import * as types from '../common/eventTypes';
 
 const STATE = {
   user: null,
+  pulse: null,
 };
 
 export default function geo(state = STATE, action) {

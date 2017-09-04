@@ -21,14 +21,18 @@
  * @author Ji Kim
  */
 
-export const USER_CREATED = 'USER_CREATED';
-export const USER_LOGGED_IN = 'USER_LOGGED_IN';
-export const USER_LOGGED_OUT = 'USER_LOGGED_OUT';
+import * as types from '../common/eventTypes';
 
-export const PULSE_CREATED = 'PULSE_CREATED';
+const STATE = {
+  subscribedPulseId: null,
+};
 
-export const GEO_USER_UPDATED = 'GEO_USER_UPDATED';
-
-export const ERROR_MESSAGE = 'ERROR_MESSAGE';
-
-export const ALERT_UPDATED = 'ALERT_UPDATED';
+export default function app(state = STATE, action) {
+  switch (action.type) {
+    case types.ALERT_UPDATED: {
+      return { ...state, ...action.payload };
+    }
+    default:
+      return state;
+  }
+}

@@ -25,7 +25,6 @@ import AvroJson from './avrojson';
 import AbstractAvro from './AbstractAvro';
 import UserId from './UserId';
 
-import * as appActions from '../actions/app';
 import * as geoActions from '../actions/geo';
 
 const FORM_MAPPER = Symbol('FORM_MAPPER');
@@ -34,10 +33,11 @@ const GEOLOCATION_NOTIFICATION_CHANGE_THRESHOLD = 2;
 
 class User extends AbstractAvro {
 
-  constructor(json) {
+  constructor(json, dispatch) {
     super();
 
     this.json = json || AvroJson('User');
+    this.dispatch = dispatch;
     this.formMapper = User[FORM_MAPPER];
     this.positionHandler = this.onPosition.bind(this);
     this.watchPosition();
@@ -46,12 +46,7 @@ class User extends AbstractAvro {
   watchPosition() {
     this.watchId = global.navigator.geolocation.watchPosition(this.positionHandler,
                       (error) => {
-                        appActions.errorMessage({ error,
-                          additional: {
-                            msg: 'Error in user geolocation',
-                            args: [],
-                          },
-                        });
+                        console.error(`Geolocation error ${error}`);
                         this.watchPosition();
                       }, U_GEOLOCATION_OPTS);
   }
@@ -92,7 +87,7 @@ class User extends AbstractAvro {
       // API.publish(TOPICS.NAVIGATION_CHANGE, Common.MAIN_NAV_PATH);
     }
     if (publishGeo) {
-      geoActions.updateGeoUser({ lat: coords.latitude, lng: coords.longitude });
+      geoActions.updateGeoUser({ lat: coords.latitude, lng: coords.longitude })(this.dispatch);
     }
   }
 
@@ -159,9 +154,9 @@ class User extends AbstractAvro {
     ]);
   }
 
-  static deserialize(json) {
+  static deserialize(json, dispatch) {
     console.debug('User.deserialize', json);
-    return new User(json);
+    return new User(json, dispatch);
   }
 
 }

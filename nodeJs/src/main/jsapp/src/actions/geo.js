@@ -25,7 +25,7 @@ import * as types from '../common/eventTypes';
 
 export default function updateGeoUser(geo) {
   return (dispatch, getState) => {
-    console.info('state', getState());
+    console.debug('state', getState());
     dispatch({
       type: types.GEO_USER_UPDATED,
       payload: { geo },
