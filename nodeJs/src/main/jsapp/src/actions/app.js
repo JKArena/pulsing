@@ -23,12 +23,36 @@
 
 import * as types from '../common/eventTypes';
 
-export default function errorMessage(error) {
+/**
+ * @param {Object} error - error message
+ * @param {Object} error.additional - additional detail of the error
+ * @param {string} error.additional.msg - custom message
+ * @param {Object[]} error.additional.args - custom message arguments
+ */
+export function errorMessage(error) {
   return (dispatch) => {
     console.error('Error message', error);
     dispatch({
       type: types.ERROR_MESSAGE,
       payload: { error },
+    });
+  };
+}
+
+/**
+ * @param {Object[]} alerts - various alerts
+ * @param {string} alerts[].invitationId - invitation UUID
+ * @param {string} alerts[].invitationType - invitation type enum
+ *  [CHAT_LOBBY_INVITE, FRIEND_REQUEST_INVITE]
+ * @param {number} alerts[].fromUserId - from user Id
+ * @param {number} alerts[].expiration - invitation expiration
+ */
+export function alertUpdate(alerts) {
+  return (dispatch) => {
+    console.debug(`Alerts: ${alerts}`);
+    dispatch({
+      type: types.ALERT_UPDATED,
+      payload: { alerts },
     });
   };
 }

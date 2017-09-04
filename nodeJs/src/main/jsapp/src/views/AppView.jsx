@@ -24,10 +24,13 @@
 import React from 'react';
 import { Grid, Row, Col } from 'react-bootstrap';
 
-import User from '../avro/User';
-
 import NavContainer from '../containers/NavContainer';
 import ChatContainer from '../containers/ChatContainer';
+
+import User from '../avro/User';
+
+require('normalize.css/normalize.css');
+require('bootstrap/dist/css/bootstrap.css');
 
 const AppView = props =>
   (<div>
@@ -44,11 +47,15 @@ const AppView = props =>
           {props.children}
         </Col>
       </Row>
-      <Row>
-        <Col>
-          <ChatContainer user={props.user} />
-        </Col>
-      </Row>
+      {(() => {
+        const chat = props.user ?
+          (<Row>
+            <Col>
+              <ChatContainer user={props.user} />
+            </Col>
+          </Row>) : null;
+        return chat;
+      })()}
     </Grid>
   </div>);
 

@@ -21,14 +21,5 @@
  * @author Ji Kim
  */
 
-export const USER_CREATED = 'USER_CREATED';
-export const USER_LOGGED_IN = 'USER_LOGGED_IN';
-export const USER_LOGGED_OUT = 'USER_LOGGED_OUT';
+import * as types from '../common/eventTypes';
 
-export const PULSE_CREATED = 'PULSE_CREATED';
-
-export const GEO_USER_UPDATED = 'GEO_USER_UPDATED';
-
-export const ERROR_MESSAGE = 'ERROR_MESSAGE';
-
-export const ALERT_UPDATED = 'ALERT_UPDATED';

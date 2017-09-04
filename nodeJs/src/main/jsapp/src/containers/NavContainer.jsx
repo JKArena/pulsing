@@ -21,3 +21,60 @@
  * @author Ji Kim
  */
 
+import React, {Component} from 'react';
+import { connect } from 'react-redux';
+
+import NavView from '../views/NavView';
+
+class NavBarContainer extends Component {
+
+  constructor(props) {
+    super(props);
+
+    this.state = {loggedIn: !!Storage.user, lat: 0, lng: 0, alerts: 0};
+    this.authHandler = this.onAuth.bind(this);
+    this.navigationChangeHandler = this.onNavigationChange.bind(this);
+    this.alertHandler = this.onAlert.bind(this);
+  }
+
+};
+
+export function mapStateToProps(state) {
+  return {
+    user: state.auth.user,
+    geo: state.geo,
+  };
+}
+
+export function mapDispatchToProps(dispatch) {
+  return {
+    onCreateUser: (btnId, formId, pictureId) => {
+      dispatch(authActions.createUser(btnId, formId, pictureId));
+    },
+    onLogIn: (btnId, formId) => {
+      dispatch(authActions.logIn(btnId, formId));
+    },
+    onLogOut: () => {
+      dispatch(authActions.logOut());
+    },
+  };
+}
+
+AppContainer.propTypes = {
+  user: React.PropTypes.objectOf(User).isRequired,
+  geo: React.PropTypes.shape.isRequired({
+    user: React.PropTypes.shape({
+      lat: React.PropTypes.number,
+      lng: React.PropTypes.number,
+    }),
+    pulse: React.PropTypes.shape({
+      lat: React.PropTypes.number,
+      lng: React.PropTypes.number,
+    }),
+  }),
+  onCreateUser: React.PropTypes.func.isRequired,
+  onLogIn: React.PropTypes.func.isRequired,
+  onLogOut: React.PropTypes.func.isRequired,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(NavBarContainer);

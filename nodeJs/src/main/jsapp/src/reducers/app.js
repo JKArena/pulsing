@@ -38,6 +38,9 @@ export default function app(state = STATE, action) {
       const errorMessages = state.errorMessages;
       return { ...state, ...errorMessages };
     }
+    case types.ALERT_UPDATED: {
+      return { ...state, ...action.payload };
+    }
     default:
       return state;
   }

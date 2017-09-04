@@ -27,12 +27,14 @@ import { DragDropContext } from 'react-dnd';
 import { connect } from 'react-redux';
 
 import * as authActions from '../actions/auth';
+
 import User from '../avro/User';
 import AppView from '../views/AppView';
 
 const AppContainer = props =>
   (<AppView
     user={props.user}
+    geo={props.geo}
     onCreateUser={props.onCreateUser}
     onLogOut={props.onLogOut}
     onLogIn={props.onLogIn}
@@ -41,6 +43,7 @@ const AppContainer = props =>
 export function mapStateToProps(state) {
   return {
     user: state.auth.user,
+    geo: state.geo,
   };
 }
 
@@ -60,9 +63,23 @@ export function mapDispatchToProps(dispatch) {
 
 AppContainer.propTypes = {
   user: React.PropTypes.objectOf(User).isRequired,
+  geo: React.PropTypes.shape.isRequired({
+    user: React.PropTypes.shape({
+      lat: React.PropTypes.number,
+      lng: React.PropTypes.number,
+    }),
+    pulse: React.PropTypes.shape({
+      lat: React.PropTypes.number,
+      lng: React.PropTypes.number,
+    }),
+  }),
   onCreateUser: React.PropTypes.func.isRequired,
   onLogIn: React.PropTypes.func.isRequired,
   onLogOut: React.PropTypes.func.isRequired,
+};
+
+AppContainer.defaultProps = {
+  geo: null,
 };
 
 export default DragDropContext(HTML5Backend)(
