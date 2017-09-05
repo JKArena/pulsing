@@ -17,5 +17,12 @@
     "node": true,
     "mocha": true
   },
+  rules: {
+    'react/no-unused-prop-types': [0, {
+      customValidators: [
+      ],
+      skipShapeProps: true,
+    }],
+  },
   "extends": ["airbnb"]
 }
