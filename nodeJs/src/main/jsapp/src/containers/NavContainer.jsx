@@ -21,8 +21,13 @@
  * @author Ji Kim
  */
 
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
+
+import WebSocket from '../common/webSocket';
+
+import User from '../avro/User';
+import * as authActions from '../actions/auth';
 
 import NavView from '../views/NavView';
 
@@ -31,18 +36,53 @@ class NavBarContainer extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {loggedIn: !!Storage.user, lat: 0, lng: 0, alerts: 0};
-    this.authHandler = this.onAuth.bind(this);
-    this.navigationChangeHandler = this.onNavigationChange.bind(this);
     this.alertHandler = this.onAlert.bind(this);
   }
 
-};
+  componentDidMount() {
+    const user = this.props.user;
+    if (user) {
+      this.ws = new WebSocket('socket');
+      this.ws.connect()
+        .then((frame) => {
+          console.debug('alert frame', frame);
+          this.sub = this.ws.subscribe(['/topics/alert/', user.id.id].join(''), this.alertHandler);
+        });
+    }
+  }
+
+  componentWillUnmount() {
+    this.recycleWS();
+  }
+
+  onAlert(alertMsg) {
+    console.debug('alertMsg', alertMsg, this);
+  }
+
+  recycleWS() {
+    if (this.ws) {
+      this.ws.destroy();
+      this.ws = null;
+    }
+  }
+
+  render() {
+    const props = this.props;
+    return (<NavView
+      user={props.user}
+      geo={props.geo}
+      onCreateUser={props.onCreateUser}
+      onLogOut={props.onLogOut}
+      onLogIn={props.onLogIn}
+    />);
+  }
+}
 
 export function mapStateToProps(state) {
   return {
     user: state.auth.user,
     geo: state.geo,
+    alerts: state.app.alerts,
   };
 }
 
@@ -60,7 +100,7 @@ export function mapDispatchToProps(dispatch) {
   };
 }
 
-AppContainer.propTypes = {
+NavBarContainer.propTypes = {
   user: React.PropTypes.objectOf(User).isRequired,
   geo: React.PropTypes.shape.isRequired({
     user: React.PropTypes.shape({
@@ -72,9 +112,22 @@ AppContainer.propTypes = {
       lng: React.PropTypes.number,
     }),
   }),
+  alerts: React.PropTypes.arrayOf.isRequired(
+    React.PropTypes.shape({
+      invitationId: React.PropTypes.string,
+      invitationType: React.PropTypes.string,
+      fromUserId: React.PropTypes.number,
+      expiration: React.PropTypes.number,
+    }),
+  ),
   onCreateUser: React.PropTypes.func.isRequired,
   onLogIn: React.PropTypes.func.isRequired,
   onLogOut: React.PropTypes.func.isRequired,
+};
+
+NavBarContainer.defaultProps = {
+  geo: null,
+  alerts: [],
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(NavBarContainer);

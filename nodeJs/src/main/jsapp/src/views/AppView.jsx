@@ -22,6 +22,7 @@
  */
 
 import React from 'react';
+import { connect } from 'react-redux';
 import { Grid, Row, Col } from 'react-bootstrap';
 
 import NavContainer from '../containers/NavContainer';
@@ -34,12 +35,7 @@ require('bootstrap/dist/css/bootstrap.css');
 
 const AppView = props =>
   (<div>
-    <NavContainer
-      user={props.user}
-      onCreateUser={props.onCreateUser}
-      onLogOut={props.onLogOut}
-      onLogIn={props.onLogIn}
-    />
+    <NavContainer />
 
     <Grid>
       <Row>
@@ -61,10 +57,13 @@ const AppView = props =>
 
 AppView.propTypes = {
   user: React.PropTypes.objectOf(User).isRequired,
-  onCreateUser: React.PropTypes.func.isRequired,
-  onLogIn: React.PropTypes.func.isRequired,
-  onLogOut: React.PropTypes.func.isRequired,
   children: React.PropTypes.element.isRequired,
 };
 
-export default AppView;
+export function mapStateToProps(state) {
+  return {
+    user: state.auth.user,
+  };
+}
+
+export default connect(mapStateToProps)(AppView);

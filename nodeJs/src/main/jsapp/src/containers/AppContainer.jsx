@@ -22,65 +22,13 @@
  */
 
 import React from 'react';
+
 import HTML5Backend from 'react-dnd-html5-backend';
 import { DragDropContext } from 'react-dnd';
-import { connect } from 'react-redux';
 
-import * as authActions from '../actions/auth';
-
-import User from '../avro/User';
 import AppView from '../views/AppView';
 
-const AppContainer = props =>
-  (<AppView
-    user={props.user}
-    geo={props.geo}
-    onCreateUser={props.onCreateUser}
-    onLogOut={props.onLogOut}
-    onLogIn={props.onLogIn}
-  />);
+const AppContainer = () =>
+  (<AppView />);
 
-export function mapStateToProps(state) {
-  return {
-    user: state.auth.user,
-    geo: state.geo,
-  };
-}
-
-export function mapDispatchToProps(dispatch) {
-  return {
-    onCreateUser: (btnId, formId, pictureId) => {
-      dispatch(authActions.createUser(btnId, formId, pictureId));
-    },
-    onLogIn: (btnId, formId) => {
-      dispatch(authActions.logIn(btnId, formId));
-    },
-    onLogOut: () => {
-      dispatch(authActions.logOut());
-    },
-  };
-}
-
-AppContainer.propTypes = {
-  user: React.PropTypes.objectOf(User).isRequired,
-  geo: React.PropTypes.shape.isRequired({
-    user: React.PropTypes.shape({
-      lat: React.PropTypes.number,
-      lng: React.PropTypes.number,
-    }),
-    pulse: React.PropTypes.shape({
-      lat: React.PropTypes.number,
-      lng: React.PropTypes.number,
-    }),
-  }),
-  onCreateUser: React.PropTypes.func.isRequired,
-  onLogIn: React.PropTypes.func.isRequired,
-  onLogOut: React.PropTypes.func.isRequired,
-};
-
-AppContainer.defaultProps = {
-  geo: null,
-};
-
-export default DragDropContext(HTML5Backend)(
-  connect(mapStateToProps, mapDispatchToProps)(AppContainer));
+export default DragDropContext(HTML5Backend)(AppContainer);

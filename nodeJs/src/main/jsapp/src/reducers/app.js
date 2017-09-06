@@ -26,6 +26,7 @@ import * as types from '../common/eventTypes';
 const ERROR_MESSAGE_CAP = 20;
 const STATE = {
   errorMessages: [],
+  alerts: [],
 };
 
 export default function app(state = STATE, action) {
