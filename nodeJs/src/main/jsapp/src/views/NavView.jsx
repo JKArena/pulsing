@@ -88,8 +88,8 @@ const NavView = props =>
   </div>);
 
 NavView.propTypes = {
-  user: React.PropTypes.objectOf(User).isRequired,
-  geo: React.PropTypes.shape.isRequired({
+  user: React.PropTypes.objectOf(User),
+  geo: React.PropTypes.shape({
     user: React.PropTypes.shape({
       lat: React.PropTypes.number,
       lng: React.PropTypes.number,
@@ -99,7 +99,7 @@ NavView.propTypes = {
       lng: React.PropTypes.number,
     }),
   }),
-  alerts: React.PropTypes.arrayOf.isRequired(
+  alerts: React.PropTypes.arrayOf(
     React.PropTypes.shape({
       invitationId: React.PropTypes.string,
       invitationType: React.PropTypes.string,
@@ -111,6 +111,7 @@ NavView.propTypes = {
 };
 
 NavView.defaultProps = {
+  user: null,
   geo: null,
   alerts: [],
 };
