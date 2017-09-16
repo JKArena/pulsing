@@ -56,8 +56,12 @@ const AppView = props =>
   </div>);
 
 AppView.propTypes = {
-  user: React.PropTypes.objectOf(User).isRequired,
+  user: React.PropTypes.objectOf(User),
   children: React.PropTypes.element.isRequired,
+};
+
+AppView.defaultProps = {
+  user: null,
 };
 
 export function mapStateToProps(state) {

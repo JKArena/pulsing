@@ -101,8 +101,8 @@ export function mapDispatchToProps(dispatch) {
 }
 
 NavBarContainer.propTypes = {
-  user: React.PropTypes.objectOf(User).isRequired,
-  geo: React.PropTypes.shape.isRequired({
+  user: React.PropTypes.objectOf(User),
+  geo: React.PropTypes.shape({
     user: React.PropTypes.shape({
       lat: React.PropTypes.number,
       lng: React.PropTypes.number,
@@ -112,7 +112,7 @@ NavBarContainer.propTypes = {
       lng: React.PropTypes.number,
     }),
   }),
-  alerts: React.PropTypes.arrayOf.isRequired(
+  alerts: React.PropTypes.arrayOf(
     React.PropTypes.shape({
       invitationId: React.PropTypes.string,
       invitationType: React.PropTypes.string,
@@ -126,6 +126,7 @@ NavBarContainer.propTypes = {
 };
 
 NavBarContainer.defaultProps = {
+  user: null,
   geo: null,
   alerts: [],
 };
