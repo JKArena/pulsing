@@ -21,17 +21,14 @@
  * @author Ji Kim
  */
 
-import React from 'react';
+export default Object.freeze(
+  {
+    __proto__: null,
 
-import AppView from '../views/AppView';
+    eventCanceller(evt) {
+      evt.stopPropagation();
+      evt.preventDefault();
+    },
 
-const AppContainer = props =>
-  (<AppView>
-    {props.children}
-  </AppView>);
-
-AppContainer.propTypes = {
-  children: React.PropTypes.element.isRequired,
-};
-
-export default AppContainer;
+  },
+);
