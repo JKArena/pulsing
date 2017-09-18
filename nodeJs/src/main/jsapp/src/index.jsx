@@ -28,7 +28,7 @@ import { Router, Route, IndexRoute, browserHistory } from 'react-router';
 import { Provider } from 'react-redux';
 
 import AppContainer from './containers/AppContainer';
-import TrendingPulseSubscriptionsContainer from './containers/TrendingPulseSubscriptionsContainer';
+import CreateUserContainer from './containers/CreateUserContainer';
 import indexStore from './indexStore';
 
 // Render the app component into the dom
@@ -36,7 +36,8 @@ render((
   <Provider store={indexStore}>
     <Router history={browserHistory}>
       <Route path="/" component={AppContainer}>
-        <IndexRoute component={TrendingPulseSubscriptionsContainer} />
+        <IndexRoute component={CreateUserContainer} />
+        <Route path="signup" component={CreateUserContainer} />
       </Route>
     </Router>
   </Provider>
