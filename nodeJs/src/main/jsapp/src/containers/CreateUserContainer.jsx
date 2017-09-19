@@ -85,7 +85,7 @@ class CreateUserContainer extends AbstractFormContainer {
   onHandleSubmit(evt) {
     console.debug('signing up');
     if (super.onHandleSubmit(evt)) {
-      // do submit
+      this.props.onCreateUser('createUserBtn', 'createUserForm', 'avatar');
     }
   }
 

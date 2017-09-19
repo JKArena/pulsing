@@ -67,7 +67,7 @@ const NavView = props =>
               <LinkContainer to="/"><NavItem>Logout</NavItem></LinkContainer>
             </Nav>) :
             (<Nav pullRight>
-              <LinkContainer to="/signup"><NavItem>Signup</NavItem></LinkContainer>
+              <LinkContainer to="/createUser"><NavItem>Signup</NavItem></LinkContainer>
               <LinkContainer to="/login"><NavItem>Login</NavItem></LinkContainer>
             </Nav>);
           return logView;

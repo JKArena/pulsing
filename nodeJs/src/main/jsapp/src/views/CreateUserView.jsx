@@ -27,7 +27,7 @@ import { Grid, Row, Col, FormGroup, ControlLabel, FormControl, HelpBlock, Button
 
 const CreateUserView = props =>
   (<div className="createuser-component">
-    <form className="form" id="createuserform" action="">
+    <form className="form" id="createUserForm" action="">
       <Grid>
         <Row>
           <Col sm={12} md={12}>
@@ -92,7 +92,7 @@ const CreateUserView = props =>
 
             <div>
               <Button
-                id="signupBtn"
+                id="createUserBtn"
                 bsSize="large"
                 bsStyle="primary"
                 block

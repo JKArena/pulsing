@@ -29,6 +29,7 @@ import { Provider } from 'react-redux';
 
 import AppContainer from './containers/AppContainer';
 import CreateUserContainer from './containers/CreateUserContainer';
+import LoginContainer from './containers/LoginContainer';
 import indexStore from './indexStore';
 
 // Render the app component into the dom
@@ -37,7 +38,8 @@ render((
     <Router history={browserHistory}>
       <Route path="/" component={AppContainer}>
         <IndexRoute component={CreateUserContainer} />
-        <Route path="signup" component={CreateUserContainer} />
+        <Route path="createUser" component={CreateUserContainer} />
+        <Route path="login" component={LoginContainer} />
       </Route>
     </Router>
   </Provider>
