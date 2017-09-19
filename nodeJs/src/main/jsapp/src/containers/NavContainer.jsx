@@ -88,9 +88,6 @@ export function mapStateToProps(state) {
 
 export function mapDispatchToProps(dispatch) {
   return {
-    onLogIn: (btnId, formId) => {
-      dispatch(authActions.logIn(btnId, formId));
-    },
     onLogOut: () => {
       dispatch(authActions.logOut());
     },
@@ -117,7 +114,6 @@ NavBarContainer.propTypes = {
       expiration: React.PropTypes.number,
     }),
   ),
-  onLogIn: React.PropTypes.func.isRequired,
   onLogOut: React.PropTypes.func.isRequired,
 };
 

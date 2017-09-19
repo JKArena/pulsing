@@ -23,36 +23,22 @@
 
 import React from 'react';
 
-import { Grid, Row, Col, FormGroup, ControlLabel, FormControl, HelpBlock, Button, Image, Panel } from 'react-bootstrap';
+import { Grid, Row, Col, FormGroup, ControlLabel, FormControl, HelpBlock, Button, Panel } from 'react-bootstrap';
+import { LinkContainer } from 'react-router-bootstrap';
 
-const CreateUserView = props =>
-  (<div className="createuser-component">
-    <form className="form" id="createUserForm" action="">
-      <Grid>
-        <Row>
-          <Col sm={12} md={12}>
-            <h1>Sign up</h1>
-          </Col>
-        </Row>
-        <Row>
-          <Col sm={12} md={4}>
-            <FormGroup controlId="avatar">
-              <ControlLabel>Picture</ControlLabel>
-              <div>
-                <Image id="avatar" rounded src="/images/dropzone.png" style={{ maxHeight: '300px' }} />
-                <FormControl.Feedback />
-              </div>
-            </FormGroup>
-          </Col>
-
-          <Col sm={12} md={8}>
-            <FormGroup controlId="name" validationState={props.getValidState('name')}>
-              <ControlLabel>Name</ControlLabel>
-              <FormControl type="text" name="name" onBlur={props.handleChange} />
-              <FormControl.Feedback />
-            </FormGroup>
-
-            <FormGroup controlId="email" validationState={props.getValidState('email')}>
+const LoginView = props =>
+  (<div className="login-component">
+    <Grid>
+      <Row>
+        <Col sm={12}>
+          <h1>Login | Register</h1>
+        </Col>
+        <Col sm={12}>
+          <form className="form" id="loginform" action="">
+            <FormGroup
+              controlId="email"
+              validationState={props.getValidState('email')}
+            >
               <ControlLabel>Email</ControlLabel>
               <FormControl
                 type="email"
@@ -63,7 +49,10 @@ const CreateUserView = props =>
               <FormControl.Feedback />
             </FormGroup>
 
-            <FormGroup controlId="password" validationState={props.getValidState('password')}>
+            <FormGroup
+              controlId="password"
+              validationState={props.getValidState('password')}
+            >
               <ControlLabel>Password</ControlLabel>
               <FormControl
                 type="password"
@@ -74,44 +63,61 @@ const CreateUserView = props =>
               <FormControl.Feedback />
               <HelpBlock>wsad best password</HelpBlock>
             </FormGroup>
-          </Col>
-        </Row>
-        <Row>
-          <Col sm={12} md={12}>
+
             {(() => {
               const errorView = props.errorMessage ?
                 (<div>
-                  <Panel header="Signup Error" bsStyle="danger">
+                  <Panel header="Login Error" bsStyle="danger">
                     {props.errorMessage}
                   </Panel>
                 </div>) : null;
               return errorView;
             })()}
 
-            <hr />
-
             <div>
               <Button
-                id="createUserBtn"
+                id="loginBtn"
                 bsSize="large"
                 bsStyle="primary"
                 block
                 onClick={props.handleSubmit}
               >
-                | Signup
+                | Login
+              </Button>
+              <LinkContainer to="/signup">
+                <Button
+                  bsSize="large"
+                  block
+                >
+                  | Signup
+                </Button>
+              </LinkContainer>
+            </div>
+
+            <hr />
+
+            <div>
+              <Button
+                id="oauthFacebook"
+                bsSize="large"
+                block
+                onClick={props.onLogInOauth}
+              >
+                | Login with Facebook
               </Button>
             </div>
-          </Col>
-        </Row>
-      </Grid>
-    </form>
+          </form>
+        </Col>
+      </Row>
+    </Grid>
   </div>);
 
-CreateUserView.propTypes = {
+LoginView.propTypes = {
   errorMessage: React.PropTypes.string.isRequired,
   getValidState: React.PropTypes.func.isRequired,
   handleChange: React.PropTypes.func.isRequired,
   handleSubmit: React.PropTypes.func.isRequired,
+  onLogInOauth: React.PropTypes.func.isRequired,
 };
 
-export default CreateUserView;
+export default LoginView;
