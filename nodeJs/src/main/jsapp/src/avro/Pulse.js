@@ -29,7 +29,7 @@ import UserId from './UserId';
 const FORM_MAPPER = Symbol('FORM_MAPPER');
 
 class Pulse extends AbstractAvro {
-  
+
   constructor(json) {
     super();
 
@@ -100,7 +100,7 @@ class Pulse extends AbstractAvro {
       },
       {
         field: 'description',
-      }
+      },
     ]);
   }
 
