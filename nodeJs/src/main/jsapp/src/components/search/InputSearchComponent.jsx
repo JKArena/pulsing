@@ -21,34 +21,15 @@
  * @author Ji Kim
  */
 
-import React from 'react';
+const DOC_TYPE = Object.freeze(
+  {
+    __proto__: null,
+    'PULSE': {'docType': 'pulse_tags', 'text': 'Pulse'},
+    'USER': {'docType': 'user_tags', 'text': 'User'}
+  }
+);
 
-import { connect } from 'react-redux';
+const InputSearchComponent = props =>
+  ();
 
-import User from '../avro/User';
-
-import AppView from '../views/AppView';
-
-const AppContainer = props =>
-  (<AppView
-    user={props.user}
-  >
-    {props.children}
-  </AppView>);
-
-AppContainer.propTypes = {
-  user: React.PropTypes.objectOf(User),
-  children: React.PropTypes.element.isRequired,
-};
-
-AppContainer.defaultProps = {
-  user: null,
-};
-
-export function mapStateToProps(state) {
-  return {
-    user: state.auth.user,
-  };
-}
-
-export default connect(mapStateToProps)(AppContainer);
+export { DOC_TYPE, InputSearchComponent };

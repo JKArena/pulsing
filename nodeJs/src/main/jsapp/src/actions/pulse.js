@@ -26,10 +26,12 @@ import fetchHelper from '../common/fetchHelper';
 import urls from '../common/urls';
 
 import Pulse from '../avro/Pulse';
+import PulseId from '../avro/PulseId';
 
 import * as appActions from './app';
 
 const CREATE_PULSE_URL = new URL([urls.controllerUrl(), 'pulse/createPulse'].join(''));
+const SUBSCRIBE_PULSE_PATH = [urls.controllerUrl(), 'pulse/subscribePulse/'].join('');
 
 export function createPulse(btnId, formId, tags) {
   return (dispatch) => {
@@ -37,7 +39,7 @@ export function createPulse(btnId, formId, tags) {
     btn.setAttribute('disabled', 'disabled');
 
     const tagsArray = [];
-    tags.forEach(val => {
+    tags.forEach((val) => {
       tagsArray.push(val);
     });
 
@@ -53,23 +55,47 @@ export function createPulse(btnId, formId, tags) {
     fData.append('pulse', pulse.serialize());
 
     fetchHelper.POST_JSON(CREATE_PULSE_URL, { body: fData }, false)
-      .then(function(result) {
+      .then((result) => {
         console.debug('create pulse', result);
 
         if (result.code === 'SUCCESS') {
-          const pulse = Pulse.deserialize(JSON.parse(result.data));
+          const pulseResult = Pulse.deserialize(JSON.parse(result.data));
 
           dispatch({
             type: types.PULSE_CREATED,
-            payload: { subscribedPulseId: pulse.id.raw },
+            payload: { subscribedPulseId: pulseResult.id.raw },
           });
         }
 
         btn.removeAttribute('disabled');
       })
-      .catch(function(err) {
+      .catch((error) => {
         appActions.errorMessage(error)(dispatch);
-        btn.removeAttribute('disabled');
+      });
+  };
+}
+
+export function subscribePulse() {
+  return (dispatch, getState) => {
+    const pulseId = getState().pulse.id;
+    const userId = getState().user.id;
+    const url = new URL([SUBSCRIBE_PULSE_PATH, pulseId.serialize(), '/', userId.serialize()].join(''));
+
+    fetchHelper.PUT_JSON(url)
+      .then((result) => {
+        console.debug('subscribePulse', result);
+
+        if (result.code === 'SUCCESS') {
+          const subscribedPulseId = PulseId.deserialize(JSON.parse(result.data));
+
+          dispatch({
+            type: types.PULSE_SUBSCRIBED,
+            payload: { subscribedPulseId },
+          });
+        }
+      })
+      .catch((error) => {
+        appActions.errorMessage(error)(dispatch);
       });
   };
 }

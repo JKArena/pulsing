@@ -21,34 +21,18 @@
  * @author Ji Kim
  */
 
-import React from 'react';
+import * as types from '../common/eventTypes';
 
-import { connect } from 'react-redux';
-
-import User from '../avro/User';
-
-import AppView from '../views/AppView';
-
-const AppContainer = props =>
-  (<AppView
-    user={props.user}
-  >
-    {props.children}
-  </AppView>);
-
-AppContainer.propTypes = {
-  user: React.PropTypes.objectOf(User),
-  children: React.PropTypes.element.isRequired,
+const STATE = {
+  trendingPulse: new Map(),
 };
 
-AppContainer.defaultProps = {
-  user: null,
-};
-
-export function mapStateToProps(state) {
-  return {
-    user: state.auth.user,
-  };
+export default function app(state = STATE, action) {
+  switch (action.type) {
+    case types.TRENDING_PULSE_UPDATED: {
+      return { ...state, ...action.payload };
+    }
+    default:
+      return state;
+  }
 }
-
-export default connect(mapStateToProps)(AppContainer);

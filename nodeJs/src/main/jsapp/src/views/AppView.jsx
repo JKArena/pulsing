@@ -22,13 +22,12 @@
  */
 
 import React from 'react';
-import { connect } from 'react-redux';
 import { Grid, Row, Col } from 'react-bootstrap';
+
+import User from '../avro/User';
 
 import NavContainer from '../containers/NavContainer';
 import ChatContainer from '../containers/ChatContainer';
-
-import User from '../avro/User';
 
 require('normalize.css/normalize.css');
 require('bootstrap/dist/css/bootstrap.css');
@@ -64,10 +63,4 @@ AppView.defaultProps = {
   user: null,
 };
 
-export function mapStateToProps(state) {
-  return {
-    user: state.auth.user,
-  };
-}
-
-export default connect(mapStateToProps)(AppView);
+export default AppView;
