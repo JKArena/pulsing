@@ -58,10 +58,10 @@ const TrendingPulseSubscriptionsView = (props) => {
 
   return (<div className="trendingpulse-component">
     <InputSearchComponent
-      store="elasticSearch"
       index="pulse"
       docTypes={ES_DOC_TYPES}
       trigger="Search Pulse"
+      onSearch={props.onSearch}
     />
     <Grid>
       <Row>
@@ -76,6 +76,7 @@ TrendingPulseSubscriptionsView.propTypes = {
   subscribedPulseId: React.PropTypes.number,
   trendingPulse: React.PropTypes.objectOf(Map),
   onSubscribe: React.PropTypes.func.isRequired,
+  onSearch: React.PropTypes.func.isRequired,
 };
 
 TrendingPulseSubscriptionsView.defaultProps = {
