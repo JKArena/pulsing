@@ -52,6 +52,9 @@ export function mapDispatchToProps(dispatch) {
       console.debug('onSubscribe', evt);
       dispatch(pulseActions.subscribePulse());
     },
+    onSearch: (docType, value) => {
+      console.debug('onSearch', docType, value);
+    },
   };
 }
 
@@ -60,6 +63,7 @@ TrendingPulseSubscriptionsContainer.propTypes = {
   subscribedPulseId: React.PropTypes.number,
   trendingPulse: React.PropTypes.objectOf(Map),
   onSubscribe: React.PropTypes.func.isRequired,
+  onSearch: React.PropTypes.func.isRequired,
 };
 
 TrendingPulseSubscriptionsContainer.defaultProps = {

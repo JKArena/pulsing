@@ -71,9 +71,7 @@ class NavBarContainer extends Component {
     return (<NavView
       user={props.user}
       geo={props.geo}
-      onCreateUser={props.onCreateUser}
       onLogOut={props.onLogOut}
-      onLogIn={props.onLogIn}
     />);
   }
 }
