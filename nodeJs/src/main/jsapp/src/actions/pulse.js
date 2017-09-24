@@ -32,6 +32,7 @@ import * as appActions from './app';
 
 const CREATE_PULSE_URL = new URL([urls.controllerUrl(), 'pulse/createPulse'].join(''));
 const SUBSCRIBE_PULSE_PATH = [urls.controllerUrl(), 'pulse/subscribePulse/'].join('');
+const UN_SUBSCRIBE_PULSE_PATH = [urls.controllerUrl(), 'pulse/unSubscribePulse/'].join('');
 
 export function createPulse(btnId, formId, tags) {
   return (dispatch) => {
@@ -91,6 +92,29 @@ export function subscribePulse() {
           dispatch({
             type: types.PULSE_SUBSCRIBED,
             payload: { subscribedPulseId },
+          });
+        }
+      })
+      .catch((error) => {
+        appActions.errorMessage(error)(dispatch);
+      });
+  };
+}
+
+export function unsubscribePulse() {
+  return (dispatch, getState) => {
+    const pulseId = getState().pulse.id;
+    const userId = getState().user.id;
+    const url = new URL([UN_SUBSCRIBE_PULSE_PATH, pulseId.serialize(), '/', userId.serialize()].join(''));
+
+    fetchHelper.PUT_JSON(url)
+      .then((result) => {
+        console.debug('unSubscribePulse', result);
+
+        if (result.code === 'SUCCESS') {
+          dispatch({
+            type: types.PULSE_UNSUBSCRIBED,
+            payload: { subscribedPulseId: null },
           });
         }
       })
