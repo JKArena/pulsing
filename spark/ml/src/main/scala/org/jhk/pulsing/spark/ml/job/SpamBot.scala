@@ -68,6 +68,8 @@ object SpamBot {
     
     println("Spam Test: " + model.predict(spamTest))
     println("Non Spam Test: " + model.predict(nonSpamTest))
+    
+    model.save(sparkContext, HadoopConstants.getWorkingDirectory(HadoopConstants.WORKING_DIRECTORIES.SPARK_SPAM_MODEL))
   }
   
 }
