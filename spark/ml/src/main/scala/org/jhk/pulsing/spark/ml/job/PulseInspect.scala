@@ -76,6 +76,8 @@ object PulseInspect {
     categories.select(hour(from_unixtime($"timeStamp")).alias("hour"), $"prediction")
       .groupBy("hour", "prediction").agg(count("prediction").alias("count")).orderBy(desc( "count" )).show
     categories.groupBy("prediction").count().show()
+
+    model.save(HadoopConstants.getWorkingDirectory(HadoopConstants.WORKING_DIRECTORIES.SPARK_PULSE_MODEL))
   }
   
 }
