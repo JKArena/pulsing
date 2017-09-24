@@ -23,22 +23,3 @@
 
 import * as types from '../common/eventTypes';
 
-const STATE = {
-  subscribedPulseId: null,
-};
-
-export default function app(state = STATE, action) {
-  switch (action.type) {
-    case types.ALERT_UPDATED: {
-      return { ...state, ...action.payload };
-    }
-    case types.PULSE_SUBSCRIBED: {
-      return { ...state, ...action.payload };
-    }
-    case types.PULSE_UNSUBSCRIBED: {
-      return { ...state, ...action.payload };
-    }
-    default:
-      return state;
-  }
-}
