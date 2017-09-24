@@ -26,14 +26,6 @@ import { InputGroup, FormControl, Button, DropdownButton, MenuItem } from 'react
 
 require('./InputSearch.scss');
 
-const DOC_TYPE = Object.freeze(
-  {
-    __proto__: null,
-    PULSE: { docType: 'pulse_tags', text: 'Pulse' },
-    USER: { docType: 'user_tags', text: 'User' },
-  },
-);
-
 class InputSearchComponent extends Component {
 
   constructor(props) {
@@ -51,14 +43,9 @@ class InputSearchComponent extends Component {
   onDataTypeSelect(eventKey) {
     console.debug('dataType selected', eventKey);
 
-    let title = '';
-    Object.keys(DOC_TYPE).forEach((key) => {
-      if (DOC_TYPE[key].docType === eventKey) {
-        title = DOC_TYPE[key].text;
-      }
-    });
+    const entry = this.props.docTypes.filter(value => value.docType === eventKey);
 
-    this.setState({ title, selectedDocType: eventKey });
+    this.setState({ title: entry.title, selectedDocType: eventKey });
   }
 
   onSearch() {
@@ -67,7 +54,8 @@ class InputSearchComponent extends Component {
       return;
     }
 
-    this.props.onSearch(this.state.selectedDocType, this.searchInputNode.value);
+    this.props.onSearch(this.props.index,
+      this.state.selectedDocType, this.searchInputNode.value);
   }
 
   render() {
@@ -128,4 +116,4 @@ InputSearchComponent.defaultProps = {
   trigger: '',
 };
 
-export { DOC_TYPE, InputSearchComponent };
+export default InputSearchComponent;

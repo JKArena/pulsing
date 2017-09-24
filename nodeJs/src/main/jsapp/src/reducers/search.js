@@ -22,4 +22,26 @@
  */
 
 import * as types from '../common/eventTypes';
+import { INDICES } from '../common/searchTypes';
 
+const STATE = {};
+Object.keys(INDICES).forEach(index => {
+  const docTypes = {};
+  state[index] = docTypes;
+  INDICES[index].forEach((entry) => {
+    docTypes[entry.docType] = null;
+  });
+});
+
+export default function search(state = STATE, action) {
+  switch (action.type) {
+    case types.USER_SEARCH: {
+      return { ...state, ...action.payload };
+    }
+    case types.PULSE_SEARCH: {
+      return { ...state, ...action.payload };
+    }
+    default:
+      return state;
+  }
+}

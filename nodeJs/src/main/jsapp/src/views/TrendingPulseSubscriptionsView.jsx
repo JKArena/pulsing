@@ -27,9 +27,9 @@ import { Grid, Row, Col, Thumbnail, Button, Badge } from 'react-bootstrap';
 
 import User from '../avro/User';
 
-import { DOC_TYPE, InputSearchComponent } from '../components/search/InputSearchComponent';
+import INDICES from '../common/searchTypes';
 
-const ES_DOC_TYPES = [DOC_TYPE.PULSE, DOC_TYPE.USER];
+import InputSearchComponent from '../components/search/InputSearchComponent';
 
 const TrendingPulseSubscriptionsView = (props) => {
   const cols = [];
@@ -59,7 +59,7 @@ const TrendingPulseSubscriptionsView = (props) => {
   return (<div className="trendingpulse-component">
     <InputSearchComponent
       index="pulse"
-      docTypes={ES_DOC_TYPES}
+      docTypes={[INDICES.pulse]}
       trigger="Search Pulse"
       onSearch={props.onSearch}
     />
