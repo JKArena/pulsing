@@ -22,5 +22,40 @@
  */
 
 import * as types from '../common/eventTypes';
+import * as appActions from './app';
 
+import fetchHelper from '../common/fetchHelper';
+import urls from '../common/urls';
 
+const ELASTIC_SEARCH_QUERY_URL = new URL([urls.djangoRootUrl(), 'search/query'].join(''));
+
+export default function search(eventType, index, docType, value,
+  queryGenerator = searchValue => `{'term': {'name': {'value': ${searchValue} }}}`) {
+  const query = queryGenerator(value);
+
+  return (dispatch) => {
+    const params = {
+      __proto__: null,
+      index,
+      doc_type: docType,
+      search: query,
+    };
+
+    fetchHelper.GET_JSON(ELASTIC_SEARCH_QUERY_URL, {}, params)
+      .then((result) => {
+        console.debug('searchDocument result', result);
+
+        if (result.code === 'SUCCESS') {
+          const searchResult = JSON.parse(result.data);
+
+          dispatch({
+            type: types[eventType],
+            payload: { [index]: { [docType]: searchResult } },
+          });
+        }
+      })
+      .catch((error) => {
+        appActions.errorMessage(error)(dispatch);
+      });
+  };
+}

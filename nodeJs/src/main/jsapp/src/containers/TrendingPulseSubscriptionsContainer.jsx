@@ -27,7 +27,10 @@ import { connect } from 'react-redux';
 
 import User from '../avro/User';
 
+import * as types from '../common/eventTypes';
+
 import * as pulseActions from '../actions/pulse';
+import * as searchActions from '../actions/search';
 
 import TrendingPulseSubscriptionsView from '../views/TrendingPulseSubscriptionsView';
 
@@ -52,8 +55,9 @@ export function mapDispatchToProps(dispatch) {
       console.debug('onSubscribe', evt);
       dispatch(pulseActions.subscribePulse());
     },
-    onSearch: (docType, value) => {
-      console.debug('onSearch', docType, value);
+    onSearch: (index, docType, value) => {
+      console.debug('onSearch', index, docType, value);
+      dispatch(searchActions.search(types.PULSE_SEARCH, index, docType, value));
     },
   };
 }

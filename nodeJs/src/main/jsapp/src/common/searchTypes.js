@@ -21,21 +21,22 @@
  * @author Ji Kim
  */
 
-export const USER_CREATED = 'USER_CREATED';
-export const USER_LOGGED_IN = 'USER_LOGGED_IN';
-export const USER_LOGGED_OUT = 'USER_LOGGED_OUT';
+const INDICES = Object.freeze(
+  {
+    __proto__: null,
+    pulse: [
+      {
+        docType: 'pulse_tags',
+        text: 'Pulse',
+      },
+    ],
+    user: [
+      {
+        docType: 'user_tags',
+        text: 'User',
+      },
+    ],
+  },
+);
 
-export const PULSE_CREATED = 'PULSE_CREATED';
-export const PULSE_SUBSCRIBED = 'PULSE_SUBSCRIBED';
-export const PULSE_UNSUBSCRIBED = 'PULSE_UNSUBSCRIBED';
-
-export const PULSE_SEARCH = 'PULSE_SEARCH';
-export const USER_SEARCH = 'USER_SEARCH';
-
-export const GEO_USER_UPDATED = 'GEO_USER_UPDATED';
-
-export const ERROR_MESSAGE = 'ERROR_MESSAGE';
-
-export const ALERT_UPDATED = 'ALERT_UPDATED';
-
-export const TRENDING_PULSE_UPDATED = 'TRENDING_PULSE_UPDATED';
+export default INDICES;
