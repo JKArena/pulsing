@@ -92,10 +92,10 @@ class CreatePulseView extends Component {
                 />
 
                 {(() => {
-                  const errorView = props.errorMessage ?
+                  const errorView = this.props.errorMessage ?
                     (<div>
                       <Panel header="Create Pulse Error" bsStyle="danger">
-                        {props.errorMessage}
+                        {this.props.errorMessage}
                       </Panel>
                     </div>) : null;
                   return errorView;
@@ -119,7 +119,7 @@ class CreatePulseView extends Component {
       </div>
     );
   }
-};
+}
 
 CreatePulseView.propTypes = {
   errorMessage: PropTypes.string.isRequired,

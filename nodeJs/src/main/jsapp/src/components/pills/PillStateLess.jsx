@@ -23,23 +23,31 @@
 
 import React from 'react';
 
-const PillsWrapper = (props) => {
-  return <span className="pills-wrapper">{props.children}</span>
+const PillsWrapper = props => <span className="pills-wrapper">{props.children}</span>;
+
+PillsWrapper.propTypes = {
+  children: React.PropTypes.element.isRequired,
 };
 
-const TextPill = (props) => {
-  return <span className="pills-value">{props.value}</span>
-};
+const TextPill = props => <span className="pills-value">{props.value}</span>;
 
 TextPill.defaultProps = {
-  value: ''
+  value: '',
 };
 TextPill.propTypes = {
-  value: React.PropTypes.string
+  value: React.PropTypes.string,
 };
 
-const PillsDelete = (props) => {
-  return <span className="pills-remove" onClick={props.clickHandler}>x</span>
+const PillsDelete = props => (<span
+  role="button"
+  tabIndex="0"
+  className="pills-remove"
+  onClick={props.clickHandler}
+>x
+</span>);
+
+PillsDelete.propTypes = {
+  clickHandler: React.PropTypes.func.isRequired,
 };
 
 export { PillsWrapper, PillsDelete, TextPill };

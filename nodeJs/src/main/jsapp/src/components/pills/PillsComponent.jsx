@@ -34,19 +34,15 @@ class PillsComponent extends Component {
   constructor(props) {
     super(props);
 
-    this.addHandler = this.onAdd.bind(this)
+    this.addHandler = this.onAdd.bind(this);
     this.nextDataIndex = 0;
     this.data = new Set();
     this.dataNodes = {};
   }
 
-  getData() {
-    return this.data;
-  }
-
   onAdd() {
     const val = this.tagInputNode.value;
-    if(val.length === 0 || this.data.has(val)) {
+    if (val.length === 0 || this.data.has(val)) {
       return;
     }
     this.data.add(val);
@@ -54,8 +50,12 @@ class PillsComponent extends Component {
     this.tagInputNode.value = '';
   }
 
+  getData() {
+    return this.data;
+  }
+
   clearData() {
-    Object.keys(this.dataNodes).forEach(removeIndex => {
+    Object.keys(this.dataNodes).forEach((removeIndex) => {
       this.removeTag(removeIndex, null);
     });
     this.dataNodes = {};
@@ -65,8 +65,8 @@ class PillsComponent extends Component {
 
   removeTag(removeIndex) {
     console.debug('removeTag ', removeIndex);
-    if(!(removeIndex in this.dataNodes)) {
-      return; //unlikely to happen but for sanity
+    if (!(removeIndex in this.dataNodes)) {
+      return; // unlikely to happen but for sanity
     }
 
     this.data.delete(this.dataNodes[removeIndex].querySelector(':scope .pills-value').innerHTML);
@@ -76,15 +76,18 @@ class PillsComponent extends Component {
 
   addTag(val) {
     const ele = document.createElement('span');
-    const removeIndex = this.nextDataIndex++;
+    const removeIndex = this.nextDataIndex;
 
+    this.nextDataIndex = this.nextDataIndex + 1;
     this.tagPanelNode.appendChild(ele);
     this.dataNodes[removeIndex] = ele;
 
+    const pillsDeleterHandler = this.removeTag.bind(this, removeIndex);
+
     render((<PillsWrapper>
-        <TextPill value={val} />
-        <PillsDelete clickHandler={this.removeTag.bind(this, removeIndex)} />
-      </PillsWrapper>), ele);
+      <TextPill value={val} />
+      <PillsDelete clickHandler={pillsDeleterHandler} />
+    </PillsWrapper>), ele);
   }
 
   render() {
@@ -117,7 +120,7 @@ class PillsComponent extends Component {
 PillsComponent.displayName = 'PillsComponent';
 
 PillsComponent.propTypes = {
-  label: PropTypes.string.isRequired
+  label: PropTypes.string.isRequired,
 };
 
 export default PillsComponent;
