@@ -29,6 +29,7 @@ import { Provider } from 'react-redux';
 
 import AppContainer from './containers/AppContainer';
 import CreateUserContainer from './containers/CreateUserContainer';
+import CreatePulseContainer from './containers/CreatePulseContainer';
 import LoginContainer from './containers/LoginContainer';
 import TrendingPulseSubscriptionsContainer from './containers/TrendingPulseSubscriptionsContainer';
 
@@ -41,6 +42,7 @@ render((
       <Route path="/" component={AppContainer}>
         <IndexRoute component={TrendingPulseSubscriptionsContainer} />
         <Route path="createUser" component={CreateUserContainer} />
+        <Route path="createPulse" component={CreatePulseContainer} />
         <Route path="login" component={LoginContainer} />
       </Route>
     </Router>
