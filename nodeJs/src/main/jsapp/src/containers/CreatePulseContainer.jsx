@@ -25,11 +25,9 @@ import React from 'react';
 
 import { connect } from 'react-redux';
 
-import utils from '../common/utils';
 import * as pulseActions from '../actions/pulse';
 
 import AbstractFormContainer from './AbstractFormContainer';
-
 import CreatePulseView from '../views/CreatePulseView';
 
 class CreatePulseContainer extends AbstractFormContainer {
