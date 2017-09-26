@@ -85,7 +85,7 @@ class InputSearchComponent extends Component {
               {menus}
             </DropdownButton>
           </InputGroup.Button>
-          <FormControl type="text" ref={searchInputRef} />
+          <FormControl type="text" inputRef={searchInputRef} />
           <InputGroup.Button>
             <Button
               onClick={this.searchHandler}
