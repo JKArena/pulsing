@@ -46,7 +46,9 @@ const AppView = props =>
         const chat = props.user ?
           (<Row>
             <Col>
-              <ChatContainer user={props.user} />
+              <ChatContainer
+                user={props.user}
+              />
             </Col>
           </Row>) : null;
         return chat;

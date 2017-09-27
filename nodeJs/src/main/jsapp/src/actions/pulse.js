@@ -35,7 +35,7 @@ const SUBSCRIBE_PULSE_PATH = [urls.controllerUrl(), 'pulse/subscribePulse/'].joi
 const UN_SUBSCRIBE_PULSE_PATH = [urls.controllerUrl(), 'pulse/unSubscribePulse/'].join('');
 
 export function createPulse(btnId, formId, tags) {
-  return (dispatch) => {
+  return (dispatch, getState) => {
     const btn = document.getElementById(btnId);
     btn.setAttribute('disabled', 'disabled');
 
@@ -46,7 +46,7 @@ export function createPulse(btnId, formId, tags) {
 
     const fData = new FormData();
     const pulse = new Pulse();
-    const user = Storage.user;
+    const user = getState().auth.user;
     pulse.formMap(document.getElementById(formId));
     pulse.userId = user.id.raw;
     pulse.tags = tagsArray;

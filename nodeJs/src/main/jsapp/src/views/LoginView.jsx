@@ -67,7 +67,10 @@ const LoginView = props =>
             {(() => {
               const errorView = props.errorMessage ?
                 (<div>
-                  <Panel header="Login Error" bsStyle="danger">
+                  <Panel
+                    header="Login Error"
+                    bsStyle="danger"
+                  >
                     {props.errorMessage}
                   </Panel>
                 </div>) : null;

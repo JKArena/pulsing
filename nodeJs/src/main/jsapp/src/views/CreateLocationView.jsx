@@ -23,10 +23,10 @@
 
 import React, { PropTypes, Component } from 'react';
 
-import { FormGroup, ControlLabel, FormControl, Panel, Button, Grid, Row, Col } from 'react-bootstrap';
+import { Grid, Row, Col, FormGroup, ControlLabel, FormControl, Button, Panel } from 'react-bootstrap';
 import PillsComponent from '../components/pills/PillsComponent';
 
-class CreatePulseView extends Component {
+class CreateLocationView extends Component {
 
   constructor(props) {
     super(props);
@@ -40,51 +40,51 @@ class CreatePulseView extends Component {
     this.props.handleSubmit(evt, this.tagComp.getData());
   }
   render() {
-    const valueInputRef = (ele) => {
-      this.valueInputNode = ele;
-    };
-
-    const descInputRef = (ele) => {
-      this.descInputNode = ele;
-    };
-
     const tagCompRef = (ele) => {
       this.tagComp = ele;
     };
 
     return (
-      <div className="createpulse-component">
+      <div className="createlocation-component">
         <Grid>
           <Row>
             <Col sm={12}>
-              <h1>Create Pulse</h1>
+              <h1>Create Location</h1>
             </Col>
             <Col sm={12}>
-              <form className="form" id="createPulseForm" action="">
+              <form className="form" id="createLocationForm" action="">
                 <FormGroup
-                  controlId="value"
-                  validationState={this.props.getValidState('value')}
+                  controlId="name"
+                  validationState={this.props.getValidState('name')}
                 >
                   <ControlLabel>Name</ControlLabel>
                   <FormControl
                     type="text"
-                    inputRef={valueInputRef}
-                    name="value"
+                    name="name"
                     onBlur={this.props.handleChange}
+                    placeholder="Location Name"
                   />
                   <FormControl.Feedback />
                 </FormGroup>
 
                 <FormGroup
-                  controlId="description"
-                  validationState={this.props.getValidState('description')}
+                  controlId="address"
+                  validationState={this.props.getValidState('address')}
                 >
+                  <ControlLabel>Address</ControlLabel>
+                  <FormControl
+                    type="text"
+                    name="address"
+                    onBlur={this.props.handleChange}
+                  />
+                  <FormControl.Feedback />
+                </FormGroup>
+
+                <FormGroup controlId="description">
                   <ControlLabel>Description</ControlLabel>
                   <FormControl
                     componentClass="textarea"
-                    inputRef={descInputRef}
                     name="description"
-                    onBlur={this.props.handleChange}
                   />
                   <FormControl.Feedback />
                 </FormGroup>
@@ -98,7 +98,7 @@ class CreatePulseView extends Component {
                   const errorView = this.props.errorMessage ?
                     (<div>
                       <Panel
-                        header="Create Pulse Error"
+                        header="Create Location Error"
                         bsStyle="danger"
                       >
                         {this.props.errorMessage}
@@ -109,13 +109,13 @@ class CreatePulseView extends Component {
 
                 <div>
                   <Button
-                    id="createPulseBtn"
+                    id="createLocationBtn"
                     bsSize="large"
                     bsStyle="primary"
                     block
                     onClick={this.props.handleSubmit}
                   >
-                    | Create
+                    Create
                   </Button>
                 </div>
               </form>
@@ -127,11 +127,11 @@ class CreatePulseView extends Component {
   }
 }
 
-CreatePulseView.propTypes = {
+CreateLocationView.propTypes = {
   errorMessage: PropTypes.string.isRequired,
   getValidState: PropTypes.func.isRequired,
   handleChange: PropTypes.func.isRequired,
   handleSubmit: PropTypes.func.isRequired,
 };
 
-export default CreatePulseView;
+export default CreateLocationView;

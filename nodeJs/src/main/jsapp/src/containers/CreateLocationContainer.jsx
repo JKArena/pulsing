@@ -25,20 +25,20 @@ import React from 'react';
 
 import { connect } from 'react-redux';
 
-import * as pulseActions from '../actions/pulse';
+import * as locationActions from '../actions/location';
 
 import AbstractFormContainer from './AbstractFormContainer';
-import CreatePulseView from '../views/CreatePulseView';
+import CreateLocationView from '../views/CreateLocationView';
 
-class CreatePulseContainer extends AbstractFormContainer {
+class CreateLocationContainer extends AbstractFormContainer {
 
   constructor(props) {
     super(props);
 
     this.state = {
       validity: {
-        value: 0, // -1 invalid, 0 initial, 1 valid
-        description: 0,
+        name: 0, // -1 invalid, 0 initial, 1 valid
+        address: 0,
       },
       errorMessage: '',
     };
@@ -47,12 +47,12 @@ class CreatePulseContainer extends AbstractFormContainer {
   onHandleSubmit(evt, tags) {
     console.debug('create pulse', evt, tags);
     if (super.onHandleSubmit(evt)) {
-      this.props.onCreatePulse('createPulseBtn', 'createPulseForm', tags);
+      this.props.onCreateLocation('createLocationBtn', 'createLocationForm', tags);
     }
   }
 
   render() {
-    return (<CreatePulseView
+    return (<CreateLocationView
       errorMessage={this.state.errorMessage}
       handleChange={this.handleChange}
       handleSubmit={this.handleSubmit}
@@ -67,14 +67,14 @@ export function mapStateToProps() {
 
 export function mapDispatchToProps(dispatch) {
   return {
-    onCreatePulse: (btnId, formId, tags) => {
-      dispatch(pulseActions.createPulse(btnId, formId, tags));
+    onCreateLocation: (btnId, formId, tags) => {
+      dispatch(locationActions.createLocation(btnId, formId, tags));
     },
   };
 }
 
-CreatePulseContainer.propTypes = {
-  onCreatePulse: React.PropTypes.func.isRequired,
+CreateLocationContainer.propTypes = {
+  onCreateLocation: React.PropTypes.func.isRequired,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(CreatePulseContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(CreateLocationContainer);

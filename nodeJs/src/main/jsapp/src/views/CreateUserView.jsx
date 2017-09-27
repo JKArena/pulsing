@@ -39,7 +39,12 @@ const CreateUserView = props =>
             <FormGroup controlId="avatar">
               <ControlLabel>Picture</ControlLabel>
               <div>
-                <Image id="avatar" rounded src="/images/dropzone.png" style={{ maxHeight: '300px' }} />
+                <Image
+                  id="avatar"
+                  rounded
+                  src="/images/dropzone.png"
+                  style={{ maxHeight: '300px' }}
+                />
                 <FormControl.Feedback />
               </div>
             </FormGroup>
@@ -48,7 +53,11 @@ const CreateUserView = props =>
           <Col sm={12} md={8}>
             <FormGroup controlId="name" validationState={props.getValidState('name')}>
               <ControlLabel>Name</ControlLabel>
-              <FormControl type="text" name="name" onBlur={props.handleChange} />
+              <FormControl
+                type="text"
+                name="name"
+                onBlur={props.handleChange}
+              />
               <FormControl.Feedback />
             </FormGroup>
 
@@ -81,7 +90,10 @@ const CreateUserView = props =>
             {(() => {
               const errorView = props.errorMessage ?
                 (<div>
-                  <Panel header="Signup Error" bsStyle="danger">
+                  <Panel
+                    header="Signup Error"
+                    bsStyle="danger"
+                  >
                     {props.errorMessage}
                   </Panel>
                 </div>) : null;
