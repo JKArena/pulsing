@@ -44,10 +44,10 @@ class CreatePulseContainer extends AbstractFormContainer {
     };
   }
 
-  onHandleSubmit(evt) {
-    console.debug('create pulse');
+  onHandleSubmit(evt, tags) {
+    console.debug('create pulse', evt, tags);
     if (super.onHandleSubmit(evt)) {
-      this.props.onCreatePulse('createPulseBtn', 'createPulseForm', 'tags');
+      this.props.onCreatePulse('createPulseBtn', 'createPulseForm', tags);
     }
   }
 
