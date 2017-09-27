@@ -36,6 +36,9 @@ class CreatePulseView extends Component {
     this.tagComp = null;
   }
 
+  onSubmitClick(evt) {
+    this.props.handleSubmit(evt, this.tagComp.getData());
+  }
   render() {
     const valueInputRef = (ele) => {
       this.valueInputNode = ele;
