@@ -24,12 +24,26 @@
 import * as types from '../common/eventTypes';
 
 const STATE = {
-  chatLobbies: null,
+  lobbies: {},
+  lobbyMessages: {},
+  paging: {},
 };
 
 export default function app(state = STATE, action) {
   switch (action.type) {
+    case types.CREATE_CHAT_LOBBY: {
+      return { ...state, ...action.payload };
+    }
+    case types.SUBSCRIBE_CHAT_LOBBY: {
+      return { ...state, ...action.payload };
+    }
+    case types.UN_SUBSCRIBE_CHAT_LOBBY: {
+      return { ...state, ...action.payload };
+    }
     case types.GET_CHAT_LOBBIES: {
+      return { ...state, ...action.payload };
+    }
+    case types.GET_CHAT_LOBBY_MESSAGES: {
       return { ...state, ...action.payload };
     }
     default:
