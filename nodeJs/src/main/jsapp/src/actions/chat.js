@@ -22,4 +22,31 @@
  */
 
 import * as types from '../common/eventTypes';
+import fetchHelper from '../common/fetchHelper';
+import urls from '../common/urls';
 
+import * as appActions from './app';
+
+const GET_CHAT_LOBBIES_PATH = [urls.controllerUrl(), 'chat/queryChatLobbies/'].join('');
+
+export function getChatLobbies() {
+  return (dispatch, getState) => {
+    const userId = getState().auth.user.id;
+    const url = new URL(GET_CHAT_LOBBIES_PATH + userId.serialize());
+
+    fetchHelper.GET_JSON(url)
+      .then((result) => {
+        console.debug('getChatLobbies result', result);
+
+        if (result.code === 'SUCCESS') {
+          dispatch({
+            type: types.GET_CHAT_LOBBIES,
+            payload: { chatLobbies: result.data },
+          });
+        }
+      })
+      .catch((error) => {
+        appActions.errorMessage(error)(dispatch);
+      });
+  };
+}
