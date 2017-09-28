@@ -34,6 +34,8 @@ export const LOCATION_CREATED = 'LOCATION_CREATED';
 export const PULSE_SEARCH = 'PULSE_SEARCH';
 export const USER_SEARCH = 'USER_SEARCH';
 
+export const GET_CHAT_LOBBIES = 'GET_CHAT_LOBBIES';
+
 export const GEO_USER_UPDATED = 'GEO_USER_UPDATED';
 
 export const ERROR_MESSAGE = 'ERROR_MESSAGE';

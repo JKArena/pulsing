@@ -23,3 +23,16 @@
 
 import * as types from '../common/eventTypes';
 
+const STATE = {
+  chatLobbies: null,
+};
+
+export default function app(state = STATE, action) {
+  switch (action.type) {
+    case types.GET_CHAT_LOBBIES: {
+      return { ...state, ...action.payload };
+    }
+    default:
+      return state;
+  }
+}

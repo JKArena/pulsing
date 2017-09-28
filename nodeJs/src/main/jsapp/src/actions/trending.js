@@ -29,7 +29,7 @@ import * as appActions from './app';
 
 const GET_TRENDING_PULSE_SUBSCRIPTIONS_URL = new URL([urls.controllerUrl(), 'pulse/getTrendingPulseSubscriptions'].join(''));
 
-export function getTrendingPulseSubscriptions() {
+export default function getTrendingPulseSubscriptions() {
   return (dispatch) => {
 
     fetchHelper.GET_JSON(GET_TRENDING_PULSE_SUBSCRIPTIONS_URL)
