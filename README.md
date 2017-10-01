@@ -2,8 +2,8 @@ Project for playing around with Realtime big data app.
 
 Allows creation of Pulse which others around the area can subscribe to and when good the group can gogo. For example driving down and one sees a restaurant that one wants to eat at and friends are too far away; create a pulse, get others to join up, and go together xD (in nutshell any things that don't fit the count). Allows chatting for the pulse group as well as creating private chat lobbies.
 
-1. Kafka as queue with Zookeeper
-2. Storm+Trident/Spark-streaming for real time data processing (both to compare)
+1. Kafka as queue with Zookeeper / Flume (to compare)
+2. Storm+Trident/Spark-streaming for real time data processing (to compare)
 3. Hadoop for HDFS + Yarn
    * Cascading+JCascade+Pail
    * Spark ml for machine learning
@@ -17,7 +17,8 @@ Allows creation of Pulse which others around the area can subscribe to and when 
 9. Python Django with Memcached for service calls (to compare with Spring + Redis)
 10. ElasticSearch/Lucene for searches
 11. ElasticSearch+Logstash+Kibana for log analysis + metrics
-12. Nginx (for RTMP), Java8, Scala, Ecmascript6 and etc
+12. Debezium for CDC + Apache Sqoop for batch
+13. Nginx (for RTMP), Java8, Scala, Ecmascript6 and etc
 
 ![ScreenShot](https://github.com/JKArena/pulsing/blob/master/spring/nonsrc/chatLobbyAlertSystem.png?raw=true)
 
