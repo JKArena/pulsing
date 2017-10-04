@@ -22,176 +22,20 @@
  */
 
 import React, { Component } from 'react';
-
 import { connect } from 'react-redux';
 
-import WebSocket from '../common/webSocket';
-import ChatView from '../views/ChatView';
-
-//below would have key as the identifier of the chatArea and values being a JSON object of text to display
-//and other necessary information
-const CHAT_MAPPER = {
-  __proto__: null
-};
-const GENERAL_CHAT_KEY = 'general'; //for general,default chat area (i.e. chat lobby invite, whisper, and etc)
+import User from '../avro/User';
+import ChatComponent from '../components/chat/ChatComponent';
 
 class ChatContainer extends Component {
-
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      chatId: GENERAL_CHAT_KEY
-    };
-
-    this.handleChatActionHandler = handleChatAction.bind(this);
-  }
-
-  componentDidMount() {
-    const user = this.props.user;
-    if (user) {
-      this.ws = new WebSocket('socket');
-      this.ws.connect()
-        .then((frame) => {
-          console.debug('chat frame', frame);
-        });
-      const subscribedPulseId = this.props.subscribedPulseId;
-      if (subscribedPulseId) {
-        this.mountChatAreaComponent([subscribedPulseId.pulseId.id, ''].join(''), 'Pulse');
-      }
-
-      this.mountChatAreaComponent(GENERAL_CHAT_KEY, 'Chat');
-    }
-  }
-
-  componentWillUnmount() {
-    this.recycleWS();
-  }
-
-  mountChatAreaComponent(id, dropDownText) {
-    const chatAreaElement = document.createElement('div');
-    let subscription = '';
-    let eagerConnect = false;
-
-    this.chatPanelNode.appendChild(chatAreaElement);
-    CHAT_MAPPER[id] = {text: dropDownText, eventKey: id};
-
-    if(id !== GENERAL_CHAT_KEY) {
-      subscription = '/topics/chat/' + id;
-      chatAreaElement.style.display = 'none';
-    } else {
-      //general chat is the default chat area and will also have other chat contents
-      //such as whispers, chat lobby invites, system messages, and etc
-
-      eagerConnect = true; //need eager connect for system messages and etc
-      subscription = '/topics/privateChat/' + Storage.user.id.id;
-      this.switchToNewChatAreaNode(chatAreaElement);
-    }
-    
-    render((<ChatAreaComponent id={id} subscription={subscription} eagerConnect={eagerConnect}
-            isChatLobby={this.isChatLobby(id)}></ChatAreaComponent>), chatAreaElement);
-    this.nodeMaps.set(id, chatAreaElement);
-
-    this.refs.chatDropDownButton.addChatMenuItem(CHAT_MAPPER[id]);
-  }
-
-  unmountChatAreaComponent(id) {
-    const node = this.nodeMaps.get(id);
-    this.nodeMaps.delete(id);
-
-    unmountComponentAtNode(node);
-    
-    this.refs.chatDropDownButton.removeChatMenuItem(CHAT_MAPPER[id]);
-    delete CHAT_MAPPER[id];
-  }
-
-  handleChatSelect(eventKey) {
-    console.debug('handleChatSelect', eventKey);
-    
-    this.state.chatId = eventKey;
-
-    API.publish(TOPICS.CHAT_AREA, {action: 'chatConnect', id: this.state.chatId});
-    
-    const node = this.nodeMaps.get(eventKey);
-    this.switchToNewChatAreaNode(node);
-  }
-
-  switchToNewChatAreaNode(cAreaNode) {
-    console.debug('switchToNewChatAreaNode', cAreaNode);
-
-    if(this.prevChatAreaNode !== null) {
-      this.prevChatAreaNode.style.display = 'none';
-    }
-
-    this.prevChatAreaNode = cAreaNode;
-    cAreaNode.style.display = '';
-  }
-
-  /*
-   * Returns the main types from CHAT_TYPE,
-   * note CHAT_LOBBY_INVITE, WHISPER types should not use this function
-   * as it should be set manually during the actions
-   */
-  getRegularChatType(chatId) {
-    if(this.isChatLobby(chatId)) {
-      return CHAT_TYPE.CHAT_LOBBY;
-    } else if(CHAT_MAPPER[chatId].text === 'Pulse') {
-      return CHAT_TYPE.PULSE;
-    } else {
-      return CHAT_TYPE.GENERAL;
-    }
-  }
-
-  isChatLobby(chatId) {
-    //note others such as WHISPER, CHAT_INVITE, and etc are by chatAction /whisper name and etc
-    return CHAT_MAPPER[chatId].text !== 'Pulse' && CHAT_MAPPER[chatId].eventKey !== GENERAL_CHAT_KEY;
-  }
-
-  handleChat() {
-    console.debug('handleChat');
-    if(this.chatInputNode.value.length === 0) {
-      return;
-    }
-
-    const user = this.props.user;
-
-    if(this.chatInputNode.value[0] === '/') {
-      //means an action
-      this.handleChatActionHandler(user);
-    } else {
-      //usual chat, need to send the type (i.e. for chatLobby need to log the message)
-      
-      this.ws.send('/pulsing/chat/' + this.state.chatId, {},
-                  JSON.stringify({message: this.chatInputNode.value,
-                                  type: this.getRegularChatType(this.state.chatId),
-                                  userId: user.id.id, name: user.name}));
-    }
-    
-    this.chatInputNode.value = '';
-  }
-
-  getChatLobbyInfo(cLName) {
-    let cInfo = null;
-
-    for (let key of Object.keys(CHAT_MAPPER)) {
-      if(CHAT_MAPPER[key].text === cLName) { //chat name
-        cInfo = CHAT_MAPPER[key];
-        break;
-      }
-    }
-
-    return cInfo;
-  }
-
-  recycleWS() {
-    if (this.ws) {
-      this.ws.destroy();
-      this.ws = null;
-    }
-  }
-
   render() {
-    return (<ChatView
+    const props = this.props;
+    return (<ChatComponent
+      user={props.user}
+      subscribedPulseId={props.subscribedPulseId}
+      lobbies={props.lobbies}
+      lobbyMessages={props.lobbyMessages}
+      paging={props.paging}
     />);
   }
 }
@@ -208,8 +52,8 @@ export function mapStateToProps(state) {
 
 export function mapDispatchToProps(dispatch) {
   return {
-    onChat: (evt) => {
-      console.debug('onChat', evt);
+    onChat: (value) => {
+      console.debug('onChat', value);
     },
   };
 }

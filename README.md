@@ -17,7 +17,7 @@ Allows creation of Pulse which others around the area can subscribe to and when 
 9. Python Django with Memcached for service calls (to compare with Spring + Redis)
 10. ElasticSearch/Lucene for searches
 11. ElasticSearch+Logstash+Kibana for log analysis + metrics
-12. Debezium for CDC + Apache Sqoop for batch
+12. Debezium for CDC + Apache Sqoop for macro/micro batch
 13. Nginx (for RTMP), Java8, Scala, Ecmascript6 and etc
 
 ![ScreenShot](https://github.com/JKArena/pulsing/blob/master/spring/nonsrc/chatLobbyAlertSystem.png?raw=true)

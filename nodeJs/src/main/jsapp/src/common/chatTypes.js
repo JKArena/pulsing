@@ -21,3 +21,11 @@
  * @author Ji Kim
  */
 
+export const PULSE = 'PULSE';
+
+export const CHAT_LOBBY = 'CHAT_LOBBY';
+export const CHAT_LOBBY_INVITE = 'CHAT_LOBBY_INVITE';
+export const FRIEND_REQUEST = 'FRIEND_REQUEST';
+export const GENERAL = 'GENERAL';
+export const WHISPER = 'WHISPER';
+export const SECRET_MESSAGE = 'SECRET_MESSAGE';
