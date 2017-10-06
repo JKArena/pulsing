@@ -22,6 +22,8 @@
  */
 
 import React, { Component, PropTypes } from 'react';
+import { Grid, Row, Col, FormGroup, FormControl, InputGroup, Button, Panel, DropdownButton } from 'react-bootstrap';
+import {render, unmountComponentAtNode} from 'react-dom';
 
 import WebSocket from '../common/webSocket';
 import User from '../avro/User';
@@ -45,6 +47,10 @@ class ChatComponent extends Component {
     this.state = {
       chatId: GENERAL_CHAT_KEY
     };
+
+    this.nodeMaps = new Map();
+    this.prevChatAreaNode = null;
+    this.handleChatHandler = this.handleChat.bind(this);
   }
 
   componentDidMount() {
@@ -61,6 +67,10 @@ class ChatComponent extends Component {
       }
 
       this.mountChatAreaComponent(GENERAL_CHAT_KEY, 'Chat');
+
+      Object.keys(this.props.lobbies).forEach((key) => {
+        this.mountChatAreaComponent(this.props.lobbies[key], key);
+      });
     }
   }
 
@@ -74,17 +84,17 @@ class ChatComponent extends Component {
     let eagerConnect = false;
 
     this.chatPanelNode.appendChild(chatAreaElement);
-    CHAT_MAPPER[id] = {text: dropDownText, eventKey: id};
+    CHAT_MAPPER[id] = { text: dropDownText, eventKey: id };
 
-    if(id !== GENERAL_CHAT_KEY) {
-      subscription = '/topics/chat/' + id;
+    if (id !== GENERAL_CHAT_KEY) {
+      subscription = ['/topics/chat/', id].join('');
       chatAreaElement.style.display = 'none';
     } else {
-      //general chat is the default chat area and will also have other chat contents
-      //such as whispers, chat lobby invites, system messages, and etc
+      // general chat is the default chat area and will also have other chat contents
+      // such as whispers, chat lobby invites, system messages, and etc
 
-      eagerConnect = true; //need eager connect for system messages and etc
-      subscription = '/topics/privateChat/' + Storage.user.id.id;
+      eagerConnect = true; // need eager connect for system messages and etc
+      subscription = ['/topics/privateChat/', this.props.user.id.id].join('');
       this.switchToNewChatAreaNode(chatAreaElement);
     }
     
@@ -92,7 +102,7 @@ class ChatComponent extends Component {
             isChatLobby={this.isChatLobby(id)}></ChatAreaComponent>), chatAreaElement);
     this.nodeMaps.set(id, chatAreaElement);
 
-    this.refs.chatDropDownButton.addChatMenuItem(CHAT_MAPPER[id]);
+    // this.refs.chatDropDownButton.addChatMenuItem(CHAT_MAPPER[id]);
   }
 
   unmountChatAreaComponent(id) {
@@ -101,7 +111,7 @@ class ChatComponent extends Component {
 
     unmountComponentAtNode(node);
     
-    this.refs.chatDropDownButton.removeChatMenuItem(CHAT_MAPPER[id]);
+    // this.refs.chatDropDownButton.removeChatMenuItem(CHAT_MAPPER[id]);
     delete CHAT_MAPPER[id];
   }
 
@@ -110,21 +120,21 @@ class ChatComponent extends Component {
     
     this.state.chatId = eventKey;
 
-    API.publish(TOPICS.CHAT_AREA, {action: 'chatConnect', id: this.state.chatId});
+    // API.publish(TOPICS.CHAT_AREA, {action: 'chatConnect', id: this.state.chatId});
     
     const node = this.nodeMaps.get(eventKey);
     this.switchToNewChatAreaNode(node);
   }
 
-  switchToNewChatAreaNode(cAreaNode) {
-    console.debug('switchToNewChatAreaNode', cAreaNode);
+  switchToNewChatAreaNode(chatAreaNode) {
+    console.debug('switchToNewChatAreaNode', chatAreaNode);
 
-    if(this.prevChatAreaNode !== null) {
+    if (this.prevChatAreaNode !== null) {
       this.prevChatAreaNode.style.display = 'none';
     }
 
-    this.prevChatAreaNode = cAreaNode;
-    cAreaNode.style.display = '';
+    this.prevChatAreaNode = chatAreaNode;
+    chatAreaNode.style.display = '';
   }
 
   /*
@@ -133,9 +143,9 @@ class ChatComponent extends Component {
    * as it should be set manually during the actions
    */
   getRegularChatType(chatId) {
-    if(this.isChatLobby(chatId)) {
+    if (this.isChatLobby(chatId)) {
       return CHAT_TYPE.CHAT_LOBBY;
-    } else if(CHAT_MAPPER[chatId].text === 'Pulse') {
+    } else if (CHAT_MAPPER[chatId].text === 'Pulse') {
       return CHAT_TYPE.PULSE;
     } else {
       return CHAT_TYPE.GENERAL;
@@ -143,39 +153,38 @@ class ChatComponent extends Component {
   }
 
   isChatLobby(chatId) {
-    //note others such as WHISPER, CHAT_INVITE, and etc are by chatAction /whisper name and etc
+    // note others such as WHISPER, CHAT_INVITE, and etc are by chatAction /whisper name and etc
     return CHAT_MAPPER[chatId].text !== 'Pulse' && CHAT_MAPPER[chatId].eventKey !== GENERAL_CHAT_KEY;
   }
 
   handleChat() {
     console.debug('handleChat');
-    if(this.chatInputNode.value.length === 0) {
+    if (this.chatInputNode.value.length === 0) {
       return;
     }
 
     const user = this.props.user;
 
-    if(this.chatInputNode.value[0] === '/') {
-      //means an action
-      this.handleChatActionHandler(user);
+    if (this.chatInputNode.value[0] === '/') {
+      // means an action
+      this.props.onChat(this.chatInputNode.value);
     } else {
-      //usual chat, need to send the type (i.e. for chatLobby need to log the message)
-      
-      this.ws.send('/pulsing/chat/' + this.state.chatId, {},
-                  JSON.stringify({message: this.chatInputNode.value,
+      // usual chat, need to send the type (i.e. for chatLobby need to log the message)
+      this.ws.send(['/pulsing/chat/', this.state.chatId].join(''), {},
+                  JSON.stringify({ message: this.chatInputNode.value,
                                   type: this.getRegularChatType(this.state.chatId),
-                                  userId: user.id.id, name: user.name}));
+                                  userId: user.id.id, name: user.name }));
     }
-    
+
     this.chatInputNode.value = '';
   }
 
-  getChatLobbyInfo(cLName) {
-    let cInfo = null;
+  getChatLobbyInfo(chatLobbyName) {
+    let chatInfo = null;
 
     for (let key of Object.keys(CHAT_MAPPER)) {
-      if(CHAT_MAPPER[key].text === cLName) { //chat name
-        cInfo = CHAT_MAPPER[key];
+      if (CHAT_MAPPER[key].text === chatLobbyName) { //chat name
+        chatInfo = CHAT_MAPPER[key];
         break;
       }
     }
@@ -191,27 +200,43 @@ class ChatComponent extends Component {
   }
 
   render() {
-    const tagInputRef = (ele) => {
-      this.tagInputNode = ele.node;
+    const chatInputRef = (ele) => {
+      this.chatInputNode = ele.node;
     };
-    const tagPanelRef = (ele) => {
-      this.tagPanelNode = ele.node.querySelector(':scope .panel-body');
+    const chatPanelRef = (ele) => {
+      this.chatPanelNode = ele.node.querySelector(':scope .panel-body');
     };
 
     return (
-      <div className="pills-component">
-        <FormGroup>
-          <ControlLabel>{this.props.label}</ControlLabel>
-          <InputGroup>
-            <FormControl type="text" inputRef={tagInputRef} />
-            <InputGroup.Button>
-              <Button onClick={this.addHandler}>Add</Button>
-            </InputGroup.Button>
-          </InputGroup>
-          <Panel ref={tagPanelRef}>
-            &nbsp;
-          </Panel>
-        </FormGroup>
+      <div className="chat-component">
+        <Grid>
+          <Row>
+            <Col>
+              <FormGroup>
+                <InputGroup>
+                  <InputGroup.Button>
+                    <DropDownButtonComponent ref='chatDropDownButton' title="Chat"
+                      onSelect={this.handleChatSelect.bind(this)} />
+                  </InputGroup.Button>
+                  <FormControl
+                    type="text"
+                    inputRef={chatInputRef}
+                  />
+                  <InputGroup.Button>
+                    <Button onClick={this.handleChatHandler}>Send</Button>
+                  </InputGroup.Button>
+                </InputGroup>
+              </FormGroup>
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <Panel ref={chatPanelRef}>
+              &nbsp;
+              </Panel>
+            </Col>
+          </Row>
+        </Grid>
       </div>
     );
   }
