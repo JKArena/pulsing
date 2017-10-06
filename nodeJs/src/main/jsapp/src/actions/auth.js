@@ -27,11 +27,18 @@ import urls from '../common/urls';
 
 import User from '../avro/User';
 
+import * as chatActions from './chat';
+import * as trendingActions from './trending';
 import * as appActions from './app';
 
 const LOGIN_URL = new URL([urls.controllerUrl(), 'user/validateUser'].join(''));
 const CREATE_USER_URL = new URL([urls.controllerUrl(), 'user/createUser'].join(''));
 const LOGOUT_PATH = [urls.controllerUrl(), 'user/logout/'].join('');
+
+function onLoggedInActions(dispatch) {
+  dispatch(chatActions.getChatLobbies());
+  dispatch(trendingActions.getTrendingPulseSubscriptions());
+}
 
 export function logIn(btnId, formId) {
   return (dispatch, getState) => {
@@ -53,7 +60,7 @@ export function logIn(btnId, formId) {
             payload: { user },
           });
         }
-
+        onLoggedInActions(dispatch);
         btn.removeAttribute('disabled');
       })
       .catch((error) => {
@@ -110,7 +117,7 @@ export function createUser(btnId, formId, pictureId) {
             type: types.USER_CREATED,
             payload: { user },
           });
-
+          onLoggedInActions(dispatch);
           btn.removeAttribute('disabled');
         }
       })
