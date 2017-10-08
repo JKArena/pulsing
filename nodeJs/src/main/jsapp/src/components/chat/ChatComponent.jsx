@@ -32,11 +32,6 @@ import ChatAreaComponent from './ChatAreaComponent';
 
 require('./Chat.scss');
 
-//below would have key as the identifier of the chatArea and values being a JSON object of text to display
-//and other necessary information
-const CHAT_MAPPER = {
-  __proto__: null
-};
 const GENERAL_CHAT_KEY = 'general'; //for general,default chat area (i.e. chat lobby invite, whisper, and etc)
 
 class ChatComponent extends Component {
@@ -48,8 +43,6 @@ class ChatComponent extends Component {
       chatId: GENERAL_CHAT_KEY
     };
 
-    this.nodeMaps = new Map();
-    this.prevChatAreaNode = null;
     this.handleChatHandler = this.handleChat.bind(this);
   }
 
@@ -61,69 +54,11 @@ class ChatComponent extends Component {
         .then((frame) => {
           console.debug('chat frame', frame);
         });
-      const subscribedPulseId = this.props.subscribedPulseId;
-      if (subscribedPulseId) {
-        this.mountChatAreaComponent([subscribedPulseId.pulseId.id, ''].join(''), 'Pulse');
-      }
-
-      this.mountChatAreaComponent(GENERAL_CHAT_KEY, 'Chat');
-
-      Object.keys(this.props.lobbies).forEach((key) => {
-        this.mountChatAreaComponent(this.props.lobbies[key], key);
-      });
     }
   }
 
   componentWillUnmount() {
     this.recycleWS();
-  }
-
-  mountChatAreaComponent(id, dropDownText) {
-    const chatAreaElement = document.createElement('div');
-    let subscription = '';
-    let eagerConnect = false;
-
-    this.chatPanelNode.appendChild(chatAreaElement);
-    CHAT_MAPPER[id] = { text: dropDownText, eventKey: id };
-
-    if (id !== GENERAL_CHAT_KEY) {
-      subscription = ['/topics/chat/', id].join('');
-      chatAreaElement.style.display = 'none';
-    } else {
-      // general chat is the default chat area and will also have other chat contents
-      // such as whispers, chat lobby invites, system messages, and etc
-
-      eagerConnect = true; // need eager connect for system messages and etc
-      subscription = ['/topics/privateChat/', this.props.user.id.id].join('');
-      this.switchToNewChatAreaNode(chatAreaElement);
-    }
-    
-    render((<ChatAreaComponent id={id} subscription={subscription} eagerConnect={eagerConnect}
-            isChatLobby={this.isChatLobby(id)}></ChatAreaComponent>), chatAreaElement);
-    this.nodeMaps.set(id, chatAreaElement);
-
-    // this.refs.chatDropDownButton.addChatMenuItem(CHAT_MAPPER[id]);
-  }
-
-  unmountChatAreaComponent(id) {
-    const node = this.nodeMaps.get(id);
-    this.nodeMaps.delete(id);
-
-    unmountComponentAtNode(node);
-    
-    // this.refs.chatDropDownButton.removeChatMenuItem(CHAT_MAPPER[id]);
-    delete CHAT_MAPPER[id];
-  }
-
-  handleChatSelect(eventKey) {
-    console.debug('handleChatSelect', eventKey);
-    
-    this.state.chatId = eventKey;
-
-    // API.publish(TOPICS.CHAT_AREA, {action: 'chatConnect', id: this.state.chatId});
-    
-    const node = this.nodeMaps.get(eventKey);
-    this.switchToNewChatAreaNode(node);
   }
 
   switchToNewChatAreaNode(chatAreaNode) {
@@ -214,10 +149,6 @@ class ChatComponent extends Component {
             <Col>
               <FormGroup>
                 <InputGroup>
-                  <InputGroup.Button>
-                    <DropDownButtonComponent ref='chatDropDownButton' title="Chat"
-                      onSelect={this.handleChatSelect.bind(this)} />
-                  </InputGroup.Button>
                   <FormControl
                     type="text"
                     inputRef={chatInputRef}
