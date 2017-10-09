@@ -22,17 +22,14 @@
  */
 
 import React, { Component, PropTypes } from 'react';
-import { Grid, Row, Col, FormGroup, FormControl, InputGroup, Button, Panel, DropdownButton } from 'react-bootstrap';
-import {render, unmountComponentAtNode} from 'react-dom';
-
-import WebSocket from '../common/webSocket';
-import User from '../avro/User';
+import { Grid, Row, Col, FormGroup, FormControl, InputGroup, Button, Panel } from 'react-bootstrap';
 
 import ChatAreaComponent from './ChatAreaComponent';
+import * as chatActions from '../actions/chat';
 
 require('./Chat.scss');
 
-const GENERAL_CHAT_KEY = 'general'; //for general,default chat area (i.e. chat lobby invite, whisper, and etc)
+const GENERAL_CHAT_KEY = 'general'; // for general,default chat area (i.e. chat lobby invite, whisper, and etc)
 
 class ChatComponent extends Component {
 
@@ -44,32 +41,6 @@ class ChatComponent extends Component {
     };
 
     this.handleChatHandler = this.handleChat.bind(this);
-  }
-
-  componentDidMount() {
-    const user = this.props.user;
-    if (user) {
-      this.ws = new WebSocket('socket');
-      this.ws.connect()
-        .then((frame) => {
-          console.debug('chat frame', frame);
-        });
-    }
-  }
-
-  componentWillUnmount() {
-    this.recycleWS();
-  }
-
-  switchToNewChatAreaNode(chatAreaNode) {
-    console.debug('switchToNewChatAreaNode', chatAreaNode);
-
-    if (this.prevChatAreaNode !== null) {
-      this.prevChatAreaNode.style.display = 'none';
-    }
-
-    this.prevChatAreaNode = chatAreaNode;
-    chatAreaNode.style.display = '';
   }
 
   /*
@@ -98,18 +69,8 @@ class ChatComponent extends Component {
       return;
     }
 
-    const user = this.props.user;
-
-    if (this.chatInputNode.value[0] === '/') {
-      // means an action
-      this.props.onChat(this.chatInputNode.value);
-    } else {
-      // usual chat, need to send the type (i.e. for chatLobby need to log the message)
-      this.ws.send(['/pulsing/chat/', this.state.chatId].join(''), {},
-                  JSON.stringify({ message: this.chatInputNode.value,
-                                  type: this.getRegularChatType(this.state.chatId),
-                                  userId: user.id.id, name: user.name }));
-    }
+    this.props.onChat(this.chatInputNode.value,
+      { id: this.state.chatId, type: this.getRegularChatType(this.state.chatId) });
 
     this.chatInputNode.value = '';
   }
@@ -127,13 +88,6 @@ class ChatComponent extends Component {
     return cInfo;
   }
 
-  recycleWS() {
-    if (this.ws) {
-      this.ws.destroy();
-      this.ws = null;
-    }
-  }
-
   render() {
     const chatInputRef = (ele) => {
       this.chatInputNode = ele.node;
@@ -145,6 +99,13 @@ class ChatComponent extends Component {
     return (
       <div className="chat-component">
         <Grid>
+          <Row>
+            <Col>
+              <Panel ref={chatPanelRef}>
+              &nbsp;
+              </Panel>
+            </Col>
+          </Row>
           <Row>
             <Col>
               <FormGroup>
@@ -160,13 +121,6 @@ class ChatComponent extends Component {
               </FormGroup>
             </Col>
           </Row>
-          <Row>
-            <Col>
-              <Panel ref={chatPanelRef}>
-              &nbsp;
-              </Panel>
-            </Col>
-          </Row>
         </Grid>
       </div>
     );
@@ -174,7 +128,6 @@ class ChatComponent extends Component {
 }
 
 ChatComponent.propTypes = {
-  user: React.PropTypes.objectOf(User).isRequired,
   subscribedPulseId: React.PropTypes.number.isRequired,
   lobbies: React.PropTypes.object.isRequired,
   lobbyMessages: React.PropTypes.object.isRequired,

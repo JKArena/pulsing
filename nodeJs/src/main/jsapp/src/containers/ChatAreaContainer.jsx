@@ -27,9 +27,9 @@ import { connect } from 'react-redux';
 import WebSocket from '../common/webSocket';
 
 import User from '../avro/User';
-import ChatComponent from '../components/chat/ChatComponent';
+import ChatAreaComponent from '../components/chat/ChatAreaComponent';
 
-class ChatContainer extends Component {
+class ChatAreaContainer extends Component {
 
   componentDidMount() {
     const user = this.props.user;
@@ -38,6 +38,7 @@ class ChatContainer extends Component {
       this.ws.connect()
         .then((frame) => {
           console.debug('chat frame', frame);
+          this.sub = this.ws.subscribe(this.subscription, this.chatHandler);
         });
     }
   }
@@ -55,11 +56,11 @@ class ChatContainer extends Component {
 
   render() {
     const props = this.props;
-    return (<ChatComponent
-      subscribedPulseId={props.subscribedPulseId}
-      lobbies={props.lobbies}
-      lobbyMessages={props.lobbyMessages}
-      paging={props.paging}
+    return (<ChatAreaComponent
+      user={props.user}
+      isChatLobby={props.isChatLobby}
+      chatMessages={props.chatMessages}
+      onChat={props.onChat}
     />);
   }
 }
@@ -67,36 +68,22 @@ class ChatContainer extends Component {
 export function mapStateToProps(state) {
   return {
     user: state.auth.user,
-    subscribedPulseId: state.pulse.subscribedPulseId,
-    lobbies: state.chat.lobbies,
-    lobbyMessages: state.chat.lobbyMessages,
-    paging: state.chat.paging,
   };
 }
 
 export function mapDispatchToProps(dispatch) {
   return {
     onChat: (value, chatInfo) => {
-      console.debug('onChat', value, chatInfo, this);
-      if(value[0] === '/') {
-        // means an action
-        // this.handleChatActionHandler(user);
-      } else {
-        // usual chat, need to send the type (i.e. for chatLobby need to log the message)
-        // this.ws.send('/pulsing/chat/' + chatInfo.id, {},
-        //  JSON.stringify({ message: value, type: chatInfo.type, userId: user.id.id, name: user.name }));
-      }
     },
   };
 }
 
-ChatContainer.propTypes = {
+ChatAreaContainer.propTypes = {
   user: React.PropTypes.objectOf(User).isRequired,
-  subscribedPulseId: React.PropTypes.number.isRequired,
-  lobbies: React.PropTypes.object.isRequired,
-  lobbyMessages: React.PropTypes.object.isRequired,
-  paging: React.PropTypes.object.isRequired,
+  subscription: React.PropTypes.string.isRequired,
+  isChatLobby: React.PropTypes.boolean.isRequired,
+  chatMessages: React.PropTypes.array.isRequired,
   onChat: React.PropTypes.func.isRequired,
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ChatContainer);
+export default connect(mapStateToProps, mapDispatchToProps)(ChatAreaContainer);
