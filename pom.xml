@@ -318,6 +318,12 @@
         <version>${spark}</version>
       </dependency>
 
+      <dependency>
+        <groupId>org.apache.spark</groupId>
+        <artifactId>spark-streaming-flume_2.11</artifactId>
+        <version>${spark}</version>
+      </dependency>
+
       <!-- structured streaming -->
       <dependency>
         <groupId>org.apache.spark</groupId>
