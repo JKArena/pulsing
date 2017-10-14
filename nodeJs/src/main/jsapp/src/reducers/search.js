@@ -25,9 +25,9 @@ import * as types from '../common/eventTypes';
 import { INDICES } from '../common/searchTypes';
 
 const STATE = {};
-Object.keys(INDICES).forEach(index => {
+Object.keys(INDICES).forEach((index) => {
   const docTypes = {};
-  state[index] = docTypes;
+  STATE[index] = docTypes;
   INDICES[index].forEach((entry) => {
     docTypes[entry.docType] = null;
   });

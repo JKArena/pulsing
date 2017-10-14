@@ -24,12 +24,24 @@
 import { createStore, combineReducers } from 'redux';
 import app from './reducers/app';
 import auth from './reducers/auth';
+import chat from './reducers/chat';
+import friend from './reducers/friend';
 import geo from './reducers/geo';
+import location from './reducers/location';
+import pulse from './reducers/pulse';
+import search from './reducers/search';
+import trending from './reducers/trending';
 
 const indexReducers = combineReducers({
   app,
   auth,
+  chat,
+  friend,
   geo,
+  location,
+  pulse,
+  search,
+  trending,
 });
 
 export default createStore(indexReducers);

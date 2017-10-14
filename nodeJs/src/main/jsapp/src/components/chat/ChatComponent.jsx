@@ -24,8 +24,8 @@
 import React, { Component, PropTypes } from 'react';
 import { Grid, Row, Col, FormGroup, FormControl, InputGroup, Button, Panel } from 'react-bootstrap';
 
+import * as chatTypes from '../common/eventTypes';
 import ChatAreaComponent from './ChatAreaComponent';
-import * as chatActions from '../actions/chat';
 
 require('./Chat.scss');
 
@@ -37,24 +37,24 @@ class ChatComponent extends Component {
     super(props);
 
     this.state = {
-      chatId: GENERAL_CHAT_KEY
+      chatId: GENERAL_CHAT_KEY,
     };
 
     this.handleChatHandler = this.handleChat.bind(this);
   }
 
   /*
-   * Returns the main types from CHAT_TYPE,
+   * Returns the main types from chatTypes,
    * note CHAT_LOBBY_INVITE, WHISPER types should not use this function
    * as it should be set manually during the actions
    */
   getRegularChatType(chatId) {
     if (this.isChatLobby(chatId)) {
-      return CHAT_TYPE.CHAT_LOBBY;
+      return chatTypes.CHAT_LOBBY;
     } else if (CHAT_MAPPER[chatId].text === 'Pulse') {
-      return CHAT_TYPE.PULSE;
+      return chatTypes.PULSE;
     } else {
-      return CHAT_TYPE.GENERAL;
+      return chatTypes.GENERAL;
     }
   }
 
@@ -128,11 +128,11 @@ class ChatComponent extends Component {
 }
 
 ChatComponent.propTypes = {
-  subscribedPulseId: React.PropTypes.number.isRequired,
-  lobbies: React.PropTypes.object.isRequired,
-  lobbyMessages: React.PropTypes.object.isRequired,
-  paging: React.PropTypes.object.isRequired,
-  onChat: React.PropTypes.func.isRequired,
+  subscribedPulseId: PropTypes.number.isRequired,
+  lobbies: PropTypes.objectOf(PropTypes.object).isRequired,
+  lobbyMessages: PropTypes.objectOf(PropTypes.object).isRequired,
+  paging: PropTypes.objectOf(PropTypes.object).isRequired,
+  onChat: PropTypes.func.isRequired,
 };
 
 export default ChatComponent;
