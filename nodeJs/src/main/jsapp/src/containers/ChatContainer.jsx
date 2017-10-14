@@ -21,7 +21,7 @@
  * @author Ji Kim
  */
 
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
 import WebSocket from '../common/webSocket';
@@ -78,25 +78,27 @@ export function mapDispatchToProps(dispatch) {
   return {
     onChat: (value, chatInfo) => {
       console.debug('onChat', value, chatInfo, this);
-      if(value[0] === '/') {
+      console.debug('dispatch', dispatch);
+      if (value[0] === '/') {
         // means an action
         // this.handleChatActionHandler(user);
       } else {
         // usual chat, need to send the type (i.e. for chatLobby need to log the message)
         // this.ws.send('/pulsing/chat/' + chatInfo.id, {},
-        //  JSON.stringify({ message: value, type: chatInfo.type, userId: user.id.id, name: user.name }));
+        // JSON.stringify({ message: value, type: chatInfo.type,
+        // userId: user.id.id, name: user.name }));
       }
     },
   };
 }
 
 ChatContainer.propTypes = {
-  user: React.PropTypes.objectOf(User).isRequired,
-  subscribedPulseId: React.PropTypes.number.isRequired,
-  lobbies: React.PropTypes.object.isRequired,
-  lobbyMessages: React.PropTypes.object.isRequired,
-  paging: React.PropTypes.object.isRequired,
-  onChat: React.PropTypes.func.isRequired,
+  user: PropTypes.objectOf(User).isRequired,
+  subscribedPulseId: PropTypes.number.isRequired,
+  lobbies: PropTypes.objectOf(PropTypes.object).isRequired,
+  lobbyMessages: PropTypes.objectOf(PropTypes.object).isRequired,
+  paging: PropTypes.objectOf(PropTypes.object).isRequired,
+  onChat: PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChatContainer);

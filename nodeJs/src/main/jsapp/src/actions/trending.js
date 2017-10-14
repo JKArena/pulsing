@@ -33,12 +33,12 @@ export default function getTrendingPulseSubscriptions() {
   return (dispatch) => {
 
     fetchHelper.GET_JSON(GET_TRENDING_PULSE_SUBSCRIPTIONS_URL)
-      .then(function(json) {
+      .then((json) => {
         console.debug('gotTrendingPulseSubscriptions', json);
 
-        //when making subsequent rest calls for Pulse, create PulseId from the long values
+        // when making subsequent rest calls for Pulse, create PulseId from the long values
         const trending = new Map();
-        Object.keys(json).forEach(id => {
+        Object.keys(json).forEach((id) => {
           trending.set(id, json[id]);
         });
 
@@ -47,9 +47,8 @@ export default function getTrendingPulseSubscriptions() {
           payload: { trendingPulse: trending },
         });
       })
-      .catch(function(err) {
+      .catch((error) => {
         appActions.errorMessage(error)(dispatch);
-        btn.removeAttribute('disabled');
       });
   };
 }

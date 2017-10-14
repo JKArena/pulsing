@@ -109,8 +109,8 @@ export function subscribeChatLobby(chatLobby) {
     const chatId = chatLobby.chatId;
     const chatName = chatLobby.chatName;
     const path = [CHAT_LOBBY_SUBSCRIBE_PATH, chatId, '/',
-                  chatName, '/', chatLobby.invitationId, '/',
-                  userId.serialize()].join('');
+      chatName, '/', chatLobby.invitationId, '/',
+      userId.serialize()].join('');
 
     fetchHelper.PUT_JSON(new URL(path))
       .then((result) => {
@@ -135,7 +135,7 @@ export function unSubscribeChatLobby(chatLobby) {
     const chatId = chatLobby.chatId;
     const chatName = chatLobby.chatName;
     const path = [CHAT_LOBBY_UN_SUBSCRIBE_PATH, chatId, '/',
-                  chatName, '/', userId.serialize()].join('');
+      chatName, '/', userId.serialize()].join('');
 
     fetchHelper.PUT_JSON(new URL(path))
       .then((result) => {
