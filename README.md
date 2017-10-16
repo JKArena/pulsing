@@ -8,7 +8,7 @@ Allows creation of Pulse which others around the area can subscribe to and when 
    * Cascading+JCascade+Pail
    * Spark ml for machine learning
    * Hive+Spark SQL for submitted location data using ESRI
-   * Spark Graphx (swap with Apache Giraph later as Graphx deprecated)
+   * Spark Graphx/Apache Giraph for graph (think Graphx getting deprecated though)
 4. MySQL/Hibernate for user data and possibly location (GIS) data using Spark SQL
 5. Cassandra for chatLobby messages which are created by users
 6. Avro+Parquet/Thrift for serializations (to compare)
@@ -16,9 +16,10 @@ Allows creation of Pulse which others around the area can subscribe to and when 
 8. Spring with Redis (websocket+session management and cache (short lived pulse data with geo radius search)) for service calls
 9. Python Django with Memcached for service calls (to compare with Spring + Redis)
 10. ElasticSearch/Lucene for searches
-11. ElasticSearch+Logstash+Kibana for log analysis + metrics
+11. ElasticSearch+Logstash+Kibana+Flume for log analysis + metrics
 12. Debezium for CDC + Apache Sqoop for macro/micro batch
-13. Nginx (for RTMP), Java8, Scala, Ecmascript6 and etc
+13. Apache Oozie + Hue initially for orchestration
+14. Nginx (for RTMP), Java8, Scala, Ecmascript6 and etc
 
 ![ScreenShot](https://github.com/JKArena/pulsing/blob/master/spring/nonsrc/chatLobbyAlertSystem.png?raw=true)
 
