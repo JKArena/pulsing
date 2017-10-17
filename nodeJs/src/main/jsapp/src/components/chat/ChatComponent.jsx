@@ -22,7 +22,7 @@
  */
 
 import React, { Component, PropTypes } from 'react';
-import { Grid, Row, Col, FormGroup, FormControl, InputGroup, Button, Panel } from 'react-bootstrap';
+import { Grid, Row, Col, FormGroup, FormControl, InputGroup, Button, Tab } from 'react-bootstrap';
 
 import * as chatTypes from '../common/eventTypes';
 import ChatAreaComponent from './ChatAreaComponent';
@@ -43,26 +43,6 @@ class ChatComponent extends Component {
     this.handleChatHandler = this.handleChat.bind(this);
   }
 
-  /*
-   * Returns the main types from chatTypes,
-   * note CHAT_LOBBY_INVITE, WHISPER types should not use this function
-   * as it should be set manually during the actions
-   */
-  getRegularChatType(chatId) {
-    if (this.isChatLobby(chatId)) {
-      return chatTypes.CHAT_LOBBY;
-    } else if (CHAT_MAPPER[chatId].text === 'Pulse') {
-      return chatTypes.PULSE;
-    } else {
-      return chatTypes.GENERAL;
-    }
-  }
-
-  isChatLobby(chatId) {
-    // note others such as WHISPER, CHAT_INVITE, and etc are by chatAction /whisper name and etc
-    return CHAT_MAPPER[chatId].text !== 'Pulse' && CHAT_MAPPER[chatId].eventKey !== GENERAL_CHAT_KEY;
-  }
-
   handleChat() {
     console.debug('handleChat');
     if (this.chatInputNode.value.length === 0) {
@@ -70,30 +50,14 @@ class ChatComponent extends Component {
     }
 
     this.props.onChat(this.chatInputNode.value,
-      { id: this.state.chatId, type: this.getRegularChatType(this.state.chatId) });
+      { id: this.state.chatId });
 
     this.chatInputNode.value = '';
-  }
-
-  getChatLobbyInfo(chatLobbyName) {
-    let chatInfo = null;
-
-    for (let key of Object.keys(CHAT_MAPPER)) {
-      if (CHAT_MAPPER[key].text === chatLobbyName) { //chat name
-        chatInfo = CHAT_MAPPER[key];
-        break;
-      }
-    }
-
-    return cInfo;
   }
 
   render() {
     const chatInputRef = (ele) => {
       this.chatInputNode = ele.node;
-    };
-    const chatPanelRef = (ele) => {
-      this.chatPanelNode = ele.node.querySelector(':scope .panel-body');
     };
 
     return (
@@ -101,9 +65,9 @@ class ChatComponent extends Component {
         <Grid>
           <Row>
             <Col>
-              <Panel ref={chatPanelRef}>
+              <Tab ref={this.chatTabRef}>
               &nbsp;
-              </Panel>
+              </Tab>
             </Col>
           </Row>
           <Row>

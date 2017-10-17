@@ -24,9 +24,9 @@
 import * as types from '../common/eventTypes';
 
 const STATE = {
-  lobbies: {},
-  lobbyMessages: {},
-  paging: {},
+  lobbies: {}, // key lobbyName, value UUID
+  lobbyMessages: {},  // key UUID, value array of Chat object
+  paging: {}, // key UUID, value PagingState
 };
 
 export default function app(state = STATE, action) {
