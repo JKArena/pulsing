@@ -85,7 +85,7 @@
           <groupId>io.netty</groupId>
           <artifactId>netty-all</artifactId>
         </exclusion>
-    </exclusions>
+      </exclusions>
     </dependency>
     
     <dependency>
