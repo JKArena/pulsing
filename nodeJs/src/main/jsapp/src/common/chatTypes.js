@@ -21,8 +21,12 @@
  * @author Ji Kim
  */
 
+// for general,default chat area (i.e. chat lobby invite, whisper, and etc)
+export const GENERAL_CHAT_KEY = 'general';
+
 export const PULSE = 'PULSE';
 
+export const SYSTEM_MESSAGE = 'SYSTEM_MESSAGE';
 export const CHAT_LOBBY = 'CHAT_LOBBY';
 export const CHAT_LOBBY_INVITE = 'CHAT_LOBBY_INVITE';
 export const FRIEND_REQUEST = 'FRIEND_REQUEST';

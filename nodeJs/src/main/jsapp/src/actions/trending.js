@@ -31,7 +31,6 @@ const GET_TRENDING_PULSE_SUBSCRIPTIONS_URL = new URL([urls.controllerUrl(), 'pul
 
 export default function getTrendingPulseSubscriptions() {
   return (dispatch) => {
-
     fetchHelper.GET_JSON(GET_TRENDING_PULSE_SUBSCRIPTIONS_URL)
       .then((json) => {
         console.debug('gotTrendingPulseSubscriptions', json);

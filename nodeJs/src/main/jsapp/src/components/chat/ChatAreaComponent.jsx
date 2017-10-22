@@ -21,11 +21,16 @@
  * @author Ji Kim
  */
 
-import React, { Component } from 'react';
+import React from 'react';
+import { OverlayTrigger } from 'react-bootstrap';
+
+import * as chatTypes from '../../common/chatTypes';
+
+import urls from '../../common/urls';
+import User from '../../avro/User';
 
 require('./ChatArea.scss');
 
-const SYSTEM_MESSAGE_CHAT_TYPE = 'SYSTEM_MESSAGE';
 const CHAT_OTHER = 'chat-other';
 const CHAT_SELF = 'chat-self';
 
@@ -35,61 +40,86 @@ const Chat = (props) => {
 
   const chat = props.chat;
   const msgViews = chat.messageViews > 0 ? chat.messageViews : '';
-  const dateLTS = (isSelf ? new Date() : new Date(chat.timeStamp)).toLocaleTimeString();
-  const chatContent = [<div className='chat-content' key={dateLTS +'_msg'}>{chat.message}
-                      <span className='chat-message-views'>{msgViews}</span></div>,
-                  <div className='chat-time' key={dateLTS +'_time'} data-content={dateLTS}></div>];
+  const dateString = (isSelf ? new Date() : new Date(chat.timeStamp)).toLocaleTimeString();
+  const chatMsgKey = [dateString, '_msg'].join('');
+  const chatContentKey = [dateString, '_time'].join('');
 
-  if(chat.messageViews > 0) {
-    //only chat lobbies has capability of messageViews
-    chatContent.push(<div className='chat-message-views'>{chat.messageViews}</div>);
+  const chatContent = [<div className="chat-content" key={chatMsgKey}>{chat.message}
+    <span className="chat-message-views">{msgViews}</span></div>,
+    <div className="chat-time" key={chatContentKey} data-content={dateString} />,
+  ];
+
+  if (chat.messageViews > 0) {
+    // only chat lobbies has capability of messageViews
+    chatContent.push(<div className="chat-message-views">{chat.messageViews}</div>);
   }
 
-  chatContent.push(<div className='chat-time' key={dateLTS +'_time'} data-content={dateLTS}></div>);
-  if(isSelf) {
+  chatContent.push(<div className="chat-time" key={chatContentKey} data-content={dateString} />);
+  if (isSelf) {
     chatContent.reverse();
   }
 
+  const triggers = ['hover', 'focus'];
   return (
     <div className={clazz}>
 
       {(() => {
-        if(!isSelf) {
-          
-          let pPath = Url.getPicturePath(chat.picturePath);
-
-          return <OverlayTrigger trigger={['hover', 'focus']} placement="bottom">
+        const pPath = urls.getPicturePath(chat.picturePath);
+        const overlay = !isSelf ?
+          (<OverlayTrigger trigger={triggers} placement="bottom">
             <figure>
-              <img className="chat-img" src={pPath} alt={chat.name}></img>
+              <img className="chat-img" src={pPath} alt={chat.name} />
               <figcaption>{chat.name}</figcaption>
             </figure>
-          </OverlayTrigger>;
-        }
+          </OverlayTrigger>) : null;
+
+        return overlay;
       })()}
 
       {chatContent}
-      
     </div>
   );
 };
 
-const SystemMessage = (props) => {
+Chat.propTypes = {
+  isSelf: React.PropTypes.boolean.isRequired,
+  chat: React.PropTypes.objectOf(React.PropTypes.object).isRequired,
+};
+
+const SystemMessage = props =>
+  (<div className="chat-system-message">
+    <div className="chat-smessage-content">
+      {props.msg}
+    </div>
+  </div>);
+
+SystemMessage.propTypes = {
+  msg: React.PropTypes.string.isRequired,
+};
+
+const ChatAreaComponent = (props) => {
+  const userId = props.user.id.id;
+  const chats = [];
+
+  props.chatMessages.forEach((chat) => {
+    if (chat.type === chatTypes.SYSTEM_MESSAGE) {
+      chats.push(<SystemMessage msg={chat.message} />);
+    } else {
+      const isSelf = chat.userId === userId;
+      chats.push(<Chat isSelf={isSelf} chat={chat} />);
+    }
+  });
+
   return (
-    <div className="chat-system-message">
-      <div className="chat-smessage-content">
-        {props.msg}
-      </div>
+    <div className="chatarea-component">
+      {chats}
     </div>
   );
 };
-
-class ChatAreaComponent extends Component {
-
-}
 
 ChatAreaComponent.propTypes = {
   user: React.PropTypes.objectOf(User).isRequired,
-  isChatLobby: React.PropTypes.boolean.isRequired,
-  chatMessages: React.PropTypes.array.isRequired,
-  onChat: React.PropTypes.func.isRequired,
+  chatMessages: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
 };
+
+export default ChatAreaComponent;

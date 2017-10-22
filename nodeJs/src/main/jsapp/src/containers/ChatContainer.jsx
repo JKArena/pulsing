@@ -56,6 +56,7 @@ class ChatContainer extends Component {
   render() {
     const props = this.props;
     return (<ChatComponent
+      user={props.user}
       subscribedPulseId={props.subscribedPulseId}
       lobbies={props.lobbies}
       lobbyMessages={props.lobbyMessages}

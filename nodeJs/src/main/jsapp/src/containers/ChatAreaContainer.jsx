@@ -21,15 +21,23 @@
  * @author Ji Kim
  */
 
-import React, { Component } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
+import * as chatTypes from '../common/chatTypes';
+import * as types from '../common/eventTypes';
 import WebSocket from '../common/webSocket';
 
 import User from '../avro/User';
 import ChatAreaComponent from '../components/chat/ChatAreaComponent';
 
 class ChatAreaContainer extends Component {
+
+  constructor() {
+    super();
+
+    this.chatMessageHandler = this.onChatMessage.bind(this);
+  }
 
   componentDidMount() {
     const user = this.props.user;
@@ -38,13 +46,22 @@ class ChatAreaContainer extends Component {
       this.ws.connect()
         .then((frame) => {
           console.debug('chat frame', frame);
-          this.sub = this.ws.subscribe(this.subscription, this.chatHandler);
+          this.sub = this.ws.subscribe(this.subscription, this.chatMessageHandler);
         });
     }
   }
 
   componentWillUnmount() {
     this.recycleWS();
+  }
+
+  onChatMessage(messageChat) {
+    console.debug('onChat', messageChat);
+
+    if (messageChat && messageChat.body) {
+      const chat = JSON.parse(messageChat.body);
+      this.props.onWebSocketChat(this.props.lobbyId, chat);
+    }
   }
 
   recycleWS() {
@@ -58,9 +75,7 @@ class ChatAreaContainer extends Component {
     const props = this.props;
     return (<ChatAreaComponent
       user={props.user}
-      isChatLobby={props.isChatLobby}
-      chatMessages={props.chatMessages}
-      onChat={props.onChat}
+      chatMessages={props.lobbyMessages}
     />);
   }
 }
@@ -68,22 +83,34 @@ class ChatAreaContainer extends Component {
 export function mapStateToProps(state) {
   return {
     user: state.auth.user,
+    lobbyMessages: state.chat.lobbyMessages[this.props.lobbyId],
   };
 }
 
 export function mapDispatchToProps(dispatch) {
   return {
-    onChat: (value, chatInfo) => {
+    onWebSocketChat: (lobbyId, chat) => {
+      if (chat.type === chatTypes.SYSTEM_MESSAGE) {
+        dispatch({
+          type: types.SYSTEM_MESSAGE_UPDATE,
+          payload: { message: chat.message },
+        });
+      } else {
+        dispatch({
+          type: types.CHAT_LOBBY_MESSAGE_UPDATE,
+          payload: { lobbyId, chat },
+        });
+      }
     },
   };
 }
 
 ChatAreaContainer.propTypes = {
-  user: React.PropTypes.objectOf(User).isRequired,
-  subscription: React.PropTypes.string.isRequired,
-  isChatLobby: React.PropTypes.boolean.isRequired,
-  chatMessages: React.PropTypes.array.isRequired,
-  onChat: React.PropTypes.func.isRequired,
+  user: PropTypes.objectOf(User).isRequired,
+  subscription: PropTypes.string.isRequired,
+  lobbyId: PropTypes.string.isRequired,
+  lobbyMessages: PropTypes.arrayOf(PropTypes.object).isRequired,
+  onWebSocketChat: PropTypes.func.isRequired,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChatAreaContainer);

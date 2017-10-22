@@ -22,14 +22,13 @@
  */
 
 import React, { Component, PropTypes } from 'react';
-import { Grid, Row, Col, FormGroup, FormControl, InputGroup, Button, Tab } from 'react-bootstrap';
+import { Grid, Row, Col, FormGroup, FormControl, InputGroup, Button, Tab, Nav, NavItem } from 'react-bootstrap';
 
-import * as chatTypes from '../common/eventTypes';
-import ChatAreaComponent from './ChatAreaComponent';
+import User from '../../avro/User';
+import * as chatTypes from '../../common/chatTypes';
+import ChatAreaContainer from '../../containers/ChatAreaContainer';
 
 require('./Chat.scss');
-
-const GENERAL_CHAT_KEY = 'general'; // for general,default chat area (i.e. chat lobby invite, whisper, and etc)
 
 class ChatComponent extends Component {
 
@@ -37,10 +36,46 @@ class ChatComponent extends Component {
     super(props);
 
     this.state = {
-      chatId: GENERAL_CHAT_KEY,
+      chatId: chatTypes.GENERAL_CHAT_KEY,
     };
 
     this.handleChatHandler = this.handleChat.bind(this);
+  }
+
+  getTabNavItems() {
+    const navItems = [<NavItem eventKey={chatTypes.GENERAL_CHAT_KEY}>General</NavItem>];
+    const lobbies = this.props.lobbies;
+
+    Object.keys(lobbies).forEach((lobbyName) => {
+      navItems.push(<NavItem eventKey={lobbies[lobbyName]}>{lobbyName}</NavItem>);
+    });
+    return navItems;
+  }
+
+  getTabContents() {
+    const userId = this.props.user.id.id;
+    const generalSubscription = ['/topics/privateChat/', userId].join('');
+    const contents = [<Tab.Pane eventKey={chatTypes.GENERAL_CHAT_KEY}>
+      <ChatAreaContainer
+        chatLobbyId={chatTypes.GENERAL_CHAT_KEY}
+        subscription={generalSubscription}
+      />
+    </Tab.Pane>];
+
+    const lobbies = this.props.lobbies;
+    Object.keys(lobbies).forEach((lobbyName) => {
+      const lobbyId = lobbies[lobbyName];
+      const lobbySubscription = ['/topics/chat/', lobbyId].join('');
+
+      contents.push(<Tab.Pane eventKey={lobbyId}>
+        <ChatAreaContainer
+          lobbyId={lobbyId}
+          subscription={lobbySubscription}
+        />
+      </Tab.Pane>);
+    });
+
+    return contents;
   }
 
   handleChat() {
@@ -65,9 +100,20 @@ class ChatComponent extends Component {
         <Grid>
           <Row>
             <Col>
-              <Tab ref={this.chatTabRef}>
-              &nbsp;
-              </Tab>
+              <Tab.Container ref={this.chatTabRef} defaultActiveKey={chatTypes.GENERAL_CHAT_KEY}>
+                <Row className="clearfix">
+                  <Col sm={12}>
+                    <Nav bsStyle="tabs">
+                      {this.getTabNavItems()}
+                    </Nav>
+                  </Col>
+                  <Col sm={12}>
+                    <Tab.Content animation>
+                      {this.getTabContents()}
+                    </Tab.Content>
+                  </Col>
+                </Row>
+              </Tab.Container>
             </Col>
           </Row>
           <Row>
@@ -92,6 +138,7 @@ class ChatComponent extends Component {
 }
 
 ChatComponent.propTypes = {
+  user: PropTypes.objectOf(User).isRequired,
   subscribedPulseId: PropTypes.number.isRequired,
   lobbies: PropTypes.objectOf(PropTypes.object).isRequired,
   lobbyMessages: PropTypes.objectOf(PropTypes.object).isRequired,
