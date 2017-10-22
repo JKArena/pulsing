@@ -21,11 +21,14 @@
  * @author Ji Kim
  */
 
+import * as chatTypes from '../common/chatTypes';
 import * as types from '../common/eventTypes';
 
+const SYSTEM_MESSAGE_CAP = 20;
 const STATE = {
   lobbies: {}, // key lobbyName, value UUID
   lobbyMessages: {},  // key UUID, value array of Chat object
+  systemMessage: [], // system messages
   paging: {}, // key UUID, value PagingState
 };
 
@@ -45,6 +48,25 @@ export default function app(state = STATE, action) {
     }
     case types.GET_CHAT_LOBBY_MESSAGES: {
       return { ...state, ...action.payload };
+    }
+    case types.CHAT_LOBBY_MESSAGE_UPDATE: {
+      const chat = action.payload.chat;
+      const type = chat.type;
+      const lobbyMessages = state.lobbyMessages[action.payload.lobbyId];
+      lobbyMessages.push(chat);
+
+      if (type === chatTypes.CHAT_LOBBY_INVITE || type === chatTypes.FRIEND_REQUEST) {
+        // Storage.invitation = chat.data;
+      }
+      return { ...state, ...lobbyMessages };
+    }
+    case types.SYSTEM_MESSAGE_UPDATE: {
+      if (state.systemMessage.length === SYSTEM_MESSAGE_CAP) {
+        state.systemMessage.splice(0, 1);
+      }
+      state.systemMessage.push(action.payload.message);
+      const message = state.message;
+      return { ...state, ...message };
     }
     default:
       return state;
