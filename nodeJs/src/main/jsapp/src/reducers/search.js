@@ -22,7 +22,7 @@
  */
 
 import * as types from '../common/eventTypes';
-import { INDICES } from '../common/searchTypes';
+import INDICES from '../common/searchTypes';
 
 const STATE = {};
 Object.keys(INDICES).forEach((index) => {

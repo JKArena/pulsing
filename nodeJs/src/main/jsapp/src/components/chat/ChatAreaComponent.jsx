@@ -82,7 +82,7 @@ const Chat = (props) => {
 };
 
 Chat.propTypes = {
-  isSelf: React.PropTypes.boolean.isRequired,
+  isSelf: React.PropTypes.bool.isRequired,
   chat: React.PropTypes.objectOf(React.PropTypes.object).isRequired,
 };
 

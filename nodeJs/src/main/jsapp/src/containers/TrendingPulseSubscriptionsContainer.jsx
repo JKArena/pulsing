@@ -39,6 +39,7 @@ const TrendingPulseSubscriptionsContainer = props =>
     subscribedPulseId={props.subscribedPulseId}
     trendingPulse={props.trendingPulse}
     onSubscribe={props.onSubscribe}
+    onSearch={props.onSearch}
   />);
 
 export function mapStateToProps(state) {
