@@ -78,6 +78,7 @@ class InputSearchComponent extends Component {
         <InputGroup>
           <InputGroup.Button>
             <DropdownButton
+              id="searchButton"
               title={this.state.title}
               bsStyle="primary"
               onSelect={this.dataTypeSelectHandler}

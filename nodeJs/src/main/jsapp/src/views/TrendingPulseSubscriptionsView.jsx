@@ -55,11 +55,10 @@ const TrendingPulseSubscriptionsView = (props) => {
       </Thumbnail>
     </Col>);
   });
-
   return (<div className="trendingpulse-component">
     <InputSearchComponent
       index="pulse"
-      docTypes={[INDICES.pulse]}
+      docTypes={INDICES.pulse}
       trigger="Search Pulse"
       onSearch={props.onSearch}
     />
