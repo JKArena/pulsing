@@ -27,11 +27,17 @@ ogr2ogr -overwrite -progress -f "MySQL" MYSQL:pulsing,user=pulsing,password=wsad
 
 Maxwell or Debezium CDC for MySQL
 
+python
+Anaconda python 2.7
+Anaconda distribution for Python 2.7 as data science community is still firmly stuck on 2.7.
+
+Brew python2
 pip2 install <package>
+
+Brew python3
 pip3 install <package>
 https://github.com/libevent/libevent/issues/465
 
 ./configure CPPFLAGS='-I/usr/lib/openssl/openssl-1.0.2l/include'
 
 mysql -u root -p with root
-
