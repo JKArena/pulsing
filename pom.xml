@@ -628,6 +628,12 @@ descent loss of performance)
       </dependency>
 
       <dependency>
+        <groupId>commons-collections</groupId>
+        <artifactId>commons-collections</artifactId>
+        <version>${commons.collections}</version>
+      </dependency>
+
+      <dependency>
         <groupId>org.apache.logging.log4j</groupId>
         <artifactId>log4j-core</artifactId>
         <version>${log4j}</version>
@@ -650,6 +656,7 @@ descent loss of performance)
   
   <properties>
     <pulsing.version>0.1-SNAPSHOT</pulsing.version>
+    <commons.collections>3.2.2</commons.collections>
     <lucene>6.4.1</lucene>
     <spark.avro>3.2.0</spark.avro>
     <avro.mapred>1.8.1</avro.mapred>
