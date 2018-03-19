@@ -75,7 +75,7 @@ public final class AvroToThriftConverter {
      * @return
      */
     private static List<Data> convertPulseAvroToThriftDataList(ITuple tuple) {
-        _LOGGER.info("AvroToThriftConverter.convertPulseAvroToThriftDataList " + tuple);
+        _LOGGER.info("AvroToThriftConverter.convertPulseAvroToThriftDataList {}", tuple);
         
         Pulse pulse = (Pulse) tuple.getValueByField(AVRO);
         
@@ -141,7 +141,7 @@ public final class AvroToThriftConverter {
     }
     
     private static Data convertUserAvroToThriftData(ITuple tuple) {
-        _LOGGER.info("AvroToThriftConverter.convertUserAvroToThriftData " + tuple);
+        _LOGGER.info("AvroToThriftConverter.convertUserAvroToThriftData {}", tuple);
         
         User user = (User) tuple.getValueByField(AVRO);
         

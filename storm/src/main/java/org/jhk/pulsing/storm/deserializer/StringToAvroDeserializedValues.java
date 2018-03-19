@@ -53,7 +53,7 @@ public final class StringToAvroDeserializedValues {
     }
     
     private static Values deserializeStringToPulseAvroValues(ITuple tuple, Boolean includeId) {
-        _LOGGER.info("StringToAvroDeserializedValues.deserializeStringToPulseAvroValues: " + tuple + " - " + includeId);
+        _LOGGER.info("StringToAvroDeserializedValues.deserializeStringToPulseAvroValues: tuple={}, includeId={}", tuple, includeId);
         
         String pulseString = tuple.getString(0);
         Values values = null;
@@ -75,7 +75,7 @@ public final class StringToAvroDeserializedValues {
     }
     
     private static Values deserializeStringToUserAvroValues(ITuple tuple, Boolean includeId) {
-        _LOGGER.info("StringToAvroDeserializedValues.deserializeStringToUserAvroValues: " + tuple + " - " + includeId);
+        _LOGGER.info("StringToAvroDeserializedValues.deserializeStringToUserAvroValues: tuple={}, includeId={}", tuple, includeId);
         
         String userString = tuple.getString(0);
         Values values = null;

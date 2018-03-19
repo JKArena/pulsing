@@ -38,12 +38,12 @@ public final class ThriftDataListRecordFormatBolt implements RecordFormat {
     
     @Override
     public byte[] format(Tuple tuple) {
-        _LOGGER.info("ThriftDataListRecordFormatBolt.format: " + tuple);
+        _LOGGER.info("ThriftDataListRecordFormatBolt.format: {}", tuple);
         
         List<Data> tDatas = (List<Data>) tuple.getValueByField(FieldConstants.THRIFT_DATA_LIST);
         byte[] bytes = StormUtil.serializeThriftDataList(tDatas);
         
-        _LOGGER.info("ThriftDataListRecordFormatBolt.format serialized to bytes: " + bytes.length);
+        _LOGGER.info("ThriftDataListRecordFormatBolt.format serialized to bytes: {}", bytes.length);
         return bytes;
     }
 

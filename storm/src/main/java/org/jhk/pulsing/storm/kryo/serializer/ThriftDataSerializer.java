@@ -40,7 +40,7 @@ public final class ThriftDataSerializer extends Serializer<Data> {
 
     @Override
     public Data read(Kryo kryo, Input input, Class<Data> type) {
-        _LOGGER.info("ThriftDataSerializer.read " + type.getName() + " - " + input.getBuffer().length);
+        _LOGGER.info("ThriftDataSerializer.read name={}, length={}", type.getName(), input.getBuffer().length);
         
         TDeserializer dSerializer = new TDeserializer(new TBinaryProtocol.Factory());
         Data data = new Data();
@@ -58,7 +58,7 @@ public final class ThriftDataSerializer extends Serializer<Data> {
 
     @Override
     public void write(Kryo kryo, Output output, Data tData) {
-        _LOGGER.info("ThriftDataSerializer.write " + tData);
+        _LOGGER.info("ThriftDataSerializer.write {}", tData);
         
         output.write(StormUtil.serializeThriftData(tData));
         output.flush();

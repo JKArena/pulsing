@@ -62,11 +62,11 @@ public final class AvroToThriftConverterBolt extends BaseBasicBolt {
     
     @Override
     public void execute(Tuple tuple, BasicOutputCollector outputCollector) {
-        _LOGGER.info("AvroToThriftConverter.execute " + tuple);
+        _LOGGER.info("AvroToThriftConverter.execute {}", tuple);
         
         Object data = _toThriftConverter.apply(tuple);
         
-        _LOGGER.info("Converted to thrift " + data);
+        _LOGGER.info("Converted to thrift {}", data);
         outputCollector.emit(new Values(data));
     }
 

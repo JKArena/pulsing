@@ -60,7 +60,7 @@ public final class AvroDeserializerFunction extends BaseFunction {
     
     @Override
     public void execute(TridentTuple tuple, TridentCollector collector) {
-        _LOGGER.info("AvroDeserializerFunction.execute: " + tuple);
+        _LOGGER.info("AvroDeserializerFunction.execute: {}", tuple);
         
         collector.emit(_toAvroDeserializer.apply(tuple, _includeId));
         

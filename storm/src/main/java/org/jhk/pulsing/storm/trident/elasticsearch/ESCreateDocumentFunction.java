@@ -78,7 +78,7 @@ public final class ESCreateDocumentFunction extends BaseFunction {
 
     @Override
     public void execute(TridentTuple tuple, TridentCollector collector) {
-        _LOGGER.info("ESCreateDocumentFunction.execute: " + tuple);
+        _LOGGER.info("ESCreateDocumentFunction.execute: {}", tuple);
         
         String id = tuple.getValueByField(FieldConstants.ID).toString();
         

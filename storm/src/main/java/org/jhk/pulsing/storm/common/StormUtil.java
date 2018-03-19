@@ -98,7 +98,7 @@ public final class StormUtil {
     }
     
     public static byte[] serializeThriftDataList(List<Data> tDatas) {
-        _LOGGER.debug("Util.serializeThriftDatas: " + tDatas);
+        _LOGGER.debug("Util.serializeThriftDatas: {}", tDatas);
         
         TSerializer serializer = new TSerializer(new TBinaryProtocol.Factory());
         

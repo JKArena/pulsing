@@ -74,7 +74,7 @@ public final class TimeIntervalBuilderBolt extends BaseBasicBolt {
 
     @Override
     public void execute(Tuple tuple, BasicOutputCollector outputCollector) {
-        _LOGGER.info("TimeIntervalBuilderBolt.execute: " + tuple);
+        _LOGGER.info("TimeIntervalBuilderBolt.execute: {}", tuple);
         
         if(isTickTuple(tuple)) {
             processTickTuple(outputCollector);
@@ -101,7 +101,7 @@ public final class TimeIntervalBuilderBolt extends BaseBasicBolt {
         long currTimeInterval = Util.getTimeInterval(Instant.now().getEpochSecond(), _secondsInterval);
         List<Long> toRemoveTI = new LinkedList<>();
         
-        _LOGGER.info("TimeIntervalBuilderBolt.processTickTuple: " + currTimeInterval + "/" + _timeInterval);
+        _LOGGER.info("TimeIntervalBuilderBolt.processTickTuple: currTimeInterval={}, timeInterval={}", currTimeInterval, _timeInterval);
         
         _timeInterval.keySet().parallelStream()
             .filter(entryTI -> (entryTI <= currTimeInterval))
@@ -111,7 +111,7 @@ public final class TimeIntervalBuilderBolt extends BaseBasicBolt {
                 
                 Map<String, Integer> tIValueCounter = _timeInterval.get(filteredTI);
                 
-                _LOGGER.info("TimeIntervalBuilderBolt.processTickTuple EMIT: " + filteredTI + "/" + tIValueCounter);
+                _LOGGER.info("TimeIntervalBuilderBolt.processTickTuple EMIT: filteredTI={}, tIValueCounter={}", filteredTI, tIValueCounter);
                 outputCollector.emit(new Values(filteredTI, tIValueCounter));
             });
         
@@ -122,7 +122,8 @@ public final class TimeIntervalBuilderBolt extends BaseBasicBolt {
     private void processTimeIntervalValue(Tuple tuple, Long timeInterval) {
         String tIValue = tuple.getStringByField(TIME_INTERVAL_VALUE);
         
-        _LOGGER.info("TimeIntervalBuilderBolt.processTimeIntervalValue: " + tIValue + "-" + timeInterval + "/" + _timeInterval);
+        _LOGGER.info("TimeIntervalBuilderBolt.processTimeIntervalValue: tIValue={}, timeInterval={}, timeInterval={}", 
+                tIValue, timeInterval, _timeInterval);
         
         Map<String, Integer> count = _timeInterval.get(timeInterval);
         if(count == null) {
@@ -131,7 +132,7 @@ public final class TimeIntervalBuilderBolt extends BaseBasicBolt {
         }
         
         count.compute(tIValue, (key, oldValue) -> oldValue == null ? 1 : oldValue + 1);
-        _LOGGER.info("TimeIntervalBuilderBolt.processTimeIntervalValue after compute: " + _timeInterval);
+        _LOGGER.info("TimeIntervalBuilderBolt.processTimeIntervalValue after compute: timeInterval={}", _timeInterval);
     }
     
     @Override
