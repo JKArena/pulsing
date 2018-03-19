@@ -61,7 +61,7 @@ public final class AvroToElasticDocumentConverter {
      * @return
      */
     private static JSONObject convertPulseAvroToElasticDoc(SpecificRecord record) {
-        _LOGGER.info("AvroToElasticDocumentConverter.convertPulseAvroToElasticDoc " + record);
+        _LOGGER.info("AvroToElasticDocumentConverter.convertPulseAvroToElasticDoc {}", record);
         
         Pulse pulse = (Pulse) record;
         
@@ -82,7 +82,7 @@ public final class AvroToElasticDocumentConverter {
     }
     
     private static JSONObject convertUserAvroToElasticDoc(SpecificRecord record) {
-        _LOGGER.info("AvroToElasticDocumentConverter.convertUserAvroToElasticDoc " + record);
+        _LOGGER.info("AvroToElasticDocumentConverter.convertUserAvroToElasticDoc {}", record);
         
         User user = (User) record;
         

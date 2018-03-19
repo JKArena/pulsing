@@ -66,7 +66,7 @@ public final class AvroDeserializerBolt extends BaseBasicBolt {
     
     @Override
     public void execute(Tuple tuple, BasicOutputCollector outputCollector) {
-        _LOGGER.info("AvroDeserializerBolt.execute: " + tuple);
+        _LOGGER.info("AvroDeserializerBolt.execute: {}", tuple);
         
         outputCollector.emit(_toAvroDeserializer.apply(tuple, _includeId));
     }

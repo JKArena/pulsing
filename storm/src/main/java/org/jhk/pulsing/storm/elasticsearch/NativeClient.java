@@ -82,12 +82,12 @@ public final class NativeClient {
     }
     
     public IndexResponse addDocument(NativeClientDocument document) {
-        _LOGGER.info("NativeClient.addDocument: " + document);
+        _LOGGER.info("NativeClient.addDocument: {}", document);
 
         IndexRequestBuilder irBuilder = addDocumentBuilder(document);
         IndexResponse iResponse = irBuilder.execute().actionGet();
         
-        _LOGGER.info("NativeClient.addDocument: Response " + iResponse);
+        _LOGGER.info("NativeClient.addDocument: Response {}", iResponse);
         
         return iResponse;
     }
@@ -97,11 +97,11 @@ public final class NativeClient {
     }
     
     public GetResponse getDocument(NativeClientDocument document) {
-        _LOGGER.info("NativeClient.getDocument: " + document);
+        _LOGGER.info("NativeClient.getDocument: {}", document);
         
         GetResponse gResponse = getDocumentBuilder(document).execute().actionGet();
         
-        _LOGGER.info("NativeClient.getDocument: Response " + gResponse);
+        _LOGGER.info("NativeClient.getDocument: Response {}", gResponse);
         
         return gResponse;
     }
@@ -123,22 +123,22 @@ public final class NativeClient {
      * @return
      */
     public SearchResponse query(NativeClientDocument document, QueryBuilder query) {
-        _LOGGER.info("NativeClient.query: " + document + "/" + query);
+        _LOGGER.info("NativeClient.query: document={}, query={}", document, query);
         
         SearchResponse sResponse = _client.prepareSearch(document._index).setTypes(document._type).setQuery(query).execute().actionGet();
         
-        _LOGGER.info("NativeClient.query: Response " + sResponse);
+        _LOGGER.info("NativeClient.query: Response {}", sResponse);
         
         return sResponse;
     }
     
     public UpdateResponse updateDocument(NativeClientDocument document) {
-        _LOGGER.info("NativeClient.updateDocument: " + document);
+        _LOGGER.info("NativeClient.updateDocument: {}", document);
         
         UpdateRequestBuilder urBuilder = updateDocumentBuilder(document);
         UpdateResponse uResponse = urBuilder.execute().actionGet();
         
-        _LOGGER.info("NativeClient.updateDocument: Response " + uResponse);
+        _LOGGER.info("NativeClient.updateDocument: Response {}", uResponse);
         
         return uResponse;
     }
@@ -156,11 +156,11 @@ public final class NativeClient {
     }
     
     public DeleteResponse deleteDocument(NativeClientDocument document) {
-        _LOGGER.info("NativeClient.deleteDocument: " + document);
+        _LOGGER.info("NativeClient.deleteDocument: {}", document);
         
         DeleteResponse dResponse = deleteDocumentBuilder(document).execute().actionGet();
         
-        _LOGGER.info("NativeClient.deleteDocument: Response " + dResponse);
+        _LOGGER.info("NativeClient.deleteDocument: Response {}", dResponse);
         
         return dResponse;
     }
@@ -170,51 +170,51 @@ public final class NativeClient {
     }
     
     public boolean isIndexPresent(String name) {
-        _LOGGER.info("NativeClient.isIndexPresent: " + name);
+        _LOGGER.info("NativeClient.isIndexPresent: {}", name);
         
         IndicesExistsResponse response = _client.admin().indices().prepareExists(name).execute().actionGet();
         return response.isExists();
     }
     
     public void createIndex(String index) {
-        _LOGGER.info("NativeClient.createIndex: " + index);
+        _LOGGER.info("NativeClient.createIndex: {}", index);
         
         _client.admin().indices().prepareCreate(index).execute().actionGet();
     }
     
     public void deleteIndex(String index) {
-        _LOGGER.info("NativeClient.deleteIndex: " + index);
+        _LOGGER.info("NativeClient.deleteIndex: {}", index);
         
         _client.admin().indices().prepareDelete(index).execute().actionGet();
     }
     
     public void closeIndex(String index) {
-        _LOGGER.info("NativeClient.closeIndex: " + index);
+        _LOGGER.info("NativeClient.closeIndex: {}", index);
         
         _client.admin().indices().prepareClose(index).execute().actionGet();
     }
     
     public void openIndex(String index) {
-        _LOGGER.info("NativeClient.openIndex: " + index);
+        _LOGGER.info("NativeClient.openIndex: {}", index);
         
         _client.admin().indices().prepareOpen(index).execute().actionGet();
     }
     
     public void refresIndices(String...indices) {
-        _LOGGER.info("NativeClient.refresIndices: " + indices);
+        _LOGGER.info("NativeClient.refresIndices: {}", indices);
         
         _client.admin().indices().prepareRefresh(indices).execute().actionGet();
     }
     
     public BulkResponse bulkAdd(List<NativeClientDocument> documents) {
-        _LOGGER.info("NativeClient.bulkAdd: " + documents);
+        _LOGGER.info("NativeClient.bulkAdd: {}", documents);
         BulkRequestBuilder bulker = _client.prepareBulk();
         
         documents.stream().forEach(document -> {
             bulker.add(addDocumentBuilder(document));
         });
         
-        _LOGGER.info("NativeClient.bulkAdd - numberOfActions: " + bulker.numberOfActions());
+        _LOGGER.info("NativeClient.bulkAdd - numberOfActions: {}", bulker.numberOfActions());
         return bulker.execute().actionGet();
     }
     
@@ -226,7 +226,7 @@ public final class NativeClient {
             bulker.add(updateDocumentBuilder(document));
         });
         
-        _LOGGER.info("NativeClient.bulkUpdate - numberOfActions: " + bulker.numberOfActions());
+        _LOGGER.info("NativeClient.bulkUpdate - numberOfActions: {}", bulker.numberOfActions());
         return bulker.execute().actionGet();
     }
     
@@ -238,7 +238,7 @@ public final class NativeClient {
             bulker.add(deleteDocumentBuilder(document));
         });
         
-        _LOGGER.info("NativeClient.bulkDelete - numberOfActions: " + bulker.numberOfActions());
+        _LOGGER.info("NativeClient.bulkDelete - numberOfActions: {}", bulker.numberOfActions());
         return bulker.execute().actionGet();
     }
     

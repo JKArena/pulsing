@@ -58,11 +58,11 @@ public final class AvroToThriftConverterFunction extends BaseFunction {
     
     @Override
     public void execute(TridentTuple tuple, TridentCollector collector) {
-        _LOGGER.info("AvroToThriftConverterFunction.execute " + tuple);
+        _LOGGER.info("AvroToThriftConverterFunction.execute {}", tuple);
         
         Object data = _toThriftConverter.apply(tuple);
         
-        _LOGGER.info("Converted to thrift " + data);
+        _LOGGER.info("Converted to thrift {}", data);
         
         collector.emit(new Values(data));
     }

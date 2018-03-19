@@ -36,12 +36,12 @@ public final class AvroRecordFormatBolt implements RecordFormat {
 
     @Override
     public byte[] format(Tuple tuple) {
-        _LOGGER.info("AvroRecordFormatBolt.format: " + tuple);
+        _LOGGER.info("AvroRecordFormatBolt.format: {}", tuple);
         
         SpecificRecord aData = (SpecificRecord) tuple.getValueByField(FieldConstants.AVRO);
         byte[] bytes = StormUtil.serializeAvro(aData);
         
-        _LOGGER.info("AvroRecordFormatBolt.format serialized to bytes: " + bytes.length);
+        _LOGGER.info("AvroRecordFormatBolt.format serialized to bytes: {}", bytes.length);
         return bytes;
     }
     

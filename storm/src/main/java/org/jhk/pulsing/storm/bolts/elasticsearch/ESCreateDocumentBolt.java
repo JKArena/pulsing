@@ -79,7 +79,7 @@ public final class ESCreateDocumentBolt extends BaseBasicBolt {
 
     @Override
     public void execute(Tuple tuple, BasicOutputCollector collector) {
-        _LOGGER.info("ESCreateDocumentBolt.execute: " + tuple);
+        _LOGGER.info("ESCreateDocumentBolt.execute: {}", tuple);
         
         String id = tuple.getValueByField(FieldConstants.ID).toString();
         

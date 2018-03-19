@@ -52,14 +52,15 @@ public final class TimeIntervalBolt extends BaseBasicBolt {
 
     @Override
     public void execute(Tuple tuple, BasicOutputCollector outputCollector) {
-        _LOGGER.info("TimeIntervalBolt.execute: " + tuple);
+        _LOGGER.info("TimeIntervalBolt.execute: {}", tuple);
         
         Long timeStamp = tuple.getLongByField(TIMESTAMP);
         Long id = tuple.getLongByField(ID);
         long timeInterval = Util.getTimeInterval(timeStamp, _secondsInterval);
         Object value = tuple.getValueByField(VALUE);
         
-        _LOGGER.info("TimeIntervalBolt.execute timeInterval: " + timeStamp + "-" + _secondsInterval + "/" + timeInterval);
+        _LOGGER.info("TimeIntervalBolt.execute timeInterval: timestamp={}, secondsInterval={}, timeInterval={}",
+                timeStamp, _secondsInterval, timeInterval);
         
         //technically should escape or convert to hex string to avoid, but ok now
         StringBuilder builder = new StringBuilder();
