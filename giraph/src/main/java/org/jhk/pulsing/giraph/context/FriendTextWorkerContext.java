@@ -33,22 +33,22 @@ public final class FriendTextWorkerContext extends WorkerContext {
     
     @Override
     public void postApplication() {
-        _LOGGER.debug("postApplication: " + getAggregatedValue(FRIENDSHIP_AGGREGATE));
+        _LOGGER.debug("postApplication: {}", getAggregatedValue(FRIENDSHIP_AGGREGATE));
     }
 
     @Override
     public void postSuperstep() {
-        _LOGGER.debug("postSuperstep: " + getAggregatedValue(FRIENDSHIP_AGGREGATE));
+        _LOGGER.debug("postSuperstep: {}", getAggregatedValue(FRIENDSHIP_AGGREGATE));
     }
 
     @Override
     public void preApplication() throws InstantiationException, IllegalAccessException {
-        _LOGGER.debug("preApplication: " + getAggregatedValue(FRIENDSHIP_AGGREGATE));
+        _LOGGER.debug("preApplication: {}", getAggregatedValue(FRIENDSHIP_AGGREGATE));
     }
 
     @Override
     public void preSuperstep() {
-        _LOGGER.debug("preSuperstep: " + getAggregatedValue(FRIENDSHIP_AGGREGATE));
+        _LOGGER.debug("preSuperstep: {}", getAggregatedValue(FRIENDSHIP_AGGREGATE));
     }
 
 }

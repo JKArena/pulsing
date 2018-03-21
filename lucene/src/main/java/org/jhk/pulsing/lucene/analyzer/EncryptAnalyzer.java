@@ -35,7 +35,7 @@ public final class EncryptAnalyzer extends Analyzer {
 
     @Override
     protected TokenStreamComponents createComponents(String field) {
-        _LOGGER.info("EncryptAnalyzer.createComponents: " + field);
+        _LOGGER.info("EncryptAnalyzer.createComponents: {}", field);
         
         Tokenizer source = new EncryptTokenizer();
         TokenStream filter = new StandardFilter(source);

@@ -38,9 +38,9 @@ public final class FriendTextMasterCompute extends DefaultMasterCompute {
         LongWritable friendship = getAggregatedValue(FRIENDSHIP_AGGREGATE);
         String superstep = String.valueOf(getSuperstep());
 
-        _LOGGER.info("Superstep: " + superstep + "; friendship: " + friendship);
-        _LOGGER.info("Superstep: " + superstep + "; edges: " + getTotalNumEdges());
-        _LOGGER.info("Superstep: " + superstep + "; vertices: " + getTotalNumVertices());
+        _LOGGER.info("Superstep: superstep={}, friendship={}", superstep, friendship);
+        _LOGGER.info("Superstep: superstep={}, edges={}", superstep, getTotalNumEdges());
+        _LOGGER.info("Superstep: superstep={}, vertices={}", superstep, getTotalNumVertices());
     }
     
     @Override

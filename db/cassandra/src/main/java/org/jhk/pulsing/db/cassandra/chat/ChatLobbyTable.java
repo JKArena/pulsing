@@ -70,20 +70,20 @@ public final class ChatLobbyTable implements ICassandraTable {
     }
     
     public Map<String, UUID> queryChatLobbies(UserId userId) {
-        _LOGGER.info("ChatLobbyTable.queryChatLobbies : " + userId);
+        _LOGGER.info("ChatLobbyTable.queryChatLobbies : {}", userId);
         
         Map<String, UUID> chatLobbies = new HashMap<>();
         
         BoundStatement cLQuery = _CHAT_LOBBY_QUERY.bind(userId.getId());
         ResultSet cLQResult = _session.execute(cLQuery);
         
-        _LOGGER.info("ChatLobbyTable.queryChatLobbies cLQResult : " + cLQResult);
+        _LOGGER.info("ChatLobbyTable.queryChatLobbies cLQResult : {}", cLQResult);
         cLQResult.forEach(chatLobby -> {
             
             String chatLobbyName = chatLobby.getString("name");
             int rank = chatLobby.getInt("rank");
             
-            _LOGGER.info("ChatLobbyTable.queryChatLobbies chatLobbyName : " + chatLobbyName + " - " + rank);
+            _LOGGER.info("ChatLobbyTable.queryChatLobbies chatLobbyName={}, rank={}", chatLobbyName, rank);
             chatLobbies.put(chatLobbyName, chatLobby.getUUID("chat_lobby_id"));
         });
         
@@ -103,7 +103,7 @@ public final class ChatLobbyTable implements ICassandraTable {
     }
     
     public Optional<UUID> createChatLobby(UserId userId, String lobbyName) {
-        _LOGGER.info("ChatLobbyTable.createChatLobby : " + userId + ", " + lobbyName);
+        _LOGGER.info("ChatLobbyTable.createChatLobby : userId={}, lobbyName={}", userId, lobbyName);
         
         if(chatLobbyExists(userId, lobbyName)) return Optional.empty();
         
@@ -113,13 +113,13 @@ public final class ChatLobbyTable implements ICassandraTable {
     }
     
     public void chatLobbyUnSubscribe(UserId userId, UUID cLId, String lobbyName) {
-        _LOGGER.info("ChatLobbyTable.chatLobbyUnSubscribe : " + userId + " - " + cLId);
+        _LOGGER.info("ChatLobbyTable.chatLobbyUnSubscribe : userId={}, cLId={}", userId, cLId);
         
         _session.executeAsync(_CHAT_LOBBY_INSERT.bind(cLId, userId.getId(), lobbyName, -1));
     }
     
     public Optional<UUID> chatLobbySubscribe(UserId userId, String lobbyName, UUID cLId) {
-        _LOGGER.info("ChatLobbyTable.chatLobbySubscribe : " + userId + ", " + lobbyName);
+        _LOGGER.info("ChatLobbyTable.chatLobbySubscribe : userId={}, lobbyName={}", userId, lobbyName);
         
         BoundStatement cLInsert = _CHAT_LOBBY_INSERT.bind(cLId, userId.getId(), lobbyName, 1);
         _session.executeAsync(cLInsert);

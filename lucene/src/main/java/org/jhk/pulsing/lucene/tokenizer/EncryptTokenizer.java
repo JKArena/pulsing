@@ -64,7 +64,7 @@ public final class EncryptTokenizer extends Tokenizer {
         termAttribute.setEmpty();
         String token = _values.get(_position++);
         
-        _LOGGER.info("EncryptTokenizer.incrementToken: token - " + _position + " / " + token);
+        _LOGGER.info("EncryptTokenizer.incrementToken: position {}, token {}", _position, token);
         termAttribute.append(token);
         
         return true;
@@ -90,12 +90,12 @@ public final class EncryptTokenizer extends Tokenizer {
             iException.printStackTrace();
         }
         
-        _LOGGER.info("EncryptTokenizer.decrypt: encrypted value > " + encrypted.toString());
+        _LOGGER.info("EncryptTokenizer.decrypt: encrypted value > {}", encrypted.toString());
         try {
             
             String decrypted = _aCipher.decrypt(encrypted.toString());
             
-            _LOGGER.info("EncryptTokenizer.decrypt: decrypted value > " + decrypted);
+            _LOGGER.info("EncryptTokenizer.decrypt: decrypted value > {}", decrypted);
             
             _values = Arrays.asList(decrypted.split(" "));
         } catch (InvalidKeyException | NoSuchAlgorithmException | NoSuchPaddingException
