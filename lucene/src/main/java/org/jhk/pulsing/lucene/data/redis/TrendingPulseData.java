@@ -76,7 +76,7 @@ public final class TrendingPulseData implements IData<Long>{
                     .collect(Collectors.toSet());
         }
         
-        _LOGGER.debug("TrendingPulseData.getData: data - " + data);
+        _LOGGER.debug("TrendingPulseData.getData: data {}", data);
         return data;
     }
 

@@ -93,7 +93,7 @@ public final class ChatMessageTable implements ICassandraTable {
     }
     
     public void messageInsert(UUID cLId, UUID msgId, long from, long timeStamp, String message) {
-        _LOGGER.info("ChatMessageTable.messageInsert : " + cLId + " - " + ";" + message);
+        _LOGGER.info("ChatMessageTable.messageInsert : cLId={}, message={}", cLId, message);
         
         BoundStatement cLMInsert = _CHAT_MESSAGE_INSERT.bind(cLId, from, msgId, timeStamp, message);
         _session.executeAsync(cLMInsert);
@@ -109,7 +109,7 @@ public final class ChatMessageTable implements ICassandraTable {
      * @return
      */
     public ResultSet messageQuery(UUID cLId, Optional<String> pagingState) {
-        _LOGGER.info("ChatMessageTable.messageQuery : " + cLId + " - " + pagingState);
+        _LOGGER.info("ChatMessageTable.messageQuery : cLId={}, pagingState={}", cLId, pagingState);
         
         BoundStatement cLMQuery = _CHAT_MESSAGE_QUERY.bind(cLId);
         cLMQuery.setFetchSize(_MESSAGE_FETCH_SIZE);
@@ -121,13 +121,13 @@ public final class ChatMessageTable implements ICassandraTable {
     }
     
     public void messageViewCountInsert(UUID msgId, long userId, long timestamp) {
-        _LOGGER.info("ChatMessageTable.messageViewCountInsert : " + msgId + "/" + userId + " - " + timestamp);
+        _LOGGER.info("ChatMessageTable.messageViewCountInsert : msgId={}, userId={}, timestamp={}", msgId, userId, timestamp);
         
         _session.executeAsync(_CHAT_MESSAGE_VIEW_COUNT_INSERT.bind(msgId, userId, timestamp));
     }
     
     public ResultSet messageViewCountQuery(UUID msgId) {
-        _LOGGER.info("ChatMessageTable.messageViewCountQuery : " + msgId);
+        _LOGGER.info("ChatMessageTable.messageViewCountQuery : {}", msgId);
         
         return _session.execute(_CHAT_MESSAGE_VIEW_COUNT_QUERY.bind(msgId));
     }
