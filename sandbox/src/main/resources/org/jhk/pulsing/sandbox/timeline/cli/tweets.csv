@@ -1,0 +1,500 @@
+643576332438388737,989489610,1442275529,@marcua oooo I want to hear/read the story! These are my kind of bugs!
+643486000384049152,989489610,1442253992,@viktorklang @pbailis @neha I think I agree with this thread: a) CC aborts are surprising b) retries are also easy to screw up
+643067008838320130,989489610,1442154097,@pcalcado I think this *the* reason to use microservices: organization and process. The first "value stream" sadly looks very familiar :)
+643057991370080256,989489610,1442151947,@jay_gee good option during rush hours. When the roads aren't busy a cab is 30 mins for $53 plus tolls and tip; I only rarely take the train
+639845739699437569,989489610,1441386086,@yschimke I think I know exactly what conversation this is referring to. I'm not sure I was actually able to help though.
+635808498622685184,989489610,1440423533,@giltene @ArielWeisberg Twitter's JVM does that for some things (thanks @cvarming @TonyPrintezis, team), but not GC log. Maybe it should?
+635638758050664448,989489610,1440383064,Work on important problems, ignore metrics, teach well; *everyone* should follow @mattmight's advice on tenure: http://t.co/HqXu9mEcYM
+635559599408586752,989489610,1440364191,@giltene thanks! In this case: the api doesn't look like IO, so I bet people didn't even think about it
+634481787742236672,989489610,1440107220,@ArielWeisberg read a bit of code: hotspot calls gclog_or_tty-&gt;flush() a few places in a safepoint; probably can block it on rare occasions?
+634465817069883392,989489610,1440103413,@ArielWeisberg guessing it is less likely? file must be dirty, then write-out from FS, then GC/safepoint logs; stats file is *always* dirty
+634438427187019776,989489610,1440096882,@AlTobey @ArielWeisberg don't even need to remount. Pauses can be triggered with dd. See the bottom of http://t.co/07fKycNjoc to repro
+634437890991353856,989489610,1440096755,@ArielWeisberg logs write to a buffered file, I only tested mmap; possible but i don't know without testing it
+634413686044631042,989489610,1440090984,@neha @marius @wm @BuoyantIO ha excellent! I'd love details about gc avoidance in prod; as would @mnnakamura who worked on it in finagle
+629627829093662720,989489610,1438949947,I don't think "co-founder" should be a job title, its a footnote. It bug me when someone gets the title well after the company was founded.
+629320985619992576,989489610,1438876789,@hongrich Ah, interesting! Having written a checker based on that code, it should be pretty easy to fix that limitation.
+629318874517757952,989489610,1438876286,@hongrich yeah, closure capture is basically the same error, but go vet already checks for it.
+628972257537208320,989489610,1438793646,@edwardbenson Thanks! You mean with using closures in a loop? (go also has this problem, but go vet checks for it)
+628961752110116864,989489610,1438791141,In Go: don't take the address of loop variables; easier mistake than I thought. (bonus: an example automated checker) http://t.co/33AqlDrWOO
+627326355319992321,989489610,1438401232,@wellskatie ha you are the third person to say something about it in the past month. I guess I'm looking older these days :)
+620182024553385984,989489610,1436697891,@dtbpoker solid write-up about your elimination. Amazing run; congratulations on the free wsop trip
+620060689026183169,989489610,1436668963,@dtbpoker bravo sir, bravo
+618279273766461440,989489610,1436244240,@andy_pavlo this email lives up to my expectations. Please tell me this is actually an address he has people check
+613802650866446336,989489610,1435176930,@yschimke yep; I'm ready for the impending leap second of doom!
+609042492906831872,989489610,1434042020,@gillianim @menghe @vijayp @ahilss @MitroCo Can you email me your questions at ej@evanjones.ca and I'll try to answer? Thanks.
+603713601984135169,989489610,1432771513,@cvarming except then it would skip my stop! Seriously: I recall an article saying it would skip the busiest stops on the f if it did that
+603295445067014144,989489610,1432671817,Debugging Java native memory leaks: Always close GZIP streams; use jemalloc's profiler http://t.co/Xm3jo3TQ7X
+596122455778926592,989489610,1430961643,@mikecvet @kylegalloway as someone who grew up in Calgary and has not been following the news: WHAAA? Amazing
+594621731148570624,989489610,1430603842,@sojoodi we looked but the programs all had conditions that did not apply. Eg this program requires a partnership with an ny state uni
+592360784602226689,989489610,1430064791,@vijayp @_v different kinds of coffee; espresso is my vice although I can appreciate a good pour over
+586846536446779392,989489610,1428750092,Apple's App store hurts users: https://t.co/m1bI5CN2bU (IMO it hurts *developers* and is a key reason I use Android; thanks @krave)
+585814925701947392,989489610,1428504136,@SeanTAllen thanks! Glad it wasn't too long and borning :)
+583656054203916289,989489610,1427989421,@JorgeO @SeanTAllen See http://t.co/QYLt0rKglL ; probably too long, but I spent a lot of time on this and am still excited about it
+583655828449665024,989489610,1427989367,@SeanTAllen Did you ever find out if this was the cause of your weird JVM pauses?
+583655692571054083,989489610,1427989335,How I figured out that the JVM statistics file can cause GC pauses: http://t.co/QYLt0rKglL (a long debugging story)
+581276872241123328,989489610,1427422180,@pgbovine Ha. Figuring out these kinds of bugs feels so awesome though!
+581232431287668737,989489610,1427411585,@scode thanks! Happy to see my time not go to waste :)
+581201769276960768,989489610,1427404274,@bitbckt Agree its not ideal. Twitter's JVM team has been awesome and are looking at a real fix, as are Hotspot devs: http://t.co/6FaYFkExpk
+581199712167940096,989489610,1427403784,@bitbckt trade-offs. I don't use jstat; jstack still works. Using a RAM disk requires system config or symlinks. The flag works on all JVMs.
+581197790304301056,989489610,1427403325,@nelhage @JorgeO I wasn't that smart :( Give me a day or so to finish writing, but basically a lot of looking at random graphs and logs.
+581174316730990592,989489610,1427397729,@JorgeO I'm on it! The blog post was getting too long so I wanted to get the technical details out.
+581154389613621248,989489610,1427392978,@SeanTAllen If this turns out to be the cause, I'd love to hear it. It was a config diff like this that let me figure it out (future post)
+581152570598551552,989489610,1427392544,@SeanTAllen Similar symptoms? high real time, low user + system? Related links in my post have other things to look at; weren't my problem
+581147928758071296,989489610,1427391438,@SeanTAllen It does *not* happen if the mmaped writes are to a file on tmpfs. I should call that out more clearly in my post ...
+581117094919450625,989489610,1427384086,@nelhage can't change the path without recompiling the JVM (os::get_temp_directory); -XX:+PerfDisableSharedMem works and breaks few things
+581114504785727489,989489610,1427383469,@nelhage Good point. Maybe the kernel could OOM kill, like it would for anonymous mmap? Kernels are hard; they must handle everything.
+581107707014299648,989489610,1427381848,@arvind__t Depends; on systems with magnetic disk and lots of IO it may affect the 95th and 90th percentile as well.
+581107376897581057,989489610,1427381769,@nelhage Thanks, looks potentially relevant. Still surprised something blocks mmaped writes. JVM authors didn't expect that either.
+581103465528573952,989489610,1427380837,My hardest bug: JVM pauses caused by the default config; disable stats to reduce latency caused by mmap writes http://t.co/07fKycvHZC
+580098864381722624,989489610,1427141321,@bolivar We'll see what we can do, thanks for letting us know.
+577958486786621440,989489610,1426631015,Poutine: that's how I know I'm back in Canada.
+567865316518289408,989489610,1424224616,One advantage of grilling in the winter: it is very obvious when the grill is hot. http://t.co/SeZQEecSO5
+566043274360934401,989489610,1423790207,@FlyTheDamnPlane yes!!!
+564595851738513410,989489610,1423445115,@emax yeah no kidding! Drop me a note if you are ever in the area.
+559519627588288514,989489610,1422234849,@hobbyist @pbailis Good point! something like CoDel is what I had in mind. Wondering if it applies without modification to large scale RPC?
+559482455577882624,989489610,1422225986,@naz_erkan I've definitely been guilty of inflicting that one on someone once :(
+559401684418723840,989489610,1422206729,@pbailis true. I got paged by a service failure that needs a queue limit; real need. Potentially ideal academic work: theory + practice
+559364536042807297,989489610,1422197872,Any reading suggestions on self tuning queues for real-world RPC? There must be a ton of work; having trouble finding any.
+553359327000403968,989489610,1420766119,@lazyboyair hello! Is there fictional service in new York? :)
+544232356673228801,989489610,1418590079,@keybaseio Verifying myself: I am epcjones on Keybase.io. 2Rc2pvSU4wxQaKzWVvsA-hNuZnR-YhcEGqL6 / https://t.co/C0Gk9Yb9cU
+542337234431930370,989489610,1418138247,@sirrice Ha, I opt not to publish it :) it was mostly a way to make sure I was able to go to CIDR!
+541308478615486464,989489610,1417892972,@blackmad ah interesting; powered by sqlite under the hood. Thanks; will check it out
+541291437779083264,989489610,1417888910,The sqlite3 command line is surprisingly useful for ad-hoc data analysis: no config, faster than writing a script: http://t.co/zX7XUTKulX
+537593722717102080,989489610,1417007306,@MathiasHansen ha yeah, that's also part of the problem. :) Thanks for then kind words and we'll try to help the best we can.
+537433289192398849,989489610,1416969055,@MathiasHansen the reality is this is part of the reason Mitro wasn't commercially viable: It doesn't solve a valuable enough problem. :(
+533978140188884992,989489610,1416145284,@samkottler I must admit I've used git repositories to find people's private email addresses...
+526137188128653312,989489610,1414275855,@davecheney @enneff I couldn't have said it better. I think erring on the side of minimal is the right policy.
+526125018749865984,989489610,1414272954,Frameworks have a deserved bad rep. However, I think good ones are needed for large-scale software (even in Go): http://t.co/RhmVAB3eB0
+526124815682633728,989489610,1414272905,@davecheney @enneff I have a pretty broad definition of framework. net/http counts, and is an example of a good one: http://t.co/RhmVAB3eB0
+526062903246729216,989489610,1414258144,@alambert ah, makes sense; but what about hw limits? A hw root key and software to manage child keys?
+524751925909389313,989489610,1413945583,@enneff @davecheney true; I've just been thinking about big programs. Some abstractions=useful, others=pain. I want to understand the diff
+524749133719302144,989489610,1413944917,@davecheney @enneff although net/http takes calls your handlers "magically" :) I like @enneff's "few demands on structure"
+524742575216140288,989489610,1413943353,@enneff @davecheney I worked in the old c++ era. Heck of a lot more than RPC came with the default server. Isn't that a framework?
+524742072327475200,989489610,1413943233,@davecheney probably the issue. What is a framework? this convo is probably be too nuanced for twitter. Maybe I need to write a blog post
+524733055182045184,989489610,1413941084,@davecheney I'm not a fan of frameworks, but at GOOG and TWTR: the "standard" server provides useful infra.; looks a bit like a framework
+524731813642903552,989489610,1413940788,@davecheney what about for big programs/orgs? everyone assembles their own routing/logs/stats/rpc/etc? Are frameworks a "bad abstraction"?
+524378062465798145,989489610,1413856447,@Sstack83 @timbray is this satire? If not, this sure proved Tim's point.
+519904292829159425,989489610,1412789817,Finally got around to saving my configs to a dotfiles repository. Its useful, but keep it simple (oops): http://t.co/WfrjE0L1op
+519676613575704577,989489610,1412735534,I didn't realize that Google's Unconcious Bias at Work talk is on YouTube. Highly recommended (~45 mins): https://t.co/9B2yilTLMC
+518054078367424512,989489610,1412348691,@karlseguin yep, but when I encountered it for the first time it was super confusing. Unlike java/c++ and others
+518035709975097344,989489610,1412344312,@francesc returning a specific error type instead of error and getting mysterious nil pointer exception: http://t.co/wxNinLzano
+517638341115015168,989489610,1412249572,@leifwalsh @jamesgolick its sort of unmaintained unfortunately. Trying to find an org interested in adopting it.
+517371545912889344,989489610,1412185963,@tsantero ah, that makes sense. Those are harder to understand, are rare, and if they are silent: very hard to know you are losing data!
+517368698039205888,989489610,1412185284,@tsantero really? I'd be interested in the details behind that observation. Even obvious things like backups?
+516605018376765440,989489610,1412003209,@chrismaddern This is why I started using android a few years ago. As a dev I don't want there to be only one phone platform
+511023622891536385,989489610,1410672500,@EvanW2K so much for not being on Twitter.
+509734364364955648,989489610,1410365117,@edwardbenson good idea. I actually think PhD and startup work are quite similar, more than startup and bigco software engineering
+508236173731725312,989489610,1410007921,@AntoineGrondin Hex Fiend! http://t.co/ttcUHYR2ev
+506881482036875264,989489610,1409684937,If you want to script preferences on Mac, see the following. Finally can force all dialogs to use column view: https://t.co/EFDMifhJo2
+502893009273647105,989489610,1408734011,@neil_conway @eikke @benbjohnson not to mention scanning a huge log at startup can be many times slower than writing an "all clean" record
+501738281462398976,989489610,1408458702,I think novelty is a big encouragement to adopt new programming languages: it makes solving the same problems yet again more interesting
+500993799326547968,989489610,1408281204,@thirteen if only you had tagged your location I would know what town you are talking about :)
+500768122643947522,989489610,1408227398,@mikebroberts I didn't think I would succumb to this problem. I was wrong. Looking forward to the rumoured 12" Macbook Air Retina
+497762728572755968,989489610,1407510857,@ChristopherFong both "Hatching Twitter" and "The Everything Store" are fun tech biz history books
+497538287276670976,989489610,1407457346,@okvivi also heroku, reddit, skype, omniti, braintree
+495327662488178688,989489610,1406930292,@samkottler @vijayp @MitroCo thanks! Looking forward to figuring how how to grow a community around it.
+494911854293295105,989489610,1406831155,@menghe @MitroCo yes actually! We should add to Github. We have some HTML of your new UI here: https://t.co/5OcsY3iA41 maybe there?
+494904090896252930,989489610,1406829304,@menghe @MitroCo thanks, and thank you for all your help. Already receiving positive comments about your work: https://t.co/tBn93ogHZV
+494583291660349440,989489610,1406752820,@vj_chidambaram Good Q. Google and Microsoft both have things like EBS. Seems hard to test without insider knowledge or access though.
+494573077876211712,989489610,1406750385,@vj_chidambaram @Obdurodon ha, let me know if i can help with the paper; I don't even need credit since I'm no longer an academic :)
+494517248263221248,989489610,1406737074,@spyced @Obdurodon could that be diff between "cached in guest" and "wrote to host"? Maybe I should test O_DIRECT vs O_SYNC ...
+494479098019074049,989489610,1406727978,@vj_chidambaram @Obdurodon So many conflicting stories and evidence. This needs a blog post...
+494259050670862336,989489610,1406675515,@Obdurodon @vj_chidambaram exactly! part of reason I'm asking. Ideally means in memory of &gt; 1 machine w separate power? I'm pessimistic.
+494239306106802176,989489610,1406670807,Anyone know if fsync() actually works on AWS/Google Cloud? If host crashes, is my data durable? I've tested reboots, but that's limited.
+494177941379874816,989489610,1406656177,@neil_conway I was going to argue its because no one uses it, but that's clearly not true. I'm curious: what promoted this complaint?
+492722113430577153,989489610,1406309080,@hyc_symas It could also be the sector checksum? So the disk doesn't let you read the partial write ("Unrecovered read error" in my test)?
+492668473458569216,989489610,1406296292,@hyc_symas @benbjohnson @armon old, but I power crash tested HDs: http://t.co/bpGga1jxOu I got media errors, but always atomic sectors
+483607368115421184,989489610,1404135956,@samkottler I think I agree (provided the transport "works"), but I think syntax contributes to re-usability, as @nieveg mentioned
+479985341508902915,989489610,1403272397,@leifwalsh the problem is when sophisticated users have a problem I worry that we might have an obscure bug in the client ...
+479971829097181184,989489610,1403269176,Makes me cry when people forget their Mitro password, since all I can do is delete their account. Happens more than I would have thought.
+479045349462798338,989489610,1403048286,@edward_ribeiro @neil_conway @pbailis yes, excellent correction/clarification
+478910857003675648,989489610,1403016220,@neil_conway @pbailis My theory: no serializability errors in development or at low scale because there is no concurrency.
+472443822870646784,989489610,1401474359,@pamelafox no we do it the old fashioned way: load a list of js files that we maintain manually. LMK if there is something better
+472430558132588545,989489610,1401471197,@pamelafox See the "making it work in both" section: http://t.co/wiQikIBBZr Works for us in all three; comments welcomed
+472403141057867776,989489610,1401464660,@emilsit not installs but we have seen corrupt local storage, where all writes and reads fail. There was a crbug for this issue
+471758150467469313,989489610,1401310882,I finally figured out how to write JavaScript that works in the browser, Node, can be unit tested and type-checked: http://t.co/yyitu1OSLp
+469184682450366465,989489610,1400697319,@yaaang I think all consensus algs are the same; although there are so many details for replication they are also all different
+466017070107222016,989489610,1399942102,@jrk Although I did include "golang" in my blog post for SEO purposes :) I figure Twitter is a write-only medium so it doesn't matter there.
+465912280488902656,989489610,1399917118,I'm willing to publicly admit I think Go is great. Its not perfect, but it makes software engineering less painful: http://t.co/nqQfaL6B2n
+464817377029664768,989489610,1399656073,Wow, ~42% of people talk to their mom more than once a week?https://t.co/8MyZSnoDNS Impressed. (PS Mother's day on Sunday) thanks @ak
+461536999586164736,989489610,1398873970,@amalt @heyfeifer @vijayp yeah, but he doesn't typically stay awake longer than 24h, he just has a "drifting" sleep schedule, but I'll ask
+456430097243713538,989489610,1397656389,Fun DB history: Part of success of Ingres: written for experimental OS (AT&amp;T UNIX); helped Ingres's popularity when it took off #sb70
+456427924007047168,989489610,1397655871,Marti Hearst on Stonebraker: "in 1995 tied #1 with most female PhDs ... not explicit desire but because he treated everyone the same" #sb70
+456427652341985282,989489610,1397655806,Marti Hearst on Stonebraker: "he just assumed I was good ... first time ever at Berkeley." http://t.co/Tr4AFPSwNR (04:41:30) #sb70
+454025648424890368,989489610,1397083124,@cperciva I approve of this design, but doesn't RAM of stunnel contain sensitive data, since all data passes through it?
+453320737198444544,989489610,1396915060,@nelson some people definitely did. E.g. Cloudflare: http://t.co/yijvoD001j
+452052905575858176,989489610,1396612786,@jgrahamc That is how BitTorrent Inc makes money. This is a pretty interesting article about it: http://t.co/1gRzTxB1jh
+450972701197611008,989489610,1396355245,My April 1st experiment: A public shared twitter account @notsecretapp ; Will it be used for evil or comedy? (powered by @MitroCo)
+445389438248841216,989489610,1395024091,@noUpside I've wondered if sharing utilities 50/50 might be best. Some incentive to insulate/upgrade, some to conserve.
+443894610566598656,989489610,1394667696,How to write code for Mars: http://t.co/yeQRqWrh3e Reliability from "redundancy": asserts, tests, multiple static analyzers.
+443735010940817408,989489610,1394629645,@StackChefs um, ❤! I have a soft spot for muffins; made my morning.
+441227425234444289,989489610,1394031790,Why most A/B tests are flawed (not following best practices for experiments): http://t.co/tcp4izGxuM Very readable; I should learn stats
+438504579551227904,989489610,1393382613,@pbailis @HenryR @ms705 @adferguson  oh wait, planetlab all pairs pings archived at: http://t.co/orPVG1mzdj I had others all now old
+438502849044307968,989489610,1393382200,@pbailis @HenryR @ms705 @adferguson I did. But they weren't great and I'm not 100% sure where they are. Will take a quick look tommorow
+438405332386476032,989489610,1393358951,Reminder to self: One repo is better than many repos, at least for one company/project. Makes dependencies and bug isolation easier.
+436865364094631937,989489610,1392991794,@LionelBarrow @coda @steveklabnik I was curious: 2.5 hours with a quick-and-dirty Go program. Could be way faster: https://t.co/kDQC0p6IUe
+436322100056690688,989489610,1392862269,@coda missed this the first time: "shared salt", no function, so SHA1, or something fast? probably could reverse phone hashes in ~1 day?
+436314716093566977,989489610,1392860509,@coda @steveklabnik I'd love to see details about the hash algo. I assumed Hash(number) must be constant across phones, meaning no salt?
+436313706608488448,989489610,1392860268,@strlen A few years ago, I *think* I tested ext4: writing to a zero filled file was slightly faster than fallocate(), excluding prefill time
+435786581408899072,989489610,1392734592,@noUpside @rgrchen I'm impressed that this manages to lampoon both tech and finance at the same time.
+434713456256614400,989489610,1392478739,@MichaelMontero JS is popular since it is the only browser lang. Its flaws are worst for "large" projects, so many people don't hit them.
+431999079221317633,989489610,1391831581,@blackmad wow it must be fun to type the punycode version of your email addr into every form on the web. can't imagine many accept nonascii
+431997940203520000,989489610,1391831309,@blackmad except aren't non-ascii domains mostly a myth? I still have some bad memories about them...
+430425817705742336,989489610,1391456486,@jerrykuch @HenryR My talk's argument: 100% of all programmers will make those mistakes occasionally if the API lets you.
+430406522397413376,989489610,1391451886,@jerrykuch @HenryR no experience with STM, but I think txns are useful, if used carefully. A better API may help avoid bugs.
+430404681286680576,989489610,1391451447,@leifwalsh I still ♥ txns, but nearly every API makes it easy to write bugs. Txns also don't solve all concurrency problems
+430371937538150400,989489610,1391443640,I did my PhD assuming transactions make programming easier. Turns out that sometimes they cause bugs: http://t.co/5F2dfYSqiW
+429239278980182016,989489610,1391173593,@pgbovine @marcua @imjuhokim @AllTom @krilnon @neha @sirrice it was mostly ranting about transactions
+426457375709474816,989489610,1390510336,UBM Tech are spammers. Attend one conf, you get all their confs's spam. Unsubscribe all link buried: http://t.co/Ssz6mCCVer @UBMTech
+426056718905114624,989489610,1390414812,@datatelling "Unlocking the Clubhouse" is my pick for CS. Summarizes an academic project and has lots of references: http://t.co/lfQzUF6jMH
+425273659742121984,989489610,1390228116,@BvCdP @vijayp computing needs cultural change, which is hard and slow. The image I posted may be clever, but sends the wrong message.
+425257572463939584,989489610,1390224280,From a startup web site, since we all know only men can be good at technology. http://t.co/fVDMetA9qa
+423284023410974721,989489610,1389753750,Command-line murder mystery: its actually kind of fun. Potential for an indie game? http://t.co/Nuvb1xZ5kX
+422146435253940224,989489610,1389482527,Want to know why there are so few women in computing? Read Unlocking the Clubhouse: http://t.co/lfQzUF6jMH 12 years old; still relevant
+421018456071208960,989489610,1389213596,@marcua Test program and a README. I might be wrong, but feel free to correct me: https://t.co/VKycL4jHvN
+421006525042151424,989489610,1389210752,@marcua Postgres doesn't support READ UNCOMMITTED (it is treated as READ COMMITTED), so I think yes! I have a test program if you want.
+417436117676195840,989489610,1388359500,SSDs: still losing data on power failure: http://t.co/AHcGWV3s7w Reminds me of August 2010, when I did similar tests: http://t.co/D8yU7UPZGY
+417355394164334592,989489610,1388340254,Pet peeve: APIs that return a list, but return null/missing to indicate "empty list". Google Apps Directory API: I'm looking at you.
+416642192275304449,989489610,1388170214,Boston-area data fan? Attend/talk at New England DB Summit. It's a good mix of academic and industrial stuff: http://t.co/jbGp9HywCL
+416301852095836160,989489610,1388089070,Interesting overview of a billing system, but its actually about how smart design decisions makes better software: http://t.co/jbwA74fWsB
+411222403901956096,989489610,1386878035,@maccaw agreed, but adoption is hard (lots of existing apps). I've ended up building a password manager to help upgrade gracefully
+411220872653844481,989489610,1386877670,@devongovett Sadly upgrading every app in the universe is hard, so I've ended up building a password manager: (it works with everything)
+410786972077019136,989489610,1386774220,Are there docs for JVM -XX options other than http://t.co/wXVuVMq4Nh ? E.g. Thread.setPriority requires -XX:ThreadPriorityPolicy=2 argh.
+410070326391762944,989489610,1386603359,Dependency injection in 2 minutes: Focus on tests. http://t.co/f005WlJVy9 And please don't use it as an excuse to over-complicate your code.
+405509896830853121,989489610,1385516068,@alexras @pbailis We have a product! We would love to have you try it. Passwords available now, certs/keys are on the roadmap. Will email.
+403311907857125376,989489610,1384992026,Gender imbalance in software is bad, but is TERRIBLE in early stage startups. Why are there so few women entrepreneurs? How do we fix it?
+400382804237623296,989489610,1384293673,@pbailis agreed; although I think app devs should do whatever it takes to get v1 working, until you prove people want your app
+399305041195958272,989489610,1384036715,@erik_paulson Oh really? AFAIK, no one at MIT CSAIL is taking advantage of this. Any idea who is? Or why people don't use it?
+399298886126166016,989489610,1384035247,My answer: 1. Commercialization; 2. Get agencies to support "software infrastructure" (the CS version of equipment)  http://t.co/fmO6oiBTTX
+399298382172131328,989489610,1384035127,Important Q: @johnregehr asks "how can academics produce good software?" http://t.co/rBSSB19lLs
+392649836656226305,989489610,1382449990,@timbray fascinating, but it will need a "killer app" to get people to adopt; my attempt: start with account mgmt: https://t.co/OELOpJIsqi
+387975597558734848,989489610,1381335565,Just found Security Engineering, awesome free book from prof Ross Anderson. Readable with real-world examples: http://t.co/50VS6zR42u
+386979831117660160,989489610,1381098156,Yext's Java build system ICBM uses a hack that is both disgusting and brilliant: parsing Java with regexps: http://t.co/ASotuBPlCc
+384805600569217024,989489610,1380579779,@greenfie @vijayp I think he meant to give the impression that you should be organized and prepared when fundraising. It was ... complex.
+382589284932280320,989489610,1380051368,@pbailis Just remembered: "fake" workload that needs &gt; 100 updates/s/item: TPC-C: Nearly all txns update warehouse, district (for sums)
+380461232224210944,989489610,1379544001,@sweis @jedisct1 @veorq @tqbf including a JS implementation that @tqbf would "love": http://t.co/vTomhIJjct
+375759363643670530,989489610,1378422988,@JorgeO Ha; discussed if we should be using NIST-approved algorithms, based on that article. DJB's NaCL looks better today :)
+375748999531073537,989489610,1378420517,I guess this means my startup is no longer stealthy: http://t.co/UJ4kClke2e
+373542910991429632,989489610,1377894544,Some of what I've been up to at Mitro: implementing Google's Keyczar encryption library in JavaScript: http://t.co/joc7EOEOB5
+369246837946843136,989489610,1376870281,Unicode acid test: Paste an emoji character in text fields. I like: 🍜 (added to Unicode Oct 2010; still breaks a shocking amount of stuff)
+364816972426383360,989489610,1375814118,Today's annoying database issue: Postgres rejects null chars in strings. Sort of understandable, but also killed half a day with debugging.
+364381365485072384,989489610,1375710262,Ah COBOL. Production software rarely dies (actual error message from a bank): http://t.co/6T6JU37M81
+364187668956987392,989489610,1375664081,I've had a change of heart: Compilers are good for productivity http://t.co/coI4idVkOu
+351680444577742848,989489610,1372682126,Last week I fixed a Java memory leak for the first time in years. Note to myself about how, maybe useful for others: http://t.co/RHP2gyhsNx
+350610369179422720,989489610,1372427000,@marcua good point: I suspect many G Reader users won't bother moving, and will give up on blogs. Good timing to join Twitter on my part?
+347740948249329664,989489610,1371742877,I'm very sad to announce that I'm now on Twitter. :( http://t.co/D70dQgXgNZ
+644844719030337536,10224712,1442577936,Tech conferences... @ Skills Matter https://t.co/Rexwr0UEOz
+644554698004033536,10224712,1442508789,RT @jasonmustian: I think Trump just did all the emoji faces in 7 seconds. http://t.co/hC18pVxKgh
+644450656670097408,10224712,1442483984,@Gshtrifork @KarenMartinOpEx Damn, I had to take a call in the hotel, heading there soon -_-
+644187783037349888,10224712,1442421310,@aaronmblevin @folone @missingfaktor ¯\_(ツ)_/¯
+644185543505498112,10224712,1442420776,@folone @missingfaktor @aaronmblevin I think they call it "a Haskell" or something
+644184699796070401,10224712,1442420575,Worst about leaving SoundCloud? Right now @folone @missingfaktor and @aaronmblevin discuss some ASCII art-driven-development topic on slack
+644081675949998080,10224712,1442396012,@danielbryantuk @adrianco @GOTOldn apparently I walked in the room 5 mins too late -_-
+643812180182331393,10224712,1442331759,@capotribu unfortunately no, in town just for @GOTOldn and flying back Friday evening
+643809952478437376,10224712,1442331228,It doesnt matter how many times I've been to London, Euston station is still my Hotel California. #fb
+643748411662016512,10224712,1442316556,RT @codemonkeyism: If you think my "A Little Guide on Using Futures for Web Developers“ was useful, please help :-) https://t.co/1gPOJYxQPI
+643721730687672320,10224712,1442310195,@ejc3 Interesting! Did they have one on drawbacks?
+643721538001338368,10224712,1442310149,@danielbryantuk That sounds interesting, I have a topic I haven’t blogged about yet regarding microsvc and docker that can be a good fit
+643721268890595328,10224712,1442310084,@esuldashi AFAIK that’s just the jekyll default CSS, I definitely didn’t do anything myself :)
+643721163487715328,10224712,1442310059,@Selrahcd Oh, those were lost in the migration to jekyll. Will try to fix today, will let you know
+642715548506324992,10224712,1442070302,@edward_ribeiro That’s what I had before and forgot to port
+642710066261573632,10224712,1442068995,Just realised I’ve accidentally removed comments from blog when migrated to Jekyll. Not sure good or bad thing? Twitter seems good enough?
+642390865843986433,10224712,1441992892,Recruiting agency sends email to corp account wrt developers for hire and to my personal saying they saw I'm leaving and offering a job...
+642355242789638144,10224712,1441984398,@wkoszek Auch, thanks for the heads-up!
+642320208661774336,10224712,1441976046,@joeerl "I’m sorry Mr. Armstrong, but we may need to move you to the adjacent room. Yes, I know we’ve just moved you here, I’m sorry."
+642271770905550848,10224712,1441964497,@timrgoodwin @pingles it’s a date, then!
+642270129976418304,10224712,1441964106,London friends, I’ll be in your village from Monday for @GOTOldn and general shenanigans. Let me know if want to catch-up! #fb
+642239125807083520,10224712,1441956714,@borkdude Also try these http://t.co/igG1lZCIgH http://t.co/4nztHuCeVa
+642237677320937472,10224712,1441956369,@borkdude @RobAshton That’s, like, three blocks away from my flat :)
+642221636830273536,10224712,1441952544,@_beatpanic thanks!
+642031227776667648,10224712,1441907147,@adrianco thanks! I'm guessing we see each other in London next week?
+642014285099610112,10224712,1441903108,RT @droidconUK: Yay! @starkcoffee at #DroidconUK15: talk  'Microservices is our BFF: why SoundCloud stopped using its own public API for it…
+641955991182028802,10224712,1441889209,Every time I hang out with people from @wire… #fb https://t.co/chrBbn3wQr
+641950287343820800,10224712,1441887850,. @discordianfish not yet. still looking for whatever I go do after SoundCloud...
+641918687390343168,10224712,1441880316,@jamiemills Thanks! I use OmniGraffle + https://t.co/0duklz2kgy
+641881942800121856,10224712,1441871555,@bodil I know exactly what you mean. I'm doing most of mine over Skype, which makes everything easier and harder at the same time
+641690664611237888,10224712,1441825951,As bad as this gig is, it's still better than Apple nusic
+641686655041163264,10224712,1441824995,&lt;something about tactilely Snapchat&gt;
+641681876873297920,10224712,1441823855,OH "Tinderloin, the worst suburb in SF"
+641681631749738496,10224712,1441823797,Sooo... You've implemented right-click? Cool.
+641672955517366272,10224712,1441821728,Cue Gloria Gaynor... @ Wire https://t.co/gjkwZSzCCG
+641670874291138560,10224712,1441821232,If I had a social media expert they'd totes advise me against pushing an 18 page blog post same day as apple releases the iPencil #fb
+641670240875753472,10224712,1441821081,@juliansimioni OR IS IT A MAVEN? #50shadesOfGladwell
+641662818887028737,10224712,1441819312,RT @mrgan: Whoa. It's huge. http://t.co/LoehWE4oDk
+641641360538382336,10224712,1441814196,@rentalcustard Nope, I also can’t be bothered deleting my filters.
+641641031184871424,10224712,1441814117,You know you are in your leave notice period when you can’t be bothered flagging stuff as spam anymore. #fb
+641614432225894401,10224712,1441807775,@sentrylab me too :)
+641612654273019904,10224712,1441807352,@srshti I say “Feliz aniversario”, but “Paragons!” is way more popular
+641612476723920896,10224712,1441807309,RT @GOTOber: Be quick now! You have one more week to buy your ticket for an #earlybird price. After that the price will increase. https://t…
+641601435768111104,10224712,1441804677,In Portuguese we use the same word for “congratulations on ur achievement”, “happy birthday”,and “happy anniversary”. Fucking confusing. #fb
+641586326668726272,10224712,1441801075,My first blog post in ages: How we ended up with microservices. http://t.co/GOWjqyiBDx #in
+641518876296118272,10224712,1441784993,RT @benfraserlee: Incredible way of making my two star review seem like I didn't hate the film http://t.co/zvOyIxHQ3h
+641325587836071936,10224712,1441738910,"Wow, that's 50 checkins in Vietnamese restaurant s!" Yeh, Foursquare, it's called "Berlin"... #fb
+641175556134977537,10224712,1441703139,I’m never succesful is correctly spelling ‘successful’. #fb
+641156745134411776,10224712,1441698654,RT @Asher_Wolf: Sweden offers residency to all Syrian refugees http://t.co/iJGkwDvq2t http://t.co/ZlxLI8PZT9
+640946479461478400,10224712,1441648523,…right? #fb https://t.co/oCacsRcGXv
+640897883672322048,10224712,1441636937,@rla4 ooh u coming to berlin for a visit?
+640872291870576640,10224712,1441630835,@steviebraga Which of the many moves? :)
+640864774377635841,10224712,1441629043,Ok, finally moved my blog to github pages. Now, what should I write about?
+640216726760726528,10224712,1441474536,RT @lsinger: Politeness in open source: issues get fixed faster, more developers join, and they stay longer. https://t.co/zu7X2QoPaf
+639460552276865025,10224712,1441294250,RT @SciencePorn: A UFO, caught on tape. http://t.co/3kQyuDSrWl
+639382508438728704,10224712,1441275643,@appneta could you please stop spamming me? Thanks.
+639369655249960960,10224712,1441272579,RT @garybernhardt: A month learning Ember to be fast for its 5-year life? Yes! A month learning functional programming to be fast forever? …
+639131758521360384,10224712,1441215860,@thattommyhall Also, I’m in London the week after next. Pub? //cc @markhneedham @philandstuff @beccyanne
+639131649784025089,10224712,1441215834,@thattommyhall No plans yet, taking my leave notice (3 months… German labour law is interesting…) to talk to ppl and figure out.
+639131255104249856,10224712,1441215740,So, as I’m quitting eventually I need to return my SoundCloud computer. Havent bought a personal computer in 8 years, what should I get? #fb
+639044121559191552,10224712,1441194966,RT @mathiasverraes: There are only two hard problems in distributed systems:  2. Exactly-once delivery 1. Guaranteed order of messages 2. E…
+638771062344445952,10224712,1441129863,@dtemme @stralauinBerlin @starkcoffee @sthuebner @martinklose @lbalamut @ikusalic @ScottMuc where are you?
+638749776725471232,10224712,1441124788,@dtemme @stralauinBerlin @starkcoffee @sthuebner @martinklose @lbalamut @ikusalic @ScottMuc ok, let’s stick to prater then
+638745084960337920,10224712,1441123670,@stralauinBerlin @dtemme @xtcberlin @starkcoffee @sthuebner @martinklose @lbalamut @ikusalic @ScottMuc ...come to SoundCloud if u want
+638745056044797952,10224712,1441123663,@stralauinBerlin @dtemme @xtcberlin @starkcoffee @sthuebner @martinklose @lbalamut @ikusalic @ScottMuc Stupid rain. We can all just
+638670746282291200,10224712,1441105946,@stralauinBerlin @dtemme @xtcberlin @starkcoffee @sthuebner @martinklose @lbalamut @ikusalic @ScottMuc 19h it is
+638390831385313281,10224712,1441039209,As much as I don’t like monorepos, defensive programming against your own code due to laziness to sync repos is a thing indeed.
+638291038516453376,10224712,1441015417,@dtemme @xtcberlin @starkcoffee @sthuebner @martinklose @lbalamut @ikusalic @ScottMuc Sounds pretty doable… //cc @fmeyer
+637669280839020544,10224712,1440867178,RT @bodil: I'm quitting ad tech, and figured I'd try my luck announcing it on the internets again: would you like to hire me as a FP or JS …
+637293826353299456,10224712,1440777663,RT @solarce: scaling your startup's infrastructure http://t.co/B6wja2yGJs
+636956737787068416,10224712,1440697295,OH in der Straßenbahn: "What?! Pretty sure there's no 'Strawmanstraße'..." #fb
+636954207682211841,10224712,1440696691,One interesting thing about being a school dropout is that nobody told you text books aren't meant to be read cover-to-cover...
+636904650822819840,10224712,1440684876,RT @awkwafina: IF IM EVER WANTED BY POLICE, THIS IS HOW I WILL GO DOWN http://t.co/kwG8cpeIcc
+636844234344108032,10224712,1440670472,RT @adsquareTech: Adsquare is hosting a meetup on Microservice architecture! Talks from @RomeoKienzler, our CTO Fritz and @grandbora. http:…
+636840686864703492,10224712,1440669626,I knew there was some reason for this disgusting thing to exist: http://t.co/3LJcSN39jh #fb
+636596551025053696,10224712,1440611419,Shit you have to do when you don't have an Anglo name... https://t.co/CQkAcbrwqD
+636475765643694080,10224712,1440582622,RT @SkylerFoxy: A group of wolves is called a pack.  A group of crows is called a murder.  A group of developers is called a merge conflict.
+635060198248443904,10224712,1440245124,RT @ramez: "Dystopian fiction is what happens when you take what happens to marginalized people and apply it to everyone" - @leeflower
+634725662935355393,10224712,1440165365,@ScottMuc &lt; HTTP/1.1 539 Too Many Canadians
+634723865780965376,10224712,1440164936,@pcalcado  (3 months leave notice in Germany, if you are curious :) )
+634723746125885440,10224712,1440164908,After amazing 4 years, I'll be leaving SoundCloud by November.Still no idea what/where the next adventure is,keep tuned for updates! #fb #in
+634675768845565952,10224712,1440153469,RT @mikiobraun: Status right now https://t.co/JMUpFFIvXh
+634645072403955712,10224712,1440146151,RT @mjpt777: Interesting discussion about OOP by Allen Wirfs-Brock (@awbjs) https://t.co/pNXAWDQVtD
+634357186676826112,10224712,1440077513,RT @marick: The irreducible complexity of flagella proves there is a God. The irreducible complexity of software build systems proves there…
+634327302999044096,10224712,1440070388,@normanmaurer Imagine how many more you’ll find once you run the tests!
+634315016909533188,10224712,1440067459,I’ll be (attending, not speaking) at  #GOTOldn (http://t.co/UQJEgrPBlU) in a couple of weeks. Who’s game for a pint or twelve? #fb
+634300986123796480,10224712,1440064114,I can’t believe whoever named the language “Frege” lost the opportunity to have a language called “Gottlob”.
+634300218842980352,10224712,1440063931,We totally need a "pro-active manifesto”...
+634291366147817472,10224712,1440061820,@PragTob @pxlpnk @elise_huard You want to check out: @PapersWeLoveBln
+634270936737415168,10224712,1440056950,"The Youngest Manhattan Project Scientist Speaks" by Motherboard  https://t.co/H7vNjboUQ8 #fb
+633992977099173888,10224712,1439990679,Finally read “The Diffusion of Innovations" (http://t.co/EXM6o80w75) during SFO-&gt;ORD-&gt;TXL.Good, but 570 pages is about 220 pages too long.
+633115839248642048,10224712,1439781553,Every time I go like  `$ git rebase -i HEAD~…` I think of this: http://t.co/4C84j957v1
+633114474594074624,10224712,1439781228,@mcclure111 AKA teenager
+633105937843290112,10224712,1439779192,@gfredericks_ …so..many…puns…must…resist
+633105654614503424,10224712,1439779125,Surely you’ve read @timbray’s response to @nytimes, here's yet another take http://t.co/OmzrSZeKhb (although “data” is used tad too loosely)
+633088824671895553,10224712,1439775112,sufficiently nested use of containers, especially from a mac, is indistinguishable from schizophrenia
+632257390197481473,10224712,1439576883,@yswu was hoping we could catch up and share notes. Are you in and available for a coffee monday?
+632108603982409728,10224712,1439541409,@lyft except I had no batt left...
+632031894348017664,10224712,1439523120,RT @finagle: .@pcalcado from @SoundCloud wrapping up #FinagleCon with our afternoon keynote. http://t.co/OjAcyjxh8h
+632031809753079808,10224712,1439523100,RT @finagle: .@pcalcado at #FinagleCon: "We chose Scala because of Finagle." http://t.co/m9j8sD6ER1
+632031524611686400,10224712,1439523032,@cra @SoundCloud @zipkinproject we actually support it! @KristofAdr is our local champion!
+632031367480520704,10224712,1439522995,RT @travisbrown: .@pcalcado at #FinagleCon: "Twitter only has four Rails boxes left? I have hundreds…"
+632031248962076672,10224712,1439522966,RT @ScalaByTheBay: .@pcalcado that @NetflixOSS stuff had so many callbacks, it was so reactive, it's like you have a fight and your partner…
+632031076387438592,10224712,1439522925,RT @ScalaByTheBay: The @SoundCloud's very own @pcalcado is killing it in the final keynote of the very first @FinagleCon #FinagleCon http:/…
+632030978811170816,10224712,1439522902,RT @travisbrown: .@pcalcado at #FinagleCon: "Remember that the 'S' in SBT stands for the same thing as the one in SOAP."
+632029698290094080,10224712,1439522597,RT @finagle: .@pcalcado on the value @SoundCloud saw in moving to ThriftMux. http://t.co/TNX67SnnrX
+631585263823790080,10224712,1439416635,RT @NeinQuarterly: In German, "war" is past tense. It'd be nice to keep it that way.
+630778000192184320,10224712,1439224169,@ScottMuc Nice walls!
+630032033687969792,10224712,1439046316,RT @haacked: Days since we've had an off-by-one bug: -1
+629833785727676416,10224712,1438999050,@adrianco sounds fun! I'll ping u
+629730363926048768,10224712,1438974393,I'll be in SF next week (11-18th), let me know if you want to catch up! #fb
+629560146331570176,10224712,1438933810,RT @velocityconf: Set your time series data on fire. Björn Rabenstein &amp; @juliusvolz lead hands-on @prometheusio tutorial #VelocityConf http…
+629329990107140096,10224712,1438878936,RT @aaronmblevin: Woo! I'll be joining @SoundCloud as an engineer on the Insights team in Berlin! I'm so excited to work with the amazing p…
+628945080162852864,10224712,1438787167,Every time somebody says "dovetails" (and, for some reason, SoundCloud people say that a lot) I first understand "DuckTales" #fb
+628865690032865280,10224712,1438768238,RT @NixConBerlin: It's official! NixCon 2015 is taking place Nov 14-15 in Berlin. Registration open, as is the Call for Presentations: http…
+628855698672193536,10224712,1438765856,If thought we do this for Dubstep, but we do it FOR SCIENCE! https://t.co/Ty6Co43KGZ #fb
+628622229958471684,10224712,1438710193,RT @alexsandra84: Currently fixing acceptance tests :) #ILookLikeAnEngineer http://t.co/IpJrOPVjdn
+628536697744158720,10224712,1438689801,RT @MarkAgee: Donald Trump is like if Caps Lock was a person.
+627631934403936256,10224712,1438474088,Berlin is the land of one-dimensional bathrooms... #fb
+627497675106160640,10224712,1438442078,I just earned the 'The Gondolier' badge on @untappd! http://t.co/obIlwsxXwZ
+627135060370673664,10224712,1438355624,RT @LeviNotik: Put #Haskell on your resume even if you don't know it. When asked, say your resume is lazy and you'll learn it when results …
+627134455896010752,10224712,1438355480,New email in inbox. Subject: “Maintenance postponed by rapper diss war” #another-day-at-soundcloud-engineering #blessed  #fb
+627124928068874240,10224712,1438353208,RT @porras: Deploying JRuby #jrubyconfeu http://t.co/vnZnYeOpHk
+626823645298622464,10224712,1438281377,@tandaradie I may have a soundtrack suggestion… oh wait!
+626703274104766465,10224712,1438252678,. @svenlange  there you go! http://t.co/wwLYH6QXrm
+625614894591778816,10224712,1437993188,@daveoflynn 100% so far: scripts assuming host == docker host, 100% of time related to IP and -p switches
+625614340205510657,10224712,1437993056,“Build is broken when running with boot2docker” —the kinda bug report I dread the most these days...
+625594656391344128,10224712,1437988363,RT @sevikh: How Berlin’s Futuristic Airport Became a $6 Billion Embarrassment http://t.co/P0R97PZpOS via @business
+625480996025204737,10224712,1437961264,RT @peterglaser: • Wurst-Käs-Szenario http://t.co/x1VriG9V6O
+624605909445054465,10224712,1437752628,Sound check for hashtag-battle-of-the-bands on SoundCloud Summer Camp #scsc @ Kongresshotel Potsdam… https://t.co/1FEzfuUfbR
+624545116108271616,10224712,1437738133,@TulinGreen sounds interesting, maybe drop me a line at &lt;my first name&gt;@soundcloud?
+624202056795090945,10224712,1437656342,Programming 101 @ SoundCloud Summer Camp #scsc @ Kongresshotel Potsdam am Templiner See https://t.co/NaAlV2A55d
+623863771509993472,10224712,1437575688,Unikernels, unibrows, etc.
+623774382436032512,10224712,1437554376,Speaking of #thoseThings, that thing when you miss your flight because you fall asleep right in front of the gate. #fb
+623460872929869824,10224712,1437479630,Dear Starbucks Deutschland,  I'm not sure this is the best political moment for this depiction of… https://t.co/QsuwbzlMPd
+623455990495715328,10224712,1437478466,TXL-&gt;FRA for some Scala and microservices!  https://t.co/er4Mv19p30
+623406435054002176,10224712,1437466651,That thing when you use Safari for a whole day just because you are afraid of bringing up chrome and having to deal with thousands of tabs..
+622007630798671876,10224712,1437133150,Finally something actually worth a push notification... #fb http://t.co/uoCe7kg0Rx
+621760167210782721,10224712,1437074150,RT @finagle: We've just published the program for the first #FinagleCon! More about the lightning talks and other details soon— https://t.c…
+621677714244796416,10224712,1437054491,RT @ClassicalMusic_: One for the mathematicians (certainly not for our news editor...) - writing Bach's music as functions http://t.co/9285…
+621669156887339008,10224712,1437052451,RT @ScalaMeetupFfm: Next week 21-Jul @pcalcado will hail all the way from Berlin to talk about "Your microservice as a Function" http://t.c…
+621665983237869568,10224712,1437051695,RT @SoundCloudDev: Tech Talk: "Music Information Retrieval from a Multicultural Perspective" by Xavier Serra of @mtg_upf on Aug 6 https://t…
+621641047622287361,10224712,1437045749,@StewGleadow Totes read “will never be a great batman”, thought you meant Affleck
+621619027157327872,10224712,1437040499,TIL “the lowest temperature recorded [in Rio de Janeiro] was 10.1 °C (50.2 °F) on October 1977” explains so much…https://t.co/b8OaGiRx4H #fb
+620714029338783745,10224712,1436824731,I just earned the 'Bar Explorer' badge on @untappd! http://t.co/FD23pRqckd
+620695597776027648,10224712,1436820337,RT @sevikh: OH: "MongoDB is the Snapchat of Databases"
+620688608538808320,10224712,1436818670,RT @ScalaMeetupFfm: We've updated the details of next week's meetup. @pcalcado will talk about "Your microservice as a Function" http://t.c…
+620664169436704770,10224712,1436812844,Tl;dr Europe. @ Centro Di Firenze https://t.co/1vP73lMB9n
+618484804464607232,10224712,1436293242,RT @SoundCloud: Our latest update to web profiles is rolling out - header images and easier navigation for all http://t.co/GDT8705fjo http:…
+618009376494878720,10224712,1436179892,~10y living abroad and mum comes visit for the first time.Also her 1st plane and time out of Brazil. I think Im more excited than her... #fb
+617345172733607940,10224712,1436021533,"If you need absolute performance I would recommend copying/pasting the implementations and using your specific type https://t.co/jNatDAEFuE
+616908855658835968,10224712,1435917507,RT @mraleph: "Why #golang and #rustlang are not competitors? Because language without parametric polymorphism can't be a competitor to a la…
+616632491194122241,10224712,1435851617,RT @SoundCloud: Our updated app for iOS is live. Discovering your next favorite track has never been easier: http://t.co/ALDVTtCh9k http://…
+616604025967017984,10224712,1435844830,RT @harrymccracken: Your 2000 tech news update: Blockbuster signs 20-year deal with Enron to deliver VHS-quality video over DSL lines. http…
+616310947142045696,10224712,1435774954,Carreer-changing epiphany: when @acarlos1000 told me:“Enough excuses, they’re irrelevant. Talk about how you won’t need them next time.” #fb
+616304514530967553,10224712,1435773421,@cvortmann The Cloud Changes Everything™
+616244724253466624,10224712,1435759166,RT @mattdesl: Confused by mathematical notation in graphics papers?   I'm writing a cheat-sheet for devs: https://t.co/fXvnmwKRRG http://t.…
+615633255379902464,10224712,1435613380,RT @alicemazzy: The only difference here is SCOTUS can use a gui but they can't fucking code, the *only* difference
+615615319474876416,10224712,1435609104,TIL: “Idiom” in English translates to “Idiotismo” in Portuguese. #fb
+615591538203205633,10224712,1435603434,The real question: `$ git commit -am “WIP”` or `$ git stash`?
+615581013884948482,10224712,1435600925,@garriguv Totes read nss-pain… but \o/!
+615580851871612929,10224712,1435600886,In good Berliner fashion, we arrive late  but bring our true colours! (nothing here opens before 2a.m. anyway) #fb http://t.co/QwZMLPps14
+615438035086393344,10224712,1435566836,RT @kaffeecoder: I blogged about compile-time restriction of Slick 3 effect types: http://t.co/inViNZcwgR
+615163149013139456,10224712,1435501298,Reminds me of Berlin... "Fairchild Parent rewarded Fairchild Child’s success the way all East Coast companies of ... http://t.co/gzXUjzZJhJ
+614577841452261376,10224712,1435361750,RT @puppetlabs: We're full of pride. Thanks #SCOTUS #POTUS #lovewins http://t.co/34xs1wa9ij
+614502781496520705,10224712,1435343854,http://t.co/Cbkj5VAFFF: Internet's best posr-mortem repository
+614101738161897472,10224712,1435248238,@rentalcustard My mind read ‘Linkedin Park'
+613812297883078656,10224712,1435179230,RT @creativitymag: Soundcloud's Berlin Wall of Sound wins Cannes Radio Grand Prix http://t.co/sMZ0nnUf5d http://t.co/d3GrPvk9wP
+613755714436222976,10224712,1435165740,Typical Optometrist on Berlin. http://t.co/4QzEQxP0nK
+613748576460623873,10224712,1435164038,@andrewsavikas @Popforms @Safari @katemats oh, wow, congrats! I’m a fan of both products!
+613738745192415233,10224712,1435161694,RT @MikeBloomberg: What’s really warming the world? It’s not orbital changes, volcanoes, or solar flares. Here’s the real reason: http://t.…
+613603252240826368,10224712,1435129390,RT @kosmikus: Please consider submitting a talk to the Haskell eXchange: https://t.co/dLtrArwl2J October 8-9 in London (yes, two days this …
+613091754519207936,10224712,1435007439,RT @postwait: OMG so funny: https://t.co/2ueQWULpun
+612749568183242753,10224712,1434925856,@travisbrown … and Instagram…
+612748568311537664,10224712,1434925617,RT @finagle: Finagle-inspired futures in C++ at Facebook: lower latencies, more maintainable code, and no more callback hell: https://t.co/…
+612728299773665281,10224712,1434920785,RT @BlueHayes: "Apple even named a programming language after her and she still refuses to cooperate" 😂 #hackernews
+612588357068177408,10224712,1434887420,Scariest about having lost my credit card is "Please update your payment information" emails and going "WTF, I was paying for this!?" #fb
+612319869367939072,10224712,1434823407,Finally got to watch the “The Computer Chronicles - Computer Bowl” video, so awesome: https://t.co/rCJ6zOJJ1s #fb
+611982583283490816,10224712,1434742992,Had forgotten how good's this playlist https://t.co/1bvaTud9l2 #fb
+611563168788254721,10224712,1434642996,@rentalcustard chill, they will never find the bodies that far away from town.
+611562681066213377,10224712,1434642880,@rentalcustard come on, emotions and alcohol: what could possibly go wrong? come!
+611562343017938946,10224712,1434642799,@rentalcustard Well, if they had to drink it then they were properly punished. Also, prater in ~10 minutes?
+611561758474510336,10224712,1434642660,Having to explain what’s Prater to fellow Berliners: até quando? #fb
+611206278883483648,10224712,1434557907,RT @smamol: What we as an industry have done to user stories. - @Atlassian's Sherif Mansour #agileaus http://t.co/y7ZuCaNfpB
+611206179847577600,10224712,1434557883,RT @shanehastie: Great warning from @jamesshore in #agilefluency workshop at #agileaus http://t.co/bNcKWecRsw
+610525096873213953,10224712,1434395500,RT @jamesiry: Okay, I confess. When I worked on scalac I injected a backdoor bitcoin miner. Sorry your builds are slow, but thanks for the …
+610500918807822336,10224712,1434389736,RT @bguthrie: "We just publish what we believe to be the position of the British government at the moment." Good times. https://t.co/1EsgkQ…
+610407902566871040,10224712,1434367559,@ddfreyne docker
+610397512646660096,10224712,1434365082,@odilontalk Still a VM, question is more around using the vm just for containers or developing in the vm
+610382490855976960,10224712,1434361500,Considering dropping boot2docker and just having Linux VM for (mostly jvm) development. Thoughts? (Linux as host not possible right now)
+609380425182613504,10224712,1434122589,Learn the story behind the @GameOfThrones theme song on the latest episode of @songexploder:  http://t.co/KMu44SRf17 #fb
+609378452689526784,10224712,1434122119,"You can use this to limit your BFFs" – @missingfaktor during SoundCloud demos describing a feature he's working on.
+609299051583041536,10224712,1434103188,@kabisaict sure thing, hit me at my first name at soundcloud dot com
+609285699234365440,10224712,1434100005,@ddfreyne I have the *exact* same problem!
+609285559467556865,10224712,1434099972,I will give a talk at @FinagleCon (part of @ScalaByTheBay) on how we use @Finagle in SoundCloud's microservices https://t.co/teGm1p2AGd #in
+608938384082485248,10224712,1434017198,RT @FinagleCon: Join us at @ScalaByTheBay on August 13 for the first annual #FinagleCon! Registration and CFP are open today: https://t.co/…
+608695317115060225,10224712,1433959247,RT @bos31337: Software verification at Facebook (this tool gives rise to hundreds of bug fixes per month): https://t.co/XYcbeE1J5q
+608666745650429952,10224712,1433952435,RT @PrometheusIO: The video of our talk about Prometheus at SREcon is up: https://t.co/xLrf1oGCp7 #srecon15europe
+608655872064110592,10224712,1433949842,@jeffsussna Acquired! (well, the .mobi download via @safaribookshelp , I hope you get some cut off my subscription :) )
+644633492375080960,2252942868,1442527575,The Databaseology Lectures - Session #2: SQLite Founder Richard Hipp // Video: http://t.co/WsQ9Yh6KtW #SQLite http://t.co/POaPknYD2T
+643868253765390336,2252942868,1442345128,.@SCSatCMU Distinguished Lecture by Mike Stonebraker -- Turing Award Talk http://t.co/KcKCjCryBr
+642062003457142785,2252942868,1441914485,The Databaseology Lectures - Session #1: @WiredTigerInc Co-Founder Keith Bostic Video: http://t.co/Qzw5sJUMeU http://t.co/CBFS7LY0ba
+636195072233578496,2252942868,1440515699,RT @andy_pavlo: The Databaseology Lectures - Creators of Embedded Databases. Video will be available http://t.co/M7Atb4aHjM @SCSatCMU http:…
+606262985812766720,2252942868,1433379334,Action shots of @pbailis &amp; @karthikz playing @SCSatCMU PhD student Dana Van Aken's BenchPress #SIGMOD15 #FlappyBird http://t.co/z3UltMqSN4
+603941746121256961,2252942868,1432825907,BenchPress #SIGMOD15 Demo: OLTP-Bench meets Flappy Bird ft. @MySQL @PostgreSQL @NuoDB @Oracle http://t.co/U45yZ4WHQP http://t.co/BTPiXeDoH1
+603919632534249472,2252942868,1432820635,RT @ISTC_BigData: #SIGMOD 2015 paper: "Squall: Fine-Grained Live Reconfiguration for Partitioned Main Memory Databases" @CMUDB @MIT_CSAIL @…
+600641954024652801,2252942868,1432039175,RT @ISTC_BigData: New blog post: Storage &amp; Recovery Methods for Non-Volatile Memory DBMSs by @CMUDB @Intel Labs http://t.co/oVr5IMZ4NX
+597780822347915265,2252942868,1431357028,Multiple DB talks today @SCSatCMU from Oracle + HP Labs: http://t.co/jm9K1W7MeU  /cc @hkimura
+596332732369772544,2252942868,1431011777,Today @SCSatCMU: @sudiptdas from MSR will be speaking about Multi-Tenant Azure SQL http://t.co/GFo31FVxrM
+590148578103980032,2252942868,1429537360,RT @dharmashukla: We will be presenting Schema-agnostic Indexing in #Azure #DocumentDB @CMUDB -  http://t.co/7w2pHW15g2  /cc @andy_pavlo @j…
+584031087996833792,2252942868,1428078836,Mon 4/6 - Peter Bailis (@pbailis) - "Coordination Avoidance In Distributed Databases" http://t.co/6nlAhNbiEi http://t.co/1XbbrmBfyc
+569860394661109760,2252942868,1424700280,RT @PittCompSci: Candidate Talk! 2/24 @PittCompSci http://t.co/5v5QUD4lGY
+563340127519657984,2252942868,1423145727,Today @SCSatCMU: Chris Jermaine from Rice talks about doing machine learning over relational databases with SimSQL http://t.co/RjnfzAeV8F
+537653321776267264,2252942868,1417021515,RT @ISTC_BigData: 12/1 Talk by @andy_pavlo  @CMUDB "DBMSs Don't Scale to 1000 Cores &amp; Other Tales of the Macabre" http://t.co/5YPLHRnGP6
+533270164369072128,2252942868,1415976489,All videos for the "7 Databases in 7 Weeks" seminar series are on-line. Special thanks to @YahooLabs for sponsoring. http://t.co/pBVcX6nHi4
+532981987720826881,2252942868,1415907782,Seven Databases in Seven Weeks - Session #7: @VoltDB CTO + Engineer #2 @ryanbetts - Full Video w/ Slides: http://t.co/FLddjXteVI
+525657968239722496,2252942868,1414161600,Today @SCSatCMU: The benevolent but scabrous @Hippotas (PhD'12) from @cloudera returns for a talk on Bionic Databases http://t.co/F7S90re6hA
+525001019064057856,2252942868,1414004971,CMU/Pitt Joint DB Meetup Today with Spyros Blanas from OSU @ 4:30 (Sennott Sq. room 6329). Hosted by @admtlab http://t.co/ff1HiwK9IT
+522837873679015937,2252942868,1413489237,Seven Databases in Seven Weeks - Session #5: @Tokutek Co-Founder @BradleyKuszmaul - Full Video w/ Slides: http://t.co/x19CabCy3U
+520313124894044160,2252942868,1412887290,Seven Databases in Seven Weeks - Session #4: @MongoDB Lead Engineer @andrewcmorrow - Full Video w/ Slides: http://t.co/1oBflhLq4i #NoSQL
+518048879116582912,2252942868,1412347452,Seven Databases in Seven Weeks - Session #3: @NuoDB CTO @technicallyseth - Full Video w/ Slides: http://t.co/MQWuFweTFU #NewSQL
+515536408476676098,2252942868,1411748432,Seven Databases in Seven Weeks - Session #2: Mike Zwilling from @SQLServer Hekaton - Full Video: http://t.co/dGnOLvmL6J
+515147772182663168,2252942868,1411655774,RT @andy_pavlo: Today @CMUDB: Mike Zwilling of @SQLServer &amp; @WisconsinCS Shore fame. Video will be available http://t.co/n4OSEHAsno http://…
+512741587684569088,2252942868,1411082095,RT @ISTC_BigData: New Blog Post: Research Updates from the ISTC for #BigData  http://t.co/S0rI7jodmU @intellabs @CMUDB
+510195814661361664,2252942868,1410475135,Seven Databases in Seven Weeks - Session #1: Ankur Goyal from @MemSQL - Full Video: http://t.co/Y91xa64iFj
+509378193288359936,2252942868,1410280199,RT @andy_pavlo: Fall 2014 @SCSatCMU Seminar Series: 7 Databases in 7 Weeks. Video will be available http://t.co/cQ12h4EyGG /cc @CMUDB http:…
+484739969375019008,2252942868,1404405989,RT @SCSatCMU: Andy Pavlo http://t.co/NLxu7jG1Dz and Bernhard Haeupler http://t.co/VHyVa0jKiI of Carnegie Mellon win dissertation awards
+471736858465284096,2252942868,1401305806,RT @ISTC_BigData: New H-Store Release http://t.co/As36oNuMYt via @andy_pavlo of @CMUDB #DBMS
+435837810361503745,2252942868,1392746806,RT @PittCompSci: CMU/Pitt Joint DB Meetup(2/19, 4:30 pm,Sennott Sq. room 6329). Hosted by @admtlab http://t.co/IwA8T3TxU7
+644444663911481348,430543248,1442482555,RT @GonzoHacker: If clocks are illegal then only criminals will be on time
+643546183697346560,430543248,1442268341,RT @bangbangcon: !!Con 2015 video: Fiona Condon: Eternal Sunshine of the Spotless Search Index!! https://t.co/0BFxE6ab8J
+642778720277790724,430543248,1442085363,@ppival hey Paul! Sorry, I've been traveling. It goes under res/values. You can actually just put the line in strings.xml
+642634446286417922,430543248,1442050966,@joneskoo_yx color works great, we just like the monochrome aesthetically
+642385434308444160,430543248,1441991597,@rallat Let me explain you: Nexus7 behind a two-way mirror ;)
+641825152867639296,430543248,1441858015,@hspter oh yeah! Nexus by Hilary. It had gotten pretty crazy slow, but is handling the simple program and up time really well.
+641803453753348096,430543248,1441852842,@jc4p @kevinrschultz This actually all started because I wandered into the eden of Canal Plastic Center
+641795241247383552,430543248,1441850884,We made a mirror for the house. To tell us things. Tale in the README https://t.co/PyZFM44Xbx http://t.co/rQIsBkkoAL
+639069542216540160,430543248,1441201026,RT @fioroco: i wrote about the ways my team at etsy uses math to help you search when you have no idea what you're searching for https://t.…
+636568956740980737,430543248,1440604840,RT @TheNextWeb: Etsy’s updated mobile app lets you locate local artisans on-the-go http://t.co/of3QMDjElo
+636288943219179520,430543248,1440538080,@hannahmitt Yolo SoLoMo
+636255475139543040,430543248,1440530100,RT @VentureBeat: Etsy squeezes into brick and mortar stores with latest shop local feature http://t.co/n4gFF3vNLA by @ruthreader http://t.c…
+636255278246330368,430543248,1440530054,We launched a thing! Check out all the awesome Etsy stuff near you, using the magic of phones: https://t.co/pd4Li26XkV
+635648095133544448,430543248,1440385290,RT @RikerGoogling: bajoran earrings etsy
+631433712866041856,430543248,1439380503,@dirbab you shouldn't have left us, Dirbab. #youllcomeback
+626674308534923264,430543248,1438245772,RT @giokincade: I wrote a post about what we've been working on for the past 9 months or so: https://t.co/aFnJn96J8L
+625683067957587968,430543248,1438009442,RT @mcfunley: Slides from my "Choose Boring Technology" talk from @oscon last week: http://t.co/DJQyQn3Qbl
+614942891027337216,430543248,1435448784,RT @joeheenan: #amazingphotos  Sand, magnified over 100 times, looks like this. http://t.co/4QOxN43fbM
+614825876107227136,430543248,1435420886,Heart feels: 💖 #LoveWins
+611548987603161088,430543248,1434639615,Etsy turns 10! And I've been here 2 years. I am an obnoxious teenager in Etsy years. https://t.co/dK4OJe4gJh
+609363115285712898,430543248,1434118462,RT @fnthawar: "We deploy to the web 50x a day, but can't for mobile apps.  So we release every 2 weeks" @hannahmitt #qconnewyork
+609363068959764480,430543248,1434118451,RT @fnthawar: The awesome @hannahmitt dropping knowledge on distributed mobile teams #qconnewyork http://t.co/3WLs4tuIlm
+609362945840123904,430543248,1434118422,RT @fnthawar: "Getting really good at a new thing sucks" @hannahmitt @Etsy #qconnewyork
+608768336432885760,430543248,1433976656,@rallat @cketcham come on grab your friends!
+607364193361272832,430543248,1433641882,RT @sophaskins: "There's nothing you can't do / When you're in New York"  In this way, New York is rather like ZomboCom
+604395651716153345,430543248,1432934127,@lozzd this is a great quote for how I'd like app deployment to work
+604395128262807552,430543248,1432934002,RT @lozzd: At Etsy we give engineers both full Nagios deploys &amp; pagers, they are on call &amp; own their thing - responsibility not blame #velo…
+604086981690175488,430543248,1432860534,@donnapep it was great meeting you too!
+604052929209761792,430543248,1432852415,@ericwleong @tumblr buddies!
+604048918188425216,430543248,1432851459,Etsy in Google's slide on the power of web links. #io15 - the Next Gen of Mweb Session http://t.co/6xsbq1uAkY
+604044613771345920,430543248,1432850433,This IO has a lot of solutions to problems without a lot of oh crap when will we refresh everything. This pleases me. #io15
+603916840302084096,430543248,1432819969,I've already spent far too much of my life at the corner of Minna and 4th. #MinnaAnd4th #shame #io15
+603889434036064258,430543248,1432813435,RT @lozzd: Aren't cookies just the best? I fucking love cookies. Also, brownies. I'll take two of each.
+602975412558368768,430543248,1432595515,@vimota they do! Email me and I'll let you know the details.
+593420836805222400,430543248,1430317527,@crafty @denizmveli @mortenjust :D Finally pushing me to upgrade to Yosemite.
+592058532658307073,430543248,1429992728,@sfrdnbrg I agree with you.
+592015291896434689,430543248,1429982419,RT @randyjhunt: Friends to the north: Etsy Made In Canada comes this september. https://t.co/qaTMZ1RitD @EtsyCA
+591588516028637185,430543248,1429880668,RT @QCon: How @Etsy dissolved the traditional #Android and #iOS teams and trained web devs in app development @hannahmitt http://t.co/KOK43…
+589294431968309248,430543248,1429333715,@aaronshapiro using the pokerap?
+588802624444637185,430543248,1429216459,RT @kellan: One more of Times Square and then back to office (but the fair is still going on!) http://t.co/u3oNwpKrQB
+588218507470438401,430543248,1429077195,RT @VectorBelly: This was always a difficult Yoshi's Island level http://t.co/rbW9pcLPTJ
+586423917192937473,430543248,1428649331,@aleffert this is one of the most dramatic Google Issue threads I've ever read.
+586423403537571840,430543248,1428649209,RT @aleffert: Apple is rejecting apps using the default G+ login behavior. Their recommendation has worse experience and security https://t…
+585343656342777856,430543248,1428391777,RT @lindsey: If you like reading failure postmortems, this is a pretty gripping tale, complete with requisite Epic screenshots. https://t.c…
+583140887485685761,430543248,1427866596,RT @kellan: "For those of you who dont know master is a database. We unearthed it under the building when we moved in and have been using i…
+582744708671250432,430543248,1427772140,RT @elizabethkozup: Pretty soon @treehouse will have a Google Play Services course with @JamieHuson! http://t.co/4aA4zFHI3O
+582735751080755200,430543248,1427770004,RT @kellan: Promised to finally publish something about ARs, ORs, and choosing new tech. But @mcfunley is unsurprisingly better http://t.co…
+581826057713496064,430543248,1427553116,RT @asmorrison: @quinnsavit: @tabtheapp just figured out that tip was included in the bill. Your attention to detail is an inspiration /cc …
+579357642918903808,430543248,1426964600,What's the form factor of the bathroom in Mos Eisley Cantina?
+576119633180258304,430543248,1426192598,RT @mrtazz: “You don’t have to fit the stereotypes to be great at software.” - @hannahmitt https://t.co/eYAp3lIKu2
+576089354080292864,430543248,1426185379,RT @Appboy: To kick off our #engage influencer series, we spoke to @Etsy's  @hannahmitt &amp; Frantz Joseph about all things mobile: http://t.c…
+574185359975804928,430543248,1425731432,@mikebrittain My lil cousin got into it with the Clone Wars cartoons. Finding out Anakin goes Vader was rough on a kid. He doesn't accept it
+571712305697857536,430543248,1425141810,HEY-SIRI-OK-GOOGLE-ALEXA what's the weather?
+566234942951424001,430543248,1423835905,@aaronshapiro I am also the proud receiver of Pottery Barn marketing.
+565671037720076288,430543248,1423701459,Complaint / Dev Nightmare: @Snapchat overran my data limit using 9x the data any other app did, without me ever opening it.
+565668081033555969,430543248,1423700754,@PeteIskandar in the last 2 days @Snapchat used 93 Mb of my data. The runner up was the OS with 12. Instagram I use all the time and used 5.
+565665506964013056,430543248,1423700141,@PeteIskandar @Snapchat holy crap. Me too. That's a deal breaker.
+564083522538045441,430543248,1423322966,RT @verge: Netflix is reportedly making a live-action Legend of Zelda series http://t.co/1OQC4KZfc6 http://t.co/fr3GUXotN2
+560268651774111744,430543248,1422413430,@asmorrison I caught you enjoying Android Studio a little bit.
+560245628740313088,430543248,1422407941,RT @jonathanklein: I just open sourced Hound, a code search tool that I helped build at Etsy with @kellegous http://t.co/Gd5TCNo1i0
+557254964511518722,430543248,1421694911,Long exposures and lasers http://t.co/obQU0HkuTd
+554369153759723524,430543248,1421006880,RT @PeteIskandar: Started using this app by @hannahmitt again! phone usage sometimes can get out of control https://t.co/p1LJLF7D9W
+554359981219536896,430543248,1421004693,Verifying myself: I am mittens on Keybase.io. ILI_Izf6s_LOCZf56pEkVZCsRAsq66culflx / https://t.co/chvHYLOLpx
+553997094277877760,430543248,1420918174,Grocery samples tell me nothing. All cheeses in tiny cubes are delicious.
+551406038931750912,430543248,1420300418,@jc4p @sodevious @denizmveli Haha. Duly noted.
+547439594908962816,430543248,1419354745,I got my first legitimate cha-ching. A non-test-account Etsy sale. Holler at $1 https://t.co/xAK0aClTBU
+543923969028784128,430543248,1418516554,RT @morainium: The handmade dagger with bedazzled hilt sunk into Caesar's back. "Etsy, Brute?" he gurgled, as his blood stained the Senate …
+543790836514045954,430543248,1418484813,RT @avleen: Omg omg omg! The new @Etsy app. "OK google, search Etsy for cats." YES!!! My life is complete.
+543787551392563201,430543248,1418484029,RT @kellan: "Beginning Dec 12 Resobox Gallery in NY will be exhibiting 3,000 amigurumi from 130 artists and 33 countries" https://t.co/fHza…
+543187528996900864,430543248,1418340973,RT @kellan: "... everyone will be assigned a spirit animal ..." #offsite
+537803119477161984,430543248,1417057230,#ship through the programmer injuries @ Etsy New York http://t.co/qYjHuHz1qs
+530022134203289601,430543248,1415202098,RT @denizmveli: #Etsy is truly an amazing place to be doing #AndroidDev AND we’re #hiring. More info http://t.co/Z3DwVXFEQy http://t.co/PUz…
+527919681819410432,430543248,1414700835,RT @FBNYengineering: @etsy's @hannahmitt and @optimike on scaling mobile development http://t.co/2qlDCKrBoq
+527873538179743744,430543248,1414689833,Mike and I discussionating about growing a mobile team "@amleszk: #newyorkmobileforum http://t.co/NPhz59cm4r" w/ @optimike
+525313316248641536,430543248,1414079429,RT @randyjhunt: Huge props to everyone @etsy behind http://t.co/UfHof1FfyH We have a reader, but its not about a reader, its about the futu…
+518440153908789248,430543248,1412440739,This brings up a lot of horror-memories, and crimes I don't want to talk about having been a part of. http://t.co/BbHCkGoHfM
+517307269743394816,430543248,1412170638,Me and my Moto 360 in Puerto Rico: https://t.co/tk913ktB2d
+516313616971485184,430543248,1411933733,@JoeLallouz That can't be it, I'm not getting invited either.
+516242763634204672,430543248,1411916840,RT @IBMBluemix: Cranking out some #bluemix cotton candy for #sundayfunday at @HackPuertoRico. Come get your sugar fix! http://t.co/T8aluHt5…
+511596816228704256,430543248,1410809160,RT @codeascraft: If you're at @DroidconNYC this weekend stop by the Etsy booth &amp; say hi! Our very own @niftynei will be speaking too! http:…
+511275903771754496,430543248,1410732649,@chatgrapecom sweet, thanks! Enjoy the SF adventures
+510898327974862848,430543248,1410642628,@chatgrapecom Hey there. I've been having an oddly difficult time figuring out where you guys are based. Where are the ChatGrape offices?
+507282335554101248,430543248,1409780508,RT @JamieHuson: Incredibly proud of my co-workers! Passion meets the pavement and we get this awesome Sell on Etsy app for Android https://…
+507225077537329152,430543248,1409766856,RT @mrtazz: Great interview with the awesome @niftynei about Android development at Etsy, build systems and tomato plants http://t.co/GwKVA…
+504810966631325696,430543248,1409191288,RT @denizmveli: Hit the button! Sell on Etsy Android launch is under way. http://t.co/AGnYQATW4H
+504642866111868928,430543248,1409151209,@lozzd ah makes sense. The charger is awful.
