@@ -173,6 +173,12 @@
         <artifactId>kafka_2.11</artifactId>
         <version>${kafka}</version>
       </dependency>
+
+      <dependency>
+        <groupId>org.apache.kafka</groupId>
+        <artifactId>kafka-streams</artifactId>
+        <version>${kafka}</version>
+      </dependency>
       
       <dependency>
         <groupId>org.springframework</groupId>
@@ -762,6 +768,7 @@ descent loss of performance)
     <module>spring</module>
     <module>lucene</module>
     <module>sandbox</module>
+    <module>kafkaStream</module>
   </modules>
   
   <build>
