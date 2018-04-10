@@ -1,0 +1,17 @@
+virtualenv env --system-site-packages
+
+source env/bin/activate
+
+pip3 install --upgrade jupyter matplotlib numpy pandas scipy scikit-learn
+
+Fire Jupyter
+jupyter notebook
+
+
+The hist() method relies on Matplotlib, which in turn relies on a user-specified graphical backend to draw on screen
+%matplotlib line
+import matplotlib.pyplot as plt
+data.hist(bins=50, figsize=(20,15)
+plt.show()
+
+Above uses Jupyter's magic command %matplotlib line which tells Jupyter to set up Matplotlib so it uses Jupyter's own backend
