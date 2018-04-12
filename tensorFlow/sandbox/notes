@@ -1,0 +1,5 @@
+Histograms which are tail heavy (extend much farther to the right of the median than to the left) are harder for some Machine Learning algorithms to detect patterns. So best to transform them to have more bell-shaped distributions (one method is logarithm?).
+
+Most Machine Learning algorithms cannot work with missing features, so have two options:
+1) Get rid of the whole attribute
+2) Set the values toe some value (zero, the mean, the median, etc)
