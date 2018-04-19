@@ -15,3 +15,5 @@ data.hist(bins=50, figsize=(20,15)
 plt.show()
 
 Above uses Jupyter's magic command %matplotlib line which tells Jupyter to set up Matplotlib so it uses Jupyter's own backend
+
+OneHotEncoder converts integer categorical values into one-hot vectors with the output a SciPy sparse matrix. One hot encoding is where to create one binary attribute per category: one attribute equal to 1 when the category is "<1H OCEAN" (and 0 otherwise), another attribute equal to 1 when the category is "NEAR OCEAN" (and 0 otherwise), and so on. This allows only one attribute be equal to 1 (hot) while the others will be 0 (cold).
