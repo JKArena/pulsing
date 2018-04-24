@@ -1,8 +1,6 @@
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import Imputer, StandardScaler
 from sklearn.base import BaseEstimator, TransformerMixin
-from sklearn.linear_model import LinearRegression
-from sklearn.tree import DecisionTreeRegressor
 
 rooms_ix, bedroomx_ix, population_ix, household_ix = 3, 4, 5, 6
 
@@ -32,13 +30,3 @@ def pipeline(housing):
     ])
   housing_num_tr = num_pipeline.fit_transform(housing_num)
   housing_num_tr
-
-def linearRegression(model, label):
-  lin_reg = LinearRegression()
-  lin_reg.fit(model, label)
-  return lin_reg
-
-def decisionTreeRegression(model, label):
-  tree_reg = DecisionTreeRegressor()
-  tree_reg.fit(model, label)
-  return tree_reg
