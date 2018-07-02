@@ -47,6 +47,12 @@
         <artifactId>pulsing-shared</artifactId>
         <version>${pulsing.version}</version>
       </dependency>
+
+      <dependency>
+        <groupId>org.jhk.pulsing.search</groupId>
+        <artifactId>pulsing-search</artifactId>
+        <version>${pulsing.version}</version>
+      </dependency>
 	  
       <dependency>
         <groupId>org.jhk.pulsing.plugin.maven</groupId>
@@ -771,6 +777,7 @@ descent loss of performance)
     <module>shared</module>
     <module>storm</module>
     <module>spark</module>
+    <module>search</module>
     <module>giraph</module>
     <module>spring</module>
     <module>lucene</module>
