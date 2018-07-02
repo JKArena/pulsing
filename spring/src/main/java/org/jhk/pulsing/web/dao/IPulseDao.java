@@ -22,7 +22,7 @@ import java.util.Optional;
 
 import org.jhk.pulsing.serialization.avro.records.Pulse;
 import org.jhk.pulsing.serialization.avro.records.PulseId;
-import org.jhk.pulsing.web.common.Result;
+import org.jhk.pulsing.shared.response.Result;
 import org.jhk.pulsing.web.pojo.light.UserLight;
 
 /**
