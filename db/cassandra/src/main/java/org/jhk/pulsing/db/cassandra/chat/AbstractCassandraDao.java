@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.web.dao.prod.db;
+package org.jhk.pulsing.db.cassandra.chat;
 
 import java.util.HashSet;
 import java.util.Set;
