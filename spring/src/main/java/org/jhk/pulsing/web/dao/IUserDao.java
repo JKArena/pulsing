@@ -22,7 +22,7 @@ import java.util.Optional;
 
 import org.jhk.pulsing.serialization.avro.records.User;
 import org.jhk.pulsing.serialization.avro.records.UserId;
-import org.jhk.pulsing.web.common.Result;
+import org.jhk.pulsing.shared.response.Result;
 
 /**
  * @author Ji Kim

@@ -27,14 +27,14 @@ import javax.inject.Inject;
 
 import org.jhk.pulsing.db.cassandra.PagingResult;
 import org.jhk.pulsing.serialization.avro.records.UserId;
-import org.jhk.pulsing.web.common.CommonUtil;
-import org.jhk.pulsing.web.common.Result;
+import org.jhk.pulsing.chat.util.Paging;
+import org.jhk.pulsing.shared.response.Result;
+import static org.jhk.pulsing.shared.response.Result.CODE.*;
 import org.jhk.pulsing.web.common.SystemMessageUtil;
 
-import static org.jhk.pulsing.web.common.Result.CODE.*;
-import org.jhk.pulsing.web.pojo.light.Chat;
+import org.jhk.pulsing.chat.IChatService;
+import org.jhk.pulsing.chat.response.Chat;
 import org.jhk.pulsing.web.pojo.light.UserLight;
-import org.jhk.pulsing.web.service.IChatService;
 import org.jhk.pulsing.web.service.IUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -82,7 +82,7 @@ public class ChatController {
     public @ResponseBody Result<PagingResult<List<Chat>>> queryChatLobbyMessages(@PathVariable UUID cLId, @PathVariable UserId userId, @RequestParam String paging) {
         _LOGGER.debug("ChatController.queryChatLobbyMessages: " + cLId + "/" + userId + " - " + paging);
         
-        return chatService.queryChatLobbyMessages(cLId, userId, CommonUtil.checkPaging(paging));
+        return chatService.queryChatLobbyMessages(cLId, userId, Paging.checkPaging(paging));
     }
     
     @RequestMapping(value="/createChatLobby", method=RequestMethod.POST)

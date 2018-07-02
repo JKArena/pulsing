@@ -18,6 +18,8 @@
  */
 package org.jhk.pulsing.web.service;
 
+import org.jhk.pulsing.chat.IChatService;
+
 /**
  * @author Ji Kim
  */

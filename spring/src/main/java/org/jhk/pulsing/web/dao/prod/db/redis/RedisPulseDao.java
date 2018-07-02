@@ -31,10 +31,10 @@ import org.jhk.pulsing.serialization.avro.records.PulseId;
 import org.jhk.pulsing.serialization.avro.serializers.SerializationHelper;
 import org.jhk.pulsing.shared.util.CommonConstants;
 import org.jhk.pulsing.shared.util.RedisConstants;
-import org.jhk.pulsing.web.common.Result;
+import org.jhk.pulsing.shared.response.Result;
 
 import static org.jhk.pulsing.shared.util.RedisConstants.REDIS_KEY.*;
-import static org.jhk.pulsing.web.common.Result.CODE.*;
+import static org.jhk.pulsing.shared.response.Result.CODE.*;
 import org.jhk.pulsing.web.dao.IPulseDao;
 import org.jhk.pulsing.web.dao.prod.db.AbstractRedisDao;
 import org.jhk.pulsing.web.pojo.light.UserLight;
