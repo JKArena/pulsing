@@ -185,6 +185,12 @@
         <artifactId>kafka-streams</artifactId>
         <version>${kafka}</version>
       </dependency>
+
+      <dependency>
+        <groupId>org.apache.zookeeper</groupId>
+        <artifactId>zookeeper</artifactId>
+        <version>${zookeeper}</version>
+      </dependency>
       
       <dependency>
         <groupId>org.springframework</groupId>
@@ -752,6 +758,7 @@ descent loss of performance)
     <javax.inject>1</javax.inject>
     <jackson>2.7.4</jackson>
     <kafka>0.11.0.0</kafka>
+    <zookeeper>3.4.10</zookeeper>
     <mysql.connector.java>5.1.9</mysql.connector.java>
     <cassandra.driver>3.3.0</cassandra.driver>
     <cassandra>3.11.0</cassandra>
@@ -783,6 +790,7 @@ descent loss of performance)
     <module>lucene</module>
     <module>sandbox</module>
     <module>kafkaStream</module>
+    <module>zookeeper</module>
   </modules>
   
   <build>
