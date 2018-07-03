@@ -49,6 +49,9 @@ public final class CommonConstants {
     public static final int ELASTICSEARCH_REST_PORT;
     public static final int ELASTICSEARCH_NODE_PORT;
     
+    public static final String ZOOKEEPER_HOST_PORT;
+    public static final int ZOOKEEPER_SESSION_TIMEOUT;
+    
     public enum TOPICS {
 		PULSE_SUBSCRIBE, USER_CREATE, PULSE_CREATE, LOCATION_CREATE, FRIEND;
 	};
@@ -79,6 +82,9 @@ public final class CommonConstants {
             
             ELASTICSEARCH_REST_PORT = Integer.parseInt(props.getProperty("elasticsearch_rest_port"));
             ELASTICSEARCH_NODE_PORT = Integer.parseInt(props.getProperty("elasticsearch_node_port"));
+            
+            ZOOKEEPER_HOST_PORT = props.getProperty("zookeeper_host_port");
+            ZOOKEEPER_SESSION_TIMEOUT = Integer.parseInt(props.getProperty("zookeeper_session_timeout"));
         } catch (IOException ioExcept) {
             throw new RuntimeException("Error while reading common.properties", ioExcept);
         }
