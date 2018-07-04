@@ -16,6 +16,11 @@
   <dependencies>
     
     <dependency>
+      <groupId>org.jhk.pulsing.shared</groupId>
+      <artifactId>pulsing-shared</artifactId>
+    </dependency>
+    
+    <dependency>
       <groupId>org.apache.zookeeper</groupId>
       <artifactId>zookeeper</artifactId>
     </dependency>
