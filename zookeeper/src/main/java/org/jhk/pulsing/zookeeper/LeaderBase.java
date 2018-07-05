@@ -21,8 +21,11 @@ package org.jhk.pulsing.zookeeper;
 import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.ZooDefs;
 import org.apache.zookeeper.AsyncCallback.DataCallback;
+import org.apache.zookeeper.AsyncCallback.StatCallback;
 import org.apache.zookeeper.AsyncCallback.StringCallback;
 import org.apache.zookeeper.KeeperException.Code;
+import org.apache.zookeeper.WatchedEvent;
+import org.apache.zookeeper.Watcher;
 import org.apache.zookeeper.data.Stat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -58,14 +61,18 @@ public abstract class LeaderBase extends AbstractBase {
                 _LOGGER.error("Is leader for path {}.", path);
                 leader = true;
                 break;
+            case NODEEXISTS:
+                _LOGGER.error("Is NOT leader for path {} and monitor leader.", path);
+                monitorLeader();
+                leader = false;
             default:
-                _LOGGER.error("Is NOT leader for path {}.", path);
+                _LOGGER.error("Default case with code {} for path {}.", Code.get(responseCode), path);
                 leader = false;
             }
         }
     };
     
-    private DataCallback LEADER_CHECK_CALLBACK = new DataCallback() {
+    private final DataCallback LEADER_CHECK_CALLBACK = new DataCallback() {
         @Override
         public void processResult(int responseCode, String path, Object context, byte[] data, Stat stat) {
             switch (Code.get(responseCode)) {
@@ -77,6 +84,33 @@ public abstract class LeaderBase extends AbstractBase {
                 break;
             default:
                 _LOGGER.error("Error code {} in leader check with path {}.", Code.get(responseCode), path);
+                break;
+            }
+        }
+    };
+    
+    private final Watcher MONITOR_LEADER_WATCHER = new Watcher() {
+        @Override
+        public void process(WatchedEvent event) {
+            switch(event.getType()) {
+            case NodeDeleted:
+                _LOGGER.info("Original leader was deleted, will run for leader");
+                runForLeader();
+                break;
+            default:
+                break;
+            }
+        }
+    };
+    
+    private final StatCallback MONITOR_LEADER_CALLBACK = new StatCallback() {
+        @Override
+        public void processResult(int responseCode, String path, Object context, Stat stat) {
+            switch(Code.get(responseCode)) {
+            case CONNECTIONLOSS:
+                monitorLeader();
+                break;
+            default:
                 break;
             }
         }
@@ -102,6 +136,10 @@ public abstract class LeaderBase extends AbstractBase {
 
     public void runForLeader() {
         zookeeper.create(path,  data, ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.EPHEMERAL, LEADER_RUN_CALLBACK, getStat());
+    }
+    
+    private void monitorLeader() {
+        zookeeper.exists(path, MONITOR_LEADER_WATCHER, MONITOR_LEADER_CALLBACK, getStat());
     }
     
     private void checkIsLeader() {
