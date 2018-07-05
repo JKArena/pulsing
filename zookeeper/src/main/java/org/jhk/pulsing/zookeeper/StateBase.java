@@ -62,6 +62,8 @@ public abstract class StateBase extends AbstractBase {
             case CONNECTIONLOSS:
                 updateState((byte[]) context);
                 break;
+            default:
+                break;
             }
         }
     };
