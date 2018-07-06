@@ -104,7 +104,7 @@ public class CassandraChatDao extends AbstractCassandraDao {
             
             ResultSet mvcResult = _chatMessageTable.messageViewCountQuery(msgId);
             entry.setMessageViews(mvcResult.one().getLong("user_views"));
-            _LOGGER.info("CassandraChatDao.queryChatLobbyMessages msg info : " + entry);
+            _LOGGER.info("CassandraChatDao.queryChatLobbyMessages msg info : {}.", entry);
             
             cLMessages.add(entry);
         }

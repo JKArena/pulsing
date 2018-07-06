@@ -115,7 +115,7 @@ public class ChatService implements IChatService {
     
     @Override
     public void sendSecretMessage(long toUserId, Chat message) {
-        _LOGGER.info("ChatService.sendSecretMessage: " + toUserId + " > " + message);
+        _LOGGER.info("ChatService.sendSecretMessage: toUserId {}, message {}.", toUserId, message);
         
         try {
             Map<String, String> sMessage = new HashMap<>();

@@ -97,7 +97,7 @@ public abstract class AbstractCassandraDao {
             _LOGGER.debug(getClass().getName() + " - Connected to " + cName);
             
             for(Host host : mData.getAllHosts()) {
-                _LOGGER.debug("Data Center : " + host.getDatacenter() + ", Rack: " + host.getRack() + ", Host: " + host.getAddress());
+                _LOGGER.debug("Data Center : {}, Rack : {}, Host : {}", host.getDatacenter(), host.getRack(), host.getAddress());
             }
         }
     }
