@@ -21,6 +21,7 @@ package org.jhk.pulsing.sandbox.timeline.cache;
 import java.io.InputStream;
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -106,8 +107,8 @@ public final class UserCache {
     public Set<User> getFollowers(long followee) {
         return following.containsKey(followee) ? 
                 following.get(followee).stream()
-                    .map(followerId -> userEntries.get(followerId))
-                    .filter(value -> value != null)
+                    .map(userEntries::get)
+                    .filter(Objects::nonNull)
                     .collect(Collectors.toSet())
                 : Collections.emptySet();
     }
