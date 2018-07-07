@@ -38,7 +38,7 @@ public abstract class SequentialBase extends AbstractBase {
      * @throws InterruptedException 
      * @throws KeeperException 
      */
-    public String createSequential(String path, byte[] data, boolean persistent) throws KeeperException, InterruptedException {
+    protected String createSequential(String path, byte[] data, boolean persistent) throws KeeperException, InterruptedException {
         CreateMode mode = persistent ? CreateMode.PERSISTENT_SEQUENTIAL : CreateMode.EPHEMERAL_SEQUENTIAL;
         
         while (true) {

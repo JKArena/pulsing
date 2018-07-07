@@ -37,8 +37,8 @@ public abstract class LeaderBase extends AbstractBase {
     
     private static final Logger _LOGGER = LoggerFactory.getLogger(LeaderBase.class);
     
-    private final String path;
-    private final byte[] data;
+    protected final String path;
+    protected final byte[] data;
     
     private boolean leader;
     
@@ -134,7 +134,7 @@ public abstract class LeaderBase extends AbstractBase {
         return leader;
     }
 
-    public void runForLeader() {
+    protected void runForLeader() {
         zookeeper.create(path,  data, ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.EPHEMERAL, LEADER_RUN_CALLBACK, getStat());
     }
     
