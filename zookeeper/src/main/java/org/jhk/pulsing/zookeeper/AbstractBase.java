@@ -76,7 +76,7 @@ public abstract class AbstractBase implements Watcher {
      * Assume all calls are made in proper order (i.e. in similar way hasNext() is invoked prior to next())
      * @throws IOException
      */
-    public void startZooKeeper() throws IOException {
+    protected void startZooKeeper() throws IOException {
         zookeeper = new ZooKeeper(hostPort, sessionTimeout, this);
     }
     

@@ -68,8 +68,8 @@ public abstract class StateBase extends AbstractBase {
         }
     };
     
-    private final String path;
-    private byte[] data;
+    protected final String path;
+    protected byte[] data;
     
     public StateBase(String path, byte[] data) {
         super();
@@ -85,7 +85,7 @@ public abstract class StateBase extends AbstractBase {
         this.data = data;
     }
     
-    public void initialSetup() {
+    protected void initialSetup() {
         zookeeper.create(path,  data, ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.EPHEMERAL, INITIAL_SETUP_CALLBACK, data);
     }
     
