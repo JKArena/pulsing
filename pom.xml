@@ -191,6 +191,12 @@
         <artifactId>zookeeper</artifactId>
         <version>${zookeeper}</version>
       </dependency>
+
+      <dependency>
+        <groupId>org.apache.curator</groupId>
+        <artifactId>curator-recipes</artifactId>
+        <version>${curator}</version>
+      </dependency>
       
       <dependency>
         <groupId>org.springframework</groupId>
@@ -759,6 +765,7 @@ descent loss of performance)
     <jackson>2.7.4</jackson>
     <kafka>0.11.0.0</kafka>
     <zookeeper>3.4.10</zookeeper>
+    <curator>4.0.0</curator>
     <mysql.connector.java>5.1.9</mysql.connector.java>
     <cassandra.driver>3.3.0</cassandra.driver>
     <cassandra>3.11.0</cassandra>
