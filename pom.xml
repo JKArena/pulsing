@@ -197,10 +197,16 @@
         <artifactId>curator-recipes</artifactId>
         <version>${curator}</version>
       </dependency>
-      
+
       <dependency>
         <groupId>org.springframework</groupId>
         <artifactId>spring-core</artifactId>
+        <version>${spring}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-web</artifactId>
         <version>${spring}</version>
       </dependency>
       
