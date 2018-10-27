@@ -6,12 +6,12 @@ Allows creation of Pulse which others around the area can subscribe to and when 
 2. Storm/Trident/Spark-streaming for real time data processing
 3. Hadoop for HDFS + Yarn
    * Cascading+JCascade+Pail
-   * Spark ml for machine learning
+   * Spark ml and TensorFlow for machine learning
    * Hive+Spark SQL for submitted location data using ESRI
    * Spark Graphx/Apache Giraph for graph (think Graphx getting deprecated though)
 4. MySQL/Hibernate for user data and possibly location (GIS) data using Spark SQL
 5. Cassandra for chatLobby messages which are created by users
-6. HBase for generated friendship and etc
+6. HBase for key value stores
 7. Avro+Parquet/Thrift for SerDe (to compare)
 8. Bootstrap+ReactJS+Redux+Router+etc
 9. Spring with Redis (websocket+session management and cache (short lived pulse data with geo radius search)) for service calls
