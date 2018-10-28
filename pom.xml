@@ -749,7 +749,7 @@ descent loss of performance)
     <kryo>4.0.0</kryo>
     <giraph>1.2.0</giraph>
     <giraph.hbase>1.2.0-hadoop2</giraph.hbase>
-    <hbase>1.3.1</hbase>
+    <hbase>2.1.0</hbase>
     <spark>2.2.0</spark>
     <spark.cassandra>1.6.3</spark.cassandra>
     <dfs-datastores>1.3.6</dfs-datastores>
