@@ -32,7 +32,7 @@ import static org.jhk.pulsing.shared.response.Result.CODE.*;
 
 import org.jhk.pulsing.web.dao.prod.db.redis.RedisPulseDao;
 import org.jhk.pulsing.web.dao.prod.db.redis.RedisUserDao;
-import org.jhk.pulsing.web.dao.prod.db.sql.MySqlUserDao;
+import org.jhk.pulsing.db.mysql.user.MySqlUserDao;
 import org.jhk.pulsing.web.pojo.light.Invitation;
 import org.jhk.pulsing.web.pojo.light.UserLight;
 import org.jhk.pulsing.web.service.IUserService;
