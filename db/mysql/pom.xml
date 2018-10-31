@@ -16,8 +16,39 @@
   <dependencies>
 
     <dependency>
+      <groupId>org.jhk.pulsing.serialization.avro</groupId>
+      <artifactId>pulsing-avro</artifactId>
+    </dependency>
+
+    <dependency>
       <groupId>org.jhk.pulsing.shared</groupId>
       <artifactId>pulsing-shared</artifactId>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-beans</artifactId>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-core</artifactId>
+      <exclusions>
+        <exclusion>
+          <groupId>commons-logging</groupId>
+          <artifactId>commons-logging</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-tx</artifactId>
+    </dependency>
+    
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-webmvc</artifactId>
     </dependency>
     
     <dependency>
