@@ -26,7 +26,7 @@ import javax.sql.DataSource;
 
 import org.jhk.pulsing.web.dao.prod.db.redis.RedisPulseDao;
 import org.jhk.pulsing.web.dao.prod.db.redis.RedisUserDao;
-import org.jhk.pulsing.web.dao.prod.db.sql.MySqlUserDao;
+import org.jhk.pulsing.db.mysql.user.MySqlUserDao;
 import org.jhk.pulsing.chat.ChatService;
 import org.jhk.pulsing.chat.IChatService;
 import org.jhk.pulsing.web.service.prod.PulseService;
