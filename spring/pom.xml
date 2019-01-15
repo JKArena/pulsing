@@ -37,6 +37,11 @@
     </dependency>
     
     <dependency>
+      <groupId>org.jhk.pulsing.db.hbase</groupId>
+      <artifactId>pulsing-db-hbase</artifactId>
+    </dependency>
+    
+    <dependency>
       <groupId>org.jhk.pulsing.plugin.maven</groupId>
       <artifactId>pulsing-plugin-maven</artifactId>
     </dependency>
