@@ -1,6 +1,6 @@
 Project for playing around with Realtime big data app.
 
-Allows creation of Pulse which others around the area can subscribe to and when good the group can gogo. For example driving down and one sees a restaurant that one wants to eat at and friends are too far away; create a pulse, get others to join up, and go together xD (in nutshell any things that don't fit the count). Allows chatting for the pulse group as well as creating private chat lobbies.
+Allows creation of Pulse which others around the area can subscribe to and when good the group can start. For example driving down and one sees a restaurant that one wants to eat at and friends are too far away; create a pulse, get others to join up, and go together xD (in nutshell any things that don't fit the count). Allows chatting for the pulse group as well as creating private chat lobbies like in video games.
 
 1. Kafka as queue with Zookeeper / Flume
 2. Storm/Trident/Spark-streaming for real time data processing
@@ -20,7 +20,7 @@ Allows creation of Pulse which others around the area can subscribe to and when 
 12. ElasticSearch+Logstash+Kibana+Flume for log analysis + metrics
 13. Debezium for change data capture + Apache Sqoop for micro/macro batch
 14. Apache Oozie + Hue initially for orchestration
-15. Nginx (for RTMP and with zookeeper for dynamic load balancing), Java8, Scala, Ecmascript6 and etc
+15. Nginx (for RTMP and with zookeeper for dynamic load balancing), Java8, Scala, Zookeeper/Curator Ecmascript6 and etc
 
 ![ScreenShot](https://github.com/JKArena/pulsing/blob/master/spring/nonsrc/diagram.png?raw=true)
 
