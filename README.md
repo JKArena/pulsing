@@ -20,7 +20,7 @@ Allows creation of Pulse which others around the area can subscribe to and when 
 12. ElasticSearch+Logstash+Kibana+Flume for log analysis + metrics
 13. Debezium for change data capture + Apache Sqoop for micro/macro batch
 14. Apache Oozie + Hue initially for orchestration
-15. Nginx (for RTMP and with zookeeper for dynamic load balancing), Java8, Scala, Zookeeper/Curator Ecmascript6 and etc
+15. Nginx (for RTMP and with zookeeper for dynamic load balancing), Consul for configuration management and service discovery, Zookeeper/Curator and etc
 
 ![ScreenShot](https://github.com/JKArena/pulsing/blob/master/spring/nonsrc/diagram.png?raw=true)
 
