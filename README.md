@@ -1,4 +1,4 @@
-Project for playing around with Realtime big data app.
+Project for playing around with Realtime big data app (mainly to tinker around with techs I read from books and etc).
 
 Allows creation of Pulse which others around the area can subscribe to and when good the group can start. For example driving down and one sees a restaurant that one wants to eat at and friends are too far away; create a pulse, get others to join up, and go together xD (in nutshell any things that don't fit the count). Allows chatting for the pulse group as well as creating private chat lobbies like in video games.
 
@@ -19,8 +19,9 @@ Allows creation of Pulse which others around the area can subscribe to and when 
 11. ElasticSearch/Lucene for searches
 12. ElasticSearch+Logstash+Kibana+Flume for log analysis + metrics
 13. Debezium for change data capture + Apache Sqoop for micro/macro batch
-14. Apache Oozie + Hue initially for orchestration
-15. Nginx (for RTMP and with zookeeper for dynamic load balancing), Consul for configuration management and service discovery, Zookeeper/Curator and etc
+14. Docker + Kubernite
+15. Apache Oozie + Hue initially for orchestration
+16. Nginx (for RTMP and with zookeeper for dynamic load balancing), Consul for configuration management and service discovery, Zookeeper/Curator and etc
 
 ![ScreenShot](https://github.com/JKArena/pulsing/blob/master/spring/nonsrc/diagram.png?raw=true)
 
