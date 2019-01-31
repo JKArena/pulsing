@@ -17,9 +17,9 @@ Allows creation of Pulse which others around the area can subscribe to and when 
 9. Spring with Redis (websocket+session management and cache (short lived pulse data with geo radius search)) for service calls
 10. Python Django with Memcached/Redis for service calls (to compare with Spring + Redis)
 11. ElasticSearch/Lucene for searches
-12. ElasticSearch+Logstash+Kibana+Flume for log analysis + metrics
+12. ElasticSearch+Logstash+Kibana+Flume for log analysis + metrics 
 13. Debezium for change data capture + Apache Sqoop for micro/macro batch
-14. Docker + Kubernite
+14. Docker as container + Kubernite
 15. Apache Oozie + Hue initially for orchestration
 16. Nginx (for RTMP and with zookeeper for dynamic load balancing), Consul for configuration management and service discovery, Zookeeper/Curator and etc
 

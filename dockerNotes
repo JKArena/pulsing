@@ -1,0 +1,23 @@
+Ubuntu image
+docker image pull ubuntu:latest
+docker image pull nginx:latest
+docker container run -it ubuntu:latest /bin/bash
+docker container exec -it container_name bash
+
+From directory that contains Dockerfile
+docker image build -t repo_name:tag_name .
+From the image
+docker container run -d \
+
+docker container run -it ubuntu:latest /bin/bash
+docker container ls
+CNTNR ID ...
+302...74
+
+docker container exec -it 302...74 bash
+
+docker container run -it --restart [always|unless-stopped|on-failed]
+-d => start container in background as daemon
+-p => maps ports on the Docker host to ports inside the container (i.e. -p 80:8080)
+
+docker container run -d --name webserver -p 80:8080 ji/plural
