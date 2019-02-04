@@ -21,3 +21,13 @@ docker container run -it --restart [always|unless-stopped|on-failed]
 -p => maps ports on the Docker host to ports inside the container (i.e. -p 80:8080)
 
 docker container run -d --name webserver -p 80:8080 ji/plural
+
+From the directory that contains the Dockerfile
+docker image build -t nodeJs:latest .
+docker image tag nodeJs:latest jihoonkim1004/nodeJs:latest
+docker image push jihoonkim1004/nodeJs:latest
+docker container run -d --name nodeJsContainer -p 80:8080 nodeJs:latest
+
+docker image inspect nodeJs:latest
+
+use multi-stage builds in Dockerfile
