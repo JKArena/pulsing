@@ -30,6 +30,8 @@ import PulseId from '../avro/PulseId';
 
 import * as appActions from './app';
 
+const URL = require('url').URL;
+
 const CREATE_PULSE_URL = new URL([urls.controllerUrl(), 'pulse/createPulse'].join(''));
 const SUBSCRIBE_PULSE_PATH = [urls.controllerUrl(), 'pulse/subscribePulse/'].join('');
 const UN_SUBSCRIBE_PULSE_PATH = [urls.controllerUrl(), 'pulse/unSubscribePulse/'].join('');

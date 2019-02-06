@@ -31,6 +31,8 @@ import * as chatActions from './chat';
 import * as trendingActions from './trending';
 import * as appActions from './app';
 
+const URL = require('url').URL;
+
 const LOGIN_URL = new URL([urls.controllerUrl(), 'user/validateUser'].join(''));
 const CREATE_USER_URL = new URL([urls.controllerUrl(), 'user/createUser'].join(''));
 const LOGOUT_PATH = [urls.controllerUrl(), 'user/logout/'].join('');

@@ -27,6 +27,8 @@ import urls from '../common/urls';
 
 import * as appActions from './app';
 
+const URL = require('url').URL;
+
 const FRIEND_JOIN_URL = new URL([urls.djangoRootUrl(), 'friend/friendJoin/'].join(''));
 const FRIEND_REQUEST_URL = new URL([urls.djangoRootUrl(), 'friend/friendRequest/'].join(''));
 

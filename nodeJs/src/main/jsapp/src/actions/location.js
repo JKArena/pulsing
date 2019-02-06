@@ -28,6 +28,8 @@ import urls from '../common/urls';
 import Location from '../../../../avro/Location';
 import * as appActions from './app';
 
+const URL = require('url').URL;
+
 const CREATE_LOCATION_URL = new URL([urls.djangoRootUrl(), 'location/add/'].join(''));
 
 export default function createLocation(btnId, formId, tags) {

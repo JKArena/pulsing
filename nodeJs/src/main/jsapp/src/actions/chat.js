@@ -27,6 +27,8 @@ import urls from '../common/urls';
 
 import * as appActions from './app';
 
+const URL = require('url').URL;
+
 const CREATE_CHAT_LOBBY_URL = new URL([urls.controllerUrl(), 'chat/createChatLobby/'].join(''));
 const GET_CHAT_LOBBIES_PATH = [urls.controllerUrl(), 'chat/queryChatLobbies/'].join('');
 const GET_CHAT_LOBBY_MESSAGES_PATH = [urls.controllerUrl(), 'chat/queryChatLobbyMessages/'].join('');
