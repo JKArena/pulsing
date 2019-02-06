@@ -27,6 +27,8 @@ import urls from '../common/urls';
 
 import * as appActions from './app';
 
+const URL = require('url').URL;
+
 const GET_TRENDING_PULSE_SUBSCRIPTIONS_URL = new URL([urls.controllerUrl(), 'pulse/getTrendingPulseSubscriptions'].join(''));
 
 export default function getTrendingPulseSubscriptions() {
