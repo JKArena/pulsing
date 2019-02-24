@@ -32,8 +32,7 @@ let PREFIX;
 
 function url(suffix) {
   if (!PREFIX) {
-    const location = global.location || {};
-    PREFIX = [location.protocol, '//', location.hostname].join('');
+    PREFIX = [global.location.protocol, '//', global.location.hostname].join('');
   }
   return PREFIX + suffix;
 }
