@@ -27,8 +27,6 @@ import * as appActions from './app';
 import fetchHelper from '../common/fetchHelper';
 import urls from '../common/urls';
 
-const URL = require('url').URL;
-
 const ELASTIC_SEARCH_QUERY_URL = new URL([urls.djangoRootUrl(), 'search/query'].join(''));
 
 export default function search(eventType, index, docType, value,
