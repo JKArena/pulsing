@@ -41,6 +41,12 @@
         <artifactId>pulsing-db-cassandra</artifactId>
         <version>${pulsing.version}</version>
       </dependency>
+
+      <dependency>
+        <groupId>org.jhk.pulsing.db.hbase</groupId>
+        <artifactId>pulsing-db-hbase</artifactId>
+        <version>${pulsing.version}</version>
+      </dependency>
 	  
       <dependency>
         <groupId>org.jhk.pulsing.shared</groupId>
