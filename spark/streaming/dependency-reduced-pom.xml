@@ -3,7 +3,7 @@
   <parent>
     <artifactId>pulsing-spark</artifactId>
     <groupId>org.jhk.pulsing.spark</groupId>
-    <version>${pulsing.version}</version>
+    <version>0.1-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.jhk.pulsing.spark.streaming</groupId>

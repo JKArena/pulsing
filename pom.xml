@@ -4,7 +4,7 @@
   <groupId>org.jhk.pulsing</groupId>
   <artifactId>pulsing-project</artifactId>
   <packaging>pom</packaging>
-  <version>${pulsing.version}</version>
+  <version>0.1-SNAPSHOT</version>
   <name>pulsing-project</name>
   <url>https://github.com/JHKTruth/pulsing</url>
   <description>Pulsing Build Project</description>
