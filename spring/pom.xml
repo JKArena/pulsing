@@ -270,7 +270,7 @@
         <configuration>
           <repository>${docker.image.prefix}/${project.artifactId}</repository>
         </configuration>
-        </plugin>
+      </plugin>
     </plugins>
     
   </build>
