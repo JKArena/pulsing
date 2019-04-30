@@ -221,6 +221,12 @@
         <artifactId>spring-context</artifactId>
         <version>${spring}</version>
       </dependency>
+
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-web</artifactId>
+        <version>${spring}</version>
+      </dependency>
       
       <dependency>
         <groupId>org.springframework</groupId>
@@ -812,6 +818,7 @@ descent loss of performance)
     <module>sandbox</module>
     <module>kafkaStream</module>
     <module>zookeeper</module>
+    <module>services</module>
   </modules>
   
   <build>
