@@ -55,6 +55,12 @@
       </dependency>
 
       <dependency>
+        <groupId>org.jhk.pulsing.services</groupId>
+        <artifactId>pulsing-services</artifactId>
+        <version>${pulsing.version}</version>
+      </dependency>
+
+      <dependency>
         <groupId>org.jhk.pulsing.search</groupId>
         <artifactId>pulsing-search</artifactId>
         <version>${pulsing.version}</version>
