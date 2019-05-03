@@ -15,61 +15,61 @@
       <dependency>
         <groupId>org.jhk.pulsing.serialization.avro</groupId>
         <artifactId>pulsing-avro</artifactId>
-        <version>${pulsing.version}</version>
+        <version>${project.version}</version>
       </dependency>
       
       <dependency>
         <groupId>org.jhk.pulsing.serialization.thrift</groupId>
         <artifactId>pulsing-thrift</artifactId>
-        <version>${pulsing.version}</version>
+        <version>${project.version}</version>
       </dependency>
 
       <dependency>
         <groupId>org.jhk.pulsing.hadoop.pail</groupId>
         <artifactId>pulsing-hadoop-pail</artifactId>
-        <version>${pulsing.version}</version>
+        <version>${project.version}</version>
       </dependency>
 
       <dependency>
         <groupId>org.jhk.pulsing.db.mysql</groupId>
         <artifactId>pulsing-db-mysql</artifactId>
-        <version>${pulsing.version}</version>
+        <version>${project.version}</version>
       </dependency>
 
       <dependency>
         <groupId>org.jhk.pulsing.db.cassandra</groupId>
         <artifactId>pulsing-db-cassandra</artifactId>
-        <version>${pulsing.version}</version>
+        <version>${project.version}</version>
       </dependency>
 
       <dependency>
         <groupId>org.jhk.pulsing.db.hbase</groupId>
         <artifactId>pulsing-db-hbase</artifactId>
-        <version>${pulsing.version}</version>
+        <version>${project.version}</version>
       </dependency>
 	  
       <dependency>
         <groupId>org.jhk.pulsing.shared</groupId>
         <artifactId>pulsing-shared</artifactId>
-        <version>${pulsing.version}</version>
+        <version>${project.version}</version>
       </dependency>
 
       <dependency>
         <groupId>org.jhk.pulsing.services</groupId>
         <artifactId>pulsing-services</artifactId>
-        <version>${pulsing.version}</version>
+        <version>${project.version}</version>
       </dependency>
 
       <dependency>
         <groupId>org.jhk.pulsing.search</groupId>
         <artifactId>pulsing-search</artifactId>
-        <version>${pulsing.version}</version>
+        <version>${project.version}</version>
       </dependency>
 	  
       <dependency>
         <groupId>org.jhk.pulsing.plugin.maven</groupId>
         <artifactId>pulsing-plugin-maven</artifactId>
-        <version>${pulsing.version}</version>
+        <version>${project.version}</version>
       </dependency>
       
       <dependency>
@@ -739,7 +739,6 @@ descent loss of performance)
   </dependencyManagement>
   
   <properties>
-    <pulsing.version>0.1-SNAPSHOT</pulsing.version>
     <commons.collections>3.2.2</commons.collections>
     <commons.cli>1.4</commons.cli>
     <guava>23.0</guava>

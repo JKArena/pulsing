@@ -225,7 +225,7 @@
       <plugin>
         <groupId>org.jhk.pulsing.plugin.maven</groupId>
         <artifactId>pulsing-plugin-maven</artifactId>
-        <version>${pulsing.version}</version>
+        <version>${project.version}</version>
         <configuration>
           <avroclasses>
             <param>org.jhk.pulsing.serialization.avro.records.Pulse</param>
