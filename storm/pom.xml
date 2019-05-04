@@ -11,7 +11,6 @@
   <groupId>org.jhk.pulsing.storm</groupId>
   <artifactId>pulsing-storm</artifactId>
   <name>pulsing-storm</name>
-  <url>https://github.com/JHKTruth/pulsing/storm</url>
   
   <dependencies>
     

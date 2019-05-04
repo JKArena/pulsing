@@ -12,7 +12,6 @@
   <artifactId>pulsing-spark</artifactId>
   <packaging>pom</packaging>
   <name>pulsing-spark</name>
-  <url>https://github.com/JHKTruth/pulsing/spark</url>
   
   <modules>
     <module>hive</module>

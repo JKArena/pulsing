@@ -11,7 +11,6 @@
   <groupId>org.jhk.pulsing.spark.streaming</groupId>
   <artifactId>pulsing-spark-streaming</artifactId>
   <name>pulsing-spark-streaming</name>
-  <url>https://github.com/JHKTruth/pulsing/spark/streaming</url>
   
   <dependencies>
     

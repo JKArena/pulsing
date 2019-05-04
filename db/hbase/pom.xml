@@ -11,7 +11,6 @@
   <groupId>org.jhk.pulsing.db.hbase</groupId>
   <artifactId>pulsing-db-hbase</artifactId>
   <name>pulsing-db-hbase</name>
-  <url>https://github.com/JHKTruth/pulsing/db/hbase</url>
   
   <dependencies>
 

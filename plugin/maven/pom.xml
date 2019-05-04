@@ -12,7 +12,6 @@
   <packaging>maven-plugin</packaging>
   <name>pulsing-plugin-maven</name>
   <description>Will inspect avro classes to create json constructure (since option values must have null for deserialization)</description>
-  <url>https://github.com/JHKTruth/pulsing/plugin/maven</url>
   
   <dependencies>
     <dependency>

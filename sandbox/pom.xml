@@ -10,7 +10,6 @@
   <groupId>org.jhk.pulsing.sandbox</groupId>
   <artifactId>pulsing-sandbox</artifactId>
   <name>pulsing-sandbox</name>
-  <url>https://github.com/JHKTruth/pulsing/sandbox</url>
 
   <dependencies>
     <dependency>

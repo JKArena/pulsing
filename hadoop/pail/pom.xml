@@ -11,7 +11,6 @@
   <groupId>org.jhk.pulsing.hadoop.pail</groupId>
   <artifactId>pulsing-hadoop-pail</artifactId>
   <name>pulsing-hadoop-pail</name>
-  <url>https://github.com/JHKTruth/pulsing/hadoop/pail</url>
   
   <dependencies>
     

@@ -12,7 +12,6 @@
   <artifactId>pulsing-lucene</artifactId>
   <name>pulsing-lucene</name>
   <packaging>jar</packaging>
-  <url>https://github.com/JHKTruth/pulsing/lucene</url>
   
   <dependencies>
     <dependency>

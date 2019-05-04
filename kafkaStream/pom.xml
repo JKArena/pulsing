@@ -11,7 +11,6 @@
   <groupId>org.jhk.pulsing.kafkaStream</groupId>
   <artifactId>pulsing-kafkaStream</artifactId>
   <name>pulsing-kafkaStream</name>
-  <url>https://github.com/JHKTruth/pulsing/kafkaStream</url>
   
   <dependencies>
     <dependency>

@@ -11,7 +11,6 @@
   <artifactId>pulsing-hadoop</artifactId>
   <packaging>pom</packaging>
   <name>pulsing-hadoop</name>
-  <url>https://github.com/JHKTruth/pulsing/hadoop</url>
   
   <modules>
     <module>cascading</module>

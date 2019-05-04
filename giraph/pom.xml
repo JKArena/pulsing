@@ -11,7 +11,6 @@
   <groupId>org.jhk.pulsing.giraph</groupId>
   <artifactId>pulsing-giraph</artifactId>
   <name>pulsing-giraph</name>
-  <url>https://github.com/JHKTruth/pulsing/giraph</url>
   
   <dependencies>
     

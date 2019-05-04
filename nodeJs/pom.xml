@@ -12,6 +12,5 @@
   <artifactId>pulsing-nodeJs</artifactId>
   <packaging>war</packaging>
   <name>pulsing-nodeJs</name>
-  <url>https://github.com/JHKTruth/pulsing/nodeJs</url>
     
 </project>

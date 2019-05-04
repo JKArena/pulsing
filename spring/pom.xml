@@ -12,7 +12,6 @@
   <artifactId>pulsing-spring</artifactId>
   <packaging>war</packaging>
   <name>pulsing-spring</name>
-  <url>http://maven.apache.org</url>
   
   <dependencies>
     

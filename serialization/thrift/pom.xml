@@ -11,7 +11,6 @@
   <groupId>org.jhk.pulsing.serialization.thrift</groupId>
   <artifactId>pulsing-thrift</artifactId>
   <name>pulsing-thrift</name>
-  <url>https://github.com/JHKTruth/pulsingserialization/thrift</url>
   
   <dependencies>
     

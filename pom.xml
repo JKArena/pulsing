@@ -6,7 +6,6 @@
   <packaging>pom</packaging>
   <version>0.1-SNAPSHOT</version>
   <name>pulsing-project</name>
-  <url>https://github.com/JHKTruth/pulsing</url>
   <description>Pulsing Build Project</description>
   
   <dependencyManagement>

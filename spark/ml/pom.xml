@@ -11,7 +11,6 @@
   <groupId>org.jhk.pulsing.spark.ml</groupId>
   <artifactId>pulsing-spark-ml</artifactId>
   <name>pulsing-spark-ml</name>
-  <url>https://github.com/JHKTruth/pulsing/spark/ml</url>
   
   <dependencies>
     

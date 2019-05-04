@@ -11,7 +11,6 @@
   <groupId>org.jhk.pulsing.zookeeper</groupId>
   <artifactId>pulsing-zookeeper</artifactId>
   <name>pulsing-zookeeper</name>
-  <url>https://github.com/JHKTruth/pulsing/zookeeper</url>
   
   <dependencies>
     
