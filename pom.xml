@@ -830,7 +830,7 @@ descent loss of performance)
     <module>sandbox</module>
     <module>kafkaStream</module>
     <module>zookeeper</module>
-    <module>services</module>
+    <module>services-client</module>
   </modules>
   
   <build>

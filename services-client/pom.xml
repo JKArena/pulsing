@@ -8,10 +8,10 @@
 	  <version>0.1-SNAPSHOT</version>
   </parent>
   
-  <groupId>org.jhk.pulsing.services</groupId>
-  <artifactId>pulsing-services</artifactId>
-  <name>pulsing-services</name>
-  <url>https://github.com/JHKTruth/pulsing/services</url>
+  <groupId>org.jhk.pulsing.services-client</groupId>
+  <artifactId>pulsing-services-client</artifactId>
+  <name>pulsing-services-client</name>
+  <url>https://github.com/JHKTruth/pulsing/services-client</url>
   
   <dependencies>
     <dependency>
