@@ -19,6 +19,8 @@
 package org.jhk.pulsing.web.service;
 
 import org.jhk.pulsing.chat.IChatService;
+import org.jhk.pulsing.client.pulse.IPulseService;
+import org.jhk.pulsing.client.user.IUserService;
 
 /**
  * @author Ji Kim

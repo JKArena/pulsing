@@ -33,7 +33,7 @@ import org.jhk.pulsing.shared.util.RedisConstants.INVITATION_ID;
 import org.jhk.pulsing.shared.util.Util;
 import org.jhk.pulsing.web.dao.prod.db.AbstractRedisDao;
 import org.jhk.pulsing.web.pojo.light.Invitation;
-import org.jhk.pulsing.web.pojo.light.UserLight;
+import org.jhk.pulsing.client.payload.light.UserLight;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;

@@ -29,7 +29,7 @@ import org.jhk.pulsing.serialization.avro.records.User;
 import org.jhk.pulsing.serialization.avro.records.UserId;
 import org.jhk.pulsing.client.payload.Result;
 import org.jhk.pulsing.web.pojo.light.Invitation;
-import org.jhk.pulsing.web.service.IUserService;
+import org.jhk.pulsing.client.user.IUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;

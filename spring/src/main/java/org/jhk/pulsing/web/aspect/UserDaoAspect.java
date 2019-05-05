@@ -36,8 +36,8 @@ import org.jhk.pulsing.serialization.avro.records.Picture;
 import org.jhk.pulsing.serialization.avro.records.User;
 import org.jhk.pulsing.serialization.avro.records.UserId;
 import org.jhk.pulsing.client.payload.Result;
-import org.jhk.pulsing.web.pojo.light.UserLight;
-import org.jhk.pulsing.web.service.IUserService;
+import org.jhk.pulsing.client.payload.light.UserLight;
+import org.jhk.pulsing.client.user.IUserService;
 
 import static org.jhk.pulsing.client.payload.Result.CODE.*;
 import org.slf4j.Logger;

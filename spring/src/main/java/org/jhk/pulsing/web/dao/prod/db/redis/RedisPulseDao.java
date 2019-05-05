@@ -37,7 +37,7 @@ import static org.jhk.pulsing.shared.util.RedisConstants.REDIS_KEY.*;
 import static org.jhk.pulsing.client.payload.Result.CODE.*;
 import org.jhk.pulsing.web.dao.IPulseDao;
 import org.jhk.pulsing.web.dao.prod.db.AbstractRedisDao;
-import org.jhk.pulsing.web.pojo.light.UserLight;
+import org.jhk.pulsing.client.payload.light.UserLight;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;

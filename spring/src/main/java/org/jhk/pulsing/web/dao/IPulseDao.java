@@ -23,7 +23,7 @@ import java.util.Optional;
 import org.jhk.pulsing.serialization.avro.records.Pulse;
 import org.jhk.pulsing.serialization.avro.records.PulseId;
 import org.jhk.pulsing.client.payload.Result;
-import org.jhk.pulsing.web.pojo.light.UserLight;
+import org.jhk.pulsing.client.payload.light.UserLight;
 
 /**
  * @author Ji Kim
