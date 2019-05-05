@@ -26,23 +26,8 @@
     </dependency>
     
     <dependency>
-      <groupId>org.jhk.pulsing.services</groupId>
-      <artifactId>pulsing-services</artifactId>
-    </dependency>
-    
-    <dependency>
-      <groupId>org.jhk.pulsing.db.mysql</groupId>
-      <artifactId>pulsing-db-mysql</artifactId>
-    </dependency>
-    
-    <dependency>
-      <groupId>org.jhk.pulsing.db.cassandra</groupId>
-      <artifactId>pulsing-db-cassandra</artifactId>
-    </dependency>
-    
-    <dependency>
-      <groupId>org.jhk.pulsing.db.hbase</groupId>
-      <artifactId>pulsing-db-hbase</artifactId>
+      <groupId>org.jhk.pulsing.services-client</groupId>
+      <artifactId>pulsing-services-client</artifactId>
     </dependency>
     
     <dependency>
@@ -54,7 +39,7 @@
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-web</artifactId>
     </dependency>
-    
+
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-core</artifactId>
@@ -251,6 +236,12 @@
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-war-plugin</artifactId>
+        <version>3.2.2</version>
       </plugin>
 
       <plugin>
