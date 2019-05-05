@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.web.service.prod;
+package org.jhk.pulsing.client.user.internal;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,15 +27,12 @@ import javax.inject.Named;
 import org.jhk.pulsing.serialization.avro.records.User;
 import org.jhk.pulsing.serialization.avro.records.UserId;
 import org.jhk.pulsing.shared.util.RedisConstants.INVITATION_ID;
-import org.jhk.pulsing.shared.response.Result;
-import static org.jhk.pulsing.shared.response.Result.CODE.*;
+import org.jhk.pulsing.client.payload.Result;
+import static org.jhk.pulsing.client.payload.Result.CODE.*;
 
-import org.jhk.pulsing.web.dao.prod.db.redis.RedisPulseDao;
-import org.jhk.pulsing.web.dao.prod.db.redis.RedisUserDao;
 import org.jhk.pulsing.db.mysql.user.MySqlUserDao;
-import org.jhk.pulsing.web.pojo.light.Invitation;
-import org.jhk.pulsing.web.pojo.light.UserLight;
-import org.jhk.pulsing.web.service.IUserService;
+import org.jhk.pulsing.client.payload.light.UserLight;
+import org.jhk.pulsing.client.user.IUserService;
 import org.springframework.stereotype.Service;
 
 /**

@@ -16,16 +16,17 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.web.service;
+package org.jhk.pulsing.client.pulse;
 
 import java.util.Map;
 import java.util.Set;
 
+import org.jhk.pulsing.client.payload.Result;
 import org.jhk.pulsing.serialization.avro.records.Pulse;
 import org.jhk.pulsing.serialization.avro.records.PulseId;
 import org.jhk.pulsing.serialization.avro.records.UserId;
-import org.jhk.pulsing.shared.response.Result;
-import org.jhk.pulsing.web.pojo.light.UserLight;
+
+import org.jhk.pulsing.client.payload.light.UserLight;
 
 /**
  * @author Ji Kim

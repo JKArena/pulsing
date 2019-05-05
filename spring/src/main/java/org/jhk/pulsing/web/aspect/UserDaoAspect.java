@@ -35,11 +35,11 @@ import org.aspectj.lang.annotation.Aspect;
 import org.jhk.pulsing.serialization.avro.records.Picture;
 import org.jhk.pulsing.serialization.avro.records.User;
 import org.jhk.pulsing.serialization.avro.records.UserId;
-import org.jhk.pulsing.shared.response.Result;
+import org.jhk.pulsing.client.payload.Result;
 import org.jhk.pulsing.web.pojo.light.UserLight;
 import org.jhk.pulsing.web.service.IUserService;
 
-import static org.jhk.pulsing.shared.response.Result.CODE.*;
+import static org.jhk.pulsing.client.payload.Result.CODE.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;

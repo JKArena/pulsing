@@ -27,7 +27,7 @@ import javax.inject.Inject;
 import org.jhk.pulsing.serialization.avro.records.Picture;
 import org.jhk.pulsing.serialization.avro.records.User;
 import org.jhk.pulsing.serialization.avro.records.UserId;
-import org.jhk.pulsing.shared.response.Result;
+import org.jhk.pulsing.client.payload.Result;
 import org.jhk.pulsing.web.pojo.light.Invitation;
 import org.jhk.pulsing.web.service.IUserService;
 import org.slf4j.Logger;

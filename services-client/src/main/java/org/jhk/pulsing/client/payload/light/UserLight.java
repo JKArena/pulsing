@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.web.pojo.light;
+package org.jhk.pulsing.client.payload.light;
 
 import java.io.Serializable;
 

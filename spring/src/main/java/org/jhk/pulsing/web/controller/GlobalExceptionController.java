@@ -18,7 +18,7 @@
  */
 package org.jhk.pulsing.web.controller;
 
-import org.jhk.pulsing.shared.response.Result;
+import org.jhk.pulsing.client.payload.Result;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 

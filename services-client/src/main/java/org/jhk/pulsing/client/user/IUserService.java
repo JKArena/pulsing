@@ -16,17 +16,14 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.web.service;
+package org.jhk.pulsing.client.user;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.jhk.pulsing.serialization.avro.records.User;
 import org.jhk.pulsing.serialization.avro.records.UserId;
-import org.jhk.pulsing.shared.util.RedisConstants.INVITATION_ID;
-import org.jhk.pulsing.shared.response.Result;
-import org.jhk.pulsing.web.pojo.light.Invitation;
-import org.jhk.pulsing.web.pojo.light.UserLight;
+import org.jhk.pulsing.client.payload.Result;
+import org.jhk.pulsing.client.payload.light.UserLight;
 
 /**
  * @author Ji Kim
@@ -40,25 +37,11 @@ public interface IUserService {
     Result<User> createUser(User user);
     
     Result<User> validateUser(String email, String password);
-    
+
     Result<String> logout(UserId userId);
-    
+
     void storeUserLight(UserLight user);
-    
+
     Optional<UserLight> getUserLight(long userId);
-    
-    Result<List<Invitation>> getAlertList(UserId userId);
-    
-    /**
-     * Creates an expiring invitationId for the userId (i.e. for /chatLobbyInvite action)
-     * 
-     * @param userId
-     * @param prefix
-     * @param expiration in seconds
-     * @return
-     */
-    String createInvitationId(long toUserId, long fromUserId, INVITATION_ID prefix, int expiration);
-    
-    boolean removeInvitationId(long userId, String invitationId);
-    
+
 }

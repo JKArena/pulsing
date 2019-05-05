@@ -28,13 +28,13 @@ import javax.inject.Inject;
 import org.jhk.pulsing.db.cassandra.PagingResult;
 import org.jhk.pulsing.serialization.avro.records.UserId;
 import org.jhk.pulsing.chat.util.Paging;
-import org.jhk.pulsing.shared.response.Result;
-import static org.jhk.pulsing.shared.response.Result.CODE.*;
+import org.jhk.pulsing.client.payload.Result;
+import static org.jhk.pulsing.client.payload.Result.CODE.*;
 import org.jhk.pulsing.web.common.SystemMessageUtil;
 
 import org.jhk.pulsing.chat.IChatService;
 import org.jhk.pulsing.chat.response.Chat;
-import org.jhk.pulsing.web.pojo.light.UserLight;
+import org.jhk.pulsing.client.payload.light.UserLight;
 import org.jhk.pulsing.web.service.IUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -18,6 +18,7 @@
  */
 package org.jhk.pulsing.web.pojo.light;
 
+import org.jhk.pulsing.client.payload.light.UserLight;
 import org.jhk.pulsing.shared.util.CommonConstants;
 
 /**

@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.web.service.prod;
+package org.jhk.pulsing.client.pulse.internal;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -38,12 +38,12 @@ import org.jhk.pulsing.serialization.avro.records.UserId;
 import org.jhk.pulsing.shared.processor.PulseProcessor;
 import org.jhk.pulsing.shared.util.CommonConstants;
 import org.jhk.pulsing.shared.util.Util;
-import org.jhk.pulsing.shared.response.Result;
-import static org.jhk.pulsing.shared.response.Result.CODE.*;
+import org.jhk.pulsing.client.payload.Result;
+import static org.jhk.pulsing.client.payload.Result.CODE.*;
 import org.jhk.pulsing.web.dao.prod.db.redis.RedisPulseDao;
 import org.jhk.pulsing.web.dao.prod.db.redis.RedisUserDao;
-import org.jhk.pulsing.web.pojo.light.UserLight;
-import org.jhk.pulsing.web.service.IPulseService;
+import org.jhk.pulsing.client.payload.light.UserLight;
+import org.jhk.pulsing.client.pulse.IPulseService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
