@@ -14,7 +14,7 @@
   
   <dependencies>
     <dependency>
-	  <groupId>org.apache.kafka</groupId>
+	    <groupId>org.apache.kafka</groupId>
       <artifactId>kafka-clients</artifactId>
     </dependency>
     

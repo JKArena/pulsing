@@ -9,6 +9,7 @@
   <groupId>org.jhk.pulsing.spark.streaming</groupId>
   <artifactId>pulsing-spark-streaming</artifactId>
   <name>pulsing-spark-streaming</name>
+
   <build>
     <sourceDirectory>src/main/scala</sourceDirectory>
     <testSourceDirectory>src/test/scala</testSourceDirectory>
