@@ -40,8 +40,4 @@ public interface IUserService {
 
     Result<String> logout(UserId userId);
 
-    void storeUserLight(UserLight user);
-
-    Optional<UserLight> getUserLight(long userId);
-
 }

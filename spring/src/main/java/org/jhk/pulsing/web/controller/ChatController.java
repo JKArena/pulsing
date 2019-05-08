@@ -31,7 +31,8 @@ import org.jhk.pulsing.chat.util.Paging;
 import org.jhk.pulsing.client.payload.Result;
 import static org.jhk.pulsing.client.payload.Result.CODE.*;
 import org.jhk.pulsing.web.common.SystemMessageUtil;
-
+import org.jhk.pulsing.web.dao.prod.db.redis.RedisUserDao;
+import org.jhk.pulsing.web.service.IInvitationService;
 import org.jhk.pulsing.chat.IChatService;
 import org.jhk.pulsing.chat.response.Chat;
 import org.jhk.pulsing.client.payload.light.UserLight;
@@ -58,10 +59,16 @@ public class ChatController {
     private static final Logger _LOGGER = LoggerFactory.getLogger(ChatController.class);
     
     @Inject
+    private IInvitationService invitationService;
+    
+    @Inject
     private IUserService userService;
     
     @Inject
     private IChatService chatService;
+    
+    @Inject
+    private RedisUserDao redisUserDao;
     
     @Inject
     private SimpMessagingTemplate template;
@@ -99,7 +106,7 @@ public class ChatController {
         Result<String> result = chatService.chatLobbyUnSubscribe(userId, cLId, lobbyName);
         
         if(result.getCode() == Result.CODE.SUCCESS) {
-            Optional<UserLight> uLight = userService.getUserLight(userId.getId());
+            Optional<UserLight> uLight = redisUserDao.getUserLight(userId.getId());
             SystemMessageUtil.sendSystemChatMessage(template, cLId, 
                     "User " + (uLight.isPresent() ? uLight.get().getName() + " " : "") + " left the chat lobby ");
         }
@@ -112,14 +119,14 @@ public class ChatController {
                                                                 @PathVariable String chatLobbyInvitationId, @PathVariable UserId userId) {
         _LOGGER.debug("ChatController.chatLobbySubscribe: " + cLId + " - " + lobbyName + " : " + userId + ";" + chatLobbyInvitationId);
         
-        if(!userService.removeInvitationId(userId.getId(), chatLobbyInvitationId)) {
+        if(!invitationService.removeInvitationId(userId.getId(), chatLobbyInvitationId)) {
             return new Result<>(FAILURE, null, "Failed to subscribe to chatLobby " + lobbyName + " - the invitationId has expired.");
         }
         
         Result<Boolean> chatSubscribe = chatService.chatLobbySubscribe(cLId, lobbyName, userId);
         
         if(chatSubscribe.getData()) {
-            Optional<UserLight> uLight = userService.getUserLight(userId.getId());
+            Optional<UserLight> uLight = redisUserDao.getUserLight(userId.getId());
             SystemMessageUtil.sendSystemChatMessage(template, cLId, 
                     "User " + (uLight.isPresent() ? uLight.get().getName() + " " : "") + " joined the chat lobby " + lobbyName + ", welcome him/her!!!");
         }

@@ -21,8 +21,7 @@ package org.jhk.pulsing.client.user.internal;
 import java.util.List;
 import java.util.Optional;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import javax.annotation.Resource;
 
 import org.jhk.pulsing.serialization.avro.records.User;
 import org.jhk.pulsing.serialization.avro.records.UserId;
@@ -48,17 +47,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService implements IUserService {
     
-    @Inject
-    @Named("mySqlUserDao")
+    @Resource(name="mySqlUserDao")
     private MySqlUserDao mySqlUserDao;
-    
-    @Inject
-    @Named("redisUserDao")
-    private RedisUserDao redisUserDao;
-    
-    @Inject
-    @Named("redisPulseDao")
-    private RedisPulseDao redisPulseDao;
     
     @Override
     public Result<User> getUser(UserId userId) {
@@ -99,48 +89,7 @@ public class UserService implements IUserService {
     @Override
     public Result<String> logout(UserId userId) {
         
-        Optional<UserLight> oUserLight = redisUserDao.getUserLight(userId.getId());
-        
-        if(oUserLight.isPresent()) {
-            
-            UserLight uLight = oUserLight.get();
-            
-            redisUserDao.removeUserLight(userId.getId());
-            
-            if(uLight.getSubscribedPulseId() != 0L) {
-                redisPulseDao.unSubscribePulse(uLight);
-            }
-        }
-        
         return new Result<>(SUCCESS, "loggedOut");
-    }
-    
-    @Override
-    public Result<List<Invitation>> getAlertList(UserId userId) {
-        
-        return new Result<List<Invitation>>(SUCCESS, redisUserDao.getAlertList(userId));
-    }
-    
-    @Override
-    public String createInvitationId(long toUserId, long fromUserId, INVITATION_ID prefix, int expiration) {
-        
-        return redisUserDao.createInvitationId(toUserId, fromUserId, prefix, expiration);
-    }
-    
-    @Override
-    public boolean removeInvitationId(long userId, String invitationId) {
-        
-        return redisUserDao.removeInvitationId(userId, invitationId);
-    }
-    
-    @Override
-    public void storeUserLight(UserLight user) {
-        redisUserDao.storeUserLight(user);
-    }
-    
-    @Override
-    public Optional<UserLight> getUserLight(long userId) {
-        return redisUserDao.getUserLight(userId);
     }
     
 }

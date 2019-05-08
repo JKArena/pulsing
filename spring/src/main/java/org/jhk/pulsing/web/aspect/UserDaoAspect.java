@@ -35,6 +35,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.jhk.pulsing.serialization.avro.records.Picture;
 import org.jhk.pulsing.serialization.avro.records.User;
 import org.jhk.pulsing.serialization.avro.records.UserId;
+import org.jhk.pulsing.web.dao.prod.db.redis.RedisUserDao;
 import org.jhk.pulsing.client.payload.Result;
 import org.jhk.pulsing.client.payload.light.UserLight;
 import org.jhk.pulsing.client.user.IUserService;
@@ -61,6 +62,9 @@ public class UserDaoAspect {
     @Inject
     private IUserService userService;
     
+    @Inject
+    private RedisUserDao redisUserDao;
+    
     @AfterReturning(pointcut="execution(org.jhk.pulsing.web.common.Result+ org.jhk.pulsing.web.service.prod.UserService.*(..))", returning= "result")
     public void patchUser(JoinPoint joinPoint, Result<User> result) {
         if(result.getCode() != SUCCESS) {
@@ -78,7 +82,7 @@ public class UserDaoAspect {
         
         if(picture != null && picture.getName() != null) {
             
-            uLight = userService.getUserLight(userId.getId());
+            uLight = redisUserDao.getUserLight(userId.getId());
             
             if(!uLight.isPresent()) {
             
@@ -114,7 +118,7 @@ public class UserDaoAspect {
         }
         
         if(!uLight.isPresent()) {
-            userService.storeUserLight(new UserLight(user));
+            redisUserDao.storeUserLight(new UserLight(user));
         }
         
     }

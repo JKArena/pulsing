@@ -21,6 +21,7 @@ package org.jhk.pulsing.web.controller;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.List;
+import java.util.Optional;
 
 import javax.inject.Inject;
 
@@ -28,8 +29,12 @@ import org.jhk.pulsing.serialization.avro.records.Picture;
 import org.jhk.pulsing.serialization.avro.records.User;
 import org.jhk.pulsing.serialization.avro.records.UserId;
 import org.jhk.pulsing.client.payload.Result;
+import org.jhk.pulsing.client.payload.light.UserLight;
 import org.jhk.pulsing.web.pojo.light.Invitation;
+import org.jhk.pulsing.web.service.IInvitationService;
 import org.jhk.pulsing.client.user.IUserService;
+import org.jhk.pulsing.web.dao.prod.db.redis.RedisPulseDao;
+import org.jhk.pulsing.web.dao.prod.db.redis.RedisUserDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
@@ -53,7 +58,16 @@ public class UserController {
     private static final Logger _LOGGER = LoggerFactory.getLogger(UserController.class);
     
     @Inject
+    private IInvitationService invitationService;
+    
+    @Inject
     private IUserService userService;
+    
+    @Inject
+    private RedisUserDao redisUserDao;
+    
+    @Inject
+    private RedisPulseDao redisPulseDao;
     
     @RequestMapping(value="/createUser", method=RequestMethod.POST, consumes={MediaType.MULTIPART_FORM_DATA_VALUE})
     public @ResponseBody Result<User> createUser(@RequestParam User user, @RequestParam(name="picture", required=false) MultipartFile mPicture) {
@@ -79,7 +93,7 @@ public class UserController {
     public @ResponseBody Result<List<Invitation>> getAlertList(@PathVariable UserId userId) {
         _LOGGER.debug("UserController.getAlertList: " + userId);
         
-        return userService.getAlertList(userId);
+        return invitationService.getAlertList(userId);
     }
     
     @RequestMapping(value="/getUser", method=RequestMethod.GET)
@@ -100,6 +114,19 @@ public class UserController {
     public @ResponseBody Result<String> logout(@PathVariable UserId userId) {
         _LOGGER.debug("UserController.logout: " + userId);
         
+        Optional<UserLight> oUserLight = redisUserDao.getUserLight(userId.getId());
+        
+        if(oUserLight.isPresent()) {
+            
+            UserLight uLight = oUserLight.get();
+            
+            redisUserDao.removeUserLight(userId.getId());
+            
+            if(uLight.getSubscribedPulseId() != 0L) {
+                redisPulseDao.unSubscribePulse(uLight);
+            }
+        }
+
         return userService.logout(userId);
     }
     

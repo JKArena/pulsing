@@ -29,6 +29,7 @@ import org.jhk.pulsing.serialization.avro.records.PulseId;
 import org.jhk.pulsing.serialization.avro.records.UserId;
 import org.jhk.pulsing.serialization.avro.serializers.SerializationHelper;
 import org.jhk.pulsing.client.payload.Result;
+import org.jhk.pulsing.web.dao.prod.db.redis.RedisUserDao;
 import org.jhk.pulsing.web.pojo.light.MapPulseCreate;
 import org.jhk.pulsing.client.payload.light.UserLight;
 import org.jhk.pulsing.client.pulse.IPulseService;
@@ -66,6 +67,9 @@ public class PulseController {
     private IUserService userService;
     
     @Inject
+    private RedisUserDao redisUserDao;
+    
+    @Inject
     private SimpMessagingTemplate template;
     
     /**
@@ -84,7 +88,7 @@ public class PulseController {
         if(result.getCode() == Result.CODE.SUCCESS) {
             pulse = result.getData();
             
-            Optional<UserLight> oUserLight = userService.getUserLight(pulse.getUserId().getId());
+            Optional<UserLight> oUserLight = redisUserDao.getUserLight(pulse.getUserId().getId());
             if(oUserLight.isPresent()) {
                 try {
                     

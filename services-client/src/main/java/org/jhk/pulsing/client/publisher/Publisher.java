@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.web.publisher;
+package org.jhk.pulsing.client.publisher;
 
 import java.util.Properties;
 

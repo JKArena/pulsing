@@ -26,6 +26,7 @@ import javax.sql.DataSource;
 
 import org.jhk.pulsing.web.dao.prod.db.redis.RedisPulseDao;
 import org.jhk.pulsing.web.dao.prod.db.redis.RedisUserDao;
+import org.jhk.pulsing.web.service.prod.InvitationService;
 import org.jhk.pulsing.db.mysql.user.MySqlUserDao;
 import org.jhk.pulsing.chat.ChatService;
 import org.jhk.pulsing.chat.IChatService;
@@ -60,6 +61,12 @@ public class ProdServiceConfig implements IServiceConfig {
     
     @Inject
     private Environment env;
+    
+    @Bean
+    @Override
+    public IInvitationService getInvitationService() {
+        return new InvitationService();
+    }
     
     @Bean
     @Override

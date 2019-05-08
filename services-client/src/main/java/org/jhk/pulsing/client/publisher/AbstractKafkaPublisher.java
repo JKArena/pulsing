@@ -16,18 +16,16 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.web.service.prod;
+package org.jhk.pulsing.client.publisher;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
-import org.jhk.pulsing.web.publisher.Publisher;
-
 /**
  * @author Ji Kim
  */
-abstract class AbstractKafkaPublisher {
-    
+public abstract class AbstractKafkaPublisher {
+
     private Publisher _kafkaPublisher;
     
     protected Publisher getKafkaPublisher() {

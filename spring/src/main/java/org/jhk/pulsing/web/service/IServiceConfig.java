@@ -27,6 +27,8 @@ import org.jhk.pulsing.client.user.IUserService;
  */
 public interface IServiceConfig {
     
+    IInvitationService getInvitationService();
+    
     IUserService getUserService();
     
     IPulseService getPulseService();

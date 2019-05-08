@@ -28,8 +28,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import javax.annotation.Resource;
 
 import org.jhk.pulsing.serialization.avro.records.ACTION;
 import org.jhk.pulsing.serialization.avro.records.Pulse;
@@ -40,9 +39,8 @@ import org.jhk.pulsing.shared.util.CommonConstants;
 import org.jhk.pulsing.shared.util.Util;
 import org.jhk.pulsing.client.payload.Result;
 import static org.jhk.pulsing.client.payload.Result.CODE.*;
-import org.jhk.pulsing.web.dao.prod.db.redis.RedisPulseDao;
-import org.jhk.pulsing.web.dao.prod.db.redis.RedisUserDao;
 import org.jhk.pulsing.client.payload.light.UserLight;
+import org.jhk.pulsing.client.publisher.AbstractKafkaPublisher;
 import org.jhk.pulsing.client.pulse.IPulseService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,12 +55,10 @@ public class PulseService extends AbstractKafkaPublisher
     
     private static final Logger _LOGGER = LoggerFactory.getLogger(PulseService.class);
     
-    @Inject
-    @Named("redisPulseDao")
+    @Resource(name="redisPulseDao")
     private RedisPulseDao redisPulseDao;
     
-    @Inject
-    @Named("redisUserDao")
+    @Resource(name="redisUserDao")
     private RedisUserDao redisUserDao;
     
     @Override

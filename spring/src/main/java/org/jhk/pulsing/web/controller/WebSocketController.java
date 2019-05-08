@@ -26,10 +26,12 @@ import javax.inject.Inject;
 
 import org.jhk.pulsing.shared.util.RedisConstants;
 import org.jhk.pulsing.web.common.SystemMessageUtil;
+import org.jhk.pulsing.web.dao.prod.db.redis.RedisUserDao;
 import org.jhk.pulsing.web.pojo.light.Alert;
 import org.jhk.pulsing.chat.IChatService;
 import org.jhk.pulsing.chat.response.Chat;
 import org.jhk.pulsing.web.pojo.light.MapPulseCreate;
+import org.jhk.pulsing.web.service.IInvitationService;
 import org.jhk.pulsing.client.payload.light.UserLight;
 import org.jhk.pulsing.client.user.IUserService;
 import org.slf4j.Logger;
@@ -52,10 +54,16 @@ public class WebSocketController {
     private static final int CHAT_LOBBY_INVITE_EXPIRATION = 300; // 5 minutes
     
     @Inject
+    private IInvitationService invitationService;
+    
+    @Inject
     private IUserService userService;
     
     @Inject
     private IChatService chatService;
+    
+    @Inject
+    private RedisUserDao redisUserDao;
     
     @Inject
     private SimpMessagingTemplate template;
@@ -82,7 +90,7 @@ public class WebSocketController {
         msg.setTimeStamp(Instant.now().toEpochMilli());
         
         if(msg.getType() == Chat.TYPE.CHAT_LOBBY_INVITE) {
-            String invitationId = userService.createInvitationId(toUserId, msg.getUserId(), RedisConstants.INVITATION_ID.CHAT_LOBBY_INVITE, 
+            String invitationId = invitationService.createInvitationId(toUserId, msg.getUserId(), RedisConstants.INVITATION_ID.CHAT_LOBBY_INVITE, 
                     CHAT_LOBBY_INVITE_EXPIRATION);
             
             msg.addData("invitationId", invitationId);
@@ -104,7 +112,7 @@ public class WebSocketController {
     public Chat chat(@DestinationVariable String chatId, @Payload Chat msg) {
         _LOGGER.debug("WebSocketController.chat: " + chatId + ": " + msg);
         
-        Optional<UserLight> oUserLight = userService.getUserLight(msg.getUserId());
+        Optional<UserLight> oUserLight = redisUserDao.getUserLight(msg.getUserId());
         oUserLight.ifPresent(user -> {
             msg.setPicturePath(user.getPicturePath());
         });
