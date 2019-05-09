@@ -18,31 +18,15 @@
  */
 package org.jhk.pulsing.client.pulse;
 
-import java.util.Map;
-import java.util.Set;
-
-import org.jhk.pulsing.client.payload.Result;
 import org.jhk.pulsing.serialization.avro.records.Pulse;
-import org.jhk.pulsing.serialization.avro.records.PulseId;
-import org.jhk.pulsing.serialization.avro.records.UserId;
-
-import org.jhk.pulsing.client.payload.light.UserLight;
 
 /**
  * @author Ji Kim
  */
 public interface IPulseService {
     
-    Result<Pulse> getPulse(PulseId pulseId);
+    void publishCreatePulse(Pulse pulse);
     
-    Result<Pulse> createPulse(Pulse pulse);
-    
-    Result<PulseId> subscribePulse(Pulse pulse, UserId userId);
-    
-    Result<String> unSubscribePulse(Pulse pulse, UserId userId);
-    
-    Map<Long, String> getTrendingPulseSubscriptions(int numMinutes);
-    
-    Map<String, Set<UserLight>> getMapPulseDataPoints(Double lat, Double lng);
+    void publishPulseSubscription(Pulse pulse);
     
 }

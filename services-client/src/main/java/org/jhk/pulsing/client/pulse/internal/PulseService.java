@@ -18,28 +18,8 @@
  */
 package org.jhk.pulsing.client.pulse.internal;
 
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
-import java.util.Map;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.LinkedHashMap;
-import java.util.Optional;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import javax.annotation.Resource;
-
-import org.jhk.pulsing.serialization.avro.records.ACTION;
 import org.jhk.pulsing.serialization.avro.records.Pulse;
-import org.jhk.pulsing.serialization.avro.records.PulseId;
-import org.jhk.pulsing.serialization.avro.records.UserId;
-import org.jhk.pulsing.shared.processor.PulseProcessor;
 import org.jhk.pulsing.shared.util.CommonConstants;
-import org.jhk.pulsing.shared.util.Util;
-import org.jhk.pulsing.client.payload.Result;
-import static org.jhk.pulsing.client.payload.Result.CODE.*;
-import org.jhk.pulsing.client.payload.light.UserLight;
 import org.jhk.pulsing.client.publisher.AbstractKafkaPublisher;
 import org.jhk.pulsing.client.pulse.IPulseService;
 import org.slf4j.Logger;
@@ -55,20 +35,6 @@ public class PulseService extends AbstractKafkaPublisher
     
     private static final Logger _LOGGER = LoggerFactory.getLogger(PulseService.class);
     
-    @Resource(name="redisPulseDao")
-    private RedisPulseDao redisPulseDao;
-    
-    @Resource(name="redisUserDao")
-    private RedisUserDao redisUserDao;
-    
-    @Override
-    public Result<Pulse> getPulse(PulseId pulseId) {
-        Optional<Pulse> optPulse = redisPulseDao.getPulse(pulseId);
-        
-        return optPulse.isPresent() ? new Result<>(SUCCESS, optPulse.get()) : new Result<>(FAILURE, null, "Unabled to find " + pulseId);
-    }
-    
-    
     /**
      * For creation of pulse there are couple of tasks that must be done
      * 
@@ -82,22 +48,10 @@ public class PulseService extends AbstractKafkaPublisher
      * @return
      */
     @Override
-    public Result<Pulse> createPulse(Pulse pulse) {
+    public void publishCreatePulse(Pulse pulse) {
         
-        PulseId pId = PulseId.newBuilder().build();
-        pId.setId(Util.uniqueId());
-        pulse.setAction(ACTION.CREATE);
-        pulse.setId(pId);
-        pulse.setTimeStamp(Instant.now().getEpochSecond());
-        
-        Result<Pulse> cPulse = redisPulseDao.createPulse(pulse);
-        if(cPulse.getCode() == SUCCESS) {
-            _LOGGER.debug("PulseService.createPulse: Sending pulse " + cPulse.getData());
-            getKafkaPublisher().produce(CommonConstants.TOPICS.PULSE_CREATE.toString(), cPulse.getData());
-            subscribePulse(pulse, pulse.getUserId());
-        }
-        
-        return cPulse;
+        _LOGGER.debug("PulseService.createPulse: Sending pulse {}", pulse);
+        getKafkaPublisher().produce(CommonConstants.TOPICS.PULSE_CREATE.toString(), pulse);
     }
     
     /**
@@ -108,87 +62,8 @@ public class PulseService extends AbstractKafkaPublisher
      * @return
      */
     @Override
-    public Result<PulseId> subscribePulse(Pulse pulse, UserId userId) {
-        pulse.setUserId(userId);
-        pulse.setAction(ACTION.SUBSCRIBE);
-        pulse.setTimeStamp(Instant.now().getEpochSecond());
-        
-        Optional<UserLight> oUserLight = redisUserDao.getUserLight(userId.getId());
-        Result<PulseId> result = new Result<>(FAILURE, pulse.getId(), "Failed in subscription");
-        
-        if(oUserLight.isPresent()) {
-            UserLight userLight = oUserLight.get();
-            userLight.setSubscribedPulseId(pulse.getId().getId());
-            
-            redisPulseDao.subscribePulse(pulse, userLight);
-            redisUserDao.storeUserLight(userLight); //need to update it with the new subscribed pulse id
-            getKafkaPublisher().produce(CommonConstants.TOPICS.PULSE_SUBSCRIBE.toString(), pulse);
-            result = new Result<>(SUCCESS, pulse.getId(), "Subscribed");
-        }
-        
-        return result;
-    }
-    
-    @Override
-    public Result<String> unSubscribePulse(Pulse pulse, UserId userId) {
-        
-        Optional<UserLight> oUserLight = redisUserDao.getUserLight(userId.getId());
-        Result<String> result = new Result<>(FAILURE, "Failed in unsubscribe");
-        
-        if(oUserLight.isPresent()) {
-            UserLight userLight = oUserLight.get();
-            redisPulseDao.unSubscribePulse(userLight);
-            
-            userLight.setSubscribedPulseId(0L);
-            redisUserDao.storeUserLight(userLight);
-            result = new Result<>(SUCCESS, "Success in unsubscribe");
-        }
-        
-        return result;
-    }
-    
-    /**
-     * Hmmm should work in DRPC from storm+trident to get notified of new batch and then send 
-     * the message to client component for new set? Look into it since familiar only w/ trident
-     * 
-     * @param numMinutes
-     * @return
-     */
-    @Override
-    public Map<Long, String> getTrendingPulseSubscriptions(int numMinutes) {
-        
-        Instant current = Instant.now();
-        Instant beforeRange = current.minus(numMinutes, ChronoUnit.MINUTES);
-        
-        Optional<Set<String>> optTpSubscribe = redisPulseDao.getTrendingPulseSubscriptions(beforeRange.getEpochSecond(), current.getEpochSecond());
-        
-        @SuppressWarnings("unchecked")
-        Map<Long, String> tpSubscriptions = Collections.EMPTY_MAP;
-        
-        if(optTpSubscribe.isPresent()) {
-            
-            Map<String, Integer> count = PulseProcessor.countTrendingPulseSubscribe(optTpSubscribe.get());
-            
-            if(count.size() > 0) {
-                tpSubscriptions = count.entrySet().stream()
-                        .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
-                        .collect(Collectors.toMap(
-                                entry -> Long.parseLong(entry.getKey().split(CommonConstants.TIME_INTERVAL_ID_VALUE_DELIM)[0]),
-                                entry -> entry.getKey().split(CommonConstants.TIME_INTERVAL_ID_VALUE_DELIM)[1],
-                                (x, y) -> {throw new AssertionError();},
-                                LinkedHashMap::new
-                                ));
-            }
-            
-        };
-        
-        return tpSubscriptions;
-    }
-    
-    @Override
-    public Map<String, Set<UserLight>> getMapPulseDataPoints(Double lat, Double lng) {
-        
-        return redisPulseDao.getMapPulseDataPoints(lat, lng);
+    public void publishPulseSubscription(Pulse pulse) {
+        getKafkaPublisher().produce(CommonConstants.TOPICS.PULSE_SUBSCRIBE.toString(), pulse);
     }
     
 }

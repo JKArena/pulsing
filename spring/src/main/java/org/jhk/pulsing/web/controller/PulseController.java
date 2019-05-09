@@ -18,22 +18,35 @@
  */
 package org.jhk.pulsing.web.controller;
 
+import static org.jhk.pulsing.client.payload.Result.CODE.FAILURE;
+import static org.jhk.pulsing.client.payload.Result.CODE.SUCCESS;
+
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
+import org.jhk.pulsing.serialization.avro.records.ACTION;
 import org.jhk.pulsing.serialization.avro.records.Pulse;
 import org.jhk.pulsing.serialization.avro.records.PulseId;
 import org.jhk.pulsing.serialization.avro.records.UserId;
 import org.jhk.pulsing.serialization.avro.serializers.SerializationHelper;
+import org.jhk.pulsing.shared.processor.PulseProcessor;
+import org.jhk.pulsing.shared.util.CommonConstants;
+import org.jhk.pulsing.shared.util.Util;
 import org.jhk.pulsing.client.payload.Result;
+import org.jhk.pulsing.web.dao.prod.db.redis.RedisPulseDao;
 import org.jhk.pulsing.web.dao.prod.db.redis.RedisUserDao;
 import org.jhk.pulsing.web.pojo.light.MapPulseCreate;
 import org.jhk.pulsing.client.payload.light.UserLight;
 import org.jhk.pulsing.client.pulse.IPulseService;
-import org.jhk.pulsing.client.user.IUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
@@ -57,6 +70,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class PulseController {
     
     private static final Logger _LOGGER = LoggerFactory.getLogger(PulseController.class);
+    private static final int TRENDING_PULSE_PRIOR_MINUTE = 10;
     
     private ObjectMapper _objectMapper = new ObjectMapper();
     
@@ -64,7 +78,7 @@ public class PulseController {
     private IPulseService pulseService;
     
     @Inject
-    private IUserService userService;
+    private RedisPulseDao redisPulseDao;
     
     @Inject
     private RedisUserDao redisUserDao;
@@ -82,16 +96,20 @@ public class PulseController {
     @RequestMapping(value="/createPulse", method=RequestMethod.POST, consumes={MediaType.MULTIPART_FORM_DATA_VALUE})
     public @ResponseBody Result<Pulse> createPulse(@RequestParam Pulse pulse) {
         _LOGGER.debug("PulseController.createPulse: " + pulse);
+        PulseId pId = PulseId.newBuilder().build();
+        pId.setId(Util.uniqueId());
+        pulse.setAction(ACTION.CREATE);
+        pulse.setId(pId);
+        pulse.setTimeStamp(Instant.now().getEpochSecond());
         
-        Result<Pulse> result = pulseService.createPulse(pulse);
-        
+        Result<Pulse> result = redisPulseDao.createPulse(pulse);
         if(result.getCode() == Result.CODE.SUCCESS) {
             pulse = result.getData();
-            
+            pulseService.publishCreatePulse(pulse);
+            subscribePulse(pulse.getId(), pulse.getUserId());
             Optional<UserLight> oUserLight = redisUserDao.getUserLight(pulse.getUserId().getId());
             if(oUserLight.isPresent()) {
                 try {
-                    
                     template.convertAndSend("/topics/pulseCreated", 
                                             _objectMapper.writeValueAsString(new MapPulseCreate(oUserLight.get(), 
                                                                                 SerializationHelper.serializeAvroTypeToJSONString(pulse))));
@@ -105,42 +123,110 @@ public class PulseController {
         return result;
     }
     
+    /**
+     * Hmmm should work in DRPC from storm+trident to get notified of new batch and then send 
+     * the message to client component for new set? Look into it since familiar only w/ trident
+     * 
+     * @param numMinutes
+     * @return
+     */
     @RequestMapping(value="/getTrendingPulseSubscriptions", method=RequestMethod.GET)
     public @ResponseBody Map<Long, String> getTrendingPulseSubscriptions() {
         _LOGGER.debug("PulseController.getTrendingPulseSubscriptions");
+
+        Instant current = Instant.now();
+        Instant beforeRange = current.minus(TRENDING_PULSE_PRIOR_MINUTE, ChronoUnit.MINUTES);
         
-        return pulseService.getTrendingPulseSubscriptions(10);
+        Optional<Set<String>> optTpSubscribe = redisPulseDao.getTrendingPulseSubscriptions(beforeRange.getEpochSecond(), current.getEpochSecond());
+        
+        @SuppressWarnings("unchecked")
+        Map<Long, String> tpSubscriptions = Collections.EMPTY_MAP;
+        
+        if(optTpSubscribe.isPresent()) {
+            
+            Map<String, Integer> count = PulseProcessor.countTrendingPulseSubscribe(optTpSubscribe.get());
+            
+            if(count.size() > 0) {
+                tpSubscriptions = count.entrySet().stream()
+                        .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+                        .collect(Collectors.toMap(
+                                entry -> Long.parseLong(entry.getKey().split(CommonConstants.TIME_INTERVAL_ID_VALUE_DELIM)[0]),
+                                entry -> entry.getKey().split(CommonConstants.TIME_INTERVAL_ID_VALUE_DELIM)[1],
+                                (x, y) -> {throw new AssertionError();},
+                                LinkedHashMap::new
+                                ));
+            }
+            
+        };
+        
+        return tpSubscriptions;
     }
     
     @RequestMapping(value="/getMapPulseDataPoints", method=RequestMethod.GET)
     public @ResponseBody Map<String, Set<UserLight>> getMapPulseDataPoints(@RequestParam double lat, @RequestParam double lng) {
-        _LOGGER.debug("PulseController.getMapPulseDataPoints: " + lat + " / " + lng);
+        _LOGGER.debug("PulseController.getMapPulseDataPoints: lat {}, lng {}", lat, lng);
         
-        return pulseService.getMapPulseDataPoints(lat, lng);
+        return redisPulseDao.getMapPulseDataPoints(lat, lng);
     }
     
     @RequestMapping(value="/subscribePulse/{pulseId}/{userId}", method=RequestMethod.PUT)
     public @ResponseBody Result<PulseId> subscribePulse(@PathVariable PulseId pulseId, @PathVariable UserId userId) {
         _LOGGER.debug("PulseController.subscribePulse: " + pulseId + " - " + userId);
         
-        Result<Pulse> result = pulseService.getPulse(pulseId);
-        if(result.getCode() == Result.CODE.FAILURE) {
-            return new Result<PulseId>(Result.CODE.FAILURE, pulseId, result.getMessage());
+        Result<Pulse> gPulse = getPulse(pulseId);
+        if(gPulse.getCode() == Result.CODE.FAILURE) {
+            return new Result<PulseId>(Result.CODE.FAILURE, pulseId, gPulse.getMessage());
         }
+
+        Pulse pulse = gPulse.getData();
+        pulse.setUserId(userId);
+        pulse.setAction(ACTION.SUBSCRIBE);
+        pulse.setTimeStamp(Instant.now().getEpochSecond());
         
-        return pulseService.subscribePulse(result.getData(), userId);
+        Optional<UserLight> oUserLight = redisUserDao.getUserLight(userId.getId());
+        Result<PulseId> result = new Result<>(FAILURE, pulse.getId(), "Failed in subscription");
+
+        if(oUserLight.isPresent()) {
+            UserLight userLight = oUserLight.get();
+            userLight.setSubscribedPulseId(pulse.getId().getId());
+            
+            redisPulseDao.subscribePulse(pulse, userLight);
+            redisUserDao.storeUserLight(userLight); //need to update it with the new subscribed pulse id
+            pulseService.publishPulseSubscription(pulse);
+            result = new Result<>(SUCCESS, pulse.getId(), "Subscribed");
+        }
+
+        return result;
     }
     
     @RequestMapping(value="/unSubscribePulse/{pulseId}/{userId}", method=RequestMethod.PUT)
     public @ResponseBody Result<String> unSubscribePulse(@PathVariable PulseId pulseId, @PathVariable UserId userId) {
         _LOGGER.debug("PulseController.unSubscribePulse: " + pulseId + " - " + userId);
         
-        Result<Pulse> result = pulseService.getPulse(pulseId);
-        if(result.getCode() == Result.CODE.FAILURE) {
-            return new Result<String>(Result.CODE.FAILURE, null, result.getMessage());
+        Result<Pulse> gPulse = getPulse(pulseId);
+        if(gPulse.getCode() == Result.CODE.FAILURE) {
+            return new Result<String>(Result.CODE.FAILURE, null, gPulse.getMessage());
         }
         
-        return pulseService.unSubscribePulse(result.getData(), userId);
+        Optional<UserLight> oUserLight = redisUserDao.getUserLight(userId.getId());
+        Result<String> result = new Result<>(FAILURE, "Failed in unsubscribe");
+        
+        if(oUserLight.isPresent()) {
+            UserLight userLight = oUserLight.get();
+            redisPulseDao.unSubscribePulse(userLight);
+            
+            userLight.setSubscribedPulseId(0L);
+            redisUserDao.storeUserLight(userLight);
+            result = new Result<>(SUCCESS, "Success in unsubscribe");
+        }
+        
+        return result;
+    }
+    
+    private Result<Pulse> getPulse(PulseId pulseId) {
+        Optional<Pulse> optPulse = redisPulseDao.getPulse(pulseId);
+        
+        return optPulse.isPresent() ? new Result<>(SUCCESS, optPulse.get()) : new Result<>(FAILURE, null, "Unabled to find " + pulseId);
     }
     
 }
