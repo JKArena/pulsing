@@ -22,7 +22,7 @@ import java.time.Instant;
 import java.util.UUID;
 
 import org.jhk.pulsing.web.pojo.light.Alert;
-import org.jhk.pulsing.chat.response.Chat;
+import org.jhk.pulsing.client.payload.chat.Chat;
 import org.jhk.pulsing.client.user.IUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
