@@ -16,42 +16,28 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.client.user.internal;
+package org.jhk.pulsing.user;
 
-import org.jhk.pulsing.client.payload.Result;
-import org.jhk.pulsing.client.user.IUserService;
+import java.util.Optional;
+
 import org.jhk.pulsing.serialization.avro.records.User;
 import org.jhk.pulsing.serialization.avro.records.UserId;
-import org.springframework.stereotype.Service;
+import org.jhk.pulsing.client.payload.Result;
+import org.jhk.pulsing.client.payload.light.UserLight;
 
 /**
  * @author Ji Kim
  */
-@Service
-public class UserService implements IUserService {
-
-    @Override
-    public Result<User> getUser(UserId userId) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Result<User> createUser(User user) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Result<User> validateUser(String email, String password) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
-    public Result<String> logout(UserId userId) {
-        // TODO Auto-generated method stub
-        return null;
-    }
+public interface IUserService {
     
+    long SYSTEM_USER_ID = -1L;
+    
+    Result<User> getUser(UserId userId);
+    
+    Result<User> createUser(User user);
+    
+    Result<User> validateUser(String email, String password);
+
+    Result<String> logout(UserId userId);
+
 }
