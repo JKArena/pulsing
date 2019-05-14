@@ -25,6 +25,11 @@
     </dependency>
     
     <dependency>
+      <groupId>org.jhk.pulsing.services-payload</groupId>
+      <artifactId>pulsing-services-payload</artifactId>
+    </dependency>
+    
+    <dependency>
       <groupId>org.jhk.pulsing.search</groupId>
       <artifactId>pulsing-search</artifactId>
     </dependency>
