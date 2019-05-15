@@ -18,18 +18,25 @@
  */
 package org.jhk.pulsing.client.user.internal;
 
+import org.jhk.pulsing.client.AbstractService;
 import org.jhk.pulsing.client.payload.Result;
 import org.jhk.pulsing.client.user.IUserService;
 import org.jhk.pulsing.serialization.avro.records.User;
 import org.jhk.pulsing.serialization.avro.records.UserId;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 /**
  * @author Ji Kim
  */
 @Service
-public class UserService implements IUserService {
+public class UserService extends AbstractService 
+                            implements IUserService {
 
+    @Autowired
+    private Environment environment;
+    
     @Override
     public Result<User> getUser(UserId userId) {
         // TODO Auto-generated method stub
@@ -52,6 +59,12 @@ public class UserService implements IUserService {
     public Result<String> logout(UserId userId) {
         // TODO Auto-generated method stub
         return null;
+    }
+    
+    @Override
+    public String getUrl() {
+        // TODO get from environment, container manager
+        return ""; 
     }
     
 }

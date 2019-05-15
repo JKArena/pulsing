@@ -23,19 +23,26 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.jhk.pulsing.client.AbstractService;
 import org.jhk.pulsing.client.chat.IChatService;
 import org.jhk.pulsing.client.payload.chat.Chat;
 import org.jhk.pulsing.client.payload.chat.PagingResult;
 import org.jhk.pulsing.serialization.avro.records.UserId;
 import org.jhk.pulsing.client.payload.Result;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 /**
  * @author Ji Kim
  */
 @Service
-public class ChatService implements IChatService {
-
+public class ChatService extends AbstractService
+                            implements IChatService {
+    
+    @Autowired
+    private Environment environment;
+    
     @Override
     public Result<UUID> createChatLobby(UserId userId, String lobbyName) {
         // TODO Auto-generated method stub
@@ -84,6 +91,12 @@ public class ChatService implements IChatService {
         // TODO Auto-generated method stub
      // Paging.checkPaging
         return null;
+    }
+    
+    @Override
+    public String getUrl() {
+        // TODO get from environment, container manager
+        return ""; 
     }
 
 }
