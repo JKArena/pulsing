@@ -33,7 +33,6 @@ import org.jhk.pulsing.client.payload.chat.Chat;
 import org.jhk.pulsing.web.pojo.light.MapPulseCreate;
 import org.jhk.pulsing.web.service.IInvitationService;
 import org.jhk.pulsing.client.payload.light.UserLight;
-import org.jhk.pulsing.client.user.IUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
@@ -55,9 +54,6 @@ public class WebSocketController {
     
     @Inject
     private IInvitationService invitationService;
-    
-    @Inject
-    private IUserService userService;
     
     @Inject
     private IChatService chatService;

@@ -38,7 +38,6 @@ import org.jhk.pulsing.serialization.avro.records.UserId;
 import org.jhk.pulsing.web.dao.prod.db.redis.RedisUserDao;
 import org.jhk.pulsing.client.payload.Result;
 import org.jhk.pulsing.client.payload.light.UserLight;
-import org.jhk.pulsing.client.user.IUserService;
 
 import static org.jhk.pulsing.client.payload.Result.CODE.*;
 import org.slf4j.Logger;
@@ -58,9 +57,6 @@ public class UserDaoAspect {
     
     @Inject
     private WebApplicationContext applicationContext;
-    
-    @Inject
-    private IUserService userService;
     
     @Inject
     private RedisUserDao redisUserDao;
