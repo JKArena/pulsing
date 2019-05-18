@@ -23,6 +23,7 @@ import org.jhk.pulsing.client.payload.Result;
 import org.jhk.pulsing.client.user.IUserService;
 import org.jhk.pulsing.serialization.avro.records.User;
 import org.jhk.pulsing.serialization.avro.records.UserId;
+import org.jhk.pulsing.shared.util.CommonConstants.SERVICE_ENV_KEY;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
@@ -63,8 +64,7 @@ public class UserService extends AbstractService
     
     @Override
     public String getUrl() {
-        // TODO get from environment, container manager
-        return ""; 
+        return environment.getProperty(SERVICE_ENV_KEY.USER_SERVICE_ENDPOINT.name()); 
     }
     
 }

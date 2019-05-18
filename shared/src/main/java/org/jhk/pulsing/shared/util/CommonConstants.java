@@ -26,6 +26,10 @@ import java.util.Properties;
  */
 public final class CommonConstants {
     
+    public enum SERVICE_ENV_KEY {
+        USER_SERVICE_ENDPOINT, CHAT_SERVICE_ENDPOINT;
+    }
+    
     public static final String DEFAULT_BOOTSTRAP_HOST;
     public static final int DEFAULT_BOOTSTRAP_PORT;
     public static final String DEFAULT_BOOTSTRAP_URL;

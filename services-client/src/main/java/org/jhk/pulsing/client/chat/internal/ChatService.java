@@ -28,6 +28,7 @@ import org.jhk.pulsing.client.chat.IChatService;
 import org.jhk.pulsing.client.payload.chat.Chat;
 import org.jhk.pulsing.client.payload.chat.PagingResult;
 import org.jhk.pulsing.serialization.avro.records.UserId;
+import org.jhk.pulsing.shared.util.CommonConstants.SERVICE_ENV_KEY;
 import org.jhk.pulsing.client.payload.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
@@ -95,8 +96,7 @@ public class ChatService extends AbstractService
     
     @Override
     public String getUrl() {
-        // TODO get from environment, container manager
-        return ""; 
+        return environment.getProperty(SERVICE_ENV_KEY.CHAT_SERVICE_ENDPOINT.name()); 
     }
 
 }
