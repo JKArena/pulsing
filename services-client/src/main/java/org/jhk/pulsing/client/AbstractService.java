@@ -19,13 +19,18 @@
 package org.jhk.pulsing.client;
 
 import java.io.IOException;
+import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
 
 import org.jhk.pulsing.client.payload.Result;
 import org.jhk.pulsing.client.payload.Result.CODE;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import okhttp3.Call;
+import okhttp3.Callback;
 import okhttp3.HttpUrl;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -37,6 +42,7 @@ import okhttp3.Response;
  */
 public abstract class AbstractService {
 
+    private static final Logger _LOGGER = LoggerFactory.getLogger(AbstractService.class);
     private static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
     
     private final OkHttpClient client = new OkHttpClient();
@@ -56,14 +62,38 @@ public abstract class AbstractService {
     
     protected <T> Result<T> synchronousResponse(Request request, IResponseDeserializer<T> deserializer) {
         try (Response response = client.newCall(request).execute()) {
-            if (!response.isSuccessful()) {
-                return new Result<>(new IOException(String.format("Unexpected code %s", response)));
-            }
 
-            return new Result<>(CODE.SUCCESS, deserializer.deserialize(response));
+            return responseProcessor(response, deserializer);
         } catch (Exception exception) {
             return new Result<>(exception);
         }
+    }
+    
+    protected <T> CompletableFuture<Result<T>> asynchronousResponse(Request request, IResponseDeserializer<T> deserializer) {
+        CompletableFuture<Result<T>> wrapper = new CompletableFuture<>();
+        client.newCall(request).enqueue(new Callback() {
+
+            @Override
+            public void onFailure(Call call, IOException io) {
+                _LOGGER.error("Failure while processing request {} with call {}", request, call, io);
+                wrapper.complete(new Result<>(io));
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                wrapper.complete(responseProcessor(response, deserializer));
+            }
+        });
+        
+        return wrapper;
+    }
+    
+    private <T> Result<T> responseProcessor(Response response, IResponseDeserializer<T> deserializer) {
+        if (!response.isSuccessful()) {
+            return new Result<>(new IOException(String.format("Unexpected code %s", response)));
+        }
+
+        return new Result<>(CODE.SUCCESS, deserializer.deserialize(response));
     }
     
     protected Request.Builder getBaseRequestBuilder(String pathSegment) {
