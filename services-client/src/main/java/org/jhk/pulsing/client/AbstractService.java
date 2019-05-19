@@ -54,13 +54,13 @@ public abstract class AbstractService {
         return mapper;
     }
     
-    protected <T> Result<T> synchronousResponse(Request request, Function<String, T> deserializer) {
+    protected <T> Result<T> synchronousResponse(Request request, IResponseDeserializer<T> deserializer) {
         try (Response response = client.newCall(request).execute()) {
             if (!response.isSuccessful()) {
                 return new Result<>(new IOException(String.format("Unexpected code %s", response)));
             }
 
-            return new Result<>(CODE.SUCCESS, deserializer.apply(response.body().string()));
+            return new Result<>(CODE.SUCCESS, deserializer.deserialize(response));
         } catch (Exception exception) {
             return new Result<>(exception);
         }
