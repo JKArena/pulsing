@@ -18,10 +18,19 @@
  */
 package org.jhk.pulsing.client;
 
+import java.io.IOException;
+import java.util.function.Function;
+
+import org.jhk.pulsing.client.payload.Result;
+import org.jhk.pulsing.client.payload.Result.CODE;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import okhttp3.HttpUrl;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
 
 /**
  * @author Ji Kim
@@ -45,6 +54,29 @@ public abstract class AbstractService {
         return mapper;
     }
     
-    public abstract String getUrl();
+    protected <T> Result<T> synchronousResponse(Request request, Function<String, T> deserializer) {
+        try (Response response = client.newCall(request).execute()) {
+            if (!response.isSuccessful()) {
+                return new Result<>(new IOException(String.format("Unexpected code %s", response)));
+            }
+
+            return new Result<>(CODE.SUCCESS, deserializer.apply(response.body().string()));
+        } catch (Exception exception) {
+            return new Result<>(exception);
+        }
+    }
+    
+    protected Request.Builder getBaseRequestBuilder(String pathSegment) {
+        HttpUrl.Builder httpUrlBuilder = new HttpUrl.Builder();
+        httpUrlBuilder.scheme("https")
+            .host(getBaseUrl())
+            .addPathSegment(pathSegment);
+        
+        Request.Builder builder = new Request.Builder();
+        builder.url(httpUrlBuilder.build());
+        return builder;
+    }
+    
+    protected abstract String getBaseUrl();
     
 }

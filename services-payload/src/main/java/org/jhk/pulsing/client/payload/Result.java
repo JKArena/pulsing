@@ -30,6 +30,7 @@ public final class Result<T> {
     private CODE _code;
     private String _message;
     private T _data;
+    private Exception _error;
     
     public Result(CODE code, T data) { 
         super();
@@ -42,6 +43,11 @@ public final class Result<T> {
         this(code, data);
         
         _message = message;
+    }
+    
+    public Result(Exception error) {
+        _code = CODE.FAILURE;
+        _error = error;
     }
     
     public CODE getCode() { 
@@ -63,6 +69,10 @@ public final class Result<T> {
     }
     public void setData(T data) {
         _data = data;
+    }
+    
+    public Exception getError() {
+        return _error;
     }
     
     @Override

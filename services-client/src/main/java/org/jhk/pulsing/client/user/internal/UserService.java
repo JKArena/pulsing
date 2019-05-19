@@ -63,7 +63,7 @@ public class UserService extends AbstractService
     }
     
     @Override
-    public String getUrl() {
+    public String getBaseUrl() {
         return environment.getProperty(SERVICE_ENV_KEY.USER_SERVICE_ENDPOINT.name()); 
     }
     

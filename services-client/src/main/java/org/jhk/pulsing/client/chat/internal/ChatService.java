@@ -95,7 +95,7 @@ public class ChatService extends AbstractService
     }
     
     @Override
-    public String getUrl() {
+    public String getBaseUrl() {
         return environment.getProperty(SERVICE_ENV_KEY.CHAT_SERVICE_ENDPOINT.name()); 
     }
 
