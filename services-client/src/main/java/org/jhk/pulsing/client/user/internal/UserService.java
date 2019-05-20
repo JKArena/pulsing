@@ -24,6 +24,8 @@ import org.jhk.pulsing.client.user.IUserService;
 import org.jhk.pulsing.serialization.avro.records.User;
 import org.jhk.pulsing.serialization.avro.records.UserId;
 import org.jhk.pulsing.shared.util.CommonConstants.SERVICE_ENV_KEY;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
@@ -35,17 +37,19 @@ import org.springframework.stereotype.Service;
 public class UserService extends AbstractService 
                             implements IUserService {
 
+    private static final Logger _LOGGER = LoggerFactory.getLogger(UserService.class);
+    
     @Autowired
     private Environment environment;
     
     @Override
-    public Result<User> getUser(UserId userId) {
+    public Result<User> createUser(User user) {
         // TODO Auto-generated method stub
         return null;
     }
-
+    
     @Override
-    public Result<User> createUser(User user) {
+    public Result<User> getUser(UserId userId) {
         // TODO Auto-generated method stub
         return null;
     }
@@ -56,12 +60,6 @@ public class UserService extends AbstractService
         return null;
     }
 
-    @Override
-    public Result<String> logout(UserId userId) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-    
     @Override
     public String getBaseUrl() {
         return environment.getProperty(SERVICE_ENV_KEY.USER_SERVICE_ENDPOINT.name()); 

@@ -18,12 +18,9 @@
  */
 package org.jhk.pulsing.client.user;
 
-import java.util.Optional;
-
 import org.jhk.pulsing.serialization.avro.records.User;
 import org.jhk.pulsing.serialization.avro.records.UserId;
 import org.jhk.pulsing.client.payload.Result;
-import org.jhk.pulsing.client.payload.light.UserLight;
 
 /**
  * @author Ji Kim
@@ -37,7 +34,5 @@ public interface IUserService {
     Result<User> createUser(User user);
     
     Result<User> validateUser(String email, String password);
-
-    Result<String> logout(UserId userId);
 
 }

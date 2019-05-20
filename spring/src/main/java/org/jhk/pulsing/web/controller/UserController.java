@@ -127,7 +127,7 @@ public class UserController {
             }
         }
 
-        return userService.logout(userId);
+        return new Result<>(Result.CODE.SUCCESS, "loggedOut");
     }
     
 }
