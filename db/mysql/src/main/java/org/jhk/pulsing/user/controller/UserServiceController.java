@@ -16,7 +16,7 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.jhk.pulsing.db.mysql.controller;
+package org.jhk.pulsing.user.controller;
 
 import static org.jhk.pulsing.client.payload.Result.CODE.FAILURE;
 import static org.jhk.pulsing.client.payload.Result.CODE.SUCCESS;
