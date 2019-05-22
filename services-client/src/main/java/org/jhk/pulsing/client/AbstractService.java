@@ -20,8 +20,8 @@ package org.jhk.pulsing.client;
 
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.Function;
 
+import org.jhk.pulsing.client.okhttp.interceptors.LoggingInterceptor;
 import org.jhk.pulsing.client.payload.Result;
 import org.jhk.pulsing.client.payload.Result.CODE;
 import org.slf4j.Logger;
@@ -43,13 +43,17 @@ import okhttp3.Response;
 public abstract class AbstractService {
 
     private static final Logger _LOGGER = LoggerFactory.getLogger(AbstractService.class);
+
     private static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
-    
-    private final OkHttpClient client = new OkHttpClient();
-    
+
+    private final OkHttpClient client;
+
     private final ObjectMapper mapper = new ObjectMapper();
     
     protected AbstractService() {
+        client = new OkHttpClient.Builder()
+                .addNetworkInterceptor(new LoggingInterceptor())
+                .build();
     }
     
     protected OkHttpClient getClient() {
