@@ -18,8 +18,6 @@
  */
 package org.jhk.pulsing.chat.util;
 
-import java.util.Optional;
-
 import com.datastax.driver.core.PagingState;
 import com.datastax.driver.core.ResultSet;
 
@@ -27,10 +25,6 @@ import com.datastax.driver.core.ResultSet;
  * @author Ji Kim
  */
 public final class Paging {
-    
-    public static Optional<String> checkPaging(String paging) {
-        return paging == null || paging.length() == 0 ? Optional.empty() : Optional.of(paging);
-    }
     
     public static String getPagingState(ResultSet result) {
         PagingState pState = result.getExecutionInfo().getPagingState();
