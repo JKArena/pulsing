@@ -717,6 +717,146 @@ descent loss of performance)
       </dependency>
 
       <dependency>
+        <groupId>io.airlift</groupId>
+        <artifactId>bootstrap</artifactId>
+        <version>${airlift}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>io.airlift</groupId>
+        <artifactId>concurrent</artifactId>
+        <version>${airlift}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>io.airlift</groupId>
+        <artifactId>configuration</artifactId>
+        <version>${airlift}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>io.airlift</groupId>
+        <artifactId>dbpool</artifactId>
+        <version>${airlift}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>io.airlift</groupId>
+        <artifactId>discovery</artifactId>
+        <version>${airlift}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>io.airlift</groupId>
+        <artifactId>event</artifactId>
+        <version>${airlift}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>io.airlift</groupId>
+        <artifactId>http-client</artifactId>
+        <version>${airlift}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>io.airlift</groupId>
+        <artifactId>http-server</artifactId>
+        <version>${airlift}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>io.airlift</groupId>
+        <artifactId>jaxrs</artifactId>
+        <version>${airlift}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>io.airlift</groupId>
+        <artifactId>jmx-http-rpc</artifactId>
+        <version>${airlift}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>io.airlift</groupId>
+        <artifactId>jmx-http</artifactId>
+        <version>${airlift}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>io.airlift</groupId>
+        <artifactId>jmx</artifactId>
+        <version>${airlift}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>io.airlift</groupId>
+        <artifactId>json</artifactId>
+        <version>${airlift}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>io.airlift</groupId>
+        <artifactId>launcher</artifactId>
+        <version>${airlift}</version>
+        <classifier>bin</classifier>
+        <type>tar.gz</type>
+      </dependency>
+
+      <dependency>
+        <groupId>io.airlift</groupId>
+        <artifactId>log</artifactId>
+        <version>${airlift}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>io.airlift</groupId>
+        <artifactId>log-manager</artifactId>
+        <version>${airlift}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>io.airlift</groupId>
+        <artifactId>node</artifactId>
+        <version>${airlift}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>io.airlift</groupId>
+        <artifactId>packaging</artifactId>
+        <version>${airlift}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>io.airlift</groupId>
+        <artifactId>security</artifactId>
+        <version>${airlift}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>io.airlift</groupId>
+        <artifactId>stats</artifactId>
+        <version>${airlift}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>io.airlift</groupId>
+        <artifactId>testing</artifactId>
+        <version>${airlift}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>io.airlift</groupId>
+        <artifactId>trace-token</artifactId>
+        <version>${airlift}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>io.airlift</groupId>
+        <artifactId>units</artifactId>
+        <version>1.0</version>
+      </dependency>
+
+      <dependency>
         <groupId>javax.inject</groupId>
         <artifactId>javax.inject</artifactId>
         <version>${javax.inject}</version>
@@ -758,6 +898,7 @@ descent loss of performance)
   <properties>
     <commons.collections>3.2.2</commons.collections>
     <commons.cli>1.4</commons.cli>
+    <airlift>0.181</airlift>
     <guava>23.0</guava>
     <guice>4.2.2</guice>
     <lucene>6.4.1</lucene>
