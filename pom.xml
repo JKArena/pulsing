@@ -857,6 +857,24 @@ descent loss of performance)
       </dependency>
 
       <dependency>
+        <groupId>com.google.protobuf</groupId>
+        <artifactId>protobuf-java</artifactId>
+        <version>${protobuf}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>com.google.protobuf</groupId>
+        <artifactId>protobuf-java-util</artifactId>
+        <version>${protobuf}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>com.google.protobuf</groupId>
+        <artifactId>protoc</artifactId>
+        <version>${protobuf}</version>
+      </dependency>
+
+      <dependency>
         <groupId>javax.inject</groupId>
         <artifactId>javax.inject</artifactId>
         <version>${javax.inject}</version>
@@ -899,6 +917,7 @@ descent loss of performance)
     <commons.collections>3.2.2</commons.collections>
     <commons.cli>1.4</commons.cli>
     <airlift>0.181</airlift>
+    <protobuf>3.7.1</protobuf>
     <guava>23.0</guava>
     <guice>4.2.2</guice>
     <lucene>6.4.1</lucene>
