@@ -119,15 +119,4 @@ public class ChatServiceController {
             new Result<>(FAILURE, false, "Unable to subscribe to chatLobby " + lobbyName);
     }
 
-    public void sendSecretMessage(long to, Chat message) {
-        // TODO Auto-generated method stub
-        
-    }
-
-    public Optional<String> checkPaging(String paging) {
-        // TODO Auto-generated method stub
-     // Paging.checkPaging
-        return null;
-    }
-
 }
