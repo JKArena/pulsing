@@ -44,6 +44,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import static org.jhk.pulsing.client.payload.Result.CODE.*;
 
 /**
+ * Consider re-impl using grpc or thrift rpc
+ * 
  * @author Ji Kim
  */
 @CrossOrigin(origins="*")
