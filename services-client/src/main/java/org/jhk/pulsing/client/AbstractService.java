@@ -21,13 +21,18 @@ package org.jhk.pulsing.client;
 import java.io.IOException;
 import java.util.concurrent.CompletableFuture;
 
+import org.apache.avro.specific.SpecificRecord;
 import org.jhk.pulsing.client.okhttp.interceptors.LoggingInterceptor;
 import org.jhk.pulsing.client.payload.Result;
 import org.jhk.pulsing.client.payload.Result.CODE;
+import org.jhk.pulsing.serialization.avro.serializers.AvroJsonSerializer;
+import org.jhk.pulsing.serialization.avro.serializers.JsonAvroDeserializer;
+import org.jhk.pulsing.serialization.avro.serializers.SerializationHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -54,6 +59,16 @@ public abstract class AbstractService {
         client = new OkHttpClient.Builder()
                 .addNetworkInterceptor(new LoggingInterceptor())
                 .build();
+        
+        SimpleModule module = new SimpleModule();
+        SerializationHelper.getAvroRecordStream()
+        .forEach(avroRecord -> {
+            Class<? extends SpecificRecord> clazz = avroRecord.getClazz();
+            module.addDeserializer(clazz, new JsonAvroDeserializer<>(clazz, avroRecord.getSchema()));
+            module.addSerializer(clazz, new AvroJsonSerializer(clazz));
+        });
+        
+        mapper.registerModule(module);
     }
     
     protected OkHttpClient getClient() {
