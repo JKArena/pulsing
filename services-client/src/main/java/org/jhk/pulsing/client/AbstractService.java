@@ -63,7 +63,7 @@ public abstract class AbstractService {
         SimpleModule module = new SimpleModule();
         SerializationHelper.getAvroRecordStream()
         .forEach(avroRecord -> {
-            Class<? extends SpecificRecord> clazz = avroRecord.getClazz();
+            Class<SpecificRecord> clazz = (Class<SpecificRecord>) avroRecord.getClazz();
             module.addDeserializer(clazz, new JsonAvroDeserializer<>(clazz, avroRecord.getSchema()));
             module.addSerializer(clazz, new AvroJsonSerializer(clazz));
         });

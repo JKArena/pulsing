@@ -29,14 +29,14 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
 /**
  * @author Ji Kim
  */
-public class JsonAvroDeserializer<T extends SpecificRecord> extends JsonDeserializer<T> {
+public class JsonAvroDeserializer<T extends SpecificRecord> extends StdDeserializer<T> {
     
     private static final Logger _LOGGER = LoggerFactory.getLogger(JsonAvroDeserializer.class);
     
@@ -45,7 +45,7 @@ public class JsonAvroDeserializer<T extends SpecificRecord> extends JsonDeserial
     private ObjectMapper _mapper = new ObjectMapper();
     
     public JsonAvroDeserializer(Class<T> type, Schema schema) {
-        super();
+        super(type);
         
         _type = type;
         _schema = schema;
