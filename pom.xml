@@ -967,7 +967,7 @@ descent loss of performance)
     <javax.inject>1</javax.inject>
     <jackson>2.9.8</jackson>
     <kafka>0.11.0.0</kafka>
-    <zookeeper>3.4.10</zookeeper>
+    <zookeeper>3.4.14</zookeeper>
     <curator>4.0.0</curator>
     <mysql.connector.java>5.1.9</mysql.connector.java>
     <cassandra.driver>3.3.0</cassandra.driver>
