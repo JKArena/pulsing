@@ -961,7 +961,7 @@ descent loss of performance)
     <okhttp>3.14.1</okhttp>
     <aspectjweaver>1.5.4</aspectjweaver>
     <aspectjrt>1.8.9</aspectjrt>
-    <commons.fileupload>1.3.2</commons.fileupload>
+    <commons.fileupload>1.3.3</commons.fileupload>
     <commons.io>2.5</commons.io>
     <javax.servlet.api>3.1.0</javax.servlet.api>
     <javax.inject>1</javax.inject>
