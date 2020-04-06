@@ -20,7 +20,7 @@
 namespace java org.jhk.pulsing.serialization.thrift.id
 
 /**
- * Pulse id node
+ * Tag id node
  *
  * @author Ji Kim
  */
