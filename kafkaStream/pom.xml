@@ -8,9 +8,9 @@
 	  <version>0.1-SNAPSHOT</version>
   </parent>
   
-  <groupId>org.jhk.pulsing.kafkaStream</groupId>
-  <artifactId>pulsing-kafkaStream</artifactId>
-  <name>pulsing-kafkaStream</name>
+  <groupId>org.jhk.pulsing.kafka-stream</groupId>
+  <artifactId>pulsing-kafka-stream</artifactId>
+  <name>pulsing-kafka-stream</name>
   
   <dependencies>
     <dependency>
