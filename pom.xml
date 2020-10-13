@@ -974,7 +974,7 @@ descent loss of performance)
     <cassandra>3.11.0</cassandra>
     <cascading.cassandra>2.0.6</cascading.cassandra>
     <hibernate>5.2.1.Final</hibernate>
-    <junit>4.12</junit>
+    <junit>4.13.1</junit>
     <junit.surefire>1.1.0</junit.surefire>
     <mockito>1.9.5</mockito>
     <jupiter>5.1.0</jupiter>
