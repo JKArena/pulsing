@@ -965,7 +965,7 @@ descent loss of performance)
     <commons.io>2.5</commons.io>
     <javax.servlet.api>3.1.0</javax.servlet.api>
     <javax.inject>1</javax.inject>
-    <jackson>2.9.8</jackson>
+    <jackson>2.9.10.8</jackson>
     <kafka>0.11.0.0</kafka>
     <zookeeper>3.4.10</zookeeper>
     <curator>4.0.0</curator>
