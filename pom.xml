@@ -925,7 +925,7 @@ descent loss of performance)
     <avro.mapred>1.8.1</avro.mapred>
     <elasticsearch.scala>5.2.11</elasticsearch.scala>
     <elasticsearch>5.2.2</elasticsearch>
-    <log4j>2.8.1</log4j>
+    <log4j>2.16.0</log4j>
     <esri.geometry>1.2.1</esri.geometry>
     <esri.hadoop>1.1</esri.hadoop>
     <jcl>1.7.21</jcl>
