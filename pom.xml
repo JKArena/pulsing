@@ -957,7 +957,7 @@ descent loss of performance)
     <spring>5.1.6.RELEASE</spring>
     <spring.session>1.2.2.RELEASE</spring.session>
     <spring.data.redis>1.7.4.RELEASE</spring.data.redis>
-    <spring.boot.starter>2.1.4.RELEASE</spring.boot.starter>
+    <spring.boot.starter>2.5.12</spring.boot.starter>
     <okhttp>3.14.1</okhttp>
     <aspectjweaver>1.5.4</aspectjweaver>
     <aspectjrt>1.8.9</aspectjrt>
