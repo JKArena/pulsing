@@ -934,7 +934,7 @@ descent loss of performance)
     <thrift>0.9.3</thrift>
     <parquet.avro>1.8.2</parquet.avro>
     <avro>1.8.0</avro>
-    <hadoop>2.8.1</hadoop>
+    <hadoop>3.2.3</hadoop>
     <clojure>1.8.0</clojure>
     <!-- With twitter.chill + kryo serialization, there is a bug 
          when kryo deserializes list 
